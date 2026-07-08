@@ -10,9 +10,6 @@
 "RESTART_REQUIRED_ALERT_TITLE" = "Restart required";
 "RESTART_REQUIRED_ALERT_MESSAGE" = "You need to restart Twitter for this change to take effect.";
 
-"RESET_COMPLETE_TITLE" = "Reset successful";
-"BACKGROUND_RESET_MESSAGE" = "The Messages background was reset to default.";
-
 "CONFIRM_ALERT_MESSAGE" = "Sure you meant to do that?";
 "YES_BUTTON_TITLE" = "Yes";
 "NO_BUTTON_TITLE" = "No";
@@ -23,10 +20,7 @@
 "NOT_NOW_BUTTON_TITLE" = "Not now";
 "CONTINUE_BUTTON_TITLE" = "Continue";
 
-/*Main menu start*/
-
 /*Settings*/
-
 "MODERN_SETTINGS_LAYOUT_TITLE" = "General";
 "MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Make the timeline truly yours with custom fonts, navigation bar theming, and much more.";
 
@@ -41,9 +35,6 @@
 
 "MODERN_SETTINGS_TWEETS_TITLE" = "Tweets and replies";
 "MODERN_SETTINGS_TWEETS_SUBTITLE" = "Change the look of Tweets and remove features you may not use.";
-
-"MODERN_SETTINGS_MESSAGES_TITLE" = "Messages";
-"MODERN_SETTINGS_MESSAGES_SUBTITLE" = "Customize your Twitter messaging experience.";
 
 "MODERN_SETTINGS_SEARCH_TITLE" = "Search and discover";
 "MODERN_SETTINGS_SEARCH_SUBTITLE" = "Change what you see in the Search tab.";
@@ -68,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Follow NeoFreeBird";
 
 /*General*/
-"MAIN_SECTION_HEADER_TITLE" = "General";
-
-"UPLOAD_CUSTOM_VOICE_OPTION_TITLE" = "Voice Tweets";
-"UPLOAD_CUSTOM_VOICE_OPTION_DETAIL_TITLE" = "Turn Voice Tweets on or off (iOS only).";
-
 "HIDE_TOPICS_OPTION_TITLE" = "No topic Tweets";
 "HIDE_TOPICS_OPTION_DETAIL_TITLE" = "Remove Tweets tied to suggested topics.";
 
@@ -95,21 +81,9 @@
 "STRIP_URL_TRACKING_PARAMETERS_DETAIL_TITLE" = "Choose a custom URL for links, and remove tracking.";
 "SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Select domain";
 
-"DISABLE_XCHAT_OPTION_TITLE" = "Disable XChat";
-"DISABLE_XCHAT_OPTION_DETAIL_TITLE" = "Remove XChat button on the sidebar.";
-
-
 /*Tweets*/
-"TWEETS_SECTION_HEADER_TITLE" = "Tweets";
-
-"ORIG_TWEET_STYLE_OPTION_TITLE" = "Disable compact style";
-"ORIG_TWEET_STYLE_OPTION_DETAIL_TITLE" = "Show likes, retweets, and replies on a separate line instead of inline on tweet detail view.";
-
 "TWEET_TO_IMAGE_OPTION_TITLE" = "Save Tweet as image";
 "TWEET_TO_IMAGE_OPTION_DETAIL_TITLE" = "Long-press share to export Tweets as images.";
-
-"ENABLE_TWEET_LABELS_OPTION_TITLE" = "Show Tweet source labels (beta)";
-"ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Shows what client Tweets were made from.";
 
 "LIKE_CONFIRM_OPTION_TITLE" = "Confirm likes";
 "LIKE_CONFIRM_OPTION_DETAIL_TITLE" = "Ask before liking a Tweet.";
@@ -145,17 +119,7 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Restore reply context";
 "RESTORE_REPLY_CONTEXT_DETAIL_TITLE" = "Shows the people that are being replied to under Tweets.";
 
-"ENABLE_TRANSLATE_OPTION_TITLE" = "AI translate button (beta)";
-"ENABLE_TRANSLATE_OPTION_DETAIL_TITLE" = "Adds an AI translate button to Tweets that are not in your language. Requires an API key.";
-
-"TRANSLATE_ENDPOINT_OPTION_TITLE" = "API endpoint";
-"TRANSLATE_API_KEY_OPTION_TITLE" = "API key";
-"TRANSLATE_MODEL_OPTION_TITLE" = "Model";
-
-
 /*Profiles*/
-"PROFILES_SECTION_HEADER_TITLE" = "Profiles";
-
 "FOLLOW_CONFIRM_OPTION_TITLE" = "Confirm follows";
 "FOLLOW_CONFIRM_OPTION_DETAIL_TITLE" = "Ask before following someone.";
 
@@ -180,36 +144,16 @@
 "RESTORE_FOLLOW_BUTTON_TITLE" = "No Subscribe button";
 "RESTORE_FOLLOW_BUTTON_DETAIL_TITLE" = "Hides the Subscribe button on Tweets and in profiles.";
 
-
 /*Search*/
-"SEARCH_SECTION_HEADER_TITLE" = "Search";
-
 "NO_HISTORY_OPTION_TITLE" = "No search history";
 "NO_HISTORY_OPTION_DETAIL_TITLE" = "Twitter will no longer keep track of your searches.";
 
 "HIDE_TREND_VIDEOS_OPTION_TITLE" = "No trending videos";
 "HIDE_TREND_VIDEOS_OPTION_DETAIL_TITLE" = "Remove the trending videos from the search menu.";
 
-
-/*Messages*/
-"MESSAGES_SECTION_HEADER_TITLE" = "Messages";
-
-"DM_AVATARS_TITLE" = "DM profile pictures";
-"DM_AVATARS_DETAIL_TITLE" = "Adds profile pictures to all recipients, not just groups.";
-
-"DM_COMPOSE_BAR_V2_TITLE" = "Old compose bar";
-"DM_COMPOSE_BAR_V2_DETAIL_TITLE" = "Use the old message compose bar.";
-
-"DM_VOICE_CREATION_TITLE" = "No voice messages";
-"DM_VOICE_CREATION_DETAIL_TITLE" = "Disable voice message sender on compose bar.";
-
-
 /*Photos and Videos*/
-"PHOTOS_VIDEOS_SECTION_HEADER_TITLE" = "Photos and videos";
-
 "AUTO_HIGHEST_LOAD_OPTION_TITLE" = "High-quality media";
 "AUTO_HIGHEST_LOAD_OPTION_DETAIL_TITLE" = "Always load photos and videos in the highest resolution possible.";
-
 
 "DISABLE_VIDEO_LAYER_CAPTIONS_OPTION_TITLE" = "No video captions";
 
@@ -219,20 +163,11 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL_TITLE" = "Shows timestamp on immersive player.";
 
 /*Twitter Blue*/
-"TWITTER_BLUE_SECTION_HEADER_TITLE" = "Twitter Blue";
-"TWITTER_BLUE_SECTION_FOOTER_TITLE" = "Restart Twitter to apply changes.";
-
 "HIDE_ADS_OPTION_TITLE" = "No ads";
 "HIDE_ADS_OPTION_DETAIL_TITLE" = "Remove all ads.";
 
 "UNDO_TWEET_OPTION_TITLE" = "Undo Tweet";
 "UNDO_TWEET_OPTION_DETAIL_TITLE" = "Add a short delay before sending Tweets, so you can undo them.";
-
-"READER_MODE_OPTION_TITLE" = "Reader mode";
-"READER_MODE_OPTION_DETAIL_TITLE" = "Read long threads with less clutter.";
-
-"MEDIA_UPLOAD_4K_ENABLED_OPTION_TITLE" = "Upload in 4K";
-"MEDIA_UPLOAD_4K_ENABLED_OPTION_DETAIL_TITLE" = "Upload photos and videos in 4K.";
 
 "DOWNLOAD_VIDEOS_OPTION_TITLE" = "Download media";
 "DOWNLOAD_VIDEOS_OPTION_DETAIL_TITLE" = "Save videos or GIFs right from the Tweet overflow menu.";
@@ -244,28 +179,19 @@
 "HIDE_PREMIUM_OFFER_OPTION_DETAIL_TITLE" = "Remove the 'Get Verified' and 'Upgrade' buttons.";
 
 "THEME_OPTION_TITLE" = "Change theme";
-"THEME_OPTION_DETAIL_TITLE" = "Pick a theme. Only you will see it.";
 
 "APP_ICON_TITLE" = "Change app icon";
-"APP_ICON_DETAIL_TITLE" = "Choose a different app icon.";
 
 "CUSTOM_TAB_BAR_OPTION_TITLE" = "Edit navigation bar";
 
-
 /*Layout*/
-"LAYOUT_CUS_SECTION_HEADER_TITLE" = "Layout";
-"LAYOUT_CUS_SECTION_FOOTER_TITLE" = "Restart Twitter to apply changes.";
-
-"CUSTOM_DIRECT_BACKGROUND_VIEW_TITLE" = "Custom Messages background";
-"CUSTOM_DIRECT_BACKGROUND_VIEW_DETAIL_TITLE" = "Pick a custom background for your Direct Messages.";
-
 "HIDE_SPACE_OPTION_TITLE" = "Hide the Spaces bar";
 
 "STOP_HIDING_TAB_BAR_TITLE" = "Keep the navigation bar visible";
 "STOP_HIDING_TAB_BAR_DETAIL_TITLE" = "Don't fade the navigation bar when you scroll.";
 
 "HIDE_CUSTOM_TIMELINES_OPTION_TITLE" = "Hide custom timelines";
-"HIDE_CUSTOM_TIMELINES_OPTION_DETAIL_TITLE" = "Remove the Add button from the home timeline tabs. Required relaunching.";
+"HIDE_CUSTOM_TIMELINES_OPTION_DETAIL_TITLE" = "Remove the Add button from the home timeline tabs. Requires relaunching.";
 
 "HIDE_TRENDS_OPTION_TITLE" = "Hide trending content";
 "HIDE_TRENDS_OPTION_DETAIL_TITLE" = "Show only the search bar on the Explore tab, hiding all trends, news and the page tabs.";
@@ -285,37 +211,25 @@
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Choose a bold font";
 
+/*Labs*/
+"ENABLE_TWEET_LABELS_OPTION_TITLE" = "Show Tweet source labels (beta)";
+"ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Shows what client Tweets were made from.";
 
-/*Legal*/
-"LEGAL_SECTION_HEADER_TITLE" = "Legal";
+"ATTESTATION_BYPASS_OPTION_TITLE" = "Strip attestation headers";
+"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "May or may not impact any feature.";
 
-"LEGAL_BUTTON_TITLE" = "Legal notices";
-"ACKNOWLEDGEMENTS_SETTINGS_NAVIGATION_TITLE" = "Legal notices";
-
+"REPLY_IN_WEBVIEW_OPTION_TITLE" = "Reply in web view";
+"REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Open the reply box in a web view to avoid attestation.";
 
 /*Debug*/
-"DEBUG_SECTION_HEADER_TITLE" = "Debug";
-
 "FLEX_OPTION_TITLE" = "Debug mode";
 "FLEX_OPTION_DETAIL_TITLE" = "Enables FLEX for debugging and inspecting Twitter's views and data.";
-
-"CLEAR_SOURCE_LABEL_CACHE_TITLE" = "Clear cookies";
-"CLEAR_SOURCE_LABEL_CACHE_DETAIL_TITLE" = "Clears the source label cookies and forces them to refresh.";
-"CLEAR_CACHE_BUTTON_TITLE" = "Clear";
-"CACHE_CLEARED_TITLE" = "Cookies cleared";
-"CACHE_CLEARED_MESSAGE" = "Source label cookies were cleared. If source labels weren't showing, they should now.";
-
 
 /*Developers*/
 "DEVELOPER_SECTION_HEADER_TITLE" = "Developers";
 
-
-/*Main menu end*/
-
-
 /*Custom fonts*/
 "CUSTOM_FONTS_NAVIGATION_BUTTON_TITLE" = "Custom fonts";
-"CUSTOM_FONTS_NAVIGATION_TITLE" = "Choose a font";
 "CUSTOM_FONTS_MENU_TITLE" = "\nChoose a font";
 "CUSTOM_FONTS_TUT_ALERT_MESSAGE" = "No custom fonts yet. Install some with the iFont app from the App Store.";
 
@@ -371,25 +285,12 @@
 "CUSTOM_TAB_BAR_GROK" = "Grok";
 "CUSTOM_TAB_BAR_VIDEO" = "Video";
 "CUSTOM_TAB_BAR_PROFILE" = "Profile";
-"CUSTOM_TAB_BAR_SECTION_1_TITLE" = "Enabled";
-"CUSTOM_TAB_BAR_SECTION_2_TITLE" = "Disabled";
 "CUSTOM_TAB_BAR_RESET_BUTTON" = "Restore to default";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "Are you sure you'd like to restore the navigation bar to its default state?";
-
-
-/* Classic navigation bar */
-"RESTART_REQUIRED_ALERT_MESSAGE_CLASSIC_TAB_BAR_ON" = "You will need to restart Twitter for this to take effect.";
-"RESTART_REQUIRED_ALERT_MESSAGE_CLASSIC_TAB_BAR_OFF" = "To disable and restore default icons, please restart Twitter.";
-"CLASSIC_TAB_BAR_DISABLED_NOTIFICATION_NAME" = "BHTClassicTabBarSettingChangedNotification";
 
 /* Restore tab labels */
 "RESTORE_TAB_LABELS_TITLE" = "Tab labels";
 "RESTORE_TAB_LABELS_DETAIL" = "Show labels under icons in the tab bar.";
-
-/*Message customization*/
-"CUSTOM_DIRECT_BACKGROUND_ALERT_OPTION_1" = "Use an image";
-"CUSTOM_DIRECT_BACKGROUND_ALERT_OPTION_2" = "Use a color";
-"CUSTOM_DIRECT_BACKGROUND_ALERT_OPTION_3" = "Reset to default";
 
 /*Refresh pill text*/
 "REFRESH_PILL_TEXT" = "Tweeted";
@@ -403,108 +304,9 @@
 "RESTORE_TWITTER_NAMES_OPTION_TITLE" = "Restore Twitter terminology";
 "RESTORE_TWITTER_NAMES_OPTION_DETAIL_TITLE" = "Replaces 'X' with 'Twitter', 'Post' with 'Tweet', 'Repost' with 'Retweet' and so on throughout the app's interface.";
 
-/*Presets*/
-
-"PRESETS_IMPORT_SUCCESS_TITLE" = "Import successful";
-"PRESETS_IMPORT_SUCCESS_MESSAGE" = "Your preset was imported successfully.";
-
-"PRESETS_IMPORT_FAILURE_TITLE" = "Import failed";
-"PRESETS_IMPORT_FAILURE_MESSAGE" = "The preset file is invalid or corrupted.";
-
-"PRESETS_EXPORT_SUCCESS_TITLE" = "Export successful";
-"PRESETS_EXPORT_SUCCESS_MESSAGE" = "Your preset was exported successfully.";
-
-"PRESETS_EXPORT_FAILURE_TITLE" = "Export failed";
-"PRESETS_EXPORT_FAILURE_MESSAGE" = "There was an error exporting your preset.";
-
-"PRESETS_APPLY_SUCCESS_TITLE" = "Preset applied";
-"PRESETS_APPLY_SUCCESS_MESSAGE" = "The preset was applied successfully.";
-
-"PRESETS_APPLY_FAILURE_TITLE" = "Coudn't apply preset";
-"PRESETS_APPLY_FAILURE_MESSAGE" = "There was an error applying the preset.";
-
-
 /*Deprecated*/
-"TRUSTED_FRIENDS_OPTION_TITLE" = "Twitter Circles";
-
-"ALWAYS_FOLLOWING_PAGE_OPTION_TITLE" = "Disable the For you tab";
-"ALWAYS_FOLLOWING_PAGE_OPTION_DETAIL_TITLE" = "Open Twitter on the Following tab.";
-
-"DN_MODULAR_SEARCH_OPTION_TITLE" = "Better Messages search";
-"DN_MODULAR_SEARCH_OPTION_DETAIL_TITLE" = "Search your Direct Messages with advanced filters.";
-
-"ADVANCED_SEARCH_TITLE" = "Advanced search";
-"ADVANCED_SEARCH_DETAIL_TITLE" = "Unlock more search filters.";
-
-"VIDEO_ZOOM_OPTION_TITLE" = "Zoom on videos";
-"VIDEO_ZOOM_OPTION_DETAIL_TITLE" = "Double-tap to zoom in and out.";
-
-"VOICE_OPTION_TITLE" = "Voice mode";
-"VOICE_OPTION_DETAIL_TITLE" = "Reply to Tweets and replies using your voice.";
-
 "MODERN_SETTINGS_PLACEHOLDER_TEXT" = "Nothing to see here - yet";
 "MODERN_SETTINGS_PLACEHOLDER_DETAIL_TEXT" = "This section is coming soon. Stay tuned for more NeoFreeBird features!";
 
 "SOURCE_UNAVAILABLE" = "Source Unavailable";
 
-"notif_reposted_your_post_old" = "reposted your post";
-"notif_reposted_your_Post_old" = "reposted your Post";
-"notif_Reposted_your_post_old" = "Reposted your post";
-"notif_Reposted_your_Post_old" = "Reposted your Post";
-
-"notif_retweeted_your_tweet_new" = "retweeted your Tweet";
-"notif_retweeted_your_Tweet_new" = "retweeted your Tweet";
-"notif_Retweeted_your_Tweet_new" = "Retweeted your Tweet";
-
-"notif_your_post_old" = "your post";
-"notif_your_Post_old" = "your Post";
-"notif_your_tweet_new" = "your Tweet";
-"notif_your_Tweet_new" = "your Tweet";
-
-"notif_a_post_old" = "a post";
-"notif_a_Post_old" = "a Post";
-"notif_a_tweet_new" = "a Tweet";
-"notif_a_Tweet_new" = "a Tweet";
-
-"notif_new_post_old" = "new post";
-"notif_new_Post_old" = "new Post";
-"notif_new_tweet_new" = "new Tweet";
-"notif_new_Tweet_new" = "new Tweet";
-
-"notif_New_post_old" = "New post";
-"notif_New_Post_old" = "New Post";
-"notif_New_tweet_new" = "New Tweet";
-"notif_New_Tweet_new" = "New Tweet";
-
-"notif_recent_post_old" = "recent post";
-"notif_recent_Post_old" = "recent Post";
-"notif_recent_tweet_new" = "recent Tweet";
-"notif_recent_Tweet_new" = "recent Tweet";
-
-"notif_Recent_post_old" = "Recent post";
-"notif_Recent_Post_old" = "Recent Post";
-"notif_Recent_tweet_new" = "Recent Tweet";
-"notif_Recent_Tweet_new" = "Recent Tweet";
-
-"notif_reposted_old" = "reposted";
-"notif_Reposted_old" = "Reposted";
-"notif_retweeted_new" = "retweeted";
-"notif_Retweeted_new" = "Retweeted";
-
-"notif_pinned_Post_old" = "New pinned Post";
-"notif_pinned_Tweet_new" = "New pinned Tweet";
-
-"notif_your_Posts_old" = "your Posts";
-"notif_your_Tweets_new" = "your Tweets";
-
-"notif_repost_old" = "repost";
-"notif_retweet_new" = "retweet";
-
-"notif_Repost_old" = "Repost";
-"notif_Retweet_new" = "Retweet";
-
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Strip attestation headers";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "May or may not impact any feature.";
-
-"REPLY_IN_WEBVIEW_OPTION_TITLE" = "Reply in web view";
-"REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Open the reply box in a web view to avoid attestation.";

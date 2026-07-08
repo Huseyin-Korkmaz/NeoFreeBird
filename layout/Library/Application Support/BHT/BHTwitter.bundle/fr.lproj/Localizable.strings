@@ -9,7 +9,6 @@
 /*Alerts and popups*/
 "RESTART_REQUIRED_ALERT_TITLE" = "Redémarrage requis";
 "RESTART_REQUIRED_ALERT_MESSAGE" = "Vous devez redémarrer Twitter pour que ce changement prenne effet.";
-"RESTART_NOW_BUTTON_TITLE" = "Redémarrer maintenant";
 
 "CONFIRM_ALERT_MESSAGE" = "Tu es sûr de vouloir faire ça ?";
 "YES_BUTTON_TITLE" = "Oui";
@@ -17,15 +16,49 @@
 "OK_BUTTON_TITLE" = "OK";
 "CANCEL_BUTTON_TITLE" = "Annuler";
 "SAVE_BUTTON_TITLE" = "Enregistrer";
+"RESTART_NOW_BUTTON_TITLE" = "Redémarrer maintenant";
+"NOT_NOW_BUTTON_TITLE" = "Plus tard";
+"CONTINUE_BUTTON_TITLE" = "Continuer";
 
-/*Main menu start*/
+/*Settings*/
+"MODERN_SETTINGS_LAYOUT_TITLE" = "Général";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Personnalisez votre fil avec des polices, couleurs et plus encore.";
+
+"MODERN_SETTINGS_MEDIA_TITLE" = "Médias";
+"MODERN_SETTINGS_MEDIA_SUBTITLE" = "Téléchargez des vidéos, activez les horodatages, etc.";
+
+"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
+"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Profitez d'une expérience sans pub et de fonctions Blue comme Annuler le tweet, les thèmes et les icônes personnalisées.";
+
+"MODERN_SETTINGS_PROFILES_TITLE" = "Profil";
+"MODERN_SETTINGS_PROFILES_SUBTITLE" = "Modifiez ce que vous voyez dans les profils.";
+
+"MODERN_SETTINGS_TWEETS_TITLE" = "Tweets et réponses";
+"MODERN_SETTINGS_TWEETS_SUBTITLE" = "Modifiez le fonctionnement des Tweets et désactivez les fonctions inutiles.";
+
+"MODERN_SETTINGS_SEARCH_TITLE" = "Recherche et découverte";
+"MODERN_SETTINGS_SEARCH_SUBTITLE" = "Modifiez ce que vous voyez dans l'onglet Recherche.";
+
+"MODERN_SETTINGS_PRESETS_TITLE" = "Préréglages";
+"MODERN_SETTINGS_PRESETS_SUBTITLE" = "Appliquez un ensemble de paramètres préconfigurés, ou exportez et importez les vôtres.";
+
+"MODERN_SETTINGS_WEB_TITLE" = "Web et liens";
+"MODERN_SETTINGS_WEB_SUBTITLE" = "Ajustez le comportement des liens et du navigateur intégré de Twitter.";
+
+"MODERN_SETTINGS_BRANDING_TITLE" = "Image de marque";
+"MODERN_SETTINGS_BRANDING_SUBTITLE" = "Ajustez le degré de retour à l'image de marque Twitter.";
+
+"MODERN_SETTINGS_EXPERIMENTAL_TITLE" = "Expérimental";
+"MODERN_SETTINGS_EXPERIMENTAL_SUBTITLE" = "Essayez des fonctionnalités instables.";
+
+"MODERN_SETTINGS_DEBUG_TITLE" = "Débogage";
+"MODERN_SETTINGS_DEBUG_SUBTITLE" = "Découvrez pourquoi quelque chose ne fonctionne pas.";
+
+"COOL_KIDS_SECTION_HEADER_TITLE" = "Enfants cool";
+"SPECIAL_THANKS_SECTION_HEADER_TITLE" = "Remerciements spéciaux";
+"FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Suivre NeoFreeBird";
 
 /*General*/
-"MAIN_SECTION_HEADER_TITLE" = "Général";
-
-"UPLOAD_CUSTOM_VOICE_OPTION_TITLE" = "Tweets vocaux";
-"UPLOAD_CUSTOM_VOICE_OPTION_DETAIL_TITLE" = "Active ou désactive les Tweets vocaux (iOS uniquement).";
-
 "HIDE_TOPICS_OPTION_TITLE" = "Pas de Tweets sur les sujets";
 "HIDE_TOPICS_OPTION_DETAIL_TITLE" = "Supprime les Tweets liés aux sujets suggérés.";
 
@@ -38,6 +71,9 @@
 "PADLOCK_OPTION_TITLE" = "Verrouiller Twitter";
 "PADLOCK_OPTION_DETAIL_TITLE" = "Nécessite Face ID ou un code pour ouvrir Twitter.";
 
+"NEW_INAPP_WEB_OPTION_TITLE" = "Navigateur intégré amélioré (bêta)";
+"NEW_INAPP_WEB_DETAIL_TITLE" = "Utilisez le nouveau navigateur intégré de Twitter pour ouvrir des liens.";
+
 "ALWAYS_OPEN_SAFARI_OPTION_TITLE" = "Utiliser navigateur externe";
 "ALWAYS_OPEN_SAFARI_OPTION_DETAIL_TITLE" = "Ouvre les liens dans Safari ou ton navigateur par défaut.";
 
@@ -45,27 +81,18 @@
 "STRIP_URL_TRACKING_PARAMETERS_DETAIL_TITLE" = "Choisis une URL perso et supprime le tracking.";
 "SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Choisir une URL personnalisée";
 
-"DISABLE_XCHAT_OPTION_TITLE" = "Désactiver XChat";
-"DISABLE_XCHAT_OPTION_DETAIL_TITLE" = "Supprimer le bouton XChat de la barre latérale.";
-
-
 /*Tweets*/
-"TWEETS_SECTION_HEADER_TITLE" = "Tweets";
-
-"ORIG_TWEET_STYLE_OPTION_TITLE" = "Désactiver le style compact";
-"ORIG_TWEET_STYLE_OPTION_DETAIL_TITLE" = "Affiche likes, retweets et réponses sur une ligne séparée.";
-
 "TWEET_TO_IMAGE_OPTION_TITLE" = "Enregistrer Tweet en image";
 "TWEET_TO_IMAGE_OPTION_DETAIL_TITLE" = "Appui long sur partager pour exporter en image.";
-
-"ENABLE_TWEET_LABELS_OPTION_TITLE" = "Afficher la source du Tweet (bêta)";
-"ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Affiche l'app utilisée pour tweeter (par @nyaathea).";
 
 "LIKE_CONFIRM_OPTION_TITLE" = "Confirmer les likes";
 "LIKE_CONFIRM_OPTION_DETAIL_TITLE" = "Demande confirmation avant de liker.";
 
 "TWEET_CONFIRM_OPTION_TITLE" = "Confirmer les Tweets";
 "TWEET_CONFIRM_OPTION_DETAIL_TITLE" = "Demande confirmation avant de publier.";
+
+"HIDE_BLUE_VERIFIED_OPTION_TITLE" = "Masquer les badges de vérification Blue";
+"HIDE_BLUE_VERIFIED_OPTION_DETAIL_TITLE" = "Masquer le badge de vérification payant sur les Tweets. Cela n'inclut pas les comptes de marques ou gouvernementaux.";
 
 "HIDE_VIEW_COUNT_OPTION_TITLE" = "Masquer les vues";
 "HIDE_VIEW_COUNT_OPTION_DETAIL_TITLE" = "N'affiche pas le nombre de vues sous les Tweets.";
@@ -76,6 +103,9 @@
 "HIDE_DOWNVOTE_BUTTON_OPTION_DETAIL_TITLE" = "Supprime le bouton de vote négatif des Tweets.";
 
 "DISABLE_SENSITIVE_TWEET_WARNINGS_OPTION_TITLE" = "Pas d'avertissements de contenu sensible";
+
+"BYPASS_AGE_VERIFICATION_OPTION_TITLE" = "Contourner la vérification d'âge";
+"BYPASS_AGE_VERIFICATION_OPTION_DETAIL_TITLE" = "Ignore la vérification d'âge pour le contenu sensible.";
 
 "HIDE_GROK_ANALYZE_BUTTON_TITLE" = "Masquer le bouton Grok Analyze";
 "HIDE_GROK_ANALYZE_BUTTON_DETAIL_TITLE" = "Masquer le bouton Grok Analyze dans les Tweets.";
@@ -89,17 +119,7 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Restaurer le contexte de réponse";
 "RESTORE_REPLY_CONTEXT_DETAIL_TITLE" = "Affiche les personnes auxquelles la réponse est adressée sous les Tweets.";
 
-"ENABLE_TRANSLATE_OPTION_TITLE" = "Bouton de traduction IA (bêta)";
-"ENABLE_TRANSLATE_OPTION_DETAIL_TITLE" = "Ajoute un bouton de traduction IA aux Tweets qui ne sont pas dans votre langue. Nécessite une clé API.";
-
-"TRANSLATE_ENDPOINT_OPTION_TITLE" = "Point de terminaison API";
-"TRANSLATE_API_KEY_OPTION_TITLE" = "Clé API";
-"TRANSLATE_MODEL_OPTION_TITLE" = "Modèle";
-
-
 /*Profiles*/
-"PROFILES_SECTION_HEADER_TITLE" = "Profils";
-
 "FOLLOW_CONFIRM_OPTION_TITLE" = "Confirmer l’abonnement";
 "FOLLOW_CONFIRM_OPTION_DETAIL_TITLE" = "Demande avant de suivre quelqu’un.";
 
@@ -124,36 +144,16 @@
 "RESTORE_FOLLOW_BUTTON_TITLE" = "Pas de bouton S'abonner";
 "RESTORE_FOLLOW_BUTTON_DETAIL_TITLE" = "Masque le bouton S'abonner dans les Tweets et les profils.";
 
-
 /*Search*/
-"SEARCH_SECTION_HEADER_TITLE" = "Recherche";
-
 "NO_HISTORY_OPTION_TITLE" = "Pas d’historique";
 "NO_HISTORY_OPTION_DETAIL_TITLE" = "Twitter n’enregistrera plus tes recherches.";
 
 "HIDE_TREND_VIDEOS_OPTION_TITLE" = "Pas de vidéos tendances";
 "HIDE_TREND_VIDEOS_OPTION_DETAIL_TITLE" = "Supprime les vidéos tendances de la recherche.";
 
-
-/*Messages*/
-"MESSAGES_SECTION_HEADER_TITLE" = "Messages";
-
-"DM_AVATARS_TITLE" = "Photos de profil en MP";
-"DM_AVATARS_DETAIL_TITLE" = "Ajoute des photos de profil à tous les destinataires, pas seulement aux groupes.";
-
-"DM_COMPOSE_BAR_V2_TITLE" = "Ancienne barre de rédaction";
-"DM_COMPOSE_BAR_V2_DETAIL_TITLE" = "Utiliser l'ancienne barre de rédaction des messages.";
-
-"DM_VOICE_CREATION_TITLE" = "Pas de messages vocaux";
-"DM_VOICE_CREATION_DETAIL_TITLE" = "Désactive l'envoi de messages vocaux dans la barre de rédaction.";
-
-
-/*Photos & Videos*/
-"PHOTOS_VIDEOS_SECTION_HEADER_TITLE" = "Photos et vidéos";
-
+/*Photos and Videos*/
 "AUTO_HIGHEST_LOAD_OPTION_TITLE" = "Qualité max";
 "AUTO_HIGHEST_LOAD_OPTION_DETAIL_TITLE" = "Upload et lecture en meilleure qualité possible.";
-
 
 "DISABLE_VIDEO_LAYER_CAPTIONS_OPTION_TITLE" = "Pas de sous-titres vidéo";
 
@@ -163,20 +163,11 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL_TITLE" = "Affiche l'horodatage dans le lecteur immersif.";
 
 /*Twitter Blue*/
-"TWITTER_BLUE_SECTION_HEADER_TITLE" = "Twitter Blue";
-"TWITTER_BLUE_SECTION_FOOTER_TITLE" = "Redémarre Twitter pour appliquer.";
-
 "HIDE_ADS_OPTION_TITLE" = "Sans pubs";
 "HIDE_ADS_OPTION_DETAIL_TITLE" = "Supprime toutes les pubs.";
 
 "UNDO_TWEET_OPTION_TITLE" = "Annuler Tweet";
 "UNDO_TWEET_OPTION_DETAIL_TITLE" = "Ajoute un court délai pour annuler la publication.";
-
-"READER_MODE_OPTION_TITLE" = "Mode lecture";
-"READER_MODE_OPTION_DETAIL_TITLE" = "Lis les threads longs plus facilement.";
-
-"MEDIA_UPLOAD_4K_ENABLED_OPTION_TITLE" = "Téléversement 4K";
-"MEDIA_UPLOAD_4K_ENABLED_OPTION_DETAIL_TITLE" = "Téléverser des photos et vidéos en 4K.";
 
 "DOWNLOAD_VIDEOS_OPTION_TITLE" = "Télécharger les médias";
 "DOWNLOAD_VIDEOS_OPTION_DETAIL_TITLE" = "Sauvegarde vidéos et GIFs directement.";
@@ -188,25 +179,22 @@
 "HIDE_PREMIUM_OFFER_OPTION_DETAIL_TITLE" = "Cache les boutons 'Vérifié' et 'Améliorer'.";
 
 "THEME_OPTION_TITLE" = "Changer de thème";
-"THEME_OPTION_DETAIL_TITLE" = "Choisis un thème. Tu es le seul à le voir.";
 
 "APP_ICON_TITLE" = "Changer l’icône";
-"APP_ICON_DETAIL_TITLE" = "Choisis une icône pour l’app.";
 
 "CUSTOM_TAB_BAR_OPTION_TITLE" = "Modifier la barre d’onglets";
 
-
 /*Layout*/
-"LAYOUT_CUS_SECTION_HEADER_TITLE" = "Disposition";
-"LAYOUT_CUS_SECTION_FOOTER_TITLE" = "Redémarre Twitter pour appliquer.";
-
-"CUSTOM_DIRECT_BACKGROUND_VIEW_TITLE" = "Fond DM personnalisé";
-"CUSTOM_DIRECT_BACKGROUND_VIEW_DETAIL_TITLE" = "Choisis un fond pour tes messages privés.";
-
 "HIDE_SPACE_OPTION_TITLE" = "Cacher la barre Spaces";
 
 "STOP_HIDING_TAB_BAR_TITLE" = "Toujours afficher la barre";
 "STOP_HIDING_TAB_BAR_DETAIL_TITLE" = "Ne pas cacher la barre au scroll.";
+
+"HIDE_CUSTOM_TIMELINES_OPTION_TITLE" = "Masquer les fils personnalisés";
+"HIDE_CUSTOM_TIMELINES_OPTION_DETAIL_TITLE" = "Supprime le bouton Ajouter des onglets du fil d'accueil. Nécessite un redémarrage.";
+
+"HIDE_TRENDS_OPTION_TITLE" = "Masquer les tendances";
+"HIDE_TRENDS_OPTION_DETAIL_TITLE" = "Affiche uniquement la barre de recherche dans l'onglet Explorer, en masquant les tendances, l'actualité et les onglets de page.";
 
 "CLASSIC_TAB_BAR_SETTINGS_TITLE" = "Barre de navigation classique";
 "CLASSIC_TAB_BAR_SETTINGS_DETAIL" = "Applique votre couleur d'accent à l'élément de navigation sélectionné.";
@@ -223,37 +211,25 @@
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Choisir une police en gras";
 
+/*Labs*/
+"ENABLE_TWEET_LABELS_OPTION_TITLE" = "Afficher la source du Tweet (bêta)";
+"ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Affiche l'app utilisée pour tweeter (par @nyaathea).";
 
-/*Legal*/
-"LEGAL_SECTION_HEADER_TITLE" = "Mentions légales";
+"ATTESTATION_BYPASS_OPTION_TITLE" = "Supprimer les en-têtes d'attestation";
+"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Peut ou non affecter certaines fonctionnalités.";
 
-"LEGAL_BUTTON_TITLE" = "Mentions légales";
-"ACKNOWLEDGEMENTS_SETTINGS_NAVIGATION_TITLE" = "Mentions légales";
-
+"REPLY_IN_WEBVIEW_OPTION_TITLE" = "Répondre dans une vue web";
+"REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Ouvre la zone de réponse dans une vue web pour éviter l'attestation.";
 
 /*Debug*/
-"DEBUG_SECTION_HEADER_TITLE" = "Debug";
-
 "FLEX_OPTION_TITLE" = "Mode debug FLEX";
 "FLEX_OPTION_DETAIL_TITLE" = "Utilise FLEX pour déboguer Twitter.";
-
-"CLEAR_SOURCE_LABEL_CACHE_TITLE" = "Effacer les cookies";
-"CLEAR_SOURCE_LABEL_CACHE_DETAIL_TITLE" = "Efface les cookies d'étiquettes de source et force leur rafraîchissement.";
-"CLEAR_CACHE_BUTTON_TITLE" = "Effacer";
-"CACHE_CLEARED_TITLE" = "Cookies effacés";
-"CACHE_CLEARED_MESSAGE" = "Les cookies des étiquettes de source ont été effacés. Si elles ne s'affichaient pas, elles devraient maintenant.";
-
 
 /*Developers*/
 "DEVELOPER_SECTION_HEADER_TITLE" = "Développeurs";
 
-
-/*Main menu end*/
-
-
 /*Custom fonts*/
 "CUSTOM_FONTS_NAVIGATION_BUTTON_TITLE" = "Polices personnalisées";
-"CUSTOM_FONTS_NAVIGATION_TITLE" = "Choisir une police";
 "CUSTOM_FONTS_MENU_TITLE" = "\nChoisir une police";
 "CUSTOM_FONTS_TUT_ALERT_MESSAGE" = "Pas encore de polices perso. Installe iFont depuis l’App Store.";
 
@@ -308,76 +284,29 @@
 "CUSTOM_TAB_BAR_MESSAGES" = "Messages";
 "CUSTOM_TAB_BAR_GROK" = "Grok";
 "CUSTOM_TAB_BAR_VIDEO" = "Vidéo";
-"CUSTOM_TAB_BAR_SECTION_1_TITLE" = "Activés";
-"CUSTOM_TAB_BAR_SECTION_2_TITLE" = "Désactivés";
+"CUSTOM_TAB_BAR_PROFILE" = "Profil";
 "CUSTOM_TAB_BAR_RESET_BUTTON" = "Restaurer les paramètres par défaut";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "Voulez-vous vraiment réinitialiser la barre de navigation ?";
-
-
-/* Classic navigation bar */
-"RESTART_REQUIRED_ALERT_MESSAGE_CLASSIC_TAB_BAR_ON" = "Vous devez redémarrer Twitter pour que cela prenne effet.";
-"RESTART_REQUIRED_ALERT_MESSAGE_CLASSIC_TAB_BAR_OFF" = "Pour désactiver et restaurer les icônes par défaut, redémarrez Twitter.";
-"CLASSIC_TAB_BAR_DISABLED_NOTIFICATION_NAME" = "BHTClassicTabBarSettingChangedNotification";
 
 /* Restore tab labels */
 "RESTORE_TAB_LABELS_TITLE" = "Étiquettes de navigation";
 "RESTORE_TAB_LABELS_DETAIL" = "Affichez les étiquettes sous les icônes comme dans les anciennes versions de Twitter.";
 
-/*Message customization*/
-"CUSTOM_DIRECT_BACKGROUND_ALERT_OPTION_1" = "Utiliser une image";
-"CUSTOM_DIRECT_BACKGROUND_ALERT_OPTION_2" = "Utiliser une couleur";
-"CUSTOM_DIRECT_BACKGROUND_ALERT_OPTION_3" = "Réinitialiser";
-
 /*Refresh pill text*/
 "REFRESH_PILL_TEXT" = "Tweeté";
 
+"COLOR_TWITTER_ICON_OPTION_TITLE" = "Colorer l'icône Twitter";
+"COLOR_TWITTER_ICON_DETAIL_TITLE" = "Applique la couleur d'accent à l'icône Twitter dans la barre supérieure.";
+
+"REFRESH_PILL_OPTION_TITLE" = "Ajouter 'Tweeté' à la pastille d'actualisation";
+"REFRESH_PILL_DETAIL_TITLE" = "Rajoute l'étiquette 'Tweeté' à la pastille d'actualisation lorsque quelqu'un tweete. Cela peut (à tort) apparaître à d'autres endroits également.";
+
+"RESTORE_TWITTER_NAMES_OPTION_TITLE" = "Restaurer la terminologie Twitter";
+"RESTORE_TWITTER_NAMES_OPTION_DETAIL_TITLE" = "Remplace 'X' par 'Twitter', 'Post' par 'Tweet', 'Repost' par 'Retweet', etc. dans toute l'interface de l'application.";
+
 /*Deprecated*/
-"TRUSTED_FRIENDS_OPTION_TITLE" = "Cercles Twitter";
-
-"ALWAYS_FOLLOWING_PAGE_OPTION_TITLE" = "Désactiver l’onglet 'Pour vous'";
-"ALWAYS_FOLLOWING_PAGE_OPTION_DETAIL_TITLE" = "Ouvre Twitter sur l’onglet Abonnements.";
-
-"DN_MODULAR_SEARCH_OPTION_TITLE" = "Recherche avancée des messages";
-"DN_MODULAR_SEARCH_OPTION_DETAIL_TITLE" = "Recherche dans tes DMs avec des filtres avancés.";
-
-"ADVANCED_SEARCH_TITLE" = "Recherche avancée";
-"ADVANCED_SEARCH_DETAIL_TITLE" = "Débloque plus de filtres.";
-
-"VIDEO_ZOOM_OPTION_TITLE" = "Zoom vidéo";
-"VIDEO_ZOOM_OPTION_DETAIL_TITLE" = "Double-tap pour zoomer.";
-
-"VOICE_OPTION_TITLE" = "Tweets vocaux";
-"VOICE_OPTION_DETAIL_TITLE" = "Active ou désactive les Tweets vocaux (iOS uniquement).";
-
-/*Modern Settings Layout*/
-
-"MODERN_SETTINGS_LAYOUT_TITLE" = "Général";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Personnalisez votre fil avec des polices, couleurs et plus encore.";
-
-"MODERN_SETTINGS_MEDIA_TITLE" = "Médias";
-"MODERN_SETTINGS_MEDIA_SUBTITLE" = "Téléchargez des vidéos, activez les horodatages, etc.";
-
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Profitez d'une expérience sans pub et de fonctions Blue comme Annuler le tweet, les thèmes et les icônes personnalisées.";
-
-"MODERN_SETTINGS_PROFILES_TITLE" = "Profil";
-"MODERN_SETTINGS_PROFILES_SUBTITLE" = "Modifiez ce que vous voyez dans les profils.";
-
-"MODERN_SETTINGS_TWEETS_TITLE" = "Tweets et réponses";
-"MODERN_SETTINGS_TWEETS_SUBTITLE" = "Modifiez le fonctionnement des Tweets et désactivez les fonctions inutiles.";
-
-"MODERN_SETTINGS_MESSAGES_TITLE" = "Messages";
-"MODERN_SETTINGS_MESSAGES_SUBTITLE" = "Personnalisez votre expérience de messagerie Twitter.";
-
-"MODERN_SETTINGS_EXPERIMENTAL_TITLE" = "Expérimental";
-"MODERN_SETTINGS_EXPERIMENTAL_SUBTITLE" = "Essayez des fonctionnalités instables.";
-
 "MODERN_SETTINGS_PLACEHOLDER_TEXT" = "Rien à voir ici — pour le moment.";
+"MODERN_SETTINGS_PLACEHOLDER_DETAIL_TEXT" = "Cette section arrive bientôt. Restez à l'affût pour plus de fonctionnalités NeoFreeBird !";
 
-"NEW_INAPP_WEB_OPTION_TITLE" = "Navigateur intégré amélioré (bêta)";
-"NEW_INAPP_WEB_DETAIL_TITLE" = "Utilisez le nouveau navigateur intégré de Twitter pour ouvrir des liens.";
-"CUSTOM_TAB_BAR_PROFILE" = "Profil";
-"HIDE_BLUE_VERIFIED_OPTION_TITLE" = "Masquer les badges de vérification Blue";
-"HIDE_BLUE_VERIFIED_OPTION_DETAIL_TITLE" = "Masquer le badge de vérification payant sur les Tweets. Cela n'inclut pas les comptes de marques ou gouvernementaux.";
+"SOURCE_UNAVAILABLE" = "Source indisponible";
 
-"COOL_KIDS_SECTION_HEADER_TITLE" = "Enfants cool";
