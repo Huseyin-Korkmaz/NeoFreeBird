@@ -10,7 +10,7 @@
 #import "BHColorThemeCell.h"
 #import "BHColorThemeItem.h"
 #import "../BHTBundle/BHTBundle.h"
-#import "../Colours/Colours.h"
+#import "Colours/Colours.h"
 #import "../TWHeaders.h"
 #import "../BHDimPalette.h"
 #import <UIKit/UIKit.h>

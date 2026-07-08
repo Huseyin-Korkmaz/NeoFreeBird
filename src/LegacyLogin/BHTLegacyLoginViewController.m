@@ -1,5 +1,5 @@
 #import "BHTLegacyLoginViewController.h"
-#import "../JGProgressHUD/JGProgressHUD.h"
+#import "JGProgressHUD/JGProgressHUD.h"
 #import <WebKit/WebKit.h>
 #import <dlfcn.h>
 #import <objc/runtime.h>
