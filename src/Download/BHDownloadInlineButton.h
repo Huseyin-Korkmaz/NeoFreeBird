@@ -7,7 +7,7 @@
 //
 
 @import UIKit;
-#import "BHTManager.h"
+#import "Core/BHTManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

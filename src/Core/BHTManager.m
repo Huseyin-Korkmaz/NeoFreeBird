@@ -5,9 +5,9 @@
 //  Created by BandarHelal.
 //
 
-#import "BHTManager.h"
-#import "BHTBundle/BHTBundle.h"
-#import "ModernSettingsViewController.h"
+#import "Core/BHTManager.h"
+#import "Core/BHTBundle.h"
+#import "Settings/ModernSettingsViewController.h"
 
 @implementation BHTManager
 + (bool)isDMVideoCell:(T1InlineMediaView *)view {
@@ -357,10 +357,6 @@
 
 + (BOOL)restoreReplyContext {
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"restore_reply_context"];
-}
-
-+ (BOOL)isAttestationBypassEnabled {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"attestation_bypass_enabled"];
 }
 
 @end

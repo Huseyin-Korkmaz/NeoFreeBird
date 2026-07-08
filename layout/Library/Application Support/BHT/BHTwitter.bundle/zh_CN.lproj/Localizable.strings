@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "显示推文来源（测试）";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "显示推文是从哪个客户端发布的（来自 @nyaathea）。";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "移除 attestation 标头";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "可能会也可能不会影响某些功能。";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "在网页视图中回复";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "在网页视图中打开回复框以避开 attestation。";
 

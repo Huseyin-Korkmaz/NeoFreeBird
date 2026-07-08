@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Show Tweet source labels (beta)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Shows what client Tweets were made from.";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Strip attestation headers";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "May or may not impact any feature.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Reply in web view";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Open the reply box in a web view to avoid attestation.";
 

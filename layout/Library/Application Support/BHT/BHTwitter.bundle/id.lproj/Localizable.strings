@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Tampilkan label sumber Tweet (beta)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Tampilkan dari aplikasi mana Tweet dibuat (oleh @nyaathea).";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Hapus header attestation";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Mungkin memengaruhi fitur tertentu, mungkin juga tidak.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Balas di web view";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Buka kotak balasan di web view untuk menghindari attestation.";
 

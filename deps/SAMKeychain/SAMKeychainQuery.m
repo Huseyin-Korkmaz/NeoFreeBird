@@ -8,7 +8,7 @@
 
 #import "SAMKeychainQuery.h"
 #import "SAMKeychain.h"
-#import "BHTBundle/BHTBundle.h"
+#import "Core/BHTBundle.h"
 
 @implementation SAMKeychainQuery
 

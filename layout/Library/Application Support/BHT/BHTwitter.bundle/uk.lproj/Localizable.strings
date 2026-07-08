@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Показувати джерело твіту (бета)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Відображає, з якого клієнта був зроблений твіт (від @nyaathea).";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Видаляти заголовки атестації";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Може вплинути на роботу деяких функцій, а може й ні.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Відповідати у веб-перегляді";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Відкривати поле відповіді у веб-перегляді, щоб уникнути атестації.";
 

@@ -9,33 +9,14 @@
 #import "BHAppIconViewController.h"
 #import "BHAppIconItem.h"
 #import "BHAppIconCell.h"
-#import "../BHTBundle/BHTBundle.h"
-#import "../BHDimPalette.h"
+#import "Core/BHTBundle.h"
+#import "ThemeColor/BHDimPalette.h"
 #import <UIKit/UIKit.h>
+#import "Core/TwitterChirpFont.h"
 
 // Key for storing last selected app icon
 #define kBHLastSelectedAppIconKey @"bh_last_selected_app_icon"
 
-typedef NS_ENUM(NSInteger, TwitterFontStyle) {
-    TwitterFontStyleRegular,
-    TwitterFontStyleSemibold,
-    TwitterFontStyleBold
-};
-
-static UIFont *TwitterChirpFont(TwitterFontStyle style) {
-    switch (style) {
-        case TwitterFontStyleBold:
-            return [UIFont fontWithName:@"ChirpUIVF_wght3200000_opsz150000" size:17] ?:
-                   [UIFont systemFontOfSize:17 weight:UIFontWeightBold];
-        case TwitterFontStyleSemibold:
-            return [UIFont fontWithName:@"ChirpUIVF_wght2BC0000_opszE0000" size:14] ?:
-                   [UIFont systemFontOfSize:14 weight:UIFontWeightSemibold];
-        case TwitterFontStyleRegular:
-        default:
-            return [UIFont fontWithName:@"ChirpUIVF_wght1900000_opszE0000" size:12] ?:
-                   [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
-    }
-}
 
 @interface BHAppIconViewController () <
     UICollectionViewDelegate,

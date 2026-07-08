@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "顯示推文來源（Beta）";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "顯示推文是從哪個客戶端發送的（作者：@nyaathea）。";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "移除認證標頭";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "可能會、也可能不會影響某些功能。";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "在內建瀏覽器中回覆";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "在內建瀏覽器中開啟回覆框以避開認證。";
 

@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Tweet-Quellenbeschriftungen anzeigen (Beta)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Zeigt, mit welchem Client der Tweet erstellt wurde.";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Attestation-Header entfernen";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Kann Funktionen beeinträchtigen oder auch nicht.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "In Webansicht antworten";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Öffnet das Antwortfeld in einer Webansicht, um Attestation zu umgehen.";
 

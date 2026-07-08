@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "عرض مصدر التغريدة (تجريبي)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "يعرض التطبيق الذي كتبت منه التغريدة (بواسطة @nyaathea).";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "إزالة ترويسات المصادقة";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "قد يؤثر أو لا يؤثر على أي ميزة.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "الرد في عرض ويب";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "فتح مربع الرد في عرض ويب لتجنب المصادقة.";
 

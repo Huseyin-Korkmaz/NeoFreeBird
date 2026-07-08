@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Afficher la source du Tweet (bêta)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Affiche l'app utilisée pour tweeter (par @nyaathea).";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Supprimer les en-têtes d'attestation";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Peut ou non affecter certaines fonctionnalités.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Répondre dans une vue web";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Ouvre la zone de réponse dans une vue web pour éviter l'attestation.";
 

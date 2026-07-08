@@ -6,7 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TWHeaders.h"
+#import "Headers/TWHeaders.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

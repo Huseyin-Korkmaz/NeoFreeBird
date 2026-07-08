@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Prikaži izvor tweeta (beta)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Prikazuje s koje je aplikacije tweet objavljen (@nyaathea).";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Ukloni atestacijska zaglavlja";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Može, ali i ne mora utjecati na neke značajke.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Odgovori u pregledniku";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Otvori okvir za odgovor u pregledniku kako bi se izbjegla atestacija.";
 

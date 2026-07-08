@@ -7,9 +7,10 @@
 
 #import "BHCustomTabBarViewController.h"
 #import "BHCustomTabBarUtility.h"
-#import "../BHTBundle/BHTBundle.h"
+#import "Core/BHTBundle.h"
 #import "Colours/Colours.h"
-#import "../BHDimPalette.h"
+#import "ThemeColor/BHDimPalette.h"
+#import "Core/TwitterChirpFont.h"
 
 // Import external function to get theme color
 extern UIColor *BHTCurrentAccentColor(void);
@@ -24,26 +25,6 @@ extern UIColor *BHTCurrentAccentColor(void);
 + (id)tfn_vectorImageNamed:(id)arg1 fitsSize:(struct CGSize)arg2 fillColor:(id)arg3;
 @end
 
-typedef NS_ENUM(NSInteger, TwitterFontStyle) {
-    TwitterFontStyleRegular,
-    TwitterFontStyleSemibold,
-    TwitterFontStyleBold
-};
-
-static UIFont *TwitterChirpFont(TwitterFontStyle style) {
-    switch (style) {
-        case TwitterFontStyleBold:
-            return [UIFont fontWithName:@"ChirpUIVF_wght3200000_opsz150000" size:17] ?:
-                   [UIFont systemFontOfSize:17 weight:UIFontWeightBold];
-        case TwitterFontStyleSemibold:
-            return [UIFont fontWithName:@"ChirpUIVF_wght2BC0000_opszE0000" size:14] ?:
-                   [UIFont systemFontOfSize:14 weight:UIFontWeightSemibold];
-        case TwitterFontStyleRegular:
-        default:
-            return [UIFont fontWithName:@"ChirpUIVF_wght1900000_opszE0000" size:12] ?:
-                   [UIFont systemFontOfSize:12 weight:UIFontWeightRegular];
-    }
-}
 
 @interface BHCustomTabBarViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (nonatomic, strong) UIScrollView *scrollView;

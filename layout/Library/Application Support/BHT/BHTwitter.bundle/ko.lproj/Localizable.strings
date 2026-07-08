@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "트윗 소스 라벨 표시 (베타)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "트윗이 어떤 클라이언트로 작성되었는지 표시합니다.";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "인증(attestation) 헤더 제거";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "일부 기능에 영향을 줄 수도, 주지 않을 수도 있습니다.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "웹뷰에서 답글 작성";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "인증(attestation)을 피하기 위해 답글 작성 창을 웹뷰에서 엽니다.";
 

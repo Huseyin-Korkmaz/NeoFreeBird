@@ -5,7 +5,7 @@ DEBUG = 1
 
 TWEAK_NAME = BHTwitter
 
-BHTwitter_FILES = src/Tweak.x $(wildcard src/*.m src/BHDownload/*.m src/BHTBundle/*.m src/AppIcon/*.m src/CustomTabBar/*.m src/ThemeColor/*.m src/LegacyLogin/*.m deps/Colours/*.m deps/JGProgressHUD/*.m deps/SAMKeychain/*.m)
+BHTwitter_FILES = $(shell find src \( -name '*.x' -o -name '*.m' \) | sort) $(wildcard deps/Colours/*.m deps/JGProgressHUD/*.m deps/SAMKeychain/*.m)
 BHTwitter_FRAMEWORKS = UIKit Foundation AVFoundation AVKit CoreMotion GameController VideoToolbox Accelerate CoreMedia CoreImage CoreGraphics ImageIO Photos CoreServices SystemConfiguration SafariServices Security QuartzCore WebKit SceneKit
 BHTwitter_PRIVATE_FRAMEWORKS = Preferences
 BHTwitter_EXTRA_FRAMEWORKS = Cephei CepheiPrefs CepheiUI

@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "ツイートのソースラベルを表示 (ベータ版)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "どのクライアントからツイートされたかを表示します。";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "アテステーションヘッダーを削除";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "機能に影響する場合があります。";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "ウェブビューで返信";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "アテステーションを回避するために、返信ボックスをウェブビューで開きます。";
 

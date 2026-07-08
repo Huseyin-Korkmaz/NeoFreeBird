@@ -5,7 +5,7 @@
 //  Created by nyaathea
 //
 
-#import "BHDimPalette.h"
+#import "ThemeColor/BHDimPalette.h"
 #import <objc/runtime.h>
 
 // Interface declaration for Twitter's internal classes

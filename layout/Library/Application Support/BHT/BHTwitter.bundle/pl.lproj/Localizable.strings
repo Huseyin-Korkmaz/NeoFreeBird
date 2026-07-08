@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Pokaż etykiety źródła Tweeta (beta)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Pokazuje, z jakiej aplikacji wysłano Tweeta.";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Usuń nagłówki atestacji";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Może, ale nie musi wpływać na jakąkolwiek funkcję.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Odpowiadaj w przeglądarce w aplikacji";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Otwiera pole odpowiedzi w przeglądarce w aplikacji, aby uniknąć atestacji.";
 

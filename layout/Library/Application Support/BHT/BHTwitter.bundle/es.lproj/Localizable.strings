@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Mostrar origen del Tweet (beta)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Muestra desde qué app se hizo el Tweet (por @nyaathea).";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Eliminar cabeceras de attestation";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Puede afectar o no a alguna función.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Responder en navegador integrado";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Abre el cuadro de respuesta en un navegador integrado para evitar la attestation.";
 

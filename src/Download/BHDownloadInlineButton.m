@@ -6,9 +6,9 @@
 //  Modified by: actuallyaridan at 27/04/2025
 //
 
-#import "BHDownloadInlineButton.h"
+#import "Download/BHDownloadInlineButton.h"
 #import <objc/runtime.h>
-#import "BHTBundle/BHTBundle.h"
+#import "Core/BHTBundle.h"
 
 #pragma mark - Helpers
 static inline UIViewController *BHTopMostController(void) {

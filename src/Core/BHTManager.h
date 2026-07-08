@@ -5,7 +5,7 @@
 //  Created by BandarHelal on 24/12/1441 AH.
 //
 
-#import "TWHeaders.h"
+#import "Headers/TWHeaders.h"
 
 
 @interface BHTManager : NSObject
@@ -78,7 +78,5 @@
 + (BOOL)replySorting;
 
 + (BOOL)restoreReplyContext;
-
-+ (BOOL)isAttestationBypassEnabled;
 
 @end

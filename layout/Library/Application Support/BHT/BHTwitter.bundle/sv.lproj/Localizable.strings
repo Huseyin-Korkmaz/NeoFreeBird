@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Visa Tweet-källor (beta)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Visar vilken klient Tweeten skapades från (av @nyaathea).";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Ta bort attestation-huvuden";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Kan påverka funktioner eller inte.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Svara i webbvy";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Öppna svarsrutan i en webbvy för att undvika attestation.";
 

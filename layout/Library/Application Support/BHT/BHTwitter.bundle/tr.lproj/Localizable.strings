@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Tweet kaynağını göster (beta)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Tweet’in hangi uygulamayla atıldığını gösterir (@nyaathea tarafından).";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Attestation başlıklarını kaldır";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Herhangi bir özelliği etkileyebilir veya etkilemeyebilir.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Web görünümünde yanıtla";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Attestation'dan kaçınmak için yanıt kutusunu web görünümünde aç.";
 

@@ -215,9 +215,6 @@
 "ENABLE_TWEET_LABELS_OPTION_TITLE" = "Показать источник твита (бета)";
 "ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Показывает, через какое приложение сделан твит (от @nyaathea).";
 
-"ATTESTATION_BYPASS_OPTION_TITLE" = "Удалить заголовки аттестации";
-"ATTESTATION_BYPASS_OPTION_DETAIL_TITLE" = "Может влиять или не влиять на некоторые функции.";
-
 "REPLY_IN_WEBVIEW_OPTION_TITLE" = "Отвечать в веб-браузере";
 "REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Открывать окно ответа в веб-браузере, чтобы избежать аттестации.";
 
