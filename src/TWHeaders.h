@@ -57,18 +57,6 @@ static NSString *_lastCopiedURL;
 @interface T1MediaAttachmentsViewCell () <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 @end
 
-@interface TCRVoiceRecordingViewController: UIViewController
-@property (nonatomic, assign, readwrite) CGFloat clipDuration;
-- (void)_tcr_pauseRecording;
-- (void)_tcr_endRecording;
-@end
-
-@interface TCRVoiceRecordingView: UIView
-@property (nonatomic, strong) NSTimer *recordingTimer;
-@property (nonatomic, assign) CGFloat desiredRecordingDuration;
-@property (nonatomic, weak, readwrite) id delegate;
-@end
-
 @interface NSParagraphStyle ()
 + (NSWritingDirection)_defaultWritingDirection;
 @end
@@ -89,9 +77,6 @@ static NSString *_lastCopiedURL;
 @property (nonatomic, assign, readonly) NSUInteger attachmentType;
 @end
 
-@interface T1DirectMessageConversationEntriesViewController: UIViewController
-@end
-
 @interface TFNTableView : UITableView
 - (void)setShowsVerticalScrollIndicator:(BOOL)arg1;
 @end
@@ -103,7 +88,6 @@ static NSString *_lastCopiedURL;
 
 @interface TFNItemsDataViewController : TFNDataViewController
 @property(copy, nonatomic) NSArray *sections;
-- (void)updateSections:(id)arg1 withRowAnimation:(long long)arg2;
 - (id)itemAtIndexPath:(id)arg1;
 @end
 
@@ -140,13 +124,8 @@ static NSString *_lastCopiedURL;
 - (void)clearActionControlWantsClear:(id)arg1;
 @end
 
-@interface T1ColorThemeSettingsViewController : TFNItemsDataViewController
-- (instancetype)initWithAccount:(TFNTwitterAccount *)acoount scribeContext:(id)context;
-@end
-
 @interface TAEStandardFontGroup : NSObject
 + (instancetype)sharedFontGroup;
-- (UIFont *)fixedLargeBoldFont;
 - (UIFont *)headline2BoldFont;
 @end
 
@@ -156,17 +135,11 @@ static NSString *_lastCopiedURL;
 + (instancetype)actionItemWithTitle:(NSString *)arg1 action:(void (^)(void))arg2;
 + (instancetype)actionItemWithTitle:(NSString *)arg1 imageName:(NSString *)arg2 action:(void (^)(void))arg3;
 + (instancetype)actionItemWithTitle:(NSString *)arg1 subtitle:(NSString *)arg2 imageName:(NSString *)arg3 action:(void (^) (void))arg4;
-+ (instancetype)actionItemWithTitle:(NSString *)arg1 systemImageName:(NSString *)arg2 action:(void (^)(void))arg3;
-@end
-
-@interface TFNMenuSheetCenteredIconItem : NSObject
-- (instancetype)initWithIconImageName:(id)imageName height:(CGFloat)arg1 fillColor:(id)Color;
 @end
 
 @interface TFNAttributedTextModel : NSObject
 @property(copy, nonatomic) NSAttributedString *attributedString;
 - (instancetype)initWithAttributedString:(NSMutableAttributedString *)arg;
-- (UIView *)_findNotificationView;
 @end
 
 @interface TFNAttributedTextView : UIView
@@ -195,7 +168,6 @@ static NSString *_lastCopiedURL;
 
 @interface TFNSettingsNavigationItem : NSObject
 - (instancetype)initWithTitle:(NSString *)arg1 detail:(NSString *)arg2 iconName:(NSString *)arg3 controllerFactory:(UIViewController* (^)(void))arg4;
-- (instancetype)initWithTitle:(NSString *)arg1 detail:(NSString *)arg2 systemIconName:(NSString *)arg3 controllerFactory:(UIViewController* (^)(void))arg4;
 - (instancetype)initWithTitle:(NSString *)arg1 detail:(NSString *)arg2 controllerFactory:(UIViewController* (^)(void))arg4;
 @end
 
@@ -204,13 +176,6 @@ static NSString *_lastCopiedURL;
 
 @interface TFNButton : UIButton
 + (id)buttonWithImage:(id)arg1 style:(long long)arg2 sizeClass:(long long)arg3;
-@end
-
-@interface TFNLegacyButtonAnimator : NSObject
-@end
-
-@interface TFNAnimatableButton : TFNButton
-@property(nonatomic) __weak id animationCoordinator;
 @end
 
 @interface T1ProfileActionButtonsView : UIView
@@ -240,10 +205,6 @@ static NSString *_lastCopiedURL;
 @protocol TTAStatusInlineActionButtonDelegate <NSObject>
 @end
 
-@interface T1StatusInlineShareButton : UIView
-@property(nonatomic) __weak id <T1StatusInlineActionButtonDelegate> delegate;
-@end
-
 @interface TTAStatusInlineShareButton : UIView
 @property(nonatomic) __weak id <T1StatusInlineActionButtonDelegate> delegate;
 @end
@@ -260,9 +221,6 @@ static NSString *_lastCopiedURL;
 @end
 
 @interface T1StatusCell : UITableViewCell <TTACoreStatusViewEventHandler>
-@end
-
-@interface T1TweetDetailsFocalStatusViewTableViewCell : T1StatusCell
 @end
 
 @interface TFSTwitterEntityMediaVideoVariant : NSObject
@@ -285,25 +243,14 @@ static NSString *_lastCopiedURL;
 @property(readonly, copy, nonatomic) NSArray *media;
 @end
 
-@protocol T1StatusViewModel <NSObject>
-@property(nonatomic, readonly) TFSTwitterEntitySet *entities;
-@property(nonatomic, assign, readonly) NSArray <TFSTwitterEntityMedia *> *representedMediaEntities;
-@property (nonatomic, assign, readonly) BOOL isMediaEntityVideo;
-@property (nonatomic, assign, readonly) BOOL isGIF;
-@end
-
 @interface T1StatusInlineActionsView : UIView <T1StatusInlineActionButtonDelegate>
-@property(readonly, nonatomic) id <T1StatusViewModel> viewModel;
+@property(readonly, nonatomic) id viewModel;
 @property(nonatomic) id delegate;
 @end
 
 @interface TTAStatusInlineActionsView : UIView <TTAStatusInlineActionButtonDelegate>
-@property(readonly, nonatomic) id <T1StatusViewModel> viewModel;
+@property(readonly, nonatomic) id viewModel;
 @property(nonatomic) id delegate;
-@end
-
-@interface T1SlideshowStatusView : UIView
-@property (nonatomic, strong, readwrite) TFSTwitterEntityMedia *media;
 @end
 
 @interface T1StandardStatusView : UIView
@@ -322,22 +269,7 @@ static NSString *_lastCopiedURL;
 - (void)enumerateSubviewsRecursively:(void (^)(UIView *))block;
 @end
 
-@interface TTACoreStatusViewModel : NSObject
-@property(nonatomic, readonly) id tweet;
-@end
-
-
-
-@interface TFNButtonBarView : UIView
-@property(nonatomic) double trailingViewsSpacing;
-@property(nonatomic) double leadingViewsSpacing;
-@property(copy, nonatomic) NSArray *leadingViews;
-@end
-
 @interface T1TweetComposeViewController : UIViewController
-@property(retain, nonatomic) TFNButton *voiceButton;
-@property(retain, nonatomic) TFNButtonBarView *buttonBarView;
-- (void)_t1_insertVoiceButtonIfNeeded;
 @end
 
 @interface T1PlayerMediaEntitySessionProducible : NSObject
@@ -363,16 +295,7 @@ static NSString *_lastCopiedURL;
 @property (nonatomic, assign, readwrite) NSUInteger playerIconViewType;
 @end
 
-@interface T1DirectMessageAbstractConversationEntryViewModel : NSObject
-@property(retain, nonatomic) UIImage *previewImage;
-@end
-
-@interface T1DirectMessageEntryViewModel : T1DirectMessageAbstractConversationEntryViewModel
-@property(nonatomic) _Bool isOutgoingMessage;
-@end
-
 @interface T1DirectMessageEntryBaseCell: UICollectionViewCell
-@property(nonatomic, readonly) T1DirectMessageEntryViewModel *messageEntryViewModel;
 @property(nonatomic, readonly) UIImage *profileImage;
 @end
 
@@ -410,7 +333,7 @@ static NSString *_lastCopiedURL;
 @interface TFNTwitterStatus : NSObject
 @property(readonly, nonatomic) NSDictionary *scribeParameters;
 @property(readonly, nonatomic) _Bool isPromoted;
-@property(readonly, nonatomic) NSString *mediaScribeContentID;
+@property(readonly, nonatomic) TFSTwitterEntitySet *entities;
 @property(nonatomic, copy) NSString *fromUserName;
 @property(nonatomic, assign) NSInteger statusID;
 - (id)init;
@@ -460,16 +383,8 @@ static NSString *_lastCopiedURL;
 @property(readonly, nonatomic) id viewModel; // @synthesize viewModel=_viewModel;
 @end
 
-@interface T1RichTextFormatViewController : UIViewController
-- (instancetype)initWithRichTextFormatDocumentPath:(NSString *)documentPath;
-@end
-
 @interface TFNTitleView: UIView
 + (instancetype)titleViewWithTitle:(NSString *)title subtitle:(NSString *)subTitle;
-@end
-
-@interface _TtC10TwitterURT32URTTimelineEventSummaryViewModel : NSObject
-@property(nonatomic, readonly) NSDictionary *scribeItem;
 @end
 
 @interface _TtC10TwitterURT25URTTimelineTrendViewModel : NSObject
@@ -639,21 +554,14 @@ static UIViewController * _Nonnull topMostController() {
 }
 
 
-@interface TFSTimelineViewController : UIViewController
-@end
-
 @interface UIImageView (TwitterLogo)
 - (id)initWithImage:(UIImage *)image;
 - (void)setImage:(UIImage *)image;
 @end
 
-@interface ONBSignedOutViewController : UIViewController
-@end
-
 @interface T1ConversationFooterTextView : TFNAttributedTextView
 @property(nonatomic, readonly) id viewModel;
 - (void)updateFooterTextView;
-- (void)BHT_appendSourceToFooter:(NSString *)sourceText;
 @end
 
 @interface TFNBarButtonItemButtonV1 : UIView
@@ -669,18 +577,14 @@ static UIViewController * _Nonnull topMostController() {
 @interface TweetSourceHelper : NSObject
 + (void)fetchSourceForTweetID:(NSString *)tweetID;
 + (void)timeoutFetchForTweetID:(NSTimer *)timer;
-+ (void)retryUpdateForTweetID:(NSString *)tweetID;
-+ (void)pollForPendingUpdates;
 + (void)handleAppForeground:(NSNotification *)notification;
 + (NSDictionary *)fetchCookies;
 + (void)cacheCookies:(NSDictionary *)cookies;
 + (NSDictionary *)loadCachedCookies;
-+ (BOOL)shouldRefreshCookies;
 + (void)handleClearCacheNotification:(NSNotification *)notification;
 + (void)pruneSourceCachesIfNeeded;
 + (void)logDebugInfo:(NSString *)message;
 + (void)initializeCookiesWithRetry;
-+ (void)retryFetchCookies;
 + (void)updateFooterTextViewsForTweetID:(NSString *)tweetID;
 + (void)cleanupTimersForBackground;
 @end
@@ -696,27 +600,6 @@ static UIViewController * _Nonnull topMostController() {
 - (void)BHT_setTranslatedText:(NSAttributedString *)translatedText;
 - (void)BHT_restoreOriginalText;
 - (BOOL)BHT_isShowingTranslatedText;
-@end
-
-// TTAStatusInlineActionButton - minimal interface for titleLabel property
-@interface TTAStatusInlineActionButton : UIView
-@property(readonly, nonatomic) UILabel *titleLabel;
-@end
-
-// Forward declare T1StandardStatusTranslateView
-@interface T1StandardStatusTranslateView : UIView
-@end
-
-// Forward declare TFNComposableViewSet
-@interface TFNComposableViewSet : NSObject
-@property(retain, nonatomic) NSMutableArray *views;
-- (void)_tfn_addView:(id)arg1 toHostViewWithViewAdapter:(id)arg2;
-@end
-
-// Forward declare TFNComposableViewAdapterSet
-@interface TFNComposableViewAdapterSet : NSObject
-@property(readonly, nonatomic) NSDictionary *viewAdaptersByIdentifier;
-- (id)initWithViewAdaptersByIdentifier:(id)arg1;
 @end
 
 // Block type definitions for compatibility
@@ -755,8 +638,4 @@ extern UIColor *BHTCurrentAccentColor(void);
 + (NSArray *)tfn_vectorImageSearchDirectoryURLs;
 + (void)tfn_vectorImageSetOverrideContainerName:(NSString *)arg1;
 + (NSString *)tfn_vectorImageOverrideContainerName;
-@end
-
-@interface TFNFlexibleLayoutView : UIView
-@property(nonatomic) CGRect frame;
 @end

@@ -93,11 +93,6 @@
     }
     return [NSString stringWithFormat:@"%@x%@", q.firstObject, q.lastObject];
 }
-+ (BOOL)isVideoCell:(id <T1StatusViewModel>)model {
-    BOOL isMediaEntityVideo = [model respondsToSelector:@selector(isMediaEntityVideo)] && model.isMediaEntityVideo;
-    BOOL isGIF = [model respondsToSelector:@selector(isGIF)] && model.isGIF;
-    return isMediaEntityVideo || isGIF;
-}
 + (void)save:(NSURL *)url {
     [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
         [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];
@@ -205,9 +200,6 @@
 + (BOOL)bypassAgeVerification {
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"bypass_age_verification"];
 }
-+ (BOOL)changeFont {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"en_font"];
-}
 + (BOOL)FLEX {
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"flex_twitter"];
 }
@@ -262,13 +254,7 @@
 + (BOOL)stripTrackingParams {
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"strip_tracking_params"];
 }
-+ (BOOL)alwaysFollowingPage {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"always_following_page"];
-}
 + (BOOL)stopHidingTabBar {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"no_tab_bar_hiding"];
-}
-+ (BOOL)noTabBarHiding {
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"no_tab_bar_hiding"];
 }
 + (BOOL)hideBookmarkButton {
@@ -352,31 +338,6 @@
     return [[NSUserDefaults standardUserDefaults] boolForKey:@"restore_tab_labels"];
 }
 
-+ (void)clearSourceLabelCache {
-    // Post notification to trigger cache clearing in Tweak.x
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"BHTClearSourceLabelCacheNotification" object:nil];
-}
-
-// Translate functionality
-+ (BOOL)enableTranslate {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"enable_translate"];
-}
-
-+ (NSString *)translateEndpoint {
-    NSString *endpoint = [[NSUserDefaults standardUserDefaults] stringForKey:@"translate_endpoint"];
-    return endpoint ?: @"https://generativelanguage.googleapis.com/v1beta/models";
-}
-
-+ (NSString *)translateAPIKey {
-    NSString *apiKey = [[NSUserDefaults standardUserDefaults] stringForKey:@"translate_api_key"];
-    return apiKey;
-}
-
-+ (NSString *)translateModel {
-    NSString *model = [[NSUserDefaults standardUserDefaults] stringForKey:@"translate_model"];
-    return model ?: @"gemini-1.5-flash";
-}
-
 + (UIViewController *)BHTSettingsWithAccount:(TFNTwitterAccount *)twAccount {
     return [[ModernSettingsViewController alloc] initWithAccount:twAccount];
 }
@@ -388,14 +349,6 @@
     BOOL containsDigitsOnly = [string rangeOfCharacterFromSet:nonDigits].location == NSNotFound;
 
     return containsDigitsOnly;
-}
-
-+ (BOOL)doesContainNonDigitsOnly:(NSString *)string {
-    NSCharacterSet *digits = [NSCharacterSet decimalDigitCharacterSet];
-
-    BOOL containsNonDigitsOnly = [string rangeOfCharacterFromSet:digits].location == NSNotFound;
-
-    return containsNonDigitsOnly;
 }
 
 + (BOOL)replySorting {

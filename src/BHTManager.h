@@ -14,7 +14,6 @@
 + (NSString *)getVideoQuality:(NSString *)url;
 + (id)sharedFontGroup;
 + (UIFont *)menuTitleFont;
-+ (BOOL)isVideoCell:(id <T1StatusViewModel>)model;
 + (bool)isDMVideoCell:(T1InlineMediaView *)view;
 + (BOOL)doesContainDigitsOnly:(NSString *)string;
 + (UIViewController *)BHTSettingsWithAccount:(TFNTwitterAccount *)twAccount;
@@ -37,7 +36,6 @@
 + (BOOL)Padlock;
 + (BOOL)OldStyle;
 + (BOOL)bypassAgeVerification;
-+ (BOOL)changeFont;
 + (BOOL)FLEX;
 + (BOOL)autoHighestLoad;
 + (BOOL)disableSensitiveTweetWarnings;
@@ -56,7 +54,6 @@
 + (BOOL)hideTrendVideos;
 + (BOOL)forceTweetFullFrame;
 + (BOOL)stripTrackingParams;
-+ (BOOL)alwaysFollowingPage;
 + (BOOL)stopHidingTabBar;
 + (BOOL)hideBookmarkButton;
 + (BOOL)hideDownvoteButton;
@@ -77,17 +74,8 @@
 + (BOOL)restoreVideoTimestamp;
 + (BOOL)classicTabBarEnabled;
 + (BOOL)restoreTabLabels;
-+ (BOOL)noTabBarHiding;
-
-// Translate functionality
-+ (BOOL)enableTranslate;
-+ (NSString *)translateEndpoint;
-+ (NSString *)translateAPIKey;
-+ (NSString *)translateModel;
 
 + (BOOL)replySorting;
-
-+ (void)clearSourceLabelCache;
 
 + (BOOL)restoreReplyContext;
 

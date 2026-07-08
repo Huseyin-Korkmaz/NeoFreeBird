@@ -2105,27 +2105,7 @@ static UIFont *TwitterChirpFont(TwitterFontStyle style) {
     NSString *key = objc_getAssociatedObject(sender, @"prefKey");
     if (key) {
         [[NSUserDefaults standardUserDefaults] setBool:sender.isOn forKey:key];
-        if ([key isEqualToString:@"flex_twitter"]) {
-            if (sender.isOn) {
-                [[objc_getClass("FLEXManager") sharedManager] showExplorer];
-            } else {
-                [[objc_getClass("FLEXManager") sharedManager] hideExplorer];
-            }
-        }
-
-        if ([key isEqualToString:@"square_avatars"]) {
-            [self showRestartRequiredAlert:@"RESTART_REQUIRED_ALERT_MESSAGE"];
-        }
     }
-}
-
-- (void)showRestartRequiredAlert:(NSString *)messageKey {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_REQUIRED_ALERT_TITLE"]
-                                                                   message:[[BHTBundle sharedBundle] localizedStringForKey:messageKey]
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"NOT_NOW_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_NOW_BUTTON_TITLE"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {exit(0);}]];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end
@@ -2378,10 +2358,6 @@ if ([type isEqualToString:@"compactButton"]) {
             [[objc_getClass("FLEXManager") sharedManager] hideExplorer];
         }
     }
-
-    if ([key isEqualToString:@"square_avatars"]) {
-        [self showRestartRequiredAlert:@"RESTART_REQUIRED_ALERT_MESSAGE"];
-    }
 }
 
 - (void)configureURLHostMenuForCell:(ModernSettingsCompactButtonCell *)cell
@@ -2457,15 +2433,6 @@ if ([type isEqualToString:@"compactButton"]) {
 
     menuButton.menu = menu;
     menuButton.showsMenuAsPrimaryAction = YES;
-}
-
-- (void)showRestartRequiredAlert:(NSString *)messageKey {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_REQUIRED_ALERT_TITLE"]
-                                                                   message:[[BHTBundle sharedBundle] localizedStringForKey:messageKey]
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"NOT_NOW_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_NOW_BUTTON_TITLE"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {exit(0);}]];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end
@@ -2652,15 +2619,6 @@ if ([type isEqualToString:@"compactButton"]) {
             }
         }
     }
-}
-
-- (void)showRestartRequiredAlert:(NSString *)messageKey {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_REQUIRED_ALERT_TITLE"]
-                                                                   message:[[BHTBundle sharedBundle] localizedStringForKey:messageKey]
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"NOT_NOW_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:nil]];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_NOW_BUTTON_TITLE"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {exit(0);}]];
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

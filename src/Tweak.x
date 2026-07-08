@@ -44,8 +44,6 @@
 // Forward declarations
 static void BHT_UpdateAllTabBarIcons(void);
 static void BHT_applyThemeToWindow(UIWindow *window);
-static void BHT_ensureTheming(void);
-static void BHT_forceRefreshAllWindowAppearances(void);
 static void BHT_ensureThemingEngineSynchronized(BOOL forceSynchronize);
 static UIViewController* getViewControllerForView(UIView *view);
 static char kBHTSourceTapAddedKey;
@@ -3612,22 +3610,6 @@ static void BHT_hideExploreTabBar(UIView *view) {
 %end
 
 // MARK: BHTwitter settings
-%hook TFNActionItem
-%new + (instancetype)actionItemWithTitle:(NSString *)arg1 systemImageName:(NSString *)arg2 action:(void (^)(void))arg3 {
-    TFNActionItem *_self = [%c(TFNActionItem) actionItemWithTitle:arg1 imageName:nil action:arg3];
-    [_self setValue:[UIImage systemImageNamed:arg2] forKey:@"_image"];
-    return _self;
-}
-%end
-
-%hook TFNSettingsNavigationItem
-%new - (instancetype)initWithTitle:(NSString *)arg1 detail:(NSString *)arg2 systemIconName:(NSString *)arg3 controllerFactory:(UIViewController* (^)(void))arg4 {
-    TFNSettingsNavigationItem *_self = [[%c(TFNSettingsNavigationItem) alloc] initWithTitle:arg1 detail:arg2 iconName:arg3 controllerFactory:arg4];
-    [_self setValue:[UIImage systemImageNamed:arg3] forKey:@"_icon"];
-    return _self;
-}
-%end
-
 %hook T1GenericSettingsViewController
 - (void)viewWillAppear:(BOOL)arg1 {
     %orig;
@@ -3834,8 +3816,6 @@ static NSMutableDictionary *viewToTweetID     = nil;
 static NSMutableDictionary *fetchTimeouts     = nil;
 static NSMutableDictionary *viewInstances     = nil;
 static NSMutableDictionary *fetchRetries      = nil;
-static NSMutableDictionary *updateRetries      = nil;
-static NSMutableDictionary *updateCompleted   = nil;
 static NSMutableDictionary *fetchPending      = nil;
 static NSMutableDictionary *cookieCache       = nil;
 static NSDate *lastCookieRefresh              = nil;
@@ -3843,19 +3823,11 @@ static NSDate *lastCookieRefresh              = nil;
 // Add a dispatch queue for thread-safe access to shared data
 static dispatch_queue_t sourceLabelDataQueue = nil;
 
-// Constants for cookie refresh interval (reduced to 1 day in seconds for more frequent refresh)
-#define COOKIE_REFRESH_INTERVAL (24 * 60 * 60)
-#define COOKIE_FORCE_REFRESH_RETRY_COUNT 1 // Force cookie refresh after this many consecutive failures
-
 // --- Networking & Helper Implementation ---
 // Full interface already declared at the top of the file
 
 #define MAX_SOURCE_CACHE_SIZE 200 // Reduced cache size to prevent memory issues
 #define MAX_CONSECUTIVE_FAILURES 3 // Maximum consecutive failures before backing off
-
-// Static variables for cookie retry mechanism
-static BOOL isInitializingCookies = NO;
-static NSTimer *cookieRetryTimer = nil;
 
 @implementation TweetSourceHelper
 
@@ -3869,17 +3841,8 @@ static NSTimer *cookieRetryTimer = nil;
 
 + (void)initializeCookiesWithRetry {
     // Simplified initialization - just load hardcoded cookies
-    isInitializingCookies = YES;
-
     NSDictionary *hardcodedCookies = [self fetchCookies];
     [self cacheCookies:hardcodedCookies];
-
-    isInitializingCookies = NO;
-}
-
-+ (void)retryFetchCookies {
-    // No need to retry with hardcoded cookies - just call initialize
-    [self initializeCookiesWithRetry];
 }
 
 + (void)pruneSourceCachesIfNeeded {
@@ -3925,8 +3888,6 @@ static NSTimer *cookieRetryTimer = nil;
                     [fetchTimeouts removeObjectForKey:key];
                 }
                 [fetchRetries removeObjectForKey:key];
-                [updateRetries removeObjectForKey:key];
-                [updateCompleted removeObjectForKey:key];
                 [fetchPending removeObjectForKey:key];
             }
         }
@@ -3981,25 +3942,6 @@ static NSTimer *cookieRetryTimer = nil;
     cookieCache = [hardcodedCookies mutableCopy];
     lastCookieRefresh = [NSDate date];
     return hardcodedCookies;
-}
-
-+ (BOOL)shouldRefreshCookies {
-    // Allow refresh if we don't have cookies cached, or if we're using real cookies that might expire
-    if (!cookieCache || cookieCache.count == 0) {
-        return YES;
-    }
-
-    // Check if we're using real cookies (not hardcoded)
-    BOOL usingRealCookies = ![cookieCache[@"ct0"] isEqualToString:@"91cc6876b96a35f91adeedc4ef149947c4d58907ca10fc2b17f64b17db0cccfb714ae61ede34cf34866166dcaf8e1c3a86085fa35c41aacc3e3927f7aa1f9b850b49139ad7633344059ff04af302d5d3"];
-
-    if (usingRealCookies && lastCookieRefresh) {
-        // Refresh real cookies every 4 hours
-        NSTimeInterval timeSinceRefresh = [[NSDate date] timeIntervalSinceDate:lastCookieRefresh];
-        return timeSinceRefresh >= (4 * 60 * 60);
-    }
-
-    // Never refresh hardcoded cookies
-    return NO;
 }
 
 + (void)fetchSourceForTweetID:(NSString *)tweetID {
@@ -4228,14 +4170,6 @@ static NSTimer *cookieRetryTimer = nil;
     });
 }
 
-+ (void)retryUpdateForTweetID:(NSString *)tweetID {
-    // Removed complex retry mechanism
-}
-
-+ (void)pollForPendingUpdates {
-    // Removed complex polling mechanism
-}
-
 + (void)handleAppForeground:(NSNotification *)notification {
     // Removed complex app foreground handling
 }
@@ -4404,12 +4338,6 @@ static NSTimer *cookieRetryTimer = nil;
     }
 }
 
-// %new - (void)enumerateSubviewsRecursively:(void (^)(UIView *))block {
-// This method is now replaced by the static C function BH_EnumerateSubviewsRecursively
-// }
-
-// Method now implemented in the TweetSourceHelper (Notifications) category
-
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -4447,7 +4375,6 @@ static NSTimer *cookieRetryTimer = nil;
 
 @interface T1ConversationFocalStatusView (BHTSourceLabels)
 - (void)BHT_updateFooterTextWithSource:(NSString *)sourceText tweetID:(NSString *)tweetID;
-- (void)BHT_applyColoredTextToFooterTextView:(id)footerTextView timeAgoText:(NSString *)timeAgoText sourceText:(NSString *)sourceText;
 - (id)footerTextView;
 @end
 
@@ -5061,20 +4988,6 @@ static BOOL findAndHideButtonWithAccessibilityId(UIView *viewToSearch, NSString 
 
 %end
 
-// Forward declare T1SuperFollowControl if its interface is not fully defined yet
-@class T1SuperFollowControl;
-
-// Helper function to recursively find and hide T1SuperFollowControl instances
-static void findAndHideSuperFollowControl(UIView *viewToSearch) {
-    if ([viewToSearch isKindOfClass:NSClassFromString(@"T1SuperFollowControl")]) {
-        viewToSearch.hidden = YES;
-        viewToSearch.alpha = 0.0;
-    }
-    for (UIView *subview in viewToSearch.subviews) {
-        findAndHideSuperFollowControl(subview);
-    }
-}
-
 @class T1ProfileHeaderViewController; // Forward declaration instead of interface definition
 
 // It's good practice to also declare the class we are looking for, even if just minimally
@@ -5084,13 +4997,7 @@ static void findAndHideSuperFollowControl(UIView *viewToSearch) {
 
 // Add global class pointer for T1ProfileHeaderViewController
 static Class gT1ProfileHeaderViewControllerClass = nil;
-// Add global class pointers for Dash specific views
-static Class gDashAvatarImageViewClass = nil;
-static Class gDashDrawerAvatarImageViewClass = nil;
 static Class gDashHostingControllerClass = nil;
-static Class gGuideContainerVCClass = nil;
-static Class gTombstoneCellClass = nil;
-static Class gExploreHeroCellClass = nil;
 
 // Helper function to find the UIViewController managing a UIView
 static UIViewController* getViewControllerForView(UIView *view) {
@@ -5420,16 +5327,6 @@ static BOOL isViewInsideDashHostingController(UIView *view) {
 
         // Ensure the label is found and prepared if the view appears.
         [self BHT_findAndPrepareTimestampLabelForVC:activePlayerVC];
-
-        // REMOVED: BHT_FirstLoadDone and related logic for forced first-load visibility.
-        // BOOL isFirstLoad = ![objc_getAssociatedObject(activePlayerVC, "BHT_FirstLoadDone") boolValue];
-        // if (isFirstLoad) {
-            // dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.75 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                // if (self && self.view.window) {
-                    // objc_setAssociatedObject(self, "BHT_FirstLoadDone", @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-                // }
-            // });
-        // }
     }
 }
 
@@ -5471,12 +5368,6 @@ static BOOL isViewInsideDashHostingController(UIView *view) {
 @interface TFNAvatarImageView : UIView // Assuming it's a UIView subclass, adjust if necessary
 - (void)setStyle:(NSInteger)style;
 - (NSInteger)style;
-@end
-
-// MARK: - Blur Handler
-
-@interface TFNBlurHandler : NSObject
-@property(retain, nonatomic) UIView *blurBackgroundView;
 @end
 
 %hook TFNAvatarImageView
@@ -5819,20 +5710,8 @@ static char kManualRefreshInProgressKey;
     // Initialize global Class pointers here when the tweak loads
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        gGuideContainerVCClass = NSClassFromString(@"T1TwitterSwift.GuideContainerViewController");
-        if (!gGuideContainerVCClass) gGuideContainerVCClass = NSClassFromString(@"T1TwitterSwift_GuideContainerViewController");
-
-        gTombstoneCellClass = NSClassFromString(@"T1TwitterSwift.ConversationTombstoneCell");
-        if (!gTombstoneCellClass) gTombstoneCellClass = NSClassFromString(@"T1TwitterSwift_ConversationTombstoneCell");
-
-        gExploreHeroCellClass = NSClassFromString(@"T1ExploreEventSummaryHeroTableViewCell");
-
         // Initialize T1ProfileHeaderViewController class pointer
         gT1ProfileHeaderViewControllerClass = NSClassFromString(@"T1ProfileHeaderViewController");
-
-        // Initialize Dash specific class pointers
-        gDashAvatarImageViewClass = NSClassFromString(@"TwitterDash.DashAvatarImageView");
-        gDashDrawerAvatarImageViewClass = NSClassFromString(@"TwitterDash.DashDrawerAvatarImageView");
 
         // The full name for the hosting controller is very long and specific.
         gDashHostingControllerClass = NSClassFromString(@"_TtGC7SwiftUI19UIHostingControllerGV10TFNUISwift22HostingEnvironmentViewV11TwitterDash18DashNavigationView__");
@@ -5846,8 +5725,6 @@ static char kManualRefreshInProgressKey;
         if (!tweetSources)      tweetSources      = [NSMutableDictionary dictionary];
         if (!fetchTimeouts)     fetchTimeouts     = [NSMutableDictionary dictionary];
         if (!fetchRetries)      fetchRetries      = [NSMutableDictionary dictionary];
-        if (!updateRetries)     updateRetries     = [NSMutableDictionary dictionary];
-        if (!updateCompleted)   updateCompleted   = [NSMutableDictionary dictionary];
         if (!fetchPending)      fetchPending      = [NSMutableDictionary dictionary];
         if (!cookieCache)       cookieCache       = [NSMutableDictionary dictionary];
     });
@@ -6045,26 +5922,6 @@ static void BHT_ensureThemingEngineSynchronized(BOOL forceSynchronize) {
     }
 }
 
-// Legacy method for backward compatibility, now just calls our new function
-static void BHT_ensureTheming(void) {
-    BHT_ensureThemingEngineSynchronized(YES);
-}
-
-// Comprehensive UI refresh - used when we need to force a UI update
-static void BHT_forceRefreshAllWindowAppearances(void) {
-    // Only update tab bar icons if classic theming is enabled
-    if ([BHTManager classicTabBarEnabled]) {
-        BHT_UpdateAllTabBarIcons();
-    }
-
-    // Trigger system-wide appearance updates
-    for (UIWindow *window in [UIApplication sharedApplication].windows) {
-        if (window.isKeyWindow && window.rootViewController) {
-            [window.rootViewController.view setNeedsLayout];
-        }
-    }
-}
-
 // MARK: - Timestamp Label Styling via UILabel -setText:
 
 // Helper method to determine if a text is likely a timestamp
@@ -6094,24 +5951,6 @@ static BOOL isTimestampText(NSString *text) {
     }
 
     return YES;
-}
-
-// Helper to find player controls in view hierarchy
-static UIView *findPlayerControlsInHierarchy(UIView *startView) {
-    if (!startView) return nil;
-
-    __block UIView *playerControls = nil;
-    BH_EnumerateSubviewsRecursively(startView, ^(UIView *view) {
-        if (playerControls) return;
-
-        NSString *className = NSStringFromClass([view class]);
-        if ([className containsString:@"PlayerControlsView"] ||
-            [className containsString:@"VideoControls"]) {
-            playerControls = view;
-        }
-    });
-
-    return playerControls;
 }
 
 %hook UILabel
@@ -6182,44 +6021,7 @@ static UIView *findPlayerControlsInHierarchy(UIView *startView) {
 
         // Mark as styled and store reference
         objc_setAssociatedObject(self, "BHT_StyledTimestamp", @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        // gVideoTimestampLabel = self; // REMOVED
     }
-}
-
-// For first-load mode, prevent hiding the timestamp
-- (void)setHidden:(BOOL)hidden {
-    // Only check labels that might be our timestamp
-    // if (self == gVideoTimestampLabel && [BHTManager restoreVideoTimestamp]) { // REMOVED gVideoTimestampLabel logic
-        // If trying to hide a fixed label, prevent it
-        // if (hidden) {
-            // BOOL isFixedForFirstLoad = [objc_getAssociatedObject(self, "BHT_FixedForFirstLoad") boolValue];
-            // if (isFixedForFirstLoad) {
-                // Let the original method run but with "NO" instead of "YES"
-                // return %orig(NO);
-            // }
-        // }
-    // }
-
-    // Default behavior
-    %orig(hidden);
-}
-
-// Also prevent changing alpha to 0 for first-load labels
-- (void)setAlpha:(CGFloat)alpha {
-    // Only check our timestamp label
-    // if (self == gVideoTimestampLabel && [BHTManager restoreVideoTimestamp]) { // REMOVED gVideoTimestampLabel logic
-        // If trying to make a fixed label transparent, prevent it
-        // if (alpha == 0.0) {
-            // BOOL isFixedForFirstLoad = [objc_getAssociatedObject(self, "BHT_FixedForFirstLoad") boolValue];
-            // if (isFixedForFirstLoad) {
-                // Keep it fully opaque during protected period
-                // return %orig(1.0);
-            // }
-        // }
-    // }
-
-    // Default behavior
-    %orig(alpha);
 }
 
 %end
@@ -6474,10 +6276,6 @@ static BOOL BHT_isInConversationContainerHierarchy(UIViewController *viewControl
 }
 
 %end
-
-static NSBundle *BHBundle() {
-    return [NSBundle bundleWithIdentifier:@"com.bandarhelal.BHTwitter"];
-}
 
 // MARK: Theme TFNBarButtonItemButtonV1
 %hook TFNBarButtonItemButtonV1

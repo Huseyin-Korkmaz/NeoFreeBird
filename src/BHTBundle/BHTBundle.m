@@ -44,7 +44,4 @@
 - (NSURL *)pathForFile:(NSString *)fileName {
     return [self.mainBundle URLForResource:fileName withExtension:nil];
 }
-- (NSString *)BHTwitterVersion {
-    return [self.mainBundle objectForInfoDictionaryKey:@"BHTVersion"];
-}
 @end
