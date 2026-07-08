@@ -10,17 +10,8 @@
 
 @implementation DebugSettingsViewController
 
-- (NSString *)pageTitleKey {
-    return @"MODERN_SETTINGS_DEBUG_TITLE";
-}
-
-- (NSString *)pageSubtitleKey {
-    return @"MODERN_SETTINGS_DEBUG_SUBTITLE";
-}
-
-- (void)buildSettingsList {
-    self.toggles = @[ @{ @"key": @"flex_twitter", @"titleKey": @"FLEX_OPTION_TITLE", @"subtitleKey": @"FLEX_OPTION_DETAIL_TITLE", @"default": @NO, @"type": @"toggle" }
-    ];
+- (NSString *)pageKey {
+    return @"debug";
 }
 
 - (void)switchChanged:(UISwitch *)sender {

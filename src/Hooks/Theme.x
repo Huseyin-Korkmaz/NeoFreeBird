@@ -112,7 +112,7 @@ static BOOL BHT_isTwitterDarkThemeActive() {
     // Signal UI to refresh after Twitter applies its palette
     if ([NSUserDefaults.standardUserDefaults objectForKey:@"bh_color_theme_selectedColor"] &&
         !BHT_isInThemeChangeOperation &&
-        [BHTManager classicTabBarEnabled]) {
+        [BHTSettings boolForKey:@"tab_bar_theming"]) {
         // This call happens after Twitter has applied its color changes,
         // so we need to refresh our tab bar theming
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -142,7 +142,7 @@ static BOOL BHT_isTwitterDarkThemeActive() {
 
     // Ensure our theme isn't lost during dark/light mode changes
     if ([NSUserDefaults.standardUserDefaults objectForKey:@"bh_color_theme_selectedColor"] &&
-        [BHTManager classicTabBarEnabled]) {
+        [BHTSettings boolForKey:@"tab_bar_theming"]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             BHT_UpdateAllTabBarIcons();
         });
@@ -177,7 +177,7 @@ static BOOL BHT_isTwitterDarkThemeActive() {
 %hook T1TabBarViewController
 
 - (void)setTabBarScrolling:(BOOL)scrolling {
-    if ([BHTManager stopHidingTabBar]) {
+    if ([BHTSettings boolForKey:@"no_tab_bar_hiding"]) {
         %orig(NO); // Force scrolling to NO if fading is prevented
     } else {
         %orig(scrolling);
@@ -198,13 +198,7 @@ static BOOL BHT_isTwitterDarkThemeActive() {
 %end
 // Helper for the Twitter icon theming setting
 static BOOL BHColorTwitterIconEnabled(void) {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-    if ([defaults objectForKey:@"color_twitter_icon_in_top_bar"] == nil) {
-        return [BHTManager isTwitterBranded];
-    }
-
-    return [defaults boolForKey:@"color_twitter_icon_in_top_bar"];
+    return [BHTSettings boolForKey:@"color_twitter_icon_in_top_bar"];
 }
 
 // MARK: Bird Icon Theming, controlled by "color_twitter_icon_in_top_bar"
@@ -247,7 +241,7 @@ static BOOL BHColorTwitterIconEnabled(void) {
 
     BOOL isSelected = [[self valueForKey:@"selected"] boolValue];
 
-    if ([BHTManager classicTabBarEnabled]) {
+    if ([BHTSettings boolForKey:@"tab_bar_theming"]) {
         // Apply custom theming
         UIColor *targetColor = isSelected ? BHTCurrentAccentColor() : [UIColor secondaryLabelColor];
 
@@ -280,7 +274,7 @@ static BOOL BHColorTwitterIconEnabled(void) {
 }
 
 - (BOOL)_t1_showsTitle {
-    if ([BHTManager restoreTabLabels]) {
+    if ([BHTSettings boolForKey:@"restore_tab_labels"]) {
         return true;
     }
     return %orig;
@@ -290,7 +284,7 @@ static BOOL BHColorTwitterIconEnabled(void) {
     %orig;
 
     // Ensure titleLabel is not hidden when restore tab labels is enabled
-    if ([BHTManager restoreTabLabels]) {
+    if ([BHTSettings boolForKey:@"restore_tab_labels"]) {
         UILabel *titleLabel = [self valueForKey:@"titleLabel"];
         if (titleLabel) {
             titleLabel.hidden = NO;
@@ -323,7 +317,7 @@ static BOOL BHColorTwitterIconEnabled(void) {
     %orig;
 
     // Apply our custom theming after Twitter updates the tab bar
-    if ([BHTManager classicTabBarEnabled]) {
+    if ([BHTSettings boolForKey:@"tab_bar_theming"]) {
         NSArray *tabViews = [self valueForKey:@"tabViews"];
         for (id tabView in tabViews) {
             if ([tabView respondsToSelector:@selector(bh_applyCurrentThemeToIcon)]) {
@@ -396,7 +390,7 @@ void BHT_ensureThemingEngineSynchronized(BOOL forceSynchronize) {
         }
 
         // Refresh only tab bar icons when classic theming is enabled
-        if ([BHTManager classicTabBarEnabled]) {
+        if ([BHTSettings boolForKey:@"tab_bar_theming"]) {
             BHT_UpdateAllTabBarIcons();
         }
 

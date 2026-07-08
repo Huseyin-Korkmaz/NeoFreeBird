@@ -97,7 +97,7 @@ static void BHT_refreshWebCookiesViaWebView(void);
 @end
 
 static BOOL BHT_nativeCreateTweetInterceptEnabled(void) {
-    return ![BHTManager replyInWebView];
+    return ![BHTSettings boolForKey:@"reply_in_webview"];
 }
 
 #pragma mark - Web session cookie harvesting

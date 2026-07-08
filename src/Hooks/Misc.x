@@ -13,7 +13,7 @@ static NSString *_lastCopiedURL;
 
 %hook SFSafariViewController
 - (void)viewWillAppear:(BOOL)animated {
-    if (![BHTManager alwaysOpenSafari]) {
+    if (![BHTSettings boolForKey:@"openInBrowser"]) {
         return %orig;
     }
 
@@ -31,7 +31,7 @@ static NSString *_lastCopiedURL;
 }
 
 - (instancetype)initWithURL:(NSURL *)URL configuration:(SFSafariViewControllerConfiguration *)configuration {
-    if (![BHTManager alwaysOpenSafari]) {
+    if (![BHTSettings boolForKey:@"openInBrowser"]) {
         return %orig;
     }
 
@@ -49,7 +49,7 @@ static NSString *_lastCopiedURL;
 }
 
 - (instancetype)initWithURL:(NSURL *)URL {
-    if (![BHTManager alwaysOpenSafari]) {
+    if (![BHTSettings boolForKey:@"openInBrowser"]) {
         return %orig;
     }
 
@@ -69,7 +69,7 @@ static NSString *_lastCopiedURL;
 
 %hook SFInteractiveDismissController
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    if (![BHTManager alwaysOpenSafari]) {
+    if (![BHTSettings boolForKey:@"openInBrowser"]) {
         return %orig;
     }
     [transitionContext completeTransition:NO];
@@ -86,23 +86,23 @@ static NSString *_lastCopiedURL;
 // MARK: Disable RTL
 %hook NSParagraphStyle
 + (NSWritingDirection)defaultWritingDirectionForLanguage:(id)lang {
-    return [BHTManager disableRTL] ? NSWritingDirectionLeftToRight : %orig;
+    return [BHTSettings boolForKey:@"dis_rtl"] ? NSWritingDirectionLeftToRight : %orig;
 }
 + (NSWritingDirection)_defaultWritingDirection {
-    return [BHTManager disableRTL] ? NSWritingDirectionLeftToRight : %orig;
+    return [BHTSettings boolForKey:@"dis_rtl"] ? NSWritingDirectionLeftToRight : %orig;
 }
 %end
 
 // MARK: Bio Translate
 %hook TFNTwitterCanonicalUser
 - (_Bool)isProfileBioTranslatable {
-    return [BHTManager BioTranslate] ? true : %orig;
+    return [BHTSettings boolForKey:@"bio_translate"] ? true : %orig;
 }
 %end
 // MARK: Show Scroll Bar
 %hook TFNTableView
 - (void)setShowsVerticalScrollIndicator:(BOOL)arg1 {
-    %orig([BHTManager showScrollIndicator]);
+    %orig([BHTSettings boolForKey:@"showScollIndicator"]);
 }
 %end
 
@@ -120,7 +120,7 @@ static NSString *_lastCopiedURL;
             };
         });
 
-        if ([BHTManager stripTrackingParams]) {
+        if ([BHTSettings boolForKey:@"strip_tracking_params"]) {
             if (UIPasteboard.generalPasteboard.hasURLs) {
                 NSURL *pasteboardURL = UIPasteboard.generalPasteboard.URL;
                 NSArray<NSString*>* params = trackingParams[pasteboardURL.host];

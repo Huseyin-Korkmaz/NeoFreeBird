@@ -15,7 +15,7 @@
 %hook TFNAvatarImageView
 
 - (void)setStyle:(NSInteger)style {
-    if ([BHTManager squareAvatars]) {
+    if ([BHTSettings boolForKey:@"square_avatars"]) {
         CGFloat activeCornerRadius;
         NSString *selfClassName = NSStringFromClass([self class]); // Get class name as string
 
@@ -75,7 +75,7 @@
 }
 
 - (NSInteger)style {
-    if ([BHTManager squareAvatars]) {
+    if ([BHTSettings boolForKey:@"square_avatars"]) {
         return 3;
     }
     return %orig;
@@ -87,7 +87,7 @@
 
 // Hook the specific TFN rounding method
 - (UIImage *)tfn_roundImageWithTargetDimensions:(CGSize)targetDimensions targetContentMode:(UIViewContentMode)targetContentMode {
-    if ([BHTManager squareAvatars]) {
+    if ([BHTSettings boolForKey:@"square_avatars"]) {
         if (targetDimensions.width <= 0 || targetDimensions.height <= 0) {
             return self; // Avoid issues with zero/negative size
         }
@@ -128,7 +128,7 @@
 %hook TFNCircularAvatarShadowLayer
 
 - (void)setHidden:(BOOL)hidden {
-    if ([BHTManager squareAvatars]) {
+    if ([BHTSettings boolForKey:@"square_avatars"]) {
         %orig(YES); // Always hide this layer when square avatars are enabled
     } else {
         %orig;

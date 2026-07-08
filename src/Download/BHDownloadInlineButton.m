@@ -9,6 +9,7 @@
 #import "Download/BHDownloadInlineButton.h"
 #import <objc/runtime.h>
 #import "Core/BHTBundle.h"
+#import "Core/BHTSettings.h"
 
 #pragma mark - Helpers
 static inline UIViewController *BHTopMostController(void) {
@@ -37,7 +38,7 @@ static inline UIViewController *BHTopMostController(void) {
 
         // HUD helpers
         void (^startHUD)(NSString *) = ^(NSString *key) {
-            if ([BHTManager DirectSave]) return;
+            if ([BHTSettings boolForKey:@"direct_save"]) return;
             self.hud = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
             self.hud.textLabel.text = [[BHTBundle sharedBundle] localizedStringForKey:key];
             [self.hud showInView:BHTopMostController().view];
@@ -117,7 +118,7 @@ static inline UIViewController *BHTopMostController(void) {
 
     [[NSFileManager defaultManager] moveItemAtURL:tmpURL toURL:dst error:nil];
 
-    if (![BHTManager DirectSave]) {
+    if (![BHTSettings boolForKey:@"direct_save"]) {
         [self.hud dismiss];
         [BHTManager showSaveVC:dst];
     } else {

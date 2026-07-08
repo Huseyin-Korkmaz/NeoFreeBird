@@ -9,6 +9,7 @@
 #import "Settings/ModernSettingsCells.h"
 #import "Headers/TWHeaders.h"
 #import "Core/BHTManager.h"
+#import "Core/BHTSettings.h"
 #import "Core/BHTBundle.h"
 #import "ThemeColor/BHDimPalette.h"
 
@@ -29,15 +30,20 @@
     [self setupTable];
 }
 
-- (NSString *)pageTitleKey {
+- (NSString *)pageKey {
     return nil;
+}
+
+- (NSString *)pageTitleKey {
+    return [BHTSettings titleKeyForPage:[self pageKey]];
 }
 
 - (NSString *)pageSubtitleKey {
-    return nil;
+    return [BHTSettings subtitleKeyForPage:[self pageKey]];
 }
 
 - (void)buildSettingsList {
+    self.toggles = [BHTSettings settingsForPage:[self pageKey]];
 }
 
 - (void)setupNav {

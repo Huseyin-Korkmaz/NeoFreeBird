@@ -127,7 +127,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 - (void)viewDidAppear:(_Bool)arg1 {
     %orig(arg1);
 
-    if (![BHTManager CopyProfileInfo]) {
+    if (![BHTSettings boolForKey:@"CopyProfileInfo"]) {
         return;
     }
 
@@ -281,7 +281,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     %orig(previousTraitCollection);
 
-    if (![BHTManager CopyProfileInfo]) {
+    if (![BHTSettings boolForKey:@"CopyProfileInfo"]) {
         return;
     }
 
@@ -340,7 +340,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 
 %hook T1ProfileSummaryView
 - (BOOL)shouldShowGetVerifiedButton {
-    return [BHTManager hidePremiumOffer] ? false : %orig;
+    return [BHTSettings boolForKey:@"hide_premium_offer"] ? false : %orig;
 }
 %end
 
@@ -404,7 +404,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 
 - (id)initWithSizeClass:(long long)arg1 {
     id result = %orig;
-    if ([BHTManager restoreFollowButton] && result) {
+    if ([BHTSettings boolForKey:@"restore_follow_button"] && result) {
         [self setHidden:YES];
         [self setAlpha:0.0];
     }
@@ -413,7 +413,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 
 - (void)_t1_configureButton {
     %orig;
-    if ([BHTManager restoreFollowButton]) {
+    if ([BHTSettings boolForKey:@"restore_follow_button"]) {
         [self setHidden:YES];
         [self setAlpha:0.0];
         if (self.button) {
@@ -429,7 +429,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 
 // Method that creates the overflow button
 - (id)_t1_overflowButtonForItems:(id)arg1 {
-    if ([BHTManager restoreFollowButton]) {
+    if ([BHTSettings boolForKey:@"restore_follow_button"]) {
         return nil; // Return nil to prevent the overflow button from appearing
     }
     return %orig;
@@ -437,7 +437,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 
 // Override the method that determines which buttons to show based on width
 - (void)_t1_updateArrangedButtonItemsForContentWidth:(double)arg1 {
-    if ([BHTManager restoreFollowButton]) {
+    if ([BHTSettings boolForKey:@"restore_follow_button"]) {
         %orig(10000.0);
     } else {
         %orig(arg1);

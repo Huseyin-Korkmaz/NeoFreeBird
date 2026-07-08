@@ -583,7 +583,7 @@ static dispatch_queue_t sourceLabelDataQueue = nil;
 - (void)setViewModel:(id)viewModel options:(unsigned long long)options account:(id)account {
     %orig(viewModel, options, account);
 
-    if (![BHTManager RestoreTweetLabels] || !viewModel) {
+    if (![BHTSettings boolForKey:@"restore_tweet_labels"] || !viewModel) {
         return;
     }
 
@@ -730,7 +730,7 @@ objc_setAssociatedObject(footerView,
     %orig;
 
     // Add source label to footer text view
-    if ([BHTManager RestoreTweetLabels] && self.viewModel) {
+    if ([BHTSettings boolForKey:@"restore_tweet_labels"] && self.viewModel) {
         @try {
             // Get the tweet object from the view model
             id tweetObject = nil;

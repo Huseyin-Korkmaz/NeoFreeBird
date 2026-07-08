@@ -9,49 +9,49 @@
 
 %hook T1CompositionStatusViewModel
 - (BOOL)isFromUserVerified {
-    return [BHTManager hideBlueVerified] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 - (BOOL)isFromUserBlueVerified {
-    return [BHTManager hideBlueVerified] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 %end
 
 %hook TFNTwitterStatus
 - (BOOL)isFromUserVerified {
-    return [BHTManager hideBlueVerified] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 - (BOOL)isFromUserBlueVerified {
-    return [BHTManager hideBlueVerified] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 %end
 
 %hook T1StandardUserViewModel
 - (BOOL)verified {
-    return [BHTManager hideBlueVerified] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 - (BOOL)isBlueVerified {
-    return [BHTManager hideBlueVerified] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 %end
 
 %hook T1ProfileUserViewModel
 - (BOOL)isVerifiedAccount {
-    return [BHTManager hideBlueVerified] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 %end
 
 %hook T1TwitterCoreStatusViewModelAdapter
 - (BOOL)isFromUserVerified {
-    return [BHTManager hideBlueVerified] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 - (BOOL)isFromUserBlueVerified {
-    return [BHTManager hideBlueVerified] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 %end
 // MARK: No search history
 %hook T1SearchTypeaheadViewController // for old Twitter versions
 - (void)viewDidLoad {
-    if ([BHTManager NoHistory]) { // thanks @CrazyMind90
+    if ([BHTSettings boolForKey:@"no_his"]) { // thanks @CrazyMind90
         if ([self respondsToSelector:@selector(clearActionControlWantsClear:)]) {
             [self performSelector:@selector(clearActionControlWantsClear:)];
         }
@@ -62,7 +62,7 @@
 
 %hook TTSSearchTypeaheadViewController
 - (void)viewDidLoad {
-    if ([BHTManager NoHistory]) { // thanks @CrazyMind90
+    if ([BHTSettings boolForKey:@"no_his"]) { // thanks @CrazyMind90
         if ([self respondsToSelector:@selector(clearActionControlWantsClear:)]) {
             [self performSelector:@selector(clearActionControlWantsClear:)];
         }
@@ -85,7 +85,7 @@ static void BHT_hideExploreTabBar(UIView *view) {
 %hook T1GuideNavigationController
 - (void)viewDidLayoutSubviews {
     %orig;
-    if (![BHTManager hideTrends]) return;
+    if (![BHTSettings boolForKey:@"hide_trends"]) return;
     @try {
         UINavigationController *nav = (UINavigationController *)self;
 
@@ -115,7 +115,7 @@ static void BHT_hideExploreTabBar(UIView *view) {
 
 %hook T1ImmersiveExploreCardView
 - (void)handleDoubleTap:(id)arg1 {
-    if ([BHTManager LikeConfirm]) {
+    if ([BHTSettings boolForKey:@"like_con"]) {
         [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
             make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
             make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {
@@ -131,7 +131,7 @@ static void BHT_hideExploreTabBar(UIView *view) {
 
 %hook T1TweetDetailsViewController
 - (void)_t1_toggleFavoriteOnCurrentStatus {
-    if ([BHTManager LikeConfirm]) {
+    if ([BHTSettings boolForKey:@"like_con"]) {
         [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
             make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
             make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {
@@ -152,14 +152,14 @@ static void BHT_hideExploreTabBar(UIView *view) {
 // button on every surface without any view-level hiding or navigation-context guessing.
 %hook TFNTwitterCanonicalStatus
 - (BOOL)grokAnalysisButton {
-    if ([BHTManager hideGrokAnalyze]) return NO;
+    if ([BHTSettings boolForKey:@"hide_grok_analyze"]) return NO;
     return %orig;
 }
 %end
 
 %hook TFSTwitterStatus
 - (BOOL)grokAnalysisButton {
-    if ([BHTManager hideGrokAnalyze]) return NO;
+    if ([BHTSettings boolForKey:@"hide_grok_analyze"]) return NO;
     return %orig;
 }
 %end
@@ -173,7 +173,7 @@ static void BHT_hideExploreTabBar(UIView *view) {
 // Subscribe button
 - (void)addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents {
     if (action == @selector(_didTapSubscribe)) {
-        if ([self isKindOfClass:NSClassFromString(@"TFNButton")] && [BHTManager restoreFollowButton]) {
+        if ([self isKindOfClass:NSClassFromString(@"TFNButton")] && [BHTSettings boolForKey:@"restore_follow_button"]) {
             self.alpha = 0.0;
             self.userInteractionEnabled = NO;
         }
@@ -222,7 +222,7 @@ static BOOL findAndHideButtonWithAccessibilityId(UIView *viewToSearch, NSString 
 
 - (void)didMoveToWindow {
     %orig;
-    if ([BHTManager hideFollowButton]) {
+    if ([BHTSettings boolForKey:@"hide_follow_button"]) {
         findAndHideButtonWithAccessibilityId(self, @"FollowButton");
     }
 }
@@ -240,7 +240,7 @@ static BOOL findAndHideButtonWithAccessibilityId(UIView *viewToSearch, NSString 
 - (void)viewDidLoad {
     %orig;
     @try {
-        if ([BHTManager hideFollowButton] && self.view) {
+        if ([BHTSettings boolForKey:@"hide_follow_button"] && self.view) {
             findAndHideButtonWithAccessibilityId(self.view, @"FollowButton");
         }
     } @catch (NSException *exception) {
@@ -251,7 +251,7 @@ static BOOL findAndHideButtonWithAccessibilityId(UIView *viewToSearch, NSString 
 - (void)viewWillAppear:(BOOL)animated {
     %orig;
     @try {
-        if ([BHTManager hideFollowButton] && self.view) {
+        if ([BHTSettings boolForKey:@"hide_follow_button"] && self.view) {
             findAndHideButtonWithAccessibilityId(self.view, @"FollowButton");
         }
     } @catch (NSException *exception) {
@@ -271,7 +271,7 @@ static BOOL findAndHideButtonWithAccessibilityId(UIView *viewToSearch, NSString 
 %hook TUIFollowControl
 
 - (void)setVariant:(NSUInteger)variant {
-    if ([BHTManager restoreFollowButton]) {
+    if ([BHTSettings boolForKey:@"restore_follow_button"]) {
         NSUInteger subscribeVariantID = 1;
         NSUInteger desiredFollowVariantID = 32;
         if (variant == subscribeVariantID) {

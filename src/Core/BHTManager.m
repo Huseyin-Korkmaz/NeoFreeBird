@@ -6,6 +6,7 @@
 //
 
 #import "Core/BHTManager.h"
+#import "Core/BHTSettings.h"
 #import "Core/BHTBundle.h"
 #import "Settings/ModernSettingsViewController.h"
 
@@ -136,7 +137,7 @@
                     ReturnCode *returnCode = [session getReturnCode];
                     dispatch_async(dispatch_get_main_queue(), ^(void) {
                         if ([ReturnCode isSuccess:returnCode]) {
-                            if (!([BHTManager DirectSave])) {
+                            if (!([BHTSettings boolForKey:@"direct_save"])) {
                                 [hud dismiss];
                                 [BHTManager showSaveVC:newFilePath];
                             } else {
@@ -155,152 +156,6 @@
     TFNMenuSheetViewController *alert = [[objc_getClass("TFNMenuSheetViewController") alloc] initWithActionItems:[NSArray arrayWithArray:actions]];
     return alert;
 }
-+ (BOOL)DownloadingVideos {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"dw_v"];
-}
-+ (BOOL)DirectSave {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"direct_save"];
-}
-+ (BOOL)LikeConfirm {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"like_con"];
-}
-+ (BOOL)TweetConfirm {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"tweet_con"];
-}
-+ (BOOL)FollowConfirm {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"follow_con"];
-}
-+ (BOOL)HidePromoted {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_promoted"];
-}
-+ (BOOL)HideTopics {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_topics"];
-}
-+ (BOOL)DisableVODCaptions {
-    // The settings toggle ("No video captions") writes @"video_layer_caption";
-    // this used to read an unexposed @"dis_VODCaptions" key, so the switch did
-    // nothing. Read the key the UI actually sets.
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"video_layer_caption"];
-}
-+ (BOOL)UndoTweet {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"undo_tweet"];
-}
-+ (BOOL)NoHistory {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"no_his"];
-}
-+ (BOOL)BioTranslate {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"bio_translate"];
-}
-+ (BOOL)Padlock {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"padlock"];
-}
-+ (BOOL)OldStyle {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"old_style"];
-}
-+ (BOOL)bypassAgeVerification {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"bypass_age_verification"];
-}
-+ (BOOL)FLEX {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"flex_twitter"];
-}
-+ (BOOL)autoHighestLoad {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"autoHighestLoad"];
-}
-+ (BOOL)disableSensitiveTweetWarnings {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"disableSensitiveTweetWarnings"];
-}
-+ (BOOL)showScrollIndicator {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"showScollIndicator"];
-}
-+ (BOOL)CopyProfileInfo {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"CopyProfileInfo"];
-}
-+ (BOOL)tweetToImage {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"TweetToImage"];
-}
-+ (BOOL)hideSpacesBar {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_spaces"];
-}
-+ (BOOL)disableRTL {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"dis_rtl"];
-}
-+ (BOOL)alwaysOpenSafari {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"openInBrowser"];
-}
-+ (BOOL)replyInWebView {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"reply_in_webview"];
-}
-+ (BOOL)hideWhoToFollow {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_who_to_follow"];
-}
-+ (BOOL)hideTopicsToFollow {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_topics_to_follow"];
-}
-+ (BOOL)hideBlueVerified {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_blue_verified"];
-}
-+ (BOOL)hideViewCount {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_view_count"];
-}
-+ (BOOL)hidePremiumOffer {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_premium_offer"];
-}
-+ (BOOL)hideTrendVideos {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_trend_videos"];
-}
-+ (BOOL)forceTweetFullFrame {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"force_tweet_full_frame"];
-}
-+ (BOOL)stripTrackingParams {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"strip_tracking_params"];
-}
-+ (BOOL)stopHidingTabBar {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"no_tab_bar_hiding"];
-}
-+ (BOOL)hideBookmarkButton {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_bookmark_button"];
-}
-+ (BOOL)hideDownvoteButton {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_downvote_button"];
-}
-+ (BOOL)customVoice {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"custom_voice_upload"];
-}
-
-+ (BOOL)RestoreTweetLabels {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"restore_tweet_labels"];
-}
-
-+ (BOOL)disableMediaTab {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"disableMediaTab"];
-}
-
-+ (BOOL)disableArticles {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"disableArticles"];
-}
-+ (BOOL)hideCustomTimelines {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_custom_timelines"];
-}
-+ (BOOL)hideTrends {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_trends"];
-}
-
-+ (BOOL)disableHighlights {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"disableHighlights"];
-}
-
-// New feature toggles implementation
-+ (BOOL)hideGrokAnalyze {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_grok_analyze"];
-}
-
-+ (BOOL)restoreTwitterNames {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    if ([defaults objectForKey:@"restore_twitter_names"] == nil) {
-        return [BHTManager isTwitterBranded];
-    }
-    return [defaults boolForKey:@"restore_twitter_names"];
-}
 
 + (BOOL)isTwitterBranded {
     static BOOL branded = NO;
@@ -309,33 +164,6 @@
         branded = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] isEqual:@"Twitter"];
     });
     return branded;
-}
-
-+ (BOOL)hideFollowButton {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"hide_follow_button"];
-}
-
-+ (BOOL)restoreFollowButton {
-    // Also controls hideSubscribeButton functionality
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"restore_follow_button"];
-}
-
-+ (BOOL)squareAvatars {
-    // Simply return the current setting without any side effects
-    // The alert will be handled exclusively by the Settings view controller
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"square_avatars"];
-}
-
-+ (BOOL)restoreVideoTimestamp {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"restore_video_timestamp"];
-}
-
-+ (BOOL)classicTabBarEnabled {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"tab_bar_theming"];
-}
-
-+ (BOOL)restoreTabLabels {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"restore_tab_labels"];
 }
 
 + (UIViewController *)BHTSettingsWithAccount:(TFNTwitterAccount *)twAccount {
@@ -349,14 +177,6 @@
     BOOL containsDigitsOnly = [string rangeOfCharacterFromSet:nonDigits].location == NSNotFound;
 
     return containsDigitsOnly;
-}
-
-+ (BOOL)replySorting {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"reply_sorting_enabled"];
-}
-
-+ (BOOL)restoreReplyContext {
-    return [[NSUserDefaults standardUserDefaults] boolForKey:@"restore_reply_context"];
 }
 
 @end

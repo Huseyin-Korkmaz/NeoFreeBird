@@ -18,7 +18,9 @@
 
 - (instancetype)initWithAccount:(TFNTwitterAccount *)account;
 
-// Overridden by each page
+// Overridden by each page to identify its entry in the BHTSettings registry
+- (NSString *)pageKey;
+
 - (NSString *)pageTitleKey;
 - (NSString *)pageSubtitleKey;
 - (void)buildSettingsList;

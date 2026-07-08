@@ -7,7 +7,9 @@
 
 #import "Settings/Pages/GeneralSettingsViewController.h"
 #import "Headers/TWHeaders.h"
+#import "Core/BHTManager.h"
 #import "Core/BHTBundle.h"
+#import "Core/BHTSettings.h"
 
 @interface GeneralSettingsViewController () <UIFontPickerViewControllerDelegate>
 @end
@@ -40,7 +42,7 @@
             [view performSelector:@selector(_t1_layoutBadgeViewMinimized)];
         }
 
-        if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"tab_bar_theming"] boolValue]) {
+        if (![BHTSettings boolForKey:@"tab_bar_theming"]) {
             UILabel *titleLabel = [view valueForKey:@"titleLabel"];
             if (titleLabel) {
                 titleLabel.textColor = nil;
@@ -73,7 +75,7 @@
             [view performSelector:@selector(_t1_layoutBadgeViewMaximized)];
         }
 
-        if (![[[NSUserDefaults standardUserDefaults] objectForKey:@"tab_bar_theming"] boolValue]) {
+        if (![BHTSettings boolForKey:@"tab_bar_theming"]) {
             UILabel *titleLabel = [view valueForKey:@"titleLabel"];
             if (titleLabel) {
                 titleLabel.textColor = nil;
@@ -86,31 +88,8 @@
     }
 }
 
-- (NSString *)pageTitleKey {
-    return @"MODERN_SETTINGS_LAYOUT_TITLE";
-}
-
-- (NSString *)pageSubtitleKey {
-    return @"MODERN_SETTINGS_LAYOUT_SUBTITLE";
-}
-
-- (void)buildSettingsList {
-    self.toggles = @[
-        @{ @"key": @"padlock", @"titleKey": @"PADLOCK_OPTION_TITLE", @"subtitleKey": @"PADLOCK_OPTION_DETAIL_TITLE", @"default": @NO },
-        @{ @"key": @"hide_topics", @"titleKey": @"HIDE_TOPICS_OPTION_TITLE", @"subtitleKey": @"HIDE_TOPICS_OPTION_DETAIL_TITLE", @"default": @YES },
-        @{ @"key": @"hide_topics_to_follow", @"titleKey": @"HIDE_TOPICS_TO_FOLLOW_OPTION", @"subtitleKey": @"HIDE_TOPICS_TO_FOLLOW_OPTION_DETAIL_TITLE", @"default": @YES },
-        @{ @"key": @"hide_who_to_follow", @"titleKey": @"HIDE_WHO_FOLLOW_OPTION", @"subtitleKey": @"HIDE_WHO_FOLLOW_OPTION_DETAIL_TITLE", @"default": @YES },
-        @{ @"key": @"hide_spaces", @"titleKey": @"HIDE_SPACE_OPTION_TITLE", @"subtitleKey": @"", @"default": @NO },
-        @{ @"key": @"hide_custom_timelines", @"titleKey": @"HIDE_CUSTOM_TIMELINES_OPTION_TITLE", @"subtitleKey": @"HIDE_CUSTOM_TIMELINES_OPTION_DETAIL_TITLE", @"default": @NO },
-        @{ @"key": @"no_tab_bar_hiding", @"titleKey": @"STOP_HIDING_TAB_BAR_TITLE", @"subtitleKey": @"STOP_HIDING_TAB_BAR_DETAIL_TITLE", @"default": @YES },
-        @{ @"key": @"tab_bar_theming", @"titleKey": @"CLASSIC_TAB_BAR_SETTINGS_TITLE", @"subtitleKey": @"CLASSIC_TAB_BAR_SETTINGS_DETAIL", @"default": @NO },
-        @{ @"key": @"restore_tab_labels", @"titleKey": @"RESTORE_TAB_LABELS_TITLE", @"subtitleKey": @"RESTORE_TAB_LABELS_DETAIL", @"default": @NO },
-        @{ @"key": @"dis_rtl", @"titleKey": @"DISABLE_RTL_OPTION_TITLE", @"subtitleKey": @"DISABLE_RTL_OPTION_DETAIL_TITLE", @"default": @NO },
-        @{ @"key": @"showScollIndicator", @"titleKey": @"SHOW_SCOLL_INDICATOR_OPTION_TITLE", @"subtitleKey": @"", @"default": @NO },
-        @{ @"key": @"en_font", @"titleKey": @"FONT_OPTION_TITLE", @"subtitleKey": @"FONT_OPTION_DETAIL_TITLE", @"default": @NO },
-        @{ @"type": @"compactButton", @"parentKey": @"en_font", @"key": @"regular_font_button", @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE", @"action": @"showRegularFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_1", @"subtitleDefault": @"System Default" },
-        @{ @"type": @"compactButton", @"parentKey": @"en_font", @"key": @"bold_font_button", @"titleKey": @"BOLD_FONTS_PICKER_OPTION_TITLE", @"action": @"showBoldFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_2", @"subtitleDefault": @"System Default" }
-    ];
+- (NSString *)pageKey {
+    return @"general";
 }
 
 - (void)updateAndAnimateChangesForKey:(NSString *)key {

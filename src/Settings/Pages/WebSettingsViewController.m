@@ -11,21 +11,8 @@
 
 @implementation WebSettingsViewController
 
-- (NSString *)pageTitleKey {
-    return @"MODERN_SETTINGS_WEB_TITLE";
-}
-
-- (NSString *)pageSubtitleKey {
-    return @"MODERN_SETTINGS_WEB_SUBTITLE";
-}
-
-- (void)buildSettingsList {
-    self.toggles = @[
-        @{ @"key": @"strip_tracking_params", @"titleKey": @"STRIP_URL_TRACKING_PARAMETERS_TITLE", @"subtitleKey": @"STRIP_URL_TRACKING_PARAMETERS_DETAIL_TITLE", @"default": @NO },
-        @{ @"type": @"compactButton", @"parentKey": @"strip_tracking_params", @"key": @"url_host_button", @"titleKey": @"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE", @"action": @"showURLHostSelectionViewController:", @"prefKeyForSubtitle": @"tweet_url_host", @"subtitleDefault": @"x.com" },
-        @{ @"key": @"openInBrowser", @"titleKey": @"ALWAYS_OPEN_SAFARI_OPTION_TITLE", @"subtitleKey": @"ALWAYS_OPEN_SAFARI_OPTION_DETAIL_TITLE", @"default": @NO },
-        @{ @"key": @"ios_in_app_article_webview_enabled", @"titleKey": @"NEW_INAPP_WEB_OPTION_TITLE", @"subtitleKey": @"NEW_INAPP_WEB_DETAIL_TITLE", @"default": @YES }
-    ];
+- (NSString *)pageKey {
+    return @"web";
 }
 
 - (NSInteger)indexForToggleKey:(NSString *)key inArray:(NSArray<NSDictionary *> *)array {

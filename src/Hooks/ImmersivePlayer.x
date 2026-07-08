@@ -166,7 +166,7 @@ static const NSTimeInterval CACHE_INVALIDATION_INTERVAL = 10.0; // 10 seconds
     T1ImmersiveFullScreenViewController *activePlayerVC = self;
 
     // The rest of the method remains unchanged
-    if (![BHTManager restoreVideoTimestamp]) {
+    if (![BHTSettings boolForKey:@"restore_video_timestamp"]) {
         if (playerToTimestampMap) {
             UILabel *labelToManage = [playerToTimestampMap objectForKey:activePlayerVC];
             if (labelToManage) {
@@ -220,7 +220,7 @@ static const NSTimeInterval CACHE_INVALIDATION_INTERVAL = 10.0; // 10 seconds
     %orig(animated);
     T1ImmersiveFullScreenViewController *activePlayerVC = self;
 
-    if ([BHTManager restoreVideoTimestamp]) {
+    if ([BHTSettings boolForKey:@"restore_video_timestamp"]) {
         if (!playerToTimestampMap) {
             playerToTimestampMap = [NSMapTable weakToStrongObjectsMapTable];
         }
@@ -234,7 +234,7 @@ static const NSTimeInterval CACHE_INVALIDATION_INTERVAL = 10.0; // 10 seconds
     %orig(playerViewController, state);
     T1ImmersiveFullScreenViewController *activePlayerVC = self;
 
-    if (![BHTManager restoreVideoTimestamp] || !playerToTimestampMap) {
+    if (![BHTSettings boolForKey:@"restore_video_timestamp"] || !playerToTimestampMap) {
         return;
     }
 
@@ -299,7 +299,7 @@ static BOOL isTimestampText(NSString *text) {
     %orig(text);
 
     // Skip processing if feature is disabled
-    if (![BHTManager restoreVideoTimestamp]) {
+    if (![BHTSettings boolForKey:@"restore_video_timestamp"]) {
         return;
     }
 

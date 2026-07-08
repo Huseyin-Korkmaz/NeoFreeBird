@@ -188,7 +188,7 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 %hook NSBundle
 - (NSString *)localizedStringForKey:(NSString *)key value:(NSString *)value table:(NSString *)tableName {
     NSString *result = %orig;
-    if (![BHTManager restoreTwitterNames] || self == [BHTBundle sharedBundle].mainBundle) {
+    if (![BHTSettings boolForKey:@"restore_twitter_names"] || self == [BHTBundle sharedBundle].mainBundle) {
         return result;
     }
 
@@ -213,7 +213,7 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
     BOOL textChanged = NO;
 
     // --- Tweet source label coloring ---
-    if ([BHTManager RestoreTweetLabels] && tweetSources.count > 0) {
+    if ([BHTSettings boolForKey:@"restore_tweet_labels"] && tweetSources.count > 0) {
         NSString *unavailable = [[BHTBundle sharedBundle] localizedStringForKey:@"SOURCE_UNAVAILABLE"];
         for (NSString *sourceText in tweetSources.allValues) {
             if (sourceText.length > 0 &&
@@ -250,7 +250,7 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
     // TTAStatusBodySelectableContentTextView, so they never reach this hook and are
     // left untouched. The rewrite is driven by the shared word-boundary transform, so
     // it changes the actual rendered text rather than a hardcoded list of phrases.
-    if ([BHTManager restoreTwitterNames]) {
+    if ([BHTSettings boolForKey:@"restore_twitter_names"]) {
         NSAttributedString *source = newString ?: model.attributedString;
         NSAttributedString *renamed = BHRestoreTwitterAttributed(source);
         if (renamed != source) {
@@ -284,13 +284,7 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 
 // Helper for the refresh pill setting
 static BOOL BHPillLabelOverrideEnabled(void) {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-
-    if ([defaults objectForKey:@"refresh_pill_label"] == nil) {
-        return [BHTManager isTwitterBranded];
-    }
-
-    return [defaults boolForKey:@"refresh_pill_label"];
+    return [BHTSettings boolForKey:@"refresh_pill_label"];
 }
 
 // Only the "new posts/Tweets" refresh pill should be relabelled. TFNPillControl

@@ -172,32 +172,8 @@ static void BHT_presentAuthIfNeeded(void) {
 - (_Bool)application:(UIApplication *)application didFinishLaunchingWithOptions:(id)arg2 {
     _Bool orig = %orig;
 
-
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"FirstRun_4.3"]) {
-        [[NSUserDefaults standardUserDefaults] setValue:@"1strun" forKey:@"FirstRun_4.3"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"dw_v"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"hide_promoted"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"voice"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"undo_tweet"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"TrustedFriends"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"bypass_age_verification"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"disableSensitiveTweetWarnings"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"disable_immersive_player"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"custom_voice_upload"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"hide_premium_offer"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"disableMediaTab"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"disableArticles"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"disableHighlights"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"hide_view_count"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"hide_grok_analyze"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"restore_reply_context"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"hide_topics"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"hide_topics_to_follow"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"hide_who_to_follow"];
-        [[NSUserDefaults standardUserDefaults] setBool:true forKey:@"no_tab_bar_hiding"];
-    }
     [BHTManager cleanCache];
-    if ([BHTManager FLEX]) {
+    if ([BHTSettings boolForKey:@"flex_twitter"]) {
         [[%c(FLEXManager) sharedManager] showExplorer];
     }
 
@@ -210,7 +186,7 @@ static void BHT_presentAuthIfNeeded(void) {
     }
 
     // Start the cookie initialization process with retry mechanism
-    if ([BHTManager RestoreTweetLabels]) {
+    if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [TweetSourceHelper initializeCookiesWithRetry];
         });
@@ -226,7 +202,7 @@ static void BHT_presentAuthIfNeeded(void) {
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bh_color_theme_selectedColor"]) {
         BHT_ensureThemingEngineSynchronized(YES);
     }
-    if ([BHTManager RestoreTweetLabels]) {
+    if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [TweetSourceHelper initializeCookiesWithRetry];
         });
@@ -234,7 +210,7 @@ static void BHT_presentAuthIfNeeded(void) {
 
     BHT_prewarmWebCookiesIfNeeded();
 
-    if ([BHTManager Padlock]) {
+    if ([BHTSettings boolForKey:@"padlock"]) {
         if (BHT_isAuthenticated()) {
             BHT_removePadlockOverlay();
         } else {
@@ -259,18 +235,18 @@ static void BHT_presentAuthIfNeeded(void) {
 - (void)applicationWillResignActive:(id)arg1 {
     %orig;
 
-    if ([BHTManager RestoreTweetLabels]) {
+    if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
         [TweetSourceHelper cleanupTimersForBackground];
     }
 
-    if ([BHTManager Padlock]) {
+    if ([BHTSettings boolForKey:@"padlock"]) {
         // Cover UI immediately
         BHT_showPadlockOverlay();
         // Mark unauthenticated so a reopen from background will prompt again
         BHT_setAuthenticated(NO);
     }
 
-    if ([BHTManager FLEX]) {
+    if ([BHTSettings boolForKey:@"flex_twitter"]) {
         [[%c(FLEXManager) sharedManager] showExplorer];
     }
 }
@@ -278,7 +254,7 @@ static void BHT_presentAuthIfNeeded(void) {
 - (void)applicationDidEnterBackground:(id)arg1 {
     %orig;
 
-    if ([BHTManager Padlock]) {
+    if ([BHTSettings boolForKey:@"padlock"]) {
         // Redundant, ensures state is locked while backgrounded
         BHT_setAuthenticated(NO);
         BHT_showPadlockOverlay();
@@ -288,7 +264,7 @@ static void BHT_presentAuthIfNeeded(void) {
 - (void)applicationWillEnterForeground:(id)arg1 {
     %orig;
 
-    if ([BHTManager Padlock]) {
+    if ([BHTSettings boolForKey:@"padlock"]) {
         // Keep UI covered during transition
         BHT_showPadlockOverlay();
     }
@@ -296,7 +272,7 @@ static void BHT_presentAuthIfNeeded(void) {
 
 - (void)applicationWillTerminate:(id)arg1 {
     %orig;
-    if ([BHTManager Padlock]) {
+    if ([BHTSettings boolForKey:@"padlock"]) {
         BHT_setAuthenticated(NO);
         BHT_removePadlockOverlay();
     }

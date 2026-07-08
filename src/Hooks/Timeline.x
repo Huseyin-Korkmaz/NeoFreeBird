@@ -43,7 +43,7 @@ static void BHTRecordPinnedTimelineUnpin(void) {
 }
 
 - (void)updatePinnedTimelines:(id)timelines {
-    if ([BHTManager hideCustomTimelines]) {
+    if ([BHTSettings boolForKey:@"hide_custom_timelines"]) {
         %orig;
         return;
     }
@@ -76,7 +76,7 @@ static void BHTRecordPinnedTimelineUnpin(void) {
 %end
 
 static void BHTHideHomeAddTabButton(id container) {
-    if (![BHTManager hideCustomTimelines]) {
+    if (![BHTSettings boolForKey:@"hide_custom_timelines"]) {
         return;
     }
     @try {
@@ -106,7 +106,7 @@ static void BHTHideHomeAddTabButton(id container) {
 %hook T1StandardStatusAttachmentViewAdapter
 - (NSUInteger)displayType {
     if (self.attachmentType == 2) {
-        return [BHTManager forceTweetFullFrame] ? 1 : %orig;
+        return [BHTSettings boolForKey:@"force_tweet_full_frame"] ? 1 : %orig;
     }
     return %orig;
 }
@@ -114,7 +114,7 @@ static void BHTHideHomeAddTabButton(id container) {
 
 %hook T1HomeTimelineItemsViewController
 - (void)_t1_initializeFleets {
-    if ([BHTManager hideSpacesBar]) {
+    if ([BHTSettings boolForKey:@"hide_spaces"]) {
         return;
     }
     return %orig;
@@ -123,7 +123,7 @@ static void BHTHideHomeAddTabButton(id container) {
 
 %hook THFHomeTimelineItemsViewController
 - (void)_t1_initializeFleets {
-    if ([BHTManager hideSpacesBar]) {
+    if ([BHTSettings boolForKey:@"hide_spaces"]) {
         return;
     }
     return %orig;
@@ -133,13 +133,13 @@ static void BHTHideHomeAddTabButton(id container) {
 
 %hook THFHomeTimelineContainerViewController
 - (void)_t1_showPremiumUpsellIfNeeded {
-    if ([BHTManager hidePremiumOffer]) {
+    if ([BHTSettings boolForKey:@"hide_premium_offer"]) {
         return;
     }
     return %orig;
 }
 - (void)_t1_showPremiumUpsellIfNeededWithScribing:(BOOL)arg1 {
-    if ([BHTManager hidePremiumOffer]) {
+    if ([BHTSettings boolForKey:@"hide_premium_offer"]) {
         return;
     }
     return %orig;

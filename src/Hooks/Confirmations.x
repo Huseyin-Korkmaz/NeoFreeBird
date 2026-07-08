@@ -8,7 +8,7 @@
 // MARK: Tweet confirm
 %hook T1TweetComposeViewController
 - (void)_t1_didTapSendButton:(UIButton *)tweetButton {
-    if ([BHTManager TweetConfirm]) {
+    if ([BHTSettings boolForKey:@"tweet_con"]) {
         [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
             make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
             make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {
@@ -21,7 +21,7 @@
     }
 }
 - (void)_t1_handleTweet {
-    if ([BHTManager TweetConfirm]) {
+    if ([BHTSettings boolForKey:@"tweet_con"]) {
         [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
             make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
             make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {
@@ -38,7 +38,7 @@
 // MARK: Follow confirm
 %hook TUIFollowControl
 - (void)_followUser:(id)arg1 event:(id)arg2 {
-    if ([BHTManager FollowConfirm]) {
+    if ([BHTSettings boolForKey:@"follow_con"]) {
         [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
             make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
             make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {
@@ -55,7 +55,7 @@
 // MARK: Like confirm
 %hook TTAStatusInlineFavoriteButton
 - (void)didTap {
-    if ([BHTManager LikeConfirm]) {
+    if ([BHTSettings boolForKey:@"like_con"]) {
         [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
             make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
             make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {
@@ -71,7 +71,7 @@
 
 %hook T1StatusInlineFavoriteButton
 - (void)didTap {
-    if ([BHTManager LikeConfirm]) {
+    if ([BHTSettings boolForKey:@"like_con"]) {
         [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
             make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
             make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {
@@ -87,6 +87,6 @@
 // MARK: Undo tweet
 %hook TFNTwitterToastNudgeExperimentModel
 - (BOOL)shouldShowShowUndoTweetSentToast {
-    return [BHTManager UndoTweet] ? true : %orig;
+    return [BHTSettings boolForKey:@"undo_tweet"] ? true : %orig;
 }
 %end

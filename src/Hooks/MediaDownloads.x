@@ -10,7 +10,7 @@
 %property (nonatomic, strong) JGProgressHUD *hud;
 - (void)setEntryViewModel:(id)arg1 {
     %orig;
-    if ([BHTManager DownloadingVideos]) {
+    if ([BHTSettings boolForKey:@"dw_v"]) {
         UIContextMenuInteraction *menuInteraction = [[UIContextMenuInteraction alloc] initWithDelegate:self];
         [self setUserInteractionEnabled:true];
 
@@ -102,30 +102,28 @@
 - (void)updateCellElements {
     %orig;
 
-    if ([BHTManager customVoice]) {
-        TFNButton *removeButton = [self valueForKey:@"_removeButton"];
+    TFNButton *removeButton = [self valueForKey:@"_removeButton"];
 
-        if ([self.attachment isKindOfClass:%c(TTMAssetVoiceRecording)]) {
-            if (self.uploadButton == nil) {
-                self.uploadButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                UIImageSymbolConfiguration *smallConfig = [UIImageSymbolConfiguration configurationWithScale:UIImageSymbolScaleSmall];
-                UIImage *arrowUpImage = [UIImage systemImageNamed:@"arrow.up" withConfiguration:smallConfig];
-                [self.uploadButton setImage:arrowUpImage forState:UIControlStateNormal];
-                [self.uploadButton addTarget:self action:@selector(handleUploadButton:) forControlEvents:UIControlEventTouchUpInside];
-                [self.uploadButton setTintColor:UIColor.labelColor];
-                [self.uploadButton setBackgroundColor:[UIColor blackColor]];
-                [self.uploadButton.layer setCornerRadius:29/2];
-                [self.uploadButton setTranslatesAutoresizingMaskIntoConstraints:false];
+    if ([self.attachment isKindOfClass:%c(TTMAssetVoiceRecording)]) {
+        if (self.uploadButton == nil) {
+            self.uploadButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            UIImageSymbolConfiguration *smallConfig = [UIImageSymbolConfiguration configurationWithScale:UIImageSymbolScaleSmall];
+            UIImage *arrowUpImage = [UIImage systemImageNamed:@"arrow.up" withConfiguration:smallConfig];
+            [self.uploadButton setImage:arrowUpImage forState:UIControlStateNormal];
+            [self.uploadButton addTarget:self action:@selector(handleUploadButton:) forControlEvents:UIControlEventTouchUpInside];
+            [self.uploadButton setTintColor:UIColor.labelColor];
+            [self.uploadButton setBackgroundColor:[UIColor blackColor]];
+            [self.uploadButton.layer setCornerRadius:29/2];
+            [self.uploadButton setTranslatesAutoresizingMaskIntoConstraints:false];
 
-                if (self.uploadButton.superview == nil) {
-                    [self addSubview:self.uploadButton];
-                    [NSLayoutConstraint activateConstraints:@[
-                        [self.uploadButton.trailingAnchor constraintEqualToAnchor:removeButton.leadingAnchor constant:-10],
-                        [self.uploadButton.topAnchor constraintEqualToAnchor:removeButton.topAnchor],
-                        [self.uploadButton.widthAnchor constraintEqualToConstant:29],
-                        [self.uploadButton.heightAnchor constraintEqualToConstant:29],
-                    ]];
-                }
+            if (self.uploadButton.superview == nil) {
+                [self addSubview:self.uploadButton];
+                [NSLayoutConstraint activateConstraints:@[
+                    [self.uploadButton.trailingAnchor constraintEqualToAnchor:removeButton.leadingAnchor constant:-10],
+                    [self.uploadButton.topAnchor constraintEqualToAnchor:removeButton.topAnchor],
+                    [self.uploadButton.widthAnchor constraintEqualToConstant:29],
+                    [self.uploadButton.heightAnchor constraintEqualToConstant:29],
+                ]];
             }
         }
     }
@@ -169,7 +167,7 @@
 
 %hook TTAStatusInlineShareButton
 - (void)didLongPressActionButton:(UILongPressGestureRecognizer *)gestureRecognizer {
-    if ([BHTManager tweetToImage]) {
+    if ([BHTSettings boolForKey:@"TweetToImage"]) {
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
             id delegate = self.delegate;
             if (![delegate isKindOfClass:%c(TTAStatusInlineActionsView)]) {
@@ -216,21 +214,21 @@ static NSArray *BHT_inlineActionViewClassesForViewModel(NSArray *classes, id vie
     Class analyticsButtonClass = %c(TTAStatusInlineAnalyticsButton);
     if (analyticsButtonClass &&
         [newClasses containsObject:analyticsButtonClass] &&
-        [BHTManager hideViewCount]) {
+        [BHTSettings boolForKey:@"hide_view_count"]) {
         [newClasses removeObject:analyticsButtonClass];
     }
 
     Class bookmarkButtonClass = %c(TTAStatusInlineBookmarkButton);
     if (bookmarkButtonClass &&
         [newClasses containsObject:bookmarkButtonClass] &&
-        [BHTManager hideBookmarkButton]) {
+        [BHTSettings boolForKey:@"hide_bookmark_button"]) {
         [newClasses removeObject:bookmarkButtonClass];
     }
 
     Class downvoteButtonClass = %c(TTAStatusInlineDownvoteButton);
     if (downvoteButtonClass &&
         [newClasses containsObject:downvoteButtonClass] &&
-        [BHTManager hideDownvoteButton]) {
+        [BHTSettings boolForKey:@"hide_downvote_button"]) {
         [newClasses removeObject:downvoteButtonClass];
     }
 
@@ -254,7 +252,7 @@ static NSArray *BHT_inlineActionViewClassesForViewModel(NSArray *classes, id vie
 // The array filter alone misses it, so intercept the gate directly: forcing
 // NO prevents the button being built in every context (timeline and comments).
 + (BOOL)t1_shouldShowDownvoteButtonForViewModel:(id)arg1 options:(NSUInteger)arg2 anatomyFeatures:(id)arg3 displayType:(NSUInteger)arg4 account:(id)arg5 {
-    if ([BHTManager hideDownvoteButton]) {
+    if ([BHTSettings boolForKey:@"hide_downvote_button"]) {
         return NO;
     }
     return %orig;
@@ -268,7 +266,7 @@ static NSArray *BHT_inlineActionViewClassesForViewModel(NSArray *classes, id vie
 // excludes it from layout (no gap) and gets it hidden like any collapsed action.
 %hook TTAStatusInlineDownvoteButton
 - (NSUInteger)visibility {
-    if ([BHTManager hideDownvoteButton]) {
+    if ([BHTSettings boolForKey:@"hide_downvote_button"]) {
         return 0;
     }
     return %orig;
@@ -280,7 +278,7 @@ static NSArray *BHT_inlineActionViewClassesForViewModel(NSArray *classes, id vie
 - (NSArray *)_t1_actionItemsForStatus:(__unsafe_unretained id)status account:(__unsafe_unretained id)account shareableEntity:(__unsafe_unretained id)shareableEntity entityURL:(__unsafe_unretained id)entityURL source:(__unsafe_unretained id)source options:(NSUInteger)options scribeComponent:(__unsafe_unretained id)scribeComponent doneBlock:(__unsafe_unretained id)doneBlock {
     NSArray *origItems = %orig;
 
-    if (![BHTManager DownloadingVideos] || ![status respondsToSelector:@selector(entities)]) {
+    if (![BHTSettings boolForKey:@"dw_v"] || ![status respondsToSelector:@selector(entities)]) {
         return origItems;
     }
 

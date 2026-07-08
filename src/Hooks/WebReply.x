@@ -170,7 +170,7 @@ static T1StatusCell *BHT_tweetViewFromInlineActionsView(TTAStatusInlineActionsVi
 
 %hook TTAStatusInlineReplyButton
 - (void)didTap {
-    if (![BHTManager replyInWebView]) {
+    if (![BHTSettings boolForKey:@"reply_in_webview"]) {
         return %orig;
     }
 
@@ -199,7 +199,7 @@ static T1StatusCell *BHT_tweetViewFromInlineActionsView(TTAStatusInlineActionsVi
 
 %hook T1PersistentComposeViewController
 - (void)persistentComposeViewDidTap:(id)composeView {
-    if (![BHTManager replyInWebView]) {
+    if (![BHTSettings boolForKey:@"reply_in_webview"]) {
         return %orig;
     }
 

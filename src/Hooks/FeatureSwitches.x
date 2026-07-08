@@ -21,7 +21,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     }
 
     // Custom timelines overrides
-    BOOL hideCustomTimelines = [BHTManager hideCustomTimelines];
+    BOOL hideCustomTimelines = [BHTSettings boolForKey:@"hide_custom_timelines"];
     if ([key isEqualToString:@"hometimeline_pinned_tabs_topics_enabled"] ||
         [key isEqualToString:@"hometimeline_pinned_tabs_generic_timelines_enabled"] ||
         [key isEqualToString:@"hometimeline_pinned_tabs_sticky_warm_start_enabled"] ||
@@ -51,7 +51,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     // Grok translations
     if ([key isEqualToString:@"grok_translations_bio_inline_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_bio_translation_is_enabled"]) {
-        return @([BHTManager BioTranslate]);
+        return @([BHTSettings boolForKey:@"bio_translate"]);
     }
 
     if ([key isEqualToString:@"grok_translations_post_inline_translation_is_enabled"] ||
@@ -61,34 +61,34 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
     // Profile tabs
     if ([key isEqualToString:@"articles_timeline_profile_tab_enabled"]) {
-        return @(![BHTManager disableArticles]);
+        return @(![BHTSettings boolForKey:@"disableArticles"]);
     }
 
     if ([key isEqualToString:@"highlights_tweets_tab_ui_enabled"]) {
-        return @(![BHTManager disableHighlights]);
+        return @(![BHTSettings boolForKey:@"disableHighlights"]);
     }
 
     if ([key isEqualToString:@"media_tab_profile_videos_tab_enabled"] ||
         [key isEqualToString:@"media_tab_profile_photos_tab_enabled"] ||
         [key isEqualToString:@"media_tab_enabled"] ||
         [key isEqualToString:@"media_tab_profile_videos_tab_new_design_enabled"]) {
-        return @(![BHTManager disableMediaTab]);
+        return @(![BHTSettings boolForKey:@"disableMediaTab"]);
     }
 
     // Age verification bypass
     if ([key hasPrefix:@"ios_age_assurance"] || [key isEqualToString:@"grok_settings_age_restriction_enabled"]) {
-        if ([BHTManager bypassAgeVerification]) {
+        if ([BHTSettings boolForKey:@"bypass_age_verification"]) {
             return @NO;
         }
     }
 
     // Conversation / tweet detail
     if ([key isEqualToString:@"conversational_replies_ios_minimal_detail_enabled"]) {
-        return @(![BHTManager OldStyle]);
+        return @YES;
     }
 
     if ([key isEqualToString:@"reply_sorting_enabled"]) {
-        return @(![BHTManager replySorting]);
+        return @(![BHTSettings boolForKey:@"reply_sorting_enabled"]);
     }
 
     if ([key isEqualToString:@"ios_tweet_detail_overflow_in_navigation_enabled"]) {
@@ -96,7 +96,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     }
 
     if ([key isEqualToString:@"ios_tweet_detail_conversation_context_removal_enabled"]) {
-        return @(![BHTManager restoreReplyContext]);
+        return @(![BHTSettings boolForKey:@"restore_reply_context"]);
     }
 
     // Tab bar configuration
@@ -114,11 +114,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
     // In-app article webview
     if ([key isEqualToString:@"ios_in_app_article_webview_enabled"]) {
-        NSUserDefaults *d = [NSUserDefaults standardUserDefaults];
-        if ([d objectForKey:key] != nil) {
-            return @([d boolForKey:key]);
-        }
-        return @YES;
+        return @([BHTSettings boolForKey:key]);
     }
 
     // Premium / subscription upsell disables
@@ -324,16 +320,16 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 %end
 %hook TFNTwitterMediaUploadConfiguration
 - (_Bool)photoUploadHighQualityImagesSettingIsVisible {
-    return [BHTManager autoHighestLoad] ? true : %orig;
+    return [BHTSettings boolForKey:@"autoHighestLoad"] ? true : %orig;
 }
 %end
 
 %hook T1SlideshowViewController
 - (_Bool)_t1_shouldDisplayLoadHighQualityImageItemForImageDisplayView:(id)arg1 highestQuality:(_Bool)arg2 {
-    return [BHTManager autoHighestLoad] ? true : %orig;
+    return [BHTSettings boolForKey:@"autoHighestLoad"] ? true : %orig;
 }
 - (id)_t1_loadHighQualityActionItemWithTitle:(id)arg1 forImageDisplayView:(id)arg2 highestQuality:(_Bool)arg3 {
-    if ([BHTManager autoHighestLoad]) {
+    if ([BHTSettings boolForKey:@"autoHighestLoad"]) {
         arg3 = true;
     }
     return %orig(arg1, arg2, arg3);
@@ -342,22 +338,22 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %hook T1ImageDisplayView
 - (_Bool)_tfn_shouldUseHighestQualityImage {
-    return [BHTManager autoHighestLoad] ? true : %orig;
+    return [BHTSettings boolForKey:@"autoHighestLoad"] ? true : %orig;
 }
 - (_Bool)_tfn_shouldUseHighQualityImage {
-    return [BHTManager autoHighestLoad] ? true : %orig;
+    return [BHTSettings boolForKey:@"autoHighestLoad"] ? true : %orig;
 }
 %end
 
 %hook T1HighQualityImagesUploadSettings
 - (_Bool)shouldUploadHighQualityImages {
-    return [BHTManager autoHighestLoad] ? true : %orig;
+    return [BHTSettings boolForKey:@"autoHighestLoad"] ? true : %orig;
 }
 %end
 
 %hook TFSTwitterAPICommandAccountStateProvider
 - (BOOL)allowPromotedContent {
-    return [BHTManager HidePromoted] ? NO : %orig;
+    return [BHTSettings boolForKey:@"hide_promoted"] ? NO : %orig;
 }
 %end
 
@@ -401,29 +397,29 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     return true;
 }
 - (_Bool)isSensitiveTweetWarningsComposeEnabled {
-    return [BHTManager disableSensitiveTweetWarnings] ? false : %orig;
+    return [BHTSettings boolForKey:@"disableSensitiveTweetWarnings"] ? false : %orig;
 }
 - (_Bool)isSensitiveTweetWarningsConsumeEnabled {
-    return [BHTManager disableSensitiveTweetWarnings] ? false : %orig;
+    return [BHTSettings boolForKey:@"disableSensitiveTweetWarnings"] ? false : %orig;
 }
 - (BOOL)isAgeAssuranceAgeVerificationFlowEnabled {
-    return [BHTManager bypassAgeVerification] ? NO : %orig;
+    return [BHTSettings boolForKey:@"bypass_age_verification"] ? NO : %orig;
 }
 - (_Bool)isVideoDynamicAdEnabled {
-    return [BHTManager HidePromoted] ? false : %orig;
+    return [BHTSettings boolForKey:@"hide_promoted"] ? false : %orig;
 }
 
 - (_Bool)isVODCaptionsEnabled {
-    return [BHTManager DisableVODCaptions] ? false : %orig;
+    return [BHTSettings boolForKey:@"video_layer_caption"] ? false : %orig;
 }
 - (_Bool)photoUploadHighQualityImagesSettingIsVisible {
-    return [BHTManager autoHighestLoad] ? true : %orig;
+    return [BHTSettings boolForKey:@"autoHighestLoad"] ? true : %orig;
 }
 - (_Bool)loadingHighestQualityImageVariantPermitted {
-    return [BHTManager autoHighestLoad] ? true : %orig;
+    return [BHTSettings boolForKey:@"autoHighestLoad"] ? true : %orig;
 }
 - (_Bool)isDoubleMaxZoomFor4KImagesEnabled {
-    return [BHTManager autoHighestLoad] ? true : %orig;
+    return [BHTSettings boolForKey:@"autoHighestLoad"] ? true : %orig;
 }
 %end
 
@@ -435,24 +431,24 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %hook TFNTwitterStatus
 - (BOOL)hasImageInterstitial {
-    return [BHTManager disableSensitiveTweetWarnings] ? false : %orig;
+    return [BHTSettings boolForKey:@"disableSensitiveTweetWarnings"] ? false : %orig;
 }
 
 - (id)imageInterstitial {
-    return [BHTManager disableSensitiveTweetWarnings] ? nil : %orig;
+    return [BHTSettings boolForKey:@"disableSensitiveTweetWarnings"] ? nil : %orig;
 }
 
 - (id)innerImageInterstitial {
-    return [BHTManager disableSensitiveTweetWarnings] ? nil : %orig;
+    return [BHTSettings boolForKey:@"disableSensitiveTweetWarnings"] ? nil : %orig;
 }
 
 - (BOOL)isPossiblySensitiveViewModelForAccount:(id)account {
-    return [BHTManager disableSensitiveTweetWarnings] ? false : %orig;
+    return [BHTSettings boolForKey:@"disableSensitiveTweetWarnings"] ? false : %orig;
 }
 %end
 
 %hook HFHealthSafetyFeature
 + (BOOL)isTweetMedialInterstitialEnabled:(id)featureSwitches {
-    return [BHTManager disableSensitiveTweetWarnings] ? false : %orig;
+    return [BHTSettings boolForKey:@"disableSensitiveTweetWarnings"] ? false : %orig;
 }
 %end
