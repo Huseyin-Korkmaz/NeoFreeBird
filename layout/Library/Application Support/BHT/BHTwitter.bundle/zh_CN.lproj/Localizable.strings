@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "视频时间戳";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "在沉浸式播放器中显示时间戳。";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "禁用视频流滑动";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "禁止在全屏播放器中滑动切换视频，并关闭自动播放下一个视频。";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "移除广告";
 "HIDE_PROMOTED_DETAIL" = "删除所有广告。";

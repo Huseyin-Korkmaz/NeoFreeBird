@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "Метка времени видео";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Показывает метку времени в полноэкранном режиме.";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "Без прокрутки видеоленты";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Запрещает пролистывание видео в полноэкранном плеере и отключает автопереход.";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Убрать рекламу";
 "HIDE_PROMOTED_DETAIL" = "Удалить всю рекламу из ленты.";

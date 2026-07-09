@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "動画のタイムスタンプ";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "没入型プレーヤー内にタイムスタンプを表示します。";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "動画フィードのスクロールを無効化";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "全画面プレーヤーでのスワイプによる動画切り替えと自動再生による次の動画への移動を無効にします。";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "広告を非表示";
 "HIDE_PROMOTED_DETAIL" = "すべての広告を非表示にします。";

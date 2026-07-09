@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "Video-tidsstämpel";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Visar tidsstämpel på den uppslukande spelaren.";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "Ingen videorullning";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Förhindrar svepning mellan videor i helskärmsspelaren och stänger av automatisk övergång till nästa video.";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Inga annonser";
 "HIDE_PROMOTED_DETAIL" = "Ta bort alla annonser.";

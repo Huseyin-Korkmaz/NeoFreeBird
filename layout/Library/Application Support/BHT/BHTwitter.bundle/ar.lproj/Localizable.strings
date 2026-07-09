@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "الطابع الزمني للفيديو";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "عرض الطابع الزمني في مشغل الفيديو الكامل.";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "بدون تمرير في موجز الفيديو";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "يمنع التمرير بين مقاطع الفيديو في المشغل الكامل ويعطل التقدم التلقائي.";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "بدون إعلانات";
 "HIDE_PROMOTED_DETAIL" = "إزالة جميع الإعلانات.";

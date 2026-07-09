@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "비디오 타임스탬프 표시";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "전체 화면 플레이어에서 영상의 현재/전체 재생시간을 표시합니다.";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "동영상 피드 스크롤 사용 안 함";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "전체 화면 플레이어에서 스와이프로 동영상을 넘기는 기능과 자동 진행을 비활성화합니다.";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "광고 제거";
 "HIDE_PROMOTED_DETAIL" = "모든 광고를 제거합니다.";

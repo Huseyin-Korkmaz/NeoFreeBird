@@ -7,13 +7,47 @@
 
 // MARK: - Immersive Player Timestamp
 
-// The immersive player builds its overlay from plugin views that each derive
-// their visibility from a shared ImmersiveCardState. The progress label
-// ("0:07 / 0:30") is a stock plugin, but its update handler only shows it when
-// isPortraitOrientation is false, so the portrait video feed never sees it.
-// Recomputing the alpha from displayMode alone restores the label in portrait
-// while keeping it tied to the controls, which hide through displayMode.
-//
+// Field indexes in ImmersiveCardState's declaration order.
+enum {
+    BHTCardStateFieldIsPanningBetweenCards = 19,
+    BHTCardStateFieldIsChromeFadedOutWhilePanning = 20,
+};
+
+static const uint8_t *BHT_immersiveCardStateMetadata(void) {
+    static const uint8_t *metadata;
+    static dispatch_once_t once;
+    dispatch_once(&once, ^{
+        const void *(*getType)(const char *, size_t, const void *, const void *const *) =
+            dlsym(RTLD_DEFAULT, "swift_getTypeByMangledNameInEnvironment");
+        if (getType) {
+            const char *mangledName = "14T1TwitterSwift18ImmersiveCardStateV";
+            metadata = getType(mangledName, strlen(mangledName), NULL, NULL);
+        }
+    });
+    return metadata;
+}
+
+// Reads a Bool field through the struct's field offset vector, the same way
+// the app's own compiled accesses do, so the byte offset never has to be
+// hardcoded.
+static BOOL BHT_cardStateBoolField(const uint8_t *state, uint32_t fieldIndex, BOOL *outValue) {
+    const uint8_t *metadata = BHT_immersiveCardStateMetadata();
+    if (!metadata) {
+        return NO;
+    }
+
+    const uint8_t *descriptor = *(const uint8_t *const *)(metadata + 8);
+    uint32_t numFields = *(const uint32_t *)(descriptor + 20);
+    uint32_t offsetVectorOffset = *(const uint32_t *)(descriptor + 24);
+    if (fieldIndex >= numFields || offsetVectorOffset == 0) {
+        return NO;
+    }
+
+    const int32_t *fieldOffsets = (const int32_t *)(metadata + offsetVectorOffset * sizeof(void *));
+    *outValue = state[fieldOffsets[fieldIndex]] & 1;
+    return YES;
+}
+
 // displayMode is a Swift enum stored as an 8-byte case index followed by a
 // discriminator tag (0 = the repliesPanning payload case, 1 = an empty case).
 // Empty cases: regular = 0, repliesOpen = 1, repliesCompletelyOpen = 2,
@@ -29,6 +63,16 @@ static BOOL BHT_progressLabelAlphaFromState(id pluginView, CGFloat *outAlpha) {
     uint8_t displayModeTag = state[8];
 
     BOOL visible = displayModeTag == 1 && (displayModeCase < 1 || displayModeCase > 3);
+
+    if (visible) {
+        BOOL panning = NO, chromeFaded = NO;
+        if (BHT_cardStateBoolField(state, BHTCardStateFieldIsPanningBetweenCards, &panning) && panning) {
+            visible = NO;
+        } else if (BHT_cardStateBoolField(state, BHTCardStateFieldIsChromeFadedOutWhilePanning, &chromeFaded) && chromeFaded) {
+            visible = NO;
+        }
+    }
+
     *outAlpha = visible ? 1.0 : 0.0;
     return YES;
 }
@@ -44,6 +88,38 @@ static BOOL BHT_progressLabelAlphaFromState(id pluginView, CGFloat *outAlpha) {
     }
 
     %orig(alpha);
+}
+
+%end
+
+// MARK: - Immersive Feed Scrolling
+
+// Restores swipe-to-dismiss gesture
+static BOOL BHT_isImmersiveCardPan(id viewController, UIGestureRecognizer *gesture) {
+    Ivar panIvar = class_getInstanceVariable([viewController class], "panRecognizer");
+    return panIvar && object_getIvar(viewController, panIvar) == gesture;
+}
+
+%hook T1ImmersiveViewController
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture {
+    if ([BHTSettings boolForKey:@"disable_immersive_scroll"] && BHT_isImmersiveCardPan(self, gesture)) {
+        return NO;
+    }
+
+    return %orig;
+}
+
+%end
+
+%hook T1ImmersiveViewControllerV2
+
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture {
+    if ([BHTSettings boolForKey:@"disable_immersive_scroll"] && BHT_isImmersiveCardPan(self, gesture)) {
+        return NO;
+    }
+
+    return %orig;
 }
 
 %end

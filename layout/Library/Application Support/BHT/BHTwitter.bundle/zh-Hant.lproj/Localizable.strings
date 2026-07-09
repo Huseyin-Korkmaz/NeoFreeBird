@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "顯示影片時間";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "在沉浸式播放器中顯示時間戳記。";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "停用影片動態捲動";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "禁止在全螢幕播放器中滑動切換影片，並關閉自動播放下一部影片。";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "不顯示廣告";
 "HIDE_PROMOTED_DETAIL" = "移除所有廣告。";

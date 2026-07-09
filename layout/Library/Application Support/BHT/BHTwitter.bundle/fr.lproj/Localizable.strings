@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "Horodatage vidéo";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Affiche l'horodatage dans le lecteur immersif.";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "Pas de défilement des vidéos";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Empêche de faire défiler les vidéos dans le lecteur plein écran et désactive le passage automatique à la vidéo suivante.";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Sans pubs";
 "HIDE_PROMOTED_DETAIL" = "Supprime toutes les pubs.";

@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "Vremenska oznaka videa";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Prikazuje vremensku oznaku u videu u punom prikazu.";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "Bez pomicanja videosadržaja";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Sprječava klizanje između videozapisa u prikazu preko cijelog zaslona i isključuje automatski prijelaz.";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Bez oglasa";
 "HIDE_PROMOTED_DETAIL" = "Ukloni sve oglase.";

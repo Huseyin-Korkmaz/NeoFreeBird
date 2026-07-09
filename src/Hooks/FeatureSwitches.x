@@ -114,6 +114,12 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @([BHTSettings boolForKey:@"new_inapp_webview"]);
     }
 
+    // A negative threshold disables immersive auto-advance and removes its row
+    // from the player's settings sheet.
+    if ([key isEqualToString:@"immersive_video_auto_advance_duration_threshold"]) {
+        return [BHTSettings boolForKey:@"disable_immersive_scroll"] ? @(-1) : nil;
+    }
+
     // Premium features gate on subscriptions_enabled || (gating bypass && premium tier).
     if ([key isEqualToString:@"subscriptions_gating_bypass"]) {
         return @YES;

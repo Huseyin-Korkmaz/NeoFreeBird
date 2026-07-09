@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "Video-Zeitstempel";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Zeigt Zeitstempel im Vollbild-Videoplayer an.";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "Kein Video-Feed-Scrollen";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Verhindert das Wischen zwischen Videos im Vollbildplayer und deaktiviert den automatischen Wechsel zum nächsten Video.";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Keine Werbung";
 "HIDE_PROMOTED_DETAIL" = "Alle Werbeanzeigen entfernen.";

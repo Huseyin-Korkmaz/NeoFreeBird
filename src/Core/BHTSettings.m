@@ -53,7 +53,8 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                     @{ @"key": @"disable_video_captions", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"auto_highest_load", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"force_tweet_full_frame", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"restore_video_timestamp", @"default": @NO, @"type": @"toggle" }
+                    @{ @"key": @"restore_video_timestamp", @"default": @NO, @"type": @"toggle" },
+                    @{ @"key": @"disable_immersive_scroll", @"default": @NO, @"type": @"toggle" }
                 ]
             },
             @"profiles": @{

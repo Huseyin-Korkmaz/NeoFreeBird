@@ -157,6 +157,9 @@
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "Video zaman etiketi";
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Tam ekran oynatıcıda zaman bilgisini gösterir.";
 
+"DISABLE_IMMERSIVE_SCROLL_TITLE" = "Video akışında kaydırma yok";
+"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Tam ekran oynatıcıda videolar arasında kaydırmayı engeller ve otomatik geçişi kapatır.";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Reklam yok";
 "HIDE_PROMOTED_DETAIL" = "Tüm reklamları kaldır.";
