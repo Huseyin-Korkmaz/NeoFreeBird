@@ -25,6 +25,17 @@ void BH_EnumerateSubviewsRecursively(UIView *view, void (^block)(UIView *current
     recursionDepth--;
 }
 
+// Module content (conversation replies, who-to-follow, Discover More) reaches the
+// section arrays wrapped in TFNDataViewItem; the real view model is its -item.
+// Standalone timeline items are the view model directly.
+id BHT_unwrapDataViewItem(id item) {
+    if ([item isKindOfClass:objc_getClass("TFNDataViewItem")] && [item respondsToSelector:@selector(item)]) {
+        return [item performSelector:@selector(item)];
+    }
+
+    return item;
+}
+
 UIColor *BHTCurrentAccentColor(void) {
     Class TAEColorSettingsCls = objc_getClass("TAEColorSettings");
     if (!TAEColorSettingsCls) {

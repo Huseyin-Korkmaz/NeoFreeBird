@@ -96,7 +96,7 @@ static void BHTHideHomeAddTabButton(id container) {
 
 %end
 
-// MARK: Remove the "Discover more" section below conversations
+// MARK: Remove the "Discover more" section below conversations and who-to-follow modules
 
 static BOOL BHTIsInConversationHierarchy(UIViewController *viewController) {
     UIViewController *currentVC = viewController;
@@ -120,80 +120,89 @@ static BOOL BHTIsInConversationHierarchy(UIViewController *viewController) {
     return NO;
 }
 
-static BOOL BHTStatusItemHasTreeContext(id item) {
-    if (![item respondsToSelector:@selector(conversationTreeContext)]) {
+static NSString *BHTItemEntryID(id item) {
+    id viewModel = BHT_unwrapDataViewItem(item);
+
+    if (![viewModel respondsToSelector:@selector(entryID)]) {
+        return nil;
+    }
+
+    NSString *entryID = [viewModel performSelector:@selector(entryID)];
+    return [entryID isKindOfClass:[NSString class]] ? entryID : nil;
+}
+
+// Both filters discriminate by entry ID (verified on device; the former
+// conversationTreeContext discriminator is never populated in 12.3). Discover More
+// items carry "tweetdetailrelatedtweets-…", who-to-follow entries "who-to-follow-…",
+// while replies are "conversationthread-…" and the focal tweet "tweet-…".
+static BOOL BHTShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL inConversation) {
+    NSString *entryID = BHTItemEntryID(item);
+
+    if (!entryID) {
         return NO;
     }
 
-    return [item performSelector:@selector(conversationTreeContext)] != nil;
+    if (inConversation && [entryID hasPrefix:@"tweetdetailrelatedtweets"]) {
+        return YES;
+    }
+
+    if (hideWhoToFollow && [entryID containsString:@"who-to-follow"]) {
+        return YES;
+    }
+
+    return NO;
 }
 
-static NSArray *BHTSectionsWithoutDiscoverMore(TFNItemsDataViewController *dataViewController, NSArray *sections) {
-    if (!BHTIsInConversationHierarchy(dataViewController)) {
+static NSArray *BHTFilteredTimelineSections(TFNItemsDataViewController *dataViewController, NSArray *sections) {
+    BOOL hideWhoToFollow = [BHTSettings boolForKey:@"hide_who_to_follow"];
+    BOOL inConversation = BHTIsInConversationHierarchy(dataViewController);
+
+    if (!hideWhoToFollow && !inConversation) {
         return sections;
     }
 
-    Class statusItemClass = objc_getClass("T1URTTimelineStatusItemViewModel");
-    if (!statusItemClass) {
-        return sections;
-    }
+    // Modules can share a section with unrelated items, so filtering is per item;
+    // a purely filtered section (like the Discover More one) empties and is dropped.
+    BOOL modified = NO;
+    NSMutableArray *filteredSections = [NSMutableArray arrayWithCapacity:sections.count];
 
-    BOOL hasConversationSection = NO;
-    for (NSArray *section in sections) {
+    for (id section in sections) {
         if (![section isKindOfClass:[NSArray class]]) {
+            [filteredSections addObject:section];
             continue;
         }
 
-        for (id item in section) {
-            if ([item isKindOfClass:statusItemClass] && BHTStatusItemHasTreeContext(item)) {
-                hasConversationSection = YES;
-                break;
+        NSArray *items = section;
+        NSMutableArray *keptItems = [NSMutableArray arrayWithCapacity:items.count];
+
+        for (id item in items) {
+            if (!BHTShouldHideTimelineItem(item, hideWhoToFollow, inConversation)) {
+                [keptItems addObject:item];
             }
         }
 
-        if (hasConversationSection) {
-            break;
-        }
-    }
-
-    if (!hasConversationSection) {
-        return sections;
-    }
-
-    NSMutableArray *filteredSections = [NSMutableArray arrayWithCapacity:sections.count];
-
-    for (NSArray *section in sections) {
-        BOOL hasStatusItems = NO;
-        BOOL hasTreeItems = NO;
-
-        if ([section isKindOfClass:[NSArray class]]) {
-            for (id item in section) {
-                if ([item isKindOfClass:statusItemClass]) {
-                    hasStatusItems = YES;
-                    if (BHTStatusItemHasTreeContext(item)) {
-                        hasTreeItems = YES;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (!hasStatusItems || hasTreeItems) {
+        if (keptItems.count == items.count) {
             [filteredSections addObject:section];
+            continue;
+        }
+
+        modified = YES;
+        if (keptItems.count > 0) {
+            [filteredSections addObject:keptItems];
         }
     }
 
-    return filteredSections.count == sections.count ? sections : [filteredSections copy];
+    return modified ? [filteredSections copy] : sections;
 }
 
 %hook TFNItemsDataViewController
 
 - (void)setSections:(NSArray *)sections restoreScrollPosition:(BOOL)restoreScrollPosition {
-    %orig(BHTSectionsWithoutDiscoverMore(self, sections), restoreScrollPosition);
+    %orig(BHTFilteredTimelineSections(self, sections), restoreScrollPosition);
 }
 
 - (void)updateSections:(NSArray *)sections reconfigureItemIdentifiers:(NSArray *)identifiers withRowAnimation:(long long)animation completion:(id)completion {
-    %orig(BHTSectionsWithoutDiscoverMore(self, sections), identifiers, animation, completion);
+    %orig(BHTFilteredTimelineSections(self, sections), identifiers, animation, completion);
 }
 
 %end

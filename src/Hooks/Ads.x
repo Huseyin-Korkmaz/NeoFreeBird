@@ -32,14 +32,15 @@ static BOOL BHTScribeItemIsPromoted(id item) {
 }
 
 static BOOL BHTIsModuleHeader(id item) {
-    return [NSStringFromClass([item classForCoder]) isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"];
+    return [NSStringFromClass([BHT_unwrapDataViewItem(item) classForCoder]) isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"];
 }
 
 static BOOL BHTIsModuleFooter(id item) {
-    return [NSStringFromClass([item classForCoder]) isEqualToString:@"TwitterURT.URTModuleFooterViewModel"];
+    return [NSStringFromClass([BHT_unwrapDataViewItem(item) classForCoder]) isEqualToString:@"TwitterURT.URTModuleFooterViewModel"];
 }
 
 static BOOL BHTShouldHideItem(id item, NSString *location) {
+    item = BHT_unwrapDataViewItem(item);
     NSString *className = NSStringFromClass([item classForCoder]);
 
     if ([BHTSettings boolForKey:@"hide_promoted"]) {
@@ -52,12 +53,6 @@ static BOOL BHTShouldHideItem(id item, NSString *location) {
         }
 
         if (([className isEqualToString:@"TwitterURT.URTTimelineTrendViewModel"] || [className isEqualToString:@"TwitterURT.URTTimelineEventSummaryViewModel"]) && BHTScribeItemIsPromoted(item)) {
-            return YES;
-        }
-    }
-
-    if ([BHTSettings boolForKey:@"hide_who_to_follow"] && ([location isEqualToString:@"TIMELINE_HOME"] || [location isEqualToString:@"PROFILE_TWEETS"])) {
-        if ([className isEqualToString:@"T1URTTimelineUserItemViewModel"] || [className isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"]) {
             return YES;
         }
     }
@@ -78,7 +73,7 @@ static BOOL BHTShouldHideItem(id item, NSString *location) {
 }
 
 static NSArray *BHTFilteredSections(TFNItemsDataViewController *dataViewController, NSArray *sections) {
-    if (!([BHTSettings boolForKey:@"hide_promoted"] || [BHTSettings boolForKey:@"hide_who_to_follow"] || [BHTSettings boolForKey:@"hide_premium_offer"] || [BHTSettings boolForKey:@"hide_trend_videos"])) {
+    if (!([BHTSettings boolForKey:@"hide_promoted"] || [BHTSettings boolForKey:@"hide_premium_offer"] || [BHTSettings boolForKey:@"hide_trend_videos"])) {
         return sections;
     }
 

@@ -27,16 +27,6 @@
 
 @interface TFNItemsDataViewController : TFNDataViewController
 @property(copy, nonatomic) NSArray *sections;
-- (id)itemAtIndexPath:(id)arg1;
-- (void)insertSection:(id)section atIndex:(NSUInteger)index;
-- (void)insertItem:(id)item atIndexPath:(NSIndexPath *)indexPath;
-@end
-
-@interface TFNItemsDataViewControllerBackingStore: NSObject
-- (void)insertSection:(id)section atIndex:(NSUInteger)index;
-- (void)insertItem:(id)item atIndexPath:(NSIndexPath *)indexPath;
-- (void)_tfn_insertSection:(id)section atIndex:(NSUInteger)index;
-- (void)_tfn_insertItem:(id)item atIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @interface TFNNavigationController : UINavigationController
@@ -76,9 +66,6 @@
 @interface TFNSettingsNavigationItem : NSObject
 - (instancetype)initWithTitle:(NSString *)arg1 detail:(NSString *)arg2 iconName:(NSString *)arg3 controllerFactory:(UIViewController* (^)(void))arg4;
 - (instancetype)initWithTitle:(NSString *)arg1 detail:(NSString *)arg2 controllerFactory:(UIViewController* (^)(void))arg4;
-@end
-
-@interface TFNTextCell: UITableViewCell
 @end
 
 @interface TFNButton : UIButton

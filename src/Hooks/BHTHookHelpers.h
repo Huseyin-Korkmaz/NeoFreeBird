@@ -32,6 +32,9 @@
 // Recursive view traversal (BHTHookHelpers.m)
 void BH_EnumerateSubviewsRecursively(UIView *view, void (^block)(UIView *currentView));
 
+// TFNDataViewItem unwrapping for timeline section filtering (BHTHookHelpers.m)
+id BHT_unwrapDataViewItem(id item);
+
 // Live square-avatar restyling (Avatars.x)
 void BHT_applySquareAvatarsSetting(void);
 
