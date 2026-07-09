@@ -5,161 +5,107 @@
 
 #import "BHTHookHelpers.h"
 
-
-static NSTimeInterval BHTPinnedTabsLaunchUptime = 0;
-
-static id BHTPinnedTabsPersistenceCoordinator(void) {
-    static id coordinator = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        coordinator = [NSObject new];
-    });
-    return coordinator;
-}
-
-static NSArray *BHTPinnedTimelinesSnapshot(id repository) {
-    if (!repository || ![repository respondsToSelector:@selector(pinnedTimelines)]) {
-        return nil;
-    }
-    id value = ((id (*)(id, SEL))objc_msgSend)(repository, @selector(pinnedTimelines));
-    return [value isKindOfClass:[NSArray class]] ? value : nil;
-}
-
-static void BHTRecordPinnedTimelineUnpin(void) {
-    @synchronized (BHTPinnedTabsPersistenceCoordinator()) {
-        [[NSUserDefaults standardUserDefaults] setDouble:CFAbsoluteTimeGetCurrent() forKey:@"BHTCustomTimelinesUnpinTime"];
-    }
-}
-
-%hook _TtC32TwitterHomeFeatureImplementation31CachedPinnedTimelinesRepository
-- (void)unpinTimelineWithTimeline:(id)timeline completion:(id)completion {
-    BHTRecordPinnedTimelineUnpin();
-    %orig;
-}
-
-- (void)unpinTimelineWithTimelineInput:(id)input completion:(id)completion {
-    BHTRecordPinnedTimelineUnpin();
-    %orig;
-}
-
-- (void)updatePinnedTimelines:(id)timelines {
-    if ([BHTSettings boolForKey:@"hide_custom_timelines"]) {
-        %orig;
-        return;
-    }
-
-    BOOL block = NO;
-    @synchronized (BHTPinnedTabsPersistenceCoordinator()) {
-        BOOL isArray = [timelines isKindOfClass:[NSArray class]];
-        NSUInteger incomingCount = isArray ? [timelines count] : 0;
-        NSTimeInterval now = CFAbsoluteTimeGetCurrent();
-        NSTimeInterval lastUnpin = [[NSUserDefaults standardUserDefaults] doubleForKey:@"BHTCustomTimelinesUnpinTime"];
-
-        if ((now - lastUnpin < 120.0) || (isArray && incomingCount != 0)) {
-            block = NO;
-        } else {
-            NSArray *snapshot = BHTPinnedTimelinesSnapshot(self);
-            if (snapshot.count == 0) {
-                block = NO;
-            } else {
-                NSTimeInterval uptime = [[NSProcessInfo processInfo] systemUptime];
-                BOOL withinStartupWindow = (BHTPinnedTabsLaunchUptime > 0) && ((uptime - BHTPinnedTabsLaunchUptime) < 20.0);
-                block = withinStartupWindow;
-            }
-        }
-    }
-
-    if (!block) {
-        %orig;
-    }
-}
-%end
+// MARK: Hide custom timelines
 
 static void BHTHideHomeAddTabButton(id container) {
     if (![BHTSettings boolForKey:@"hide_custom_timelines"]) {
         return;
     }
+
     @try {
-        id button = [container valueForKey:@"addTabButton"];
+        UIView *button = [container valueForKey:@"addTabButton"];
         if ([button isKindOfClass:[UIView class]]) {
-            ((UIView *)button).hidden = YES;
+            button.hidden = YES;
         }
     } @catch (__unused NSException *exception) {
 
-		}
+    }
 }
 
+// The repository publishes the pinned-timelines list to the home container
+// through this single delegate call, so handing it an empty array removes the
+// custom tabs without ever touching the persisted server-side state.
 %hook _TtC32TwitterHomeFeatureImplementation35HomeTimelineContainerViewController
+
+- (void)pinnedTimelinesRepository:(id)repository didChangeWithPinnedTimelineModels:(NSArray *)models {
+    if ([BHTSettings boolForKey:@"hide_custom_timelines"]) {
+        %orig(repository, @[]);
+        return;
+    }
+
+    %orig;
+}
+
 - (id)tfn_navigationBarAccessoryView {
-    id accessory = %orig;
+    id accessoryView = %orig;
     BHTHideHomeAddTabButton(self);
-    return accessory;
+    return accessoryView;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     %orig;
     BHTHideHomeAddTabButton(self);
 }
+
+%end
+
+// While hiding, the overridden pinned-tabs feature switches make the app
+// compute an empty pinned list; freezing repository writes keeps it from
+// being persisted over the user's real tabs.
+%hook _TtC32TwitterHomeFeatureImplementation31CachedPinnedTimelinesRepository
+
+- (void)updatePinnedTimelines:(id)timelines {
+    if ([BHTSettings boolForKey:@"hide_custom_timelines"]) {
+        return;
+    }
+
+    %orig;
+}
+
 %end
 
 // MARK: Force Tweets to show images as Full frame: https://github.com/BandarHL/BHTwitter/issues/101
+
 %hook T1StandardStatusAttachmentViewAdapter
+
+// attachmentType 2 = photos, displayType 1 = full frame
 - (NSUInteger)displayType {
     if (self.attachmentType == 2) {
         return [BHTSettings boolForKey:@"force_tweet_full_frame"] ? 1 : %orig;
     }
+
     return %orig;
 }
+
 %end
 
-%hook T1HomeTimelineItemsViewController
-- (void)_t1_initializeFleets {
+// MARK: Hide the Spaces bar
+
+// The bar is still the repurposed Fleets line. Both home timeline
+// implementations create the same T1FleetLineHeaderController, and this is its
+// visibility gate, re-evaluated on every content or settings update.
+%hook T1FleetLineHeaderController
+
+- (BOOL)_t1_shouldShowFleetLine {
     if ([BHTSettings boolForKey:@"hide_spaces"]) {
-        return;
+        return NO;
     }
+
     return %orig;
 }
+
 %end
 
-%hook THFHomeTimelineItemsViewController
-- (void)_t1_initializeFleets {
-    if ([BHTSettings boolForKey:@"hide_spaces"]) {
-        return;
-    }
-    return %orig;
-}
-%end
+// MARK: Remove the "Discover more" section below conversations
 
-
-%hook THFHomeTimelineContainerViewController
-- (void)_t1_showPremiumUpsellIfNeeded {
-    if ([BHTSettings boolForKey:@"hide_premium_offer"]) {
-        return;
-    }
-    return %orig;
-}
-- (void)_t1_showPremiumUpsellIfNeededWithScribing:(BOOL)arg1 {
-    if ([BHTSettings boolForKey:@"hide_premium_offer"]) {
-        return;
-    }
-    return %orig;
-}
-%end
-// Helper function to check if we're in the T1ConversationContainerViewController hierarchy
-static BOOL BHT_isInConversationContainerHierarchy(UIViewController *viewController) {
-    if (!viewController) return NO;
-
-    // Check all view controllers up the hierarchy
+static BOOL BHTIsInConversationHierarchy(UIViewController *viewController) {
     UIViewController *currentVC = viewController;
-    while (currentVC) {
-        NSString *className = NSStringFromClass([currentVC class]);
 
-        // Check for T1ConversationContainerViewController
-        if ([className isEqualToString:@"T1ConversationContainerViewController"]) {
+    while (currentVC) {
+        if ([NSStringFromClass([currentVC class]) isEqualToString:@"T1ConversationContainerViewController"]) {
             return YES;
         }
 
-        // Move up the hierarchy
         if (currentVC.parentViewController) {
             currentVC = currentVC.parentViewController;
         } else if (currentVC.navigationController) {
@@ -174,30 +120,80 @@ static BOOL BHT_isInConversationContainerHierarchy(UIViewController *viewControl
     return NO;
 }
 
-// MARK : Remove "Discover More" section
-%hook T1URTViewController
+static BOOL BHTStatusItemHasTreeContext(id item) {
+    if (![item respondsToSelector:@selector(conversationTreeContext)]) {
+        return NO;
+    }
 
-- (void)setSections:(NSArray *)sections {
+    return [item performSelector:@selector(conversationTreeContext)] != nil;
+}
 
-    // Only filter if we're in the T1ConversationContainerViewController hierarchy
-    BOOL inConversationHierarchy = BHT_isInConversationContainerHierarchy((UIViewController *)self);
+static NSArray *BHTSectionsWithoutDiscoverMore(TFNItemsDataViewController *dataViewController, NSArray *sections) {
+    if (!BHTIsInConversationHierarchy(dataViewController)) {
+        return sections;
+    }
 
-    if (inConversationHierarchy) {
-        // Remove entry 1 (index 1) from sections array
-        if (sections.count > 1) {
-            NSMutableArray *filteredSections = [NSMutableArray arrayWithArray:sections];
-            [filteredSections removeObjectAtIndex:1];
-            sections = [filteredSections copy];
+    Class statusItemClass = objc_getClass("T1URTTimelineStatusItemViewModel");
+    if (!statusItemClass) {
+        return sections;
+    }
+
+    BOOL hasConversationSection = NO;
+    for (NSArray *section in sections) {
+        if (![section isKindOfClass:[NSArray class]]) {
+            continue;
+        }
+
+        for (id item in section) {
+            if ([item isKindOfClass:statusItemClass] && BHTStatusItemHasTreeContext(item)) {
+                hasConversationSection = YES;
+                break;
+            }
+        }
+
+        if (hasConversationSection) {
+            break;
         }
     }
 
-    %orig(sections);
+    if (!hasConversationSection) {
+        return sections;
+    }
+
+    NSMutableArray *filteredSections = [NSMutableArray arrayWithCapacity:sections.count];
+
+    for (NSArray *section in sections) {
+        BOOL hasStatusItems = NO;
+        BOOL hasTreeItems = NO;
+
+        if ([section isKindOfClass:[NSArray class]]) {
+            for (id item in section) {
+                if ([item isKindOfClass:statusItemClass]) {
+                    hasStatusItems = YES;
+                    if (BHTStatusItemHasTreeContext(item)) {
+                        hasTreeItems = YES;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!hasStatusItems || hasTreeItems) {
+            [filteredSections addObject:section];
+        }
+    }
+
+    return filteredSections.count == sections.count ? sections : [filteredSections copy];
+}
+
+%hook TFNItemsDataViewController
+
+- (void)setSections:(NSArray *)sections restoreScrollPosition:(BOOL)restoreScrollPosition {
+    %orig(BHTSectionsWithoutDiscoverMore(self, sections), restoreScrollPosition);
+}
+
+- (void)updateSections:(NSArray *)sections reconfigureItemIdentifiers:(NSArray *)identifiers withRowAnimation:(long long)animation completion:(id)completion {
+    %orig(BHTSectionsWithoutDiscoverMore(self, sections), identifiers, animation, completion);
 }
 
 %end
-
-%ctor {
-    BHTPinnedTabsLaunchUptime = [[NSProcessInfo processInfo] systemUptime];
-
-    %init;
-}

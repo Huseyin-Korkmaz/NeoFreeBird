@@ -63,7 +63,7 @@ static BOOL BHTShouldHideItem(id item, NSString *location) {
     }
 
     if ([BHTSettings boolForKey:@"hide_premium_offer"]) {
-        if ([className isEqualToString:@"T1URTTimelineMessageItemViewModel"]) {
+        if ([className isEqualToString:@"TwitterURT.URTTimelineMessageItemViewModel"]) {
             return YES;
         }
     }
