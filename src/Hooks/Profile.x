@@ -221,7 +221,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 }
 
 %new - (void)copyButtonHandler:(UIButton *)sender {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"hi"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
                                                                    message:nil
                                                             preferredStyle:UIAlertControllerStyleActionSheet];
     if (is_iPad()) {

@@ -88,13 +88,13 @@ static void BHT_showPostSentAlert(NSString *statusID) {
         if (!top) {
             return;
         }
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Post sent"
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"WEB_REPLY_POST_SENT_TITLE"]
                                                                       message:nil
                                                                preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Open" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OPEN_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             BHT_openStatusNatively(statusID);
         }]];
-        [alert addAction:[UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DISMISS_BUTTON_TITLE"] style:UIAlertActionStyleCancel handler:nil]];
         [top presentViewController:alert animated:YES completion:nil];
     });
 }

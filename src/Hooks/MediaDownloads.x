@@ -21,7 +21,7 @@
 }
 %new - (UIContextMenuConfiguration *)contextMenuInteraction:(UIContextMenuInteraction *)interaction configurationForMenuAtLocation:(CGPoint)location {
     return [UIContextMenuConfiguration configurationWithIdentifier:nil previewProvider:nil actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
-        UIAction *saveAction = [UIAction actionWithTitle:@"Download" image:[UIImage systemImageNamed:@"square.and.arrow.down"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        UIAction *saveAction = [UIAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_BUTTON_TITLE"] image:[UIImage systemImageNamed:@"square.and.arrow.down"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
             [self DownloadHandler];
         }];
         return [UIMenu menuWithTitle:@"" children:@[saveAction]];

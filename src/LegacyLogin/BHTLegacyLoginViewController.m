@@ -1,4 +1,5 @@
 #import "BHTLegacyLoginViewController.h"
+#import "Core/BHTBundle.h"
 #import "JGProgressHUD/JGProgressHUD.h"
 #import <WebKit/WebKit.h>
 #import <dlfcn.h>
@@ -222,7 +223,7 @@ static NSString *const kJSInstJS =
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor systemBackgroundColor];
-    self.title = @"Log in";
+    self.title = [[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_TITLE"];
 
     if (!self.asRootScreen) {
         self.navigationItem.leftBarButtonItem =
@@ -231,20 +232,20 @@ static NSString *const kJSInstJS =
                                                           action:@selector(cancelTapped)];
     }
 
-    self.infoLabel = [self label:@"Log in with your username and password.\n\nGoogle and Apple sign-in aren't supported. If your account uses one of those, add a password to it first."];
+    self.infoLabel = [self label:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_INFO_LABEL"]];
 
-    self.userField = [self field:@"Username, email or phone" secure:NO];
+    self.userField = [self field:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_USERNAME_PLACEHOLDER"] secure:NO];
     self.userField.keyboardType = UIKeyboardTypeEmailAddress;
     // Tag the fields so iOS Password AutoFill recognises the form and offers
     // saved logins / the Passwords key in the QuickType bar (the native
     // equivalent of autocomplete=username / current-password on a web form).
     self.userField.textContentType = UITextContentTypeUsername;
 
-    self.passField = [self field:@"Password" secure:YES];
+    self.passField = [self field:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_PASSWORD_PLACEHOLDER"] secure:YES];
     self.passField.textContentType = UITextContentTypePassword;
 
     self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.actionButton setTitle:@"Log in" forState:UIControlStateNormal];
+    [self.actionButton setTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_TITLE"] forState:UIControlStateNormal];
     self.actionButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     self.actionButton.translatesAutoresizingMaskIntoConstraints = NO;
     [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
@@ -389,19 +390,19 @@ static NSString *const kJSInstJS =
     NSString *user = self.userField.text ?: @"";
     NSString *pass = self.passField.text ?: @"";
     if (user.length == 0 || pass.length == 0) {
-        [self alert:@"Missing input" msg:@"Enter username and password."];
+        [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_MISSING_INPUT_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_MISSING_INPUT_MESSAGE"]];
         return;
     }
 
-    [self showHUD:@"Verifying…"];
+    [self showHUD:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_VERIFYING_STATUS"]];
 
     [self generateUIMetrics:^(NSString *metrics) {
-        self.hud.textLabel.text = @"Signing in…";
+        self.hud.textLabel.text = [[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_SIGNING_IN_STATUS"];
 
         Class cmdCls = objc_getClass("TFSTwitterAPIXAuthPasswordCommand");
         if (!cmdCls || !BHTLoader() || !BHTContext()) {
             [self.hud dismiss];
-            [self alert:@"Unavailable" msg:@"Login classes missing."];
+            [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNAVAILABLE_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_CLASSES_MISSING_MESSAGE"]];
             return;
         }
 
@@ -422,14 +423,14 @@ static NSString *const kJSInstJS =
                          BHTBuilder("TFSTwitterXAuthPasswordResponseBuilder"), [completion copy]);
             if (!cmd) {
                 [self.hud dismiss];
-                [self alert:@"Unavailable" msg:@"Could not build command."];
+                [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNAVAILABLE_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_BUILD_COMMAND_FAILED_MESSAGE"]];
                 return;
             }
 
             ((void (*)(id, SEL, id))objc_msgSend)(BHTLoader(), @selector(startCommand:), cmd);
         } @catch (NSException *ex) {
             [self.hud dismiss];
-            [self alert:@"Crash avoided" msg:ex.reason ?: ex.description];
+            [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_CRASH_AVOIDED_TITLE"] msg:ex.reason ?: ex.description];
         }
     }];
 }
@@ -438,7 +439,7 @@ static NSString *const kJSInstJS =
     [self.hud dismiss];
 
     if (!ok) {
-        [self alertError:err title:@"Login failed"];
+        [self alertError:err title:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_FAILED_TITLE"]];
         return;
     }
 
@@ -454,7 +455,7 @@ static NSString *const kJSInstJS =
     }
 
     if (!BHTPerform0(resp, @selector(loginVerificationRequestId))) {
-        [self alert:@"Unexpected response" msg:@"No token and no challenge."];
+        [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNEXPECTED_RESPONSE_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_NO_TOKEN_NO_CHALLENGE_MESSAGE"]];
         return;
     }
 
@@ -482,7 +483,7 @@ static NSString *const kJSInstJS =
     }
 
     if (!requestID || !urlString) {
-        [self alert:@"Unexpected response" msg:@"Challenge is missing its request id or URL."];
+        [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNEXPECTED_RESPONSE_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_CHALLENGE_MISSING_INFO_MESSAGE"]];
         return;
     }
 
@@ -495,7 +496,7 @@ static NSString *const kJSInstJS =
     Class factoryCls = objc_getClass("T1LoginChallengeFactory");
     id host = BHTPerform0(objc_getClass("T1HostViewController"), @selector(sharedHostViewController));
     if (!factoryCls || !host) {
-        [self alert:@"Unavailable" msg:@"Challenge/host classes missing."];
+        [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNAVAILABLE_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_CHALLENGE_CLASSES_MISSING_MESSAGE"]];
         return;
     }
 
@@ -508,7 +509,7 @@ static NSString *const kJSInstJS =
                            securityKey ? 1 : 0, loginType, requestID,
                            self.userField.text ?: @"", userID, urlString, cause);
         if (!challenge) {
-            [self alert:@"Unavailable" msg:@"Could not build challenge."];
+            [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNAVAILABLE_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_BUILD_CHALLENGE_FAILED_MESSAGE"]];
             return;
         }
 
@@ -551,7 +552,7 @@ static NSString *const kJSInstJS =
             present();
         }
     } @catch (NSException *ex) {
-        [self alert:@"Crash avoided" msg:ex.reason ?: ex.description];
+        [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_CRASH_AVOIDED_TITLE"] msg:ex.reason ?: ex.description];
     }
 }
 
@@ -559,7 +560,7 @@ static NSString *const kJSInstJS =
 
 - (void)buildAndAddAccountWithToken:(id)token secret:(id)secret screenName:(id)screenName userId:(long long)userId {
     if (!token || !secret) {
-        [self alert:@"Unexpected response" msg:@"No token in response."];
+        [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNEXPECTED_RESPONSE_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_NO_TOKEN_MESSAGE"]];
         return;
     }
 
@@ -575,7 +576,7 @@ static NSString *const kJSInstJS =
 
 - (void)addAndSwitchToAccount:(id)account {
     if (!account) {
-        [self alert:@"Login failed" msg:@"No account was returned."];
+        [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_FAILED_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_NO_ACCOUNT_MESSAGE"]];
         return;
     }
 
@@ -603,15 +604,15 @@ static NSString *const kJSInstJS =
         return [NSString stringWithFormat:@"%@ (%ld)\n%@", e.domain, (long)e.code, [e.userInfo description] ?: @""];
     }
 
-    return error ? [error description] : @"Unknown error";
+    return error ? [error description] : [[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNKNOWN_ERROR"];
 }
 
 - (void)alertError:(id)err title:(NSString *)title {
     NSString *details = [self errorText:err];
 
     if (BHTIsRateLimit(err)) {
-        NSString *msg = [NSString stringWithFormat:@"Too many attempts. Wait a while or switch network/VPN, then try again.\n\nDetails:\n%@", details];
-        [self alert:@"Likely rate limited (243)" msg:msg];
+        NSString *msg = [NSString stringWithFormat:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_RATE_LIMITED_MESSAGE"], details];
+        [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_RATE_LIMITED_TITLE"] msg:msg];
         return;
     }
 
@@ -622,7 +623,7 @@ static NSString *const kJSInstJS =
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
                                                                  message:message
                                                           preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 

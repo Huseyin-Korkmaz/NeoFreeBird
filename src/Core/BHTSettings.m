@@ -7,6 +7,7 @@
 
 #import "Core/BHTSettings.h"
 #import "Core/BHTManager.h"
+#import "Core/BHTBundle.h"
 
 static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
     static NSDictionary<NSString *, NSDictionary *> *pages;
@@ -29,8 +30,8 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                     @{ @"key": @"disable_rtl", @"default": @NO },
                     @{ @"key": @"show_scroll_indicator", @"default": @NO },
                     @{ @"key": @"custom_fonts", @"default": @NO },
-                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"regular_font_button", @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE", @"action": @"showRegularFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_1", @"subtitleDefault": @"System Default" },
-                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"bold_font_button", @"titleKey": @"BOLD_FONTS_PICKER_OPTION_TITLE", @"action": @"showBoldFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_2", @"subtitleDefault": @"System Default" }
+                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"regular_font_button", @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE", @"action": @"showRegularFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_1", @"subtitleDefault": [[BHTBundle sharedBundle] localizedStringForKey:@"FONT_SYSTEM_DEFAULT_SUBTITLE"] },
+                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"bold_font_button", @"titleKey": @"BOLD_FONTS_PICKER_OPTION_TITLE", @"action": @"showBoldFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_2", @"subtitleDefault": [[BHTBundle sharedBundle] localizedStringForKey:@"FONT_SYSTEM_DEFAULT_SUBTITLE"] }
                 ]
             },
             @"twitter_blue": @{

@@ -75,7 +75,7 @@ static inline UIViewController *BHTopMostController(void) {
         if (mediaEntities.count > 1) {
             [mediaEntities enumerateObjectsUsingBlock:^(TFSTwitterEntityMedia *obj, NSUInteger idx, BOOL *stop) {
                 if (obj.mediaType == 2 || obj.mediaType == 3) {
-                    TFNActionItem *videoGroup = [objc_getClass("TFNActionItem") actionItemWithTitle:[NSString stringWithFormat:@"Video %lu", (unsigned long)idx + 1]
+                    TFNActionItem *videoGroup = [objc_getClass("TFNActionItem") actionItemWithTitle:[NSString stringWithFormat:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_VIDEO_NUMBER_TITLE"], (unsigned long)idx + 1]
                                                                                        imageName:@"arrow_down_circle_stroke" action:^{
                         for (TFSTwitterEntityMediaVideoVariant *variant in obj.videoInfo.variants) {
                             if ([variant.contentType isEqualToString:@"video/mp4"])          [innerActions addObject:makeMP4Item([NSURL URLWithString:variant.url])];
@@ -101,7 +101,7 @@ static inline UIViewController *BHTopMostController(void) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"ERROR_TITLE"]
                                                                        message:[[BHTBundle sharedBundle] localizedStringForKey:@"UNKNOWN_ERROR"]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON"] style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:nil]];
         [BHTopMostController() presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -138,7 +138,7 @@ static inline UIViewController *BHTopMostController(void) {
     UIAlertController *a = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"ERROR_TITLE"]
                                                                message:error.localizedDescription
                                                         preferredStyle:UIAlertControllerStyleAlert];
-    [a addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON"]
+    [a addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON_TITLE"]
                                           style:UIAlertActionStyleDefault
                                         handler:nil]];
     [BHTopMostController() presentViewController:a animated:YES completion:nil];

@@ -292,7 +292,7 @@ static dispatch_queue_t sourceLabelDataQueue = nil;
                 }
 
                 NSString *sourceHTML = tweetData[@"source"];
-                NSString *sourceText = @"Unknown Source";
+                NSString *sourceText = [[BHTBundle sharedBundle] localizedStringForKey:@"UNKNOWN_SOURCE"];
 
                 if (sourceHTML) {
                     NSRange startRange = [sourceHTML rangeOfString:@">"];

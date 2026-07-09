@@ -92,7 +92,7 @@ static void BHT_showPadlockOverlay(void) {
 
     UILabel *label = [[UILabel alloc] init];
     label.translatesAutoresizingMaskIntoConstraints = NO;
-    label.text = @"Locked";
+    label.text = [[BHTBundle sharedBundle] localizedStringForKey:@"PADLOCK_LOCKED_LABEL"];
     label.textColor = UIColor.labelColor;
     label.font = [UIFont systemFontOfSize:22 weight:UIFontWeightSemibold];
     label.textAlignment = NSTextAlignmentCenter;
