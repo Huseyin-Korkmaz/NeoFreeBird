@@ -170,3 +170,35 @@ static NSUInteger BHTFollowVariantRemovingSubscribe(NSUInteger variant) {
 }
 
 %end
+
+// MARK: Hide inline action buttons
+
+%hook TTAStatusInlineActionsView
+
++ (NSArray *)_t1_inlineActionViewClassesForViewModel:(id)arg1 options:(NSUInteger)arg2 displayType:(NSUInteger)arg3 account:(id)arg4 {
+    NSArray *origClasses = %orig;
+    if (![origClasses isKindOfClass:NSArray.class]) {
+        return origClasses;
+    }
+
+    NSMutableArray *newClasses = [origClasses mutableCopy];
+
+    Class analyticsButtonClass = %c(TTAStatusInlineAnalyticsButton);
+    if (analyticsButtonClass && [BHTSettings boolForKey:@"hide_view_count"]) {
+        [newClasses removeObject:analyticsButtonClass];
+    }
+
+    Class bookmarkButtonClass = %c(TTAStatusInlineBookmarkButton);
+    if (bookmarkButtonClass && [BHTSettings boolForKey:@"hide_bookmark_button"]) {
+        [newClasses removeObject:bookmarkButtonClass];
+    }
+
+    Class downvoteButtonClass = %c(TTAStatusInlineDownvoteButton);
+    if (downvoteButtonClass && [BHTSettings boolForKey:@"hide_downvote_button"]) {
+        [newClasses removeObject:downvoteButtonClass];
+    }
+
+    return [newClasses copy];
+}
+
+%end

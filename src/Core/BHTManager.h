@@ -13,7 +13,6 @@
 + (NSString *)getVideoQuality:(NSString *)url;
 + (id)sharedFontGroup;
 + (UIFont *)menuTitleFont;
-+ (bool)isDMVideoCell:(T1InlineMediaView *)view;
 + (BOOL)doesContainDigitsOnly:(NSString *)string;
 + (UIViewController *)BHTSettingsWithAccount:(TFNTwitterAccount *)twAccount;
 + (void)showSaveVC:(NSURL *)url;

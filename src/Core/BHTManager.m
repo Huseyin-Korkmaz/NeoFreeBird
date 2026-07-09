@@ -11,13 +11,6 @@
 #import "Settings/ModernSettingsViewController.h"
 
 @implementation BHTManager
-+ (bool)isDMVideoCell:(T1InlineMediaView *)view {
-    if (view.playerIconViewType == 4) {
-        return true;
-    } else {
-        return false;
-    }
-}
 + (void)cleanCache {
     NSArray <NSURL *> *DocumentFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:[NSURL fileURLWithPath:NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, true).firstObject] includingPropertiesForKeys:@[] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
 

@@ -126,6 +126,11 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return [BHTSettings boolForKey:@"disable_immersive_scroll"] ? @(-1) : nil;
     }
 
+    // Reply downvote (dislike) button
+    if ([key isEqualToString:@"conversational_replies_ios_downvote_enabled"]) {
+        return [BHTSettings boolForKey:@"hide_downvote_button"] ? @NO : nil;
+    }
+
     // Premium features gate on subscriptions_enabled || (gating bypass && premium tier).
     if ([key isEqualToString:@"subscriptions_gating_bypass"]) {
         return @YES;

@@ -131,47 +131,21 @@
 @interface T1TweetComposeViewController : UIViewController
 @end
 
-@interface T1PlayerMediaEntitySessionProducible : NSObject
-@property(readonly, nonatomic) TFSTwitterEntityMedia *mediaEntity;
+@class BHDownloadInlineButton;
+
+// DM media message container (DMConversation.MessageAttachmentView)
+@interface _TtC14DMConversation21MessageAttachmentView : UIView
+@property (nonatomic, strong) UIContextMenuInteraction *downloadMenuInteraction;
+@property (nonatomic, strong) BHDownloadInlineButton *downloadHandler;
 @end
 
-@protocol T1PlayerSessionProducible <NSObject>
+@interface _TtC14DMConversation21MessageAttachmentView () <UIContextMenuInteractionDelegate>
 @end
 
-@interface T1PlayerSessionProducer : NSObject
-@property(readonly, nonatomic) id <T1PlayerSessionProducible> sessionProducible;
-@end
-
-
-@protocol T1InlineMediaViewModel <NSObject>
-@property(nonatomic, readonly) T1PlayerSessionProducer *playerSessionProducer;
-@end
-
-@interface T1InlineMediaView : UIView
-@property (retain, nonatomic) id <T1InlineMediaViewModel> viewModel;
-@property (readonly, nonatomic) UIImageView *previewImageView;
-@property (retain, nonatomic) UIView *playerIconView;
-@property (nonatomic, assign, readwrite) NSUInteger playerIconViewType;
-@end
-
-@interface T1DirectMessageEntryBaseCell: UICollectionViewCell
-@property(nonatomic, readonly) UIImage *profileImage;
-@end
-
-@interface T1DirectMessageEntryMediaCell : T1DirectMessageEntryBaseCell
-@property (nonatomic, strong) JGProgressHUD *hud;
-// @property (nonatomic, strong) NSURL *ffmepgExportURL;
-- (void)mediaUploadProgress:(id)arg1;
-@property(nonatomic, readonly) T1InlineMediaView *inlineMediaView; // @synthesize inlineMediaView;
-- (void)updateConstraints;
-- (_Bool)accessibilityActivate;
-- (void)dealloc;
-- (void)layoutSubviews;
-- (instancetype)initWithFrame:(struct CGRect)arg1;
-- (void)DownloadHandler;
-@end
-
-@interface T1DirectMessageEntryMediaCell () <BHDownloadDelegate, UIContextMenuInteractionDelegate>
+// Shared media view (TweetMediaAttachments.MultiMediaView); its carousel
+// variant exposes -inlineMediaInfos as well
+@interface _TtC21TweetMediaAttachments14MultiMediaView : UIView
+@property (nonatomic, readonly) NSArray *inlineMediaInfos;
 @end
 
 @interface T1HostViewController : UIViewController
