@@ -13,11 +13,20 @@
 #import "Core/BHTBundle.h"
 #import "ThemeColor/BHDimPalette.h"
 
+@interface ModernSettingsPageViewController ()
+@property (nonatomic, copy) NSString *registryPageKey;
+@end
+
 @implementation ModernSettingsPageViewController
 
 - (instancetype)initWithAccount:(TFNTwitterAccount *)account {
+    return [self initWithAccount:account pageKey:nil];
+}
+
+- (instancetype)initWithAccount:(TFNTwitterAccount *)account pageKey:(NSString *)pageKey {
     if ((self = [super init])) {
         self.account = account;
+        self.registryPageKey = pageKey;
         [self buildSettingsList];
         [self updateVisibleToggles];
     }
@@ -31,7 +40,7 @@
 }
 
 - (NSString *)pageKey {
-    return nil;
+    return self.registryPageKey;
 }
 
 - (NSString *)pageTitleKey {

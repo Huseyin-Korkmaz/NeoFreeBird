@@ -8,14 +8,10 @@
 #import "Settings/ModernSettingsViewController.h"
 #import "Settings/ModernSettingsCells.h"
 #import "Settings/ModernSettingsPlaceholderViewController.h"
+#import "Settings/ModernSettingsPageViewController.h"
 #import "Settings/Pages/GeneralSettingsViewController.h"
 #import "Settings/Pages/TwitterBlueSettingsViewController.h"
-#import "Settings/Pages/MediaDownloadsSettingsViewController.h"
 #import "Settings/Pages/ProfilesSettingsViewController.h"
-#import "Settings/Pages/TweetsSettingsViewController.h"
-#import "Settings/Pages/SearchSettingsViewController.h"
-#import "Settings/Pages/BrandingSettingsViewController.h"
-#import "Settings/Pages/ExperimentalSettingsViewController.h"
 #import "Settings/Pages/WebSettingsViewController.h"
 #import "Settings/Pages/DebugSettingsViewController.h"
 #import "Core/BHTManager.h"
@@ -505,7 +501,7 @@
 }
 
 - (void)showDownloadsSettings {
-    MediaDownloadsSettingsViewController *vc = [[MediaDownloadsSettingsViewController alloc] initWithAccount:self.account];
+    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"media_downloads"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -515,17 +511,17 @@
 }
 
 - (void)showTweetsSettings {
-    TweetsSettingsViewController *vc = [[TweetsSettingsViewController alloc] initWithAccount:self.account];
+    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"tweets"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)showBrandingSettings {
-    BrandingSettingsViewController *vc = [[BrandingSettingsViewController alloc] initWithAccount:self.account];
+    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"branding"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)showExperimentalSettings {
-    ExperimentalSettingsViewController *vc = [[ExperimentalSettingsViewController alloc] initWithAccount:self.account];
+    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"experimental"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -535,7 +531,7 @@
 }
 
 - (void)showSearchSettings {
-    SearchSettingsViewController *vc = [[SearchSettingsViewController alloc] initWithAccount:self.account];
+    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"search"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

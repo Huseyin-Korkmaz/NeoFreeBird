@@ -18,7 +18,11 @@
 
 - (instancetype)initWithAccount:(TFNTwitterAccount *)account;
 
-// Overridden by each page to identify its entry in the BHTSettings registry
+// Data-only pages are created directly with their registry key; pages with
+// custom behaviour subclass this and override -pageKey instead.
+- (instancetype)initWithAccount:(TFNTwitterAccount *)account pageKey:(NSString *)pageKey;
+
+// Identifies the page's entry in the BHTSettings registry
 - (NSString *)pageKey;
 
 - (NSString *)pageTitleKey;
