@@ -59,124 +59,124 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Suivre NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_OPTION_TITLE" = "Pas de Tweets sur les sujets";
-"HIDE_TOPICS_OPTION_DETAIL_TITLE" = "Supprime les Tweets liés aux sujets suggérés.";
+"HIDE_TOPICS_TITLE" = "Pas de Tweets sur les sujets";
+"HIDE_TOPICS_DETAIL" = "Supprime les Tweets liés aux sujets suggérés.";
 
-"HIDE_TOPICS_TO_FOLLOW_OPTION" = "Pas de 'Sujets à suivre'";
-"HIDE_TOPICS_TO_FOLLOW_OPTION_DETAIL_TITLE" = "Supprime les suggestions de sujets.";
+"HIDE_TOPICS_TO_FOLLOW_TITLE" = "Pas de 'Sujets à suivre'";
+"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Supprime les suggestions de sujets.";
 
-"HIDE_WHO_FOLLOW_OPTION" = "Pas de 'Qui suivre'";
-"HIDE_WHO_FOLLOW_OPTION_DETAIL_TITLE" = "Supprime les suggestions de suivi.";
+"HIDE_WHO_TO_FOLLOW_TITLE" = "Pas de 'Qui suivre'";
+"HIDE_WHO_TO_FOLLOW_DETAIL" = "Supprime les suggestions de suivi.";
 
-"PADLOCK_OPTION_TITLE" = "Verrouiller Twitter";
-"PADLOCK_OPTION_DETAIL_TITLE" = "Nécessite Face ID ou un code pour ouvrir Twitter.";
+"PADLOCK_TITLE" = "Verrouiller Twitter";
+"PADLOCK_DETAIL" = "Nécessite Face ID ou un code pour ouvrir Twitter.";
 
-"NEW_INAPP_WEB_OPTION_TITLE" = "Navigateur intégré amélioré (bêta)";
-"NEW_INAPP_WEB_DETAIL_TITLE" = "Utilisez le nouveau navigateur intégré de Twitter pour ouvrir des liens.";
+"NEW_INAPP_WEBVIEW_TITLE" = "Navigateur intégré amélioré (bêta)";
+"NEW_INAPP_WEBVIEW_DETAIL" = "Utilisez le nouveau navigateur intégré de Twitter pour ouvrir des liens.";
 
-"ALWAYS_OPEN_SAFARI_OPTION_TITLE" = "Utiliser navigateur externe";
-"ALWAYS_OPEN_SAFARI_OPTION_DETAIL_TITLE" = "Ouvre les liens dans Safari ou ton navigateur par défaut.";
+"ALWAYS_OPEN_SAFARI_TITLE" = "Utiliser navigateur externe";
+"ALWAYS_OPEN_SAFARI_DETAIL" = "Ouvre les liens dans Safari ou ton navigateur par défaut.";
 
-"STRIP_URL_TRACKING_PARAMETERS_TITLE" = "Personnaliser les liens";
-"STRIP_URL_TRACKING_PARAMETERS_DETAIL_TITLE" = "Choisis une URL perso et supprime le tracking.";
+"STRIP_TRACKING_PARAMS_TITLE" = "Personnaliser les liens";
+"STRIP_TRACKING_PARAMS_DETAIL" = "Choisis une URL perso et supprime le tracking.";
 "SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Choisir une URL personnalisée";
 
 /*Tweets*/
-"TWEET_TO_IMAGE_OPTION_TITLE" = "Enregistrer Tweet en image";
-"TWEET_TO_IMAGE_OPTION_DETAIL_TITLE" = "Appui long sur partager pour exporter en image.";
+"TWEET_TO_IMAGE_TITLE" = "Enregistrer Tweet en image";
+"TWEET_TO_IMAGE_DETAIL" = "Appui long sur partager pour exporter en image.";
 
-"LIKE_CONFIRM_OPTION_TITLE" = "Confirmer les likes";
-"LIKE_CONFIRM_OPTION_DETAIL_TITLE" = "Demande confirmation avant de liker.";
+"LIKE_CONFIRM_TITLE" = "Confirmer les likes";
+"LIKE_CONFIRM_DETAIL" = "Demande confirmation avant de liker.";
 
-"TWEET_CONFIRM_OPTION_TITLE" = "Confirmer les Tweets";
-"TWEET_CONFIRM_OPTION_DETAIL_TITLE" = "Demande confirmation avant de publier.";
+"TWEET_CONFIRM_TITLE" = "Confirmer les Tweets";
+"TWEET_CONFIRM_DETAIL" = "Demande confirmation avant de publier.";
 
-"HIDE_BLUE_VERIFIED_OPTION_TITLE" = "Masquer les badges de vérification Blue";
-"HIDE_BLUE_VERIFIED_OPTION_DETAIL_TITLE" = "Masquer le badge de vérification payant sur les Tweets. Cela n'inclut pas les comptes de marques ou gouvernementaux.";
+"HIDE_BLUE_VERIFIED_TITLE" = "Masquer les badges de vérification Blue";
+"HIDE_BLUE_VERIFIED_DETAIL" = "Masquer le badge de vérification payant sur les Tweets. Cela n'inclut pas les comptes de marques ou gouvernementaux.";
 
-"HIDE_VIEW_COUNT_OPTION_TITLE" = "Masquer les vues";
-"HIDE_VIEW_COUNT_OPTION_DETAIL_TITLE" = "N'affiche pas le nombre de vues sous les Tweets.";
+"HIDE_VIEW_COUNT_TITLE" = "Masquer les vues";
+"HIDE_VIEW_COUNT_DETAIL" = "N'affiche pas le nombre de vues sous les Tweets.";
 
-"HIDE_MARKBOOK_BUTTON_OPTION_TITLE" = "Masquer les favoris";
-"HIDE_MARKBOOK_BUTTON_OPTION_DETAIL_TITLE" = "Supprime le bouton de favoris.";
-"HIDE_DOWNVOTE_BUTTON_OPTION_TITLE" = "Masquer les votes négatifs";
-"HIDE_DOWNVOTE_BUTTON_OPTION_DETAIL_TITLE" = "Supprime le bouton de vote négatif des Tweets.";
+"HIDE_BOOKMARK_BUTTON_TITLE" = "Masquer les favoris";
+"HIDE_BOOKMARK_BUTTON_DETAIL" = "Supprime le bouton de favoris.";
+"HIDE_DOWNVOTE_BUTTON_TITLE" = "Masquer les votes négatifs";
+"HIDE_DOWNVOTE_BUTTON_DETAIL" = "Supprime le bouton de vote négatif des Tweets.";
 
-"DISABLE_SENSITIVE_TWEET_WARNINGS_OPTION_TITLE" = "Pas d'avertissements de contenu sensible";
+"DISABLE_SENSITIVE_TWEET_WARNINGS_TITLE" = "Pas d'avertissements de contenu sensible";
 
-"BYPASS_AGE_VERIFICATION_OPTION_TITLE" = "Contourner la vérification d'âge";
-"BYPASS_AGE_VERIFICATION_OPTION_DETAIL_TITLE" = "Ignore la vérification d'âge pour le contenu sensible.";
+"BYPASS_AGE_VERIFICATION_TITLE" = "Contourner la vérification d'âge";
+"BYPASS_AGE_VERIFICATION_DETAIL" = "Ignore la vérification d'âge pour le contenu sensible.";
 
-"HIDE_GROK_ANALYZE_BUTTON_TITLE" = "Masquer le bouton Grok Analyze";
-"HIDE_GROK_ANALYZE_BUTTON_DETAIL_TITLE" = "Masquer le bouton Grok Analyze dans les Tweets.";
+"HIDE_GROK_ANALYZE_TITLE" = "Masquer le bouton Grok Analyze";
+"HIDE_GROK_ANALYZE_DETAIL" = "Masquer le bouton Grok Analyze dans les Tweets.";
 
 "SQUARE_AVATARS_TITLE" = "Photos de profil carrées";
-"SQUARE_AVATARS_DETAIL_TITLE" = "Affiche des photos de profil carrées pour tout le monde, comme les comptes de marque sur l'ancien Twitter.";
+"SQUARE_AVATARS_DETAIL" = "Affiche des photos de profil carrées pour tout le monde, comme les comptes de marque sur l'ancien Twitter.";
 
 "REPLY_SORTING_TITLE" = "Pas de tri des réponses";
-"REPLY_SORTING_DETAIL_TITLE" = "Désactive le tri des réponses dans les conversations de Tweets.";
+"REPLY_SORTING_DETAIL" = "Désactive le tri des réponses dans les conversations de Tweets.";
 
 "RESTORE_REPLY_CONTEXT_TITLE" = "Restaurer le contexte de réponse";
-"RESTORE_REPLY_CONTEXT_DETAIL_TITLE" = "Affiche les personnes auxquelles la réponse est adressée sous les Tweets.";
+"RESTORE_REPLY_CONTEXT_DETAIL" = "Affiche les personnes auxquelles la réponse est adressée sous les Tweets.";
 
 /*Profiles*/
-"FOLLOW_CONFIRM_OPTION_TITLE" = "Confirmer l’abonnement";
-"FOLLOW_CONFIRM_OPTION_DETAIL_TITLE" = "Demande avant de suivre quelqu’un.";
+"FOLLOW_CONFIRM_TITLE" = "Confirmer l’abonnement";
+"FOLLOW_CONFIRM_DETAIL" = "Demande avant de suivre quelqu’un.";
 
-"COPY_PROFILE_INFO_OPTION_TITLE" = "Copier les infos du profil";
-"COPY_PROFILE_INFO_OPTION_DETAIL_TITLE" = "Copie les pseudos, bios, etc. en un tap.";
+"COPY_PROFILE_INFO_TITLE" = "Copier les infos du profil";
+"COPY_PROFILE_INFO_DETAIL" = "Copie les pseudos, bios, etc. en un tap.";
 
-"BIO_TRANSLATE_OPTION_TITLE" = "Traduire les bios";
-"BIO_TRANSLATE_OPTION_DETAIL_TITLE" = "Affiche les bios dans ta langue.";
+"BIO_TRANSLATE_TITLE" = "Traduire les bios";
+"BIO_TRANSLATE_DETAIL" = "Affiche les bios dans ta langue.";
 
-"DISABLE_MEDIA_TAB_OPTION_TITLE" = "Pas d’onglets Médias séparés";
-"DISABLE_MEDIA_TAB_OPTION_DETAIL_TITLE" = "Fusionne Photos et Vidéos en un seul onglet.";
+"DISABLE_MEDIA_TAB_TITLE" = "Pas d’onglets Médias séparés";
+"DISABLE_MEDIA_TAB_DETAIL" = "Fusionne Photos et Vidéos en un seul onglet.";
 
-"DISABLE_ARTICLES_OPTION_TITLE" = "Pas d’onglet Articles";
-"DISABLE_ARTICLES_OPTION_DETAIL_TITLE" = "Cache l’onglet Articles du profil.";
+"DISABLE_ARTICLES_TITLE" = "Pas d’onglet Articles";
+"DISABLE_ARTICLES_DETAIL" = "Cache l’onglet Articles du profil.";
 
-"DISABLE_HIGHLIGHTS_OPTION_TITLE" = "Pas d’onglet Highlights";
-"DISABLE_HIGHLIGHTS_OPTION_DETAIL_TITLE" = "Cache l’onglet Moments forts.";
+"DISABLE_HIGHLIGHTS_TITLE" = "Pas d’onglet Highlights";
+"DISABLE_HIGHLIGHTS_DETAIL" = "Cache l’onglet Moments forts.";
 
 "HIDE_FOLLOW_BUTTON_TITLE" = "Pas de bouton Suivre dans les Tweets";
-"HIDE_FOLLOW_BUTTON_DETAIL_TITLE" = "Masque le bouton Suivre dans les Tweets.";
+"HIDE_FOLLOW_BUTTON_DETAIL" = "Masque le bouton Suivre dans les Tweets.";
 
 "RESTORE_FOLLOW_BUTTON_TITLE" = "Pas de bouton S'abonner";
-"RESTORE_FOLLOW_BUTTON_DETAIL_TITLE" = "Masque le bouton S'abonner dans les Tweets et les profils.";
+"RESTORE_FOLLOW_BUTTON_DETAIL" = "Masque le bouton S'abonner dans les Tweets et les profils.";
 
 /*Search*/
-"NO_HISTORY_OPTION_TITLE" = "Pas d’historique";
-"NO_HISTORY_OPTION_DETAIL_TITLE" = "Twitter n’enregistrera plus tes recherches.";
+"NO_HISTORY_TITLE" = "Pas d’historique";
+"NO_HISTORY_DETAIL" = "Twitter n’enregistrera plus tes recherches.";
 
-"HIDE_TREND_VIDEOS_OPTION_TITLE" = "Pas de vidéos tendances";
-"HIDE_TREND_VIDEOS_OPTION_DETAIL_TITLE" = "Supprime les vidéos tendances de la recherche.";
+"HIDE_TREND_VIDEOS_TITLE" = "Pas de vidéos tendances";
+"HIDE_TREND_VIDEOS_DETAIL" = "Supprime les vidéos tendances de la recherche.";
 
 /*Photos and Videos*/
-"AUTO_HIGHEST_LOAD_OPTION_TITLE" = "Qualité max";
-"AUTO_HIGHEST_LOAD_OPTION_DETAIL_TITLE" = "Upload et lecture en meilleure qualité possible.";
+"AUTO_HIGHEST_LOAD_TITLE" = "Qualité max";
+"AUTO_HIGHEST_LOAD_DETAIL" = "Upload et lecture en meilleure qualité possible.";
 
-"DISABLE_VIDEO_LAYER_CAPTIONS_OPTION_TITLE" = "Pas de sous-titres vidéo";
+"DISABLE_VIDEO_CAPTIONS_TITLE" = "Pas de sous-titres vidéo";
 
 "FORCE_TWEET_FULL_FRAME_TITLE" = "Images larges";
 
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "Horodatage vidéo";
-"RESTORE_VIDEO_TIMESTAMP_DETAIL_TITLE" = "Affiche l'horodatage dans le lecteur immersif.";
+"RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Affiche l'horodatage dans le lecteur immersif.";
 
 /*Twitter Blue*/
-"HIDE_ADS_OPTION_TITLE" = "Sans pubs";
-"HIDE_ADS_OPTION_DETAIL_TITLE" = "Supprime toutes les pubs.";
+"HIDE_PROMOTED_TITLE" = "Sans pubs";
+"HIDE_PROMOTED_DETAIL" = "Supprime toutes les pubs.";
 
-"UNDO_TWEET_OPTION_TITLE" = "Annuler Tweet";
-"UNDO_TWEET_OPTION_DETAIL_TITLE" = "Ajoute un court délai pour annuler la publication.";
+"UNDO_TWEET_TITLE" = "Annuler Tweet";
+"UNDO_TWEET_DETAIL" = "Ajoute un court délai pour annuler la publication.";
 
-"DOWNLOAD_VIDEOS_OPTION_TITLE" = "Télécharger les médias";
-"DOWNLOAD_VIDEOS_OPTION_DETAIL_TITLE" = "Sauvegarde vidéos et GIFs directement.";
+"DOWNLOAD_VIDEOS_TITLE" = "Télécharger les médias";
+"DOWNLOAD_VIDEOS_DETAIL" = "Sauvegarde vidéos et GIFs directement.";
 
-"DIRECT_SAVE_OPTION_TITLE" = "Enregistrer dans Photos";
-"DIRECT_SAVE_OPTION_DETAIL_TITLE" = "Les vidéos se sauvegardent dans l’app Photos.";
+"DIRECT_SAVE_TITLE" = "Enregistrer dans Photos";
+"DIRECT_SAVE_DETAIL" = "Les vidéos se sauvegardent dans l’app Photos.";
 
-"HIDE_PREMIUM_OFFER_OPTION" = "Pas d’offres Twitter Blue";
-"HIDE_PREMIUM_OFFER_OPTION_DETAIL_TITLE" = "Cache les boutons 'Vérifié' et 'Améliorer'.";
+"HIDE_PREMIUM_OFFER_TITLE" = "Pas d’offres Twitter Blue";
+"HIDE_PREMIUM_OFFER_DETAIL" = "Cache les boutons 'Vérifié' et 'Améliorer'.";
 
 "THEME_OPTION_TITLE" = "Changer de thème";
 
@@ -185,42 +185,42 @@
 "CUSTOM_TAB_BAR_OPTION_TITLE" = "Modifier la barre d’onglets";
 
 /*Layout*/
-"HIDE_SPACE_OPTION_TITLE" = "Cacher la barre Spaces";
+"HIDE_SPACES_TITLE" = "Cacher la barre Spaces";
 
-"STOP_HIDING_TAB_BAR_TITLE" = "Toujours afficher la barre";
-"STOP_HIDING_TAB_BAR_DETAIL_TITLE" = "Ne pas cacher la barre au scroll.";
+"NO_TAB_BAR_HIDING_TITLE" = "Toujours afficher la barre";
+"NO_TAB_BAR_HIDING_DETAIL" = "Ne pas cacher la barre au scroll.";
 
-"HIDE_CUSTOM_TIMELINES_OPTION_TITLE" = "Masquer les fils personnalisés";
-"HIDE_CUSTOM_TIMELINES_OPTION_DETAIL_TITLE" = "Supprime le bouton Ajouter des onglets du fil d'accueil. Nécessite un redémarrage.";
+"HIDE_CUSTOM_TIMELINES_TITLE" = "Masquer les fils personnalisés";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Supprime le bouton Ajouter des onglets du fil d'accueil. Nécessite un redémarrage.";
 
-"HIDE_TRENDS_OPTION_TITLE" = "Masquer les tendances";
-"HIDE_TRENDS_OPTION_DETAIL_TITLE" = "Affiche uniquement la barre de recherche dans l'onglet Explorer, en masquant les tendances, l'actualité et les onglets de page.";
+"HIDE_TRENDS_TITLE" = "Masquer les tendances";
+"HIDE_TRENDS_DETAIL" = "Affiche uniquement la barre de recherche dans l'onglet Explorer, en masquant les tendances, l'actualité et les onglets de page.";
 
-"CLASSIC_TAB_BAR_SETTINGS_TITLE" = "Barre de navigation classique";
-"CLASSIC_TAB_BAR_SETTINGS_DETAIL" = "Applique votre couleur d'accent à l'élément de navigation sélectionné.";
+"TAB_BAR_THEMING_TITLE" = "Barre de navigation classique";
+"TAB_BAR_THEMING_DETAIL" = "Applique votre couleur d'accent à l'élément de navigation sélectionné.";
 
-"DISABLE_RTL_OPTION_TITLE" = "Utiliser disposition gauche-droite";
-"DISABLE_RTL_OPTION_DETAIL_TITLE" = "Force la vue LTR même pour les langues RTL.";
+"DISABLE_RTL_TITLE" = "Utiliser disposition gauche-droite";
+"DISABLE_RTL_DETAIL" = "Force la vue LTR même pour les langues RTL.";
 
-"SHOW_SCOLL_INDICATOR_OPTION_TITLE" = "Toujours afficher la barre de scroll";
+"SHOW_SCROLL_INDICATOR_TITLE" = "Toujours afficher la barre de scroll";
 
-"FONT_OPTION_TITLE" = "Polices personnalisées";
-"FONT_OPTION_DETAIL_TITLE" = "Choisis une police pour Twitter.";
+"CUSTOM_FONTS_TITLE" = "Polices personnalisées";
+"CUSTOM_FONTS_DETAIL" = "Choisis une police pour Twitter.";
 
 "REQULAR_FONTS_PICKER_OPTION_TITLE" = "Choisir une police";
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Choisir une police en gras";
 
 /*Labs*/
-"ENABLE_TWEET_LABELS_OPTION_TITLE" = "Afficher la source du Tweet (bêta)";
-"ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Affiche l'app utilisée pour tweeter (par @nyaathea).";
+"RESTORE_TWEET_LABELS_TITLE" = "Afficher la source du Tweet (bêta)";
+"RESTORE_TWEET_LABELS_DETAIL" = "Affiche l'app utilisée pour tweeter (par @nyaathea).";
 
-"REPLY_IN_WEBVIEW_OPTION_TITLE" = "Répondre dans une vue web";
-"REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Ouvre la zone de réponse dans une vue web pour éviter l'attestation.";
+"REPLY_IN_WEBVIEW_TITLE" = "Répondre dans une vue web";
+"REPLY_IN_WEBVIEW_DETAIL" = "Ouvre la zone de réponse dans une vue web pour éviter l'attestation.";
 
 /*Debug*/
-"FLEX_OPTION_TITLE" = "Mode debug FLEX";
-"FLEX_OPTION_DETAIL_TITLE" = "Utilise FLEX pour déboguer Twitter.";
+"FLEX_TWITTER_TITLE" = "Mode debug FLEX";
+"FLEX_TWITTER_DETAIL" = "Utilise FLEX pour déboguer Twitter.";
 
 /*Developers*/
 "DEVELOPER_SECTION_HEADER_TITLE" = "Développeurs";
@@ -292,14 +292,14 @@
 /*Refresh pill text*/
 "REFRESH_PILL_TEXT" = "Tweeté";
 
-"COLOR_TWITTER_ICON_OPTION_TITLE" = "Colorer l'icône Twitter";
-"COLOR_TWITTER_ICON_DETAIL_TITLE" = "Applique la couleur d'accent à l'icône Twitter dans la barre supérieure.";
+"COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Colorer l'icône Twitter";
+"COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Applique la couleur d'accent à l'icône Twitter dans la barre supérieure.";
 
-"REFRESH_PILL_OPTION_TITLE" = "Ajouter 'Tweeté' à la pastille d'actualisation";
-"REFRESH_PILL_DETAIL_TITLE" = "Rajoute l'étiquette 'Tweeté' à la pastille d'actualisation lorsque quelqu'un tweete. Cela peut (à tort) apparaître à d'autres endroits également.";
+"REFRESH_PILL_LABEL_TITLE" = "Ajouter 'Tweeté' à la pastille d'actualisation";
+"REFRESH_PILL_LABEL_DETAIL" = "Rajoute l'étiquette 'Tweeté' à la pastille d'actualisation lorsque quelqu'un tweete. Cela peut (à tort) apparaître à d'autres endroits également.";
 
-"RESTORE_TWITTER_NAMES_OPTION_TITLE" = "Restaurer la terminologie Twitter";
-"RESTORE_TWITTER_NAMES_OPTION_DETAIL_TITLE" = "Remplace 'X' par 'Twitter', 'Post' par 'Tweet', 'Repost' par 'Retweet', etc. dans toute l'interface de l'application.";
+"RESTORE_TWITTER_NAMES_TITLE" = "Restaurer la terminologie Twitter";
+"RESTORE_TWITTER_NAMES_DETAIL" = "Remplace 'X' par 'Twitter', 'Post' par 'Tweet', 'Repost' par 'Retweet', etc. dans toute l'interface de l'application.";
 
 /*Deprecated*/
 "MODERN_SETTINGS_PLACEHOLDER_TEXT" = "Rien à voir ici — pour le moment.";

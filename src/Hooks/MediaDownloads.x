@@ -10,7 +10,7 @@
 %property (nonatomic, strong) JGProgressHUD *hud;
 - (void)setEntryViewModel:(id)arg1 {
     %orig;
-    if ([BHTSettings boolForKey:@"dw_v"]) {
+    if ([BHTSettings boolForKey:@"download_videos"]) {
         UIContextMenuInteraction *menuInteraction = [[UIContextMenuInteraction alloc] initWithDelegate:self];
         [self setUserInteractionEnabled:true];
 
@@ -167,7 +167,7 @@
 
 %hook TTAStatusInlineShareButton
 - (void)didLongPressActionButton:(UILongPressGestureRecognizer *)gestureRecognizer {
-    if ([BHTSettings boolForKey:@"TweetToImage"]) {
+    if ([BHTSettings boolForKey:@"tweet_to_image"]) {
         if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
             id delegate = self.delegate;
             if (![delegate isKindOfClass:%c(TTAStatusInlineActionsView)]) {
@@ -278,7 +278,7 @@ static NSArray *BHT_inlineActionViewClassesForViewModel(NSArray *classes, id vie
 - (NSArray *)_t1_actionItemsForStatus:(__unsafe_unretained id)status account:(__unsafe_unretained id)account shareableEntity:(__unsafe_unretained id)shareableEntity entityURL:(__unsafe_unretained id)entityURL source:(__unsafe_unretained id)source options:(NSUInteger)options scribeComponent:(__unsafe_unretained id)scribeComponent doneBlock:(__unsafe_unretained id)doneBlock {
     NSArray *origItems = %orig;
 
-    if (![BHTSettings boolForKey:@"dw_v"] || ![status respondsToSelector:@selector(entities)]) {
+    if (![BHTSettings boolForKey:@"download_videos"] || ![status respondsToSelector:@selector(entities)]) {
         return origItems;
     }
 
@@ -301,7 +301,7 @@ static NSArray *BHT_inlineActionViewClassesForViewModel(NSArray *classes, id vie
         objc_setAssociatedObject(self, &downloaderKey, downloader, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
 
-    TFNActionItem *downloadItem = [%c(TFNActionItem) actionItemWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_VIDEOS_OPTION_TITLE"]
+    TFNActionItem *downloadItem = [%c(TFNActionItem) actionItemWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_VIDEOS_TITLE"]
                                                               imageName:@"arrow_down_circle_stroke" action:^{
         [downloader presentDownloadOptionsForMediaEntities:mediaEntities];
     }];

@@ -59,124 +59,124 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Följ NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_OPTION_TITLE" = "Inga ämnes-Tweets";
-"HIDE_TOPICS_OPTION_DETAIL_TITLE" = "Ta bort Tweets kopplade till föreslagna ämnen.";
+"HIDE_TOPICS_TITLE" = "Inga ämnes-Tweets";
+"HIDE_TOPICS_DETAIL" = "Ta bort Tweets kopplade till föreslagna ämnen.";
 
-"HIDE_TOPICS_TO_FOLLOW_OPTION" = "Inga ’Ämnen att följa’";
-"HIDE_TOPICS_TO_FOLLOW_OPTION_DETAIL_TITLE" = "Ta bort föreslagna ämnen.";
+"HIDE_TOPICS_TO_FOLLOW_TITLE" = "Inga ’Ämnen att följa’";
+"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Ta bort föreslagna ämnen.";
 
-"HIDE_WHO_FOLLOW_OPTION" = "Ingen ’Vem att följa’";
-"HIDE_WHO_FOLLOW_OPTION_DETAIL_TITLE" = "Ta bort förslag om vem du kan följa från profiler.";
+"HIDE_WHO_TO_FOLLOW_TITLE" = "Ingen ’Vem att följa’";
+"HIDE_WHO_TO_FOLLOW_DETAIL" = "Ta bort förslag om vem du kan följa från profiler.";
 
-"PADLOCK_OPTION_TITLE" = "Lås Twitter";
-"PADLOCK_OPTION_DETAIL_TITLE" = "Kräv Face ID eller lösenkod för att öppna Twitter.";
+"PADLOCK_TITLE" = "Lås Twitter";
+"PADLOCK_DETAIL" = "Kräv Face ID eller lösenkod för att öppna Twitter.";
 
-"NEW_INAPP_WEB_OPTION_TITLE" = "Förbättrad inbyggd webbläsare (beta)";
-"NEW_INAPP_WEB_DETAIL_TITLE" = "Använd Twitters nya inbyggda webbläsare för att öppna länkar.";
+"NEW_INAPP_WEBVIEW_TITLE" = "Förbättrad inbyggd webbläsare (beta)";
+"NEW_INAPP_WEBVIEW_DETAIL" = "Använd Twitters nya inbyggda webbläsare för att öppna länkar.";
 
-"ALWAYS_OPEN_SAFARI_OPTION_TITLE" = "Använd extern webbläsare";
-"ALWAYS_OPEN_SAFARI_OPTION_DETAIL_TITLE" = "Öppna länkar i Safari eller din standardwebbläsare.";
+"ALWAYS_OPEN_SAFARI_TITLE" = "Använd extern webbläsare";
+"ALWAYS_OPEN_SAFARI_DETAIL" = "Öppna länkar i Safari eller din standardwebbläsare.";
 
-"STRIP_URL_TRACKING_PARAMETERS_TITLE" = "Justera länkar";
-"STRIP_URL_TRACKING_PARAMETERS_DETAIL_TITLE" = "Välj en anpassad URL och ta bort spårningsparametrar.";
+"STRIP_TRACKING_PARAMS_TITLE" = "Justera länkar";
+"STRIP_TRACKING_PARAMS_DETAIL" = "Välj en anpassad URL och ta bort spårningsparametrar.";
 "SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Välj anpassad URL";
 
 /*Tweets*/
-"TWEET_TO_IMAGE_OPTION_TITLE" = "Spara Tweet som bild";
-"TWEET_TO_IMAGE_OPTION_DETAIL_TITLE" = "Tryck länge på dela för att exportera Tweets som bilder.";
+"TWEET_TO_IMAGE_TITLE" = "Spara Tweet som bild";
+"TWEET_TO_IMAGE_DETAIL" = "Tryck länge på dela för att exportera Tweets som bilder.";
 
-"LIKE_CONFIRM_OPTION_TITLE" = "Bekräfta gilla-markeringar";
-"LIKE_CONFIRM_OPTION_DETAIL_TITLE" = "Fråga innan du gillar en Tweet.";
+"LIKE_CONFIRM_TITLE" = "Bekräfta gilla-markeringar";
+"LIKE_CONFIRM_DETAIL" = "Fråga innan du gillar en Tweet.";
 
-"TWEET_CONFIRM_OPTION_TITLE" = "Bekräfta Tweets";
-"TWEET_CONFIRM_OPTION_DETAIL_TITLE" = "Fråga innan du postar en Tweet.";
+"TWEET_CONFIRM_TITLE" = "Bekräfta Tweets";
+"TWEET_CONFIRM_DETAIL" = "Fråga innan du postar en Tweet.";
 
-"HIDE_BLUE_VERIFIED_OPTION_TITLE" = "Dölj Blue-verifieringsbockar";
-"HIDE_BLUE_VERIFIED_OPTION_DETAIL_TITLE" = "Dölj betald verifieringsbock på Tweets. Detta omfattar inte varumärkes- eller myndighetskonton.";
+"HIDE_BLUE_VERIFIED_TITLE" = "Dölj Blue-verifieringsbockar";
+"HIDE_BLUE_VERIFIED_DETAIL" = "Dölj betald verifieringsbock på Tweets. Detta omfattar inte varumärkes- eller myndighetskonton.";
 
-"HIDE_VIEW_COUNT_OPTION_TITLE" = "Dölj visningar";
-"HIDE_VIEW_COUNT_OPTION_DETAIL_TITLE" = "Visa inte visningar under Tweets.";
+"HIDE_VIEW_COUNT_TITLE" = "Dölj visningar";
+"HIDE_VIEW_COUNT_DETAIL" = "Visa inte visningar under Tweets.";
 
-"HIDE_MARKBOOK_BUTTON_OPTION_TITLE" = "Dölj bokmärkesknapp";
-"HIDE_MARKBOOK_BUTTON_OPTION_DETAIL_TITLE" = "Ta bort bokmärkesknappen från Tweets.";
-"HIDE_DOWNVOTE_BUTTON_OPTION_TITLE" = "Dölj nedröstningsknapp";
-"HIDE_DOWNVOTE_BUTTON_OPTION_DETAIL_TITLE" = "Ta bort nedröstningsknappen från Tweets.";
+"HIDE_BOOKMARK_BUTTON_TITLE" = "Dölj bokmärkesknapp";
+"HIDE_BOOKMARK_BUTTON_DETAIL" = "Ta bort bokmärkesknappen från Tweets.";
+"HIDE_DOWNVOTE_BUTTON_TITLE" = "Dölj nedröstningsknapp";
+"HIDE_DOWNVOTE_BUTTON_DETAIL" = "Ta bort nedröstningsknappen från Tweets.";
 
-"DISABLE_SENSITIVE_TWEET_WARNINGS_OPTION_TITLE" = "Inga varningar för känsligt innehåll";
+"DISABLE_SENSITIVE_TWEET_WARNINGS_TITLE" = "Inga varningar för känsligt innehåll";
 
-"BYPASS_AGE_VERIFICATION_OPTION_TITLE" = "Kringgå åldersverifiering";
-"BYPASS_AGE_VERIFICATION_OPTION_DETAIL_TITLE" = "Hoppar över åldersverifieringen för känsligt innehåll.";
+"BYPASS_AGE_VERIFICATION_TITLE" = "Kringgå åldersverifiering";
+"BYPASS_AGE_VERIFICATION_DETAIL" = "Hoppar över åldersverifieringen för känsligt innehåll.";
 
-"HIDE_GROK_ANALYZE_BUTTON_TITLE" = "Dölj Grok-analysknappar";
-"HIDE_GROK_ANALYZE_BUTTON_DETAIL_TITLE" = "Döljer Grok-analysknappen i Tweets.";
+"HIDE_GROK_ANALYZE_TITLE" = "Dölj Grok-analysknappar";
+"HIDE_GROK_ANALYZE_DETAIL" = "Döljer Grok-analysknappen i Tweets.";
 
 "SQUARE_AVATARS_TITLE" = "Fyrkantiga profilbilder";
-"SQUARE_AVATARS_DETAIL_TITLE" = "Ge alla fyrkantiga profilbilder, precis som förr.";
+"SQUARE_AVATARS_DETAIL" = "Ge alla fyrkantiga profilbilder, precis som förr.";
 
 "REPLY_SORTING_TITLE" = "Ingen svarssortering";
-"REPLY_SORTING_DETAIL_TITLE" = "Inaktivera funktionen för att sortera svar i konversationer.";
+"REPLY_SORTING_DETAIL" = "Inaktivera funktionen för att sortera svar i konversationer.";
 
 "RESTORE_REPLY_CONTEXT_TITLE" = "Återställ svarssammanhang";
-"RESTORE_REPLY_CONTEXT_DETAIL_TITLE" = "Visar vilka personer som besvaras under Tweets.";
+"RESTORE_REPLY_CONTEXT_DETAIL" = "Visar vilka personer som besvaras under Tweets.";
 
 /*Profiles*/
-"FOLLOW_CONFIRM_OPTION_TITLE" = "Bekräfta följningar";
-"FOLLOW_CONFIRM_OPTION_DETAIL_TITLE" = "Fråga innan du följer någon.";
+"FOLLOW_CONFIRM_TITLE" = "Bekräfta följningar";
+"FOLLOW_CONFIRM_DETAIL" = "Fråga innan du följer någon.";
 
-"COPY_PROFILE_INFO_OPTION_TITLE" = "Kopiera profilinfo";
-"COPY_PROFILE_INFO_OPTION_DETAIL_TITLE" = "Kopiera användarnamn, biografier, och mer med ett tryck.";
+"COPY_PROFILE_INFO_TITLE" = "Kopiera profilinfo";
+"COPY_PROFILE_INFO_DETAIL" = "Kopiera användarnamn, biografier, och mer med ett tryck.";
 
-"BIO_TRANSLATE_OPTION_TITLE" = "Översätt biografi";
-"BIO_TRANSLATE_OPTION_DETAIL_TITLE" = "Se biografier på ditt språk.";
+"BIO_TRANSLATE_TITLE" = "Översätt biografi";
+"BIO_TRANSLATE_DETAIL" = "Se biografier på ditt språk.";
 
-"DISABLE_MEDIA_TAB_OPTION_TITLE" = "Separera inte Mediafilken";
-"DISABLE_MEDIA_TAB_OPTION_DETAIL_TITLE" = "Slår ihop Foto- och Videoflikarna.";
+"DISABLE_MEDIA_TAB_TITLE" = "Separera inte Mediafilken";
+"DISABLE_MEDIA_TAB_DETAIL" = "Slår ihop Foto- och Videoflikarna.";
 
-"DISABLE_ARTICLES_OPTION_TITLE" = "Ingen Artiklar-flik";
-"DISABLE_ARTICLES_OPTION_DETAIL_TITLE" = "Dölj Artiklar-fliken i profiler.";
+"DISABLE_ARTICLES_TITLE" = "Ingen Artiklar-flik";
+"DISABLE_ARTICLES_DETAIL" = "Dölj Artiklar-fliken i profiler.";
 
-"DISABLE_HIGHLIGHTS_OPTION_TITLE" = "Ingen 'Höjdpunkter'-flik";
-"DISABLE_HIGHLIGHTS_OPTION_DETAIL_TITLE" = "Dölj Höjdpunkter-fliken i profiler.";
+"DISABLE_HIGHLIGHTS_TITLE" = "Ingen 'Höjdpunkter'-flik";
+"DISABLE_HIGHLIGHTS_DETAIL" = "Dölj Höjdpunkter-fliken i profiler.";
 
 "HIDE_FOLLOW_BUTTON_TITLE" = "Dölj 'Följ' knappen på Tweets";
-"HIDE_FOLLOW_BUTTON_DETAIL_TITLE" = "Visar inte följknappen på Tweets.";
+"HIDE_FOLLOW_BUTTON_DETAIL" = "Visar inte följknappen på Tweets.";
 
 "RESTORE_FOLLOW_BUTTON_TITLE" = "Dölj 'Prenumerera' knappen";
-"RESTORE_FOLLOW_BUTTON_DETAIL_TITLE" = "Vis inte prenumerationsknappen på Tweets.";
+"RESTORE_FOLLOW_BUTTON_DETAIL" = "Vis inte prenumerationsknappen på Tweets.";
 
 /*Search*/
-"NO_HISTORY_OPTION_TITLE" = "Ingen sökhistorik";
-"NO_HISTORY_OPTION_DETAIL_TITLE" = "Twitter sparar inte längre dina sökningar.";
+"NO_HISTORY_TITLE" = "Ingen sökhistorik";
+"NO_HISTORY_DETAIL" = "Twitter sparar inte längre dina sökningar.";
 
-"HIDE_TREND_VIDEOS_OPTION_TITLE" = "Inga trendande videor";
-"HIDE_TREND_VIDEOS_OPTION_DETAIL_TITLE" = "Ta bort trendande videor från sökmenyn.";
+"HIDE_TREND_VIDEOS_TITLE" = "Inga trendande videor";
+"HIDE_TREND_VIDEOS_DETAIL" = "Ta bort trendande videor från sökmenyn.";
 
 /*Photos and Videos*/
-"AUTO_HIGHEST_LOAD_OPTION_TITLE" = "Högkvalitetsmedia";
-"AUTO_HIGHEST_LOAD_OPTION_DETAIL_TITLE" = "Ladda upp och visa media i bästa möjliga kvalitet.";
+"AUTO_HIGHEST_LOAD_TITLE" = "Högkvalitetsmedia";
+"AUTO_HIGHEST_LOAD_DETAIL" = "Ladda upp och visa media i bästa möjliga kvalitet.";
 
-"DISABLE_VIDEO_LAYER_CAPTIONS_OPTION_TITLE" = "Inga videoundertexter";
+"DISABLE_VIDEO_CAPTIONS_TITLE" = "Inga videoundertexter";
 
 "FORCE_TWEET_FULL_FRAME_TITLE" = "Stora bilder";
 
 "RESTORE_VIDEO_TIMESTAMP_TITLE" = "Video-tidsstämpel";
-"RESTORE_VIDEO_TIMESTAMP_DETAIL_TITLE" = "Visar tidsstämpel på den uppslukande spelaren.";
+"RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Visar tidsstämpel på den uppslukande spelaren.";
 
 /*Twitter Blue*/
-"HIDE_ADS_OPTION_TITLE" = "Inga annonser";
-"HIDE_ADS_OPTION_DETAIL_TITLE" = "Ta bort alla annonser.";
+"HIDE_PROMOTED_TITLE" = "Inga annonser";
+"HIDE_PROMOTED_DETAIL" = "Ta bort alla annonser.";
 
-"UNDO_TWEET_OPTION_TITLE" = "Ångra Tweet";
-"UNDO_TWEET_OPTION_DETAIL_TITLE" = "Lägg till en kort fördröjning så att du kan ångra Tweets.";
+"UNDO_TWEET_TITLE" = "Ångra Tweet";
+"UNDO_TWEET_DETAIL" = "Lägg till en kort fördröjning så att du kan ångra Tweets.";
 
-"DOWNLOAD_VIDEOS_OPTION_TITLE" = "Ladda ner media";
-"DOWNLOAD_VIDEOS_OPTION_DETAIL_TITLE" = "Spara videor eller GIF:ar direkt från Tweets.";
+"DOWNLOAD_VIDEOS_TITLE" = "Ladda ner media";
+"DOWNLOAD_VIDEOS_DETAIL" = "Spara videor eller GIF:ar direkt från Tweets.";
 
-"DIRECT_SAVE_OPTION_TITLE" = "Spara till Bilder";
-"DIRECT_SAVE_OPTION_DETAIL_TITLE" = "Videor du sparar hamnar direkt i Bilder-appen.";
+"DIRECT_SAVE_TITLE" = "Spara till Bilder";
+"DIRECT_SAVE_DETAIL" = "Videor du sparar hamnar direkt i Bilder-appen.";
 
-"HIDE_PREMIUM_OFFER_OPTION" = "Inga Twitter Blue-promptar";
-"HIDE_PREMIUM_OFFER_OPTION_DETAIL_TITLE" = "Ta bort ’Bli verifierad’ och ’Uppgradera’-knapparna.";
+"HIDE_PREMIUM_OFFER_TITLE" = "Inga Twitter Blue-promptar";
+"HIDE_PREMIUM_OFFER_DETAIL" = "Ta bort ’Bli verifierad’ och ’Uppgradera’-knapparna.";
 
 "THEME_OPTION_TITLE" = "Ändra tema";
 
@@ -185,42 +185,42 @@
 "CUSTOM_TAB_BAR_OPTION_TITLE" = "Redigera flikfältet";
 
 /*Layout*/
-"HIDE_SPACE_OPTION_TITLE" = "Dölj Områden-fältet";
+"HIDE_SPACES_TITLE" = "Dölj Områden-fältet";
 
-"STOP_HIDING_TAB_BAR_TITLE" = "Behåll flikfältet synligt";
-"STOP_HIDING_TAB_BAR_DETAIL_TITLE" = "Dölj inte flikfältet vid scrollning.";
+"NO_TAB_BAR_HIDING_TITLE" = "Behåll flikfältet synligt";
+"NO_TAB_BAR_HIDING_DETAIL" = "Dölj inte flikfältet vid scrollning.";
 
-"HIDE_CUSTOM_TIMELINES_OPTION_TITLE" = "Dölj anpassade tidslinjer";
-"HIDE_CUSTOM_TIMELINES_OPTION_DETAIL_TITLE" = "Ta bort Lägg till-knappen från flikarna på hemtidslinjen. Kräver omstart.";
+"HIDE_CUSTOM_TIMELINES_TITLE" = "Dölj anpassade tidslinjer";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Ta bort Lägg till-knappen från flikarna på hemtidslinjen. Kräver omstart.";
 
-"HIDE_TRENDS_OPTION_TITLE" = "Dölj trendande innehåll";
-"HIDE_TRENDS_OPTION_DETAIL_TITLE" = "Visa endast sökfältet på Utforska-fliken och dölj alla trender, nyheter och sidflikarna.";
+"HIDE_TRENDS_TITLE" = "Dölj trendande innehåll";
+"HIDE_TRENDS_DETAIL" = "Visa endast sökfältet på Utforska-fliken och dölj alla trender, nyheter och sidflikarna.";
 
-"CLASSIC_TAB_BAR_SETTINGS_TITLE" = "Klassiska flikikoner";
-"CLASSIC_TAB_BAR_SETTINGS_DETAIL" = "Tillämpa accentfärg på den valda fliken. Omstart krävs.";
+"TAB_BAR_THEMING_TITLE" = "Klassiska flikikoner";
+"TAB_BAR_THEMING_DETAIL" = "Tillämpa accentfärg på den valda fliken. Omstart krävs.";
 
-"DISABLE_RTL_OPTION_TITLE" = "Vänster-till-höger-layout";
-"DISABLE_RTL_OPTION_DETAIL_TITLE" = "Tvinga LTR-layout, även för RTL-språk. Omstart krävs.";
+"DISABLE_RTL_TITLE" = "Vänster-till-höger-layout";
+"DISABLE_RTL_DETAIL" = "Tvinga LTR-layout, även för RTL-språk. Omstart krävs.";
 
-"SHOW_SCOLL_INDICATOR_OPTION_TITLE" = "Visa alltid rullningslisten";
+"SHOW_SCROLL_INDICATOR_TITLE" = "Visa alltid rullningslisten";
 
-"FONT_OPTION_TITLE" = "Anpassade typsnitt";
-"FONT_OPTION_DETAIL_TITLE" = "Välj ett anpassat typsnitt för Twitter.";
+"CUSTOM_FONTS_TITLE" = "Anpassade typsnitt";
+"CUSTOM_FONTS_DETAIL" = "Välj ett anpassat typsnitt för Twitter.";
 
 "REQULAR_FONTS_PICKER_OPTION_TITLE" = "Välj typsnitt";
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Välj fetstil";
 
 /*Labs*/
-"ENABLE_TWEET_LABELS_OPTION_TITLE" = "Visa Tweet-källor (beta)";
-"ENABLE_TWEET_LABELS_OPTION_DETAIL_TITLE" = "Visar vilken klient Tweeten skapades från (av @nyaathea).";
+"RESTORE_TWEET_LABELS_TITLE" = "Visa Tweet-källor (beta)";
+"RESTORE_TWEET_LABELS_DETAIL" = "Visar vilken klient Tweeten skapades från (av @nyaathea).";
 
-"REPLY_IN_WEBVIEW_OPTION_TITLE" = "Svara i webbvy";
-"REPLY_IN_WEBVIEW_OPTION_DETAIL_TITLE" = "Öppna svarsrutan i en webbvy för att undvika attestation.";
+"REPLY_IN_WEBVIEW_TITLE" = "Svara i webbvy";
+"REPLY_IN_WEBVIEW_DETAIL" = "Öppna svarsrutan i en webbvy för att undvika attestation.";
 
 /*Debug*/
-"FLEX_OPTION_TITLE" = "FLEX-felsökningsläge";
-"FLEX_OPTION_DETAIL_TITLE" = "Använd FLEX för att felsöka Twitter.";
+"FLEX_TWITTER_TITLE" = "FLEX-felsökningsläge";
+"FLEX_TWITTER_DETAIL" = "Använd FLEX för att felsöka Twitter.";
 
 /*Developers*/
 "DEVELOPER_SECTION_HEADER_TITLE" = "Utvecklare";
@@ -292,14 +292,14 @@
 /*Refresh pill text*/
 "REFRESH_PILL_TEXT" = "Tweetade";
 
-"COLOR_TWITTER_ICON_OPTION_TITLE" = "Färga Twitter-ikonen";
-"COLOR_TWITTER_ICON_DETAIL_TITLE" = "Tillämpa accentfärgen på Twitter-ikonen i den övre menyn.";
+"COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Färga Twitter-ikonen";
+"COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Tillämpa accentfärgen på Twitter-ikonen i den övre menyn.";
 
-"REFRESH_PILL_OPTION_TITLE" = "Lägg till 'Tweetade' i uppdateringspillen";
-"REFRESH_PILL_DETAIL_TITLE" = "Lägger tillbaka etiketten 'Tweetade' i uppdateringspillen när någon Tweetar. Detta kan (felaktigt) visas i vissa andra områden också.";
+"REFRESH_PILL_LABEL_TITLE" = "Lägg till 'Tweetade' i uppdateringspillen";
+"REFRESH_PILL_LABEL_DETAIL" = "Lägger tillbaka etiketten 'Tweetade' i uppdateringspillen när någon Tweetar. Detta kan (felaktigt) visas i vissa andra områden också.";
 
-"RESTORE_TWITTER_NAMES_OPTION_TITLE" = "Återställ Twitter-terminologi";
-"RESTORE_TWITTER_NAMES_OPTION_DETAIL_TITLE" = "Ersätter 'X' med 'Twitter', 'Post' med 'Tweet', 'Repost' med 'Retweet' och så vidare i hela appens gränssnitt.";
+"RESTORE_TWITTER_NAMES_TITLE" = "Återställ Twitter-terminologi";
+"RESTORE_TWITTER_NAMES_DETAIL" = "Ersätter 'X' med 'Twitter', 'Post' med 'Tweet', 'Repost' med 'Retweet' och så vidare i hela appens gränssnitt.";
 
 /*Deprecated*/
 "MODERN_SETTINGS_PLACEHOLDER_TEXT" = "Här var det tomt.";

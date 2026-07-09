@@ -127,7 +127,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 - (void)viewDidAppear:(_Bool)arg1 {
     %orig(arg1);
 
-    if (![BHTSettings boolForKey:@"CopyProfileInfo"]) {
+    if (![BHTSettings boolForKey:@"copy_profile_info"]) {
         return;
     }
 
@@ -281,7 +281,7 @@ static void BHTApplyCopyButtonStyle(UIButton *copyButton, T1ProfileHeaderView *h
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     %orig(previousTraitCollection);
 
-    if (![BHTSettings boolForKey:@"CopyProfileInfo"]) {
+    if (![BHTSettings boolForKey:@"copy_profile_info"]) {
         return;
     }
 

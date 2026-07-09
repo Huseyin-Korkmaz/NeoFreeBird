@@ -13,7 +13,7 @@ static NSString *_lastCopiedURL;
 
 %hook SFSafariViewController
 - (void)viewWillAppear:(BOOL)animated {
-    if (![BHTSettings boolForKey:@"openInBrowser"]) {
+    if (![BHTSettings boolForKey:@"always_open_safari"]) {
         return %orig;
     }
 
@@ -31,7 +31,7 @@ static NSString *_lastCopiedURL;
 }
 
 - (instancetype)initWithURL:(NSURL *)URL configuration:(SFSafariViewControllerConfiguration *)configuration {
-    if (![BHTSettings boolForKey:@"openInBrowser"]) {
+    if (![BHTSettings boolForKey:@"always_open_safari"]) {
         return %orig;
     }
 
@@ -49,7 +49,7 @@ static NSString *_lastCopiedURL;
 }
 
 - (instancetype)initWithURL:(NSURL *)URL {
-    if (![BHTSettings boolForKey:@"openInBrowser"]) {
+    if (![BHTSettings boolForKey:@"always_open_safari"]) {
         return %orig;
     }
 
@@ -69,7 +69,7 @@ static NSString *_lastCopiedURL;
 
 %hook SFInteractiveDismissController
 - (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    if (![BHTSettings boolForKey:@"openInBrowser"]) {
+    if (![BHTSettings boolForKey:@"always_open_safari"]) {
         return %orig;
     }
     [transitionContext completeTransition:NO];
@@ -86,10 +86,10 @@ static NSString *_lastCopiedURL;
 // MARK: Disable RTL
 %hook NSParagraphStyle
 + (NSWritingDirection)defaultWritingDirectionForLanguage:(id)lang {
-    return [BHTSettings boolForKey:@"dis_rtl"] ? NSWritingDirectionLeftToRight : %orig;
+    return [BHTSettings boolForKey:@"disable_rtl"] ? NSWritingDirectionLeftToRight : %orig;
 }
 + (NSWritingDirection)_defaultWritingDirection {
-    return [BHTSettings boolForKey:@"dis_rtl"] ? NSWritingDirectionLeftToRight : %orig;
+    return [BHTSettings boolForKey:@"disable_rtl"] ? NSWritingDirectionLeftToRight : %orig;
 }
 %end
 
@@ -102,7 +102,7 @@ static NSString *_lastCopiedURL;
 // MARK: Show Scroll Bar
 %hook TFNTableView
 - (void)setShowsVerticalScrollIndicator:(BOOL)arg1 {
-    %orig([BHTSettings boolForKey:@"showScollIndicator"]);
+    %orig([BHTSettings boolForKey:@"show_scroll_indicator"]);
 }
 %end
 

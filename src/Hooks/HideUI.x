@@ -51,7 +51,7 @@
 // MARK: No search history
 %hook T1SearchTypeaheadViewController // for old Twitter versions
 - (void)viewDidLoad {
-    if ([BHTSettings boolForKey:@"no_his"]) { // thanks @CrazyMind90
+    if ([BHTSettings boolForKey:@"no_history"]) { // thanks @CrazyMind90
         if ([self respondsToSelector:@selector(clearActionControlWantsClear:)]) {
             [self performSelector:@selector(clearActionControlWantsClear:)];
         }
@@ -62,7 +62,7 @@
 
 %hook TTSSearchTypeaheadViewController
 - (void)viewDidLoad {
-    if ([BHTSettings boolForKey:@"no_his"]) { // thanks @CrazyMind90
+    if ([BHTSettings boolForKey:@"no_history"]) { // thanks @CrazyMind90
         if ([self respondsToSelector:@selector(clearActionControlWantsClear:)]) {
             [self performSelector:@selector(clearActionControlWantsClear:)];
         }
@@ -115,7 +115,7 @@ static void BHT_hideExploreTabBar(UIView *view) {
 
 %hook T1ImmersiveExploreCardView
 - (void)handleDoubleTap:(id)arg1 {
-    if ([BHTSettings boolForKey:@"like_con"]) {
+    if ([BHTSettings boolForKey:@"like_confirm"]) {
         [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
             make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
             make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {
@@ -131,7 +131,7 @@ static void BHT_hideExploreTabBar(UIView *view) {
 
 %hook T1TweetDetailsViewController
 - (void)_t1_toggleFavoriteOnCurrentStatus {
-    if ([BHTSettings boolForKey:@"like_con"]) {
+    if ([BHTSettings boolForKey:@"like_confirm"]) {
         [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
             make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
             make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {

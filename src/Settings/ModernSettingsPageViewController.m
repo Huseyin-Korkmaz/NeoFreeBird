@@ -94,12 +94,29 @@
     return self.visibleToggles.count;
 }
 
+// Localization keys are derived from the setting key: KEY_TITLE and KEY_DETAIL.
+// A button entry may instead carry an explicit titleKey, which takes precedence.
+- (NSString *)localizedTitleForEntry:(NSDictionary *)entry {
+    NSString *titleKey = entry[@"titleKey"];
+    if (!titleKey) {
+        titleKey = [NSString stringWithFormat:@"%@_TITLE", [entry[@"key"] uppercaseString]];
+    }
+    return [[BHTBundle sharedBundle] localizedStringForKey:titleKey];
+}
+
+// Returns the detail string for a key, or an empty string when none is defined.
+- (NSString *)localizedDetailForKey:(NSString *)key {
+    NSString *detailKey = [NSString stringWithFormat:@"%@_DETAIL", [key uppercaseString]];
+    NSString *detail = [[BHTBundle sharedBundle] localizedStringForKey:detailKey];
+    return [detail isEqualToString:detailKey] ? @"" : detail;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *toggleData = self.visibleToggles[indexPath.row];
     NSString *type = toggleData[@"type"];
     if ([type isEqualToString:@"compactButton"]) {
         ModernSettingsCompactButtonCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CompactButtonCell" forIndexPath:indexPath];
-        NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:toggleData[@"titleKey"]];
+        NSString *title = [self localizedTitleForEntry:toggleData];
         NSString *subtitle = @"";
         NSString *prefKey = toggleData[@"prefKeyForSubtitle"];
         if (prefKey) {
@@ -112,7 +129,7 @@
         return cell;
     } else if ([type isEqualToString:@"button"]) {
         ModernSettingsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ButtonCell" forIndexPath:indexPath];
-        NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:toggleData[@"titleKey"]];
+        NSString *title = [self localizedTitleForEntry:toggleData];
         NSString *subtitle = @"";
         NSString *prefKey = toggleData[@"prefKeyForSubtitle"];
         if (prefKey) {
@@ -126,11 +143,10 @@
         return cell;
     } else {
         ModernSettingsToggleCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ToggleCell" forIndexPath:indexPath];
-        NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:toggleData[@"titleKey"]];
-        NSString *subtitleKey = toggleData[@"subtitleKey"];
-        NSString *subtitle = (subtitleKey.length > 0) ? [[BHTBundle sharedBundle] localizedStringForKey:subtitleKey] : @"";
-        [cell configureWithTitle:title subtitle:subtitle];
         NSString *key = toggleData[@"key"];
+        NSString *title = [self localizedTitleForEntry:toggleData];
+        NSString *subtitle = [self localizedDetailForKey:key];
+        [cell configureWithTitle:title subtitle:subtitle];
         BOOL isEnabled = [[[NSUserDefaults standardUserDefaults] objectForKey:key] ?: toggleData[@"default"] boolValue];
         cell.toggleSwitch.on = isEnabled;
         objc_setAssociatedObject(cell.toggleSwitch, @"prefKey", key, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
