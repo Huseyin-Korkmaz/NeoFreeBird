@@ -50,15 +50,14 @@ static NSDictionary<NSString *, NSString *> *BHTwitterWordMap(void) {
     return map;
 }
 
-// Builds \b(word|word…)\b from the map keys of one sensitivity class, longest word
-// first so inflections win over their stems ("reposts" before "repost").
-static NSRegularExpression *BHTRenameRegex(BOOL caseSensitive) {
+// Builds a case-insensitive \b(word|word…)\b from every map key, longest word first
+// so inflections win over their stems ("reposts" before "repost"). Matching is always
+// case-insensitive; per-match resolution (see BHRenameEdits) enforces exact case for
+// keys that carry an uppercase letter, so lowercase "x" never becomes "Twitter".
+static NSRegularExpression *BHTRenameRegex(void) {
     NSMutableArray<NSString *> *words = [NSMutableArray array];
     for (NSString *word in BHTwitterWordMap()) {
-        BOOL hasUpper = [word rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]].location != NSNotFound;
-        if (hasUpper == caseSensitive) {
-            [words addObject:[NSRegularExpression escapedPatternForString:word]];
-        }
+        [words addObject:[NSRegularExpression escapedPatternForString:word]];
     }
     if (words.count == 0) {
         return nil;
@@ -71,7 +70,7 @@ static NSRegularExpression *BHTRenameRegex(BOOL caseSensitive) {
     }];
     NSString *pattern = [NSString stringWithFormat:@"\\b(%@)\\b", [words componentsJoinedByString:@"|"]];
     return [NSRegularExpression regularExpressionWithPattern:pattern
-                                                     options:(caseSensitive ? 0 : NSRegularExpressionCaseInsensitive)
+                                                     options:NSRegularExpressionCaseInsensitive
                                                        error:nil];
 }
 
@@ -94,54 +93,42 @@ static NSString *BHMatchCapitalisation(NSString *token, NSString *base) {
     return base;
 }
 
-// Returns the ordered list of edits (@"range" -> NSValue, @"repl" -> NSString) to apply
-// to `input`, sorted last-match-first so applying them never invalidates a later range.
+// Returns the edits (@"range" -> NSValue, @"repl" -> NSString) to apply to `input`, in
+// ascending order — the single regex pass yields non-overlapping left-to-right matches,
+// so callers apply them back-to-front and no edit invalidates a later range.
 // Returns nil when there is nothing to change.
 static NSArray<NSDictionary *> *BHRenameEdits(NSString *input) {
     if (input.length == 0) {
         return nil;
     }
 
-    static NSRegularExpression *insensitiveRegex = nil;
-    static NSRegularExpression *sensitiveRegex = nil;
+    static NSRegularExpression *regex = nil;
     static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        insensitiveRegex = BHTRenameRegex(NO);
-        sensitiveRegex = BHTRenameRegex(YES);
-    });
+    dispatch_once(&onceToken, ^{ regex = BHTRenameRegex(); });
+    if (!regex) {
+        return nil;
+    }
 
     NSDictionary *wordMap = BHTwitterWordMap();
     NSRange full = NSMakeRange(0, input.length);
     NSMutableArray<NSDictionary *> *edits = [NSMutableArray array];
 
-    for (NSTextCheckingResult *match in [sensitiveRegex matchesInString:input options:0 range:full]) {
-        NSString *repl = wordMap[[input substringWithRange:match.range]];
+    for (NSTextCheckingResult *match in [regex matchesInString:input options:0 range:full]) {
+        NSString *token = [input substringWithRange:match.range];
+        // Exact key wins (uppercase-bearing keys like "X" replace verbatim); otherwise
+        // fall back to the lowercase key and copy the token's capitalisation. A lowercase
+        // occurrence of an uppercase-only key resolves to neither and is left alone.
+        NSString *repl = wordMap[token];
+        if (!repl) {
+            NSString *base = wordMap[token.lowercaseString];
+            repl = base ? BHMatchCapitalisation(token, base) : nil;
+        }
         if (repl) {
             [edits addObject:@{@"range": [NSValue valueWithRange:match.range], @"repl": repl}];
         }
     }
 
-    for (NSTextCheckingResult *match in [insensitiveRegex matchesInString:input options:0 range:full]) {
-        NSString *token = [input substringWithRange:match.range];
-        NSString *base = wordMap[token.lowercaseString];
-        if (base) {
-            [edits addObject:@{@"range": [NSValue valueWithRange:match.range],
-                               @"repl": BHMatchCapitalisation(token, base)}];
-        }
-    }
-
-    if (edits.count == 0) {
-        return nil;
-    }
-
-    [edits sortUsingComparator:^NSComparisonResult(NSDictionary *a, NSDictionary *b) {
-        NSUInteger la = [a[@"range"] rangeValue].location;
-        NSUInteger lb = [b[@"range"] rangeValue].location;
-        if (la > lb) return NSOrderedAscending;
-        if (la < lb) return NSOrderedDescending;
-        return NSOrderedSame;
-    }];
-    return edits;
+    return edits.count > 0 ? edits : nil;
 }
 
 static NSString *BHRestoreTwitterTerminology(NSString *input) {
@@ -159,7 +146,7 @@ static NSString *BHRestoreTwitterTerminology(NSString *input) {
     NSString *output = input;
     if (edits) {
         NSMutableString *result = [input mutableCopy];
-        for (NSDictionary *edit in edits) {
+        for (NSDictionary *edit in edits.reverseObjectEnumerator) {
             [result replaceCharactersInRange:[edit[@"range"] rangeValue] withString:edit[@"repl"]];
         }
         output = [result copy];
@@ -176,7 +163,7 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
     }
 
     NSMutableAttributedString *result = [input mutableCopy];
-    for (NSDictionary *edit in edits) {
+    for (NSDictionary *edit in edits.reverseObjectEnumerator) {
         NSRange range = [edit[@"range"] rangeValue];
         NSDictionary *attrs = [result attributesAtIndex:range.location effectiveRange:NULL];
         NSAttributedString *piece = [[NSAttributedString alloc] initWithString:edit[@"repl"] attributes:attrs];
@@ -206,9 +193,10 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 // MARK: Rename server-composed text + colour restored source labels
 // TFNAttributedTextView renders interface chrome and server-composed URT text
 // (notification headers, footers, timestamps, counts…) that carries no localization
-// key, so the NSBundle hook can't reach it. Tweet bodies use the separate
-// TTAStatusBodyTextView view-model path, so they never reach this hook and are
-// left untouched.
+// key, so the NSBundle hook can't reach it. Tweet bodies also flow through here:
+// TTAStatusBodyAttributedTextView is a TFNAttributedTextView subclass that doesn't
+// override setTextModel:, so the rename is skipped for it to avoid mangling a user's
+// own words ("Post", "Tweet", …) inside their tweet.
 %hook TFNAttributedTextView
 - (void)setTextModel:(TFNAttributedTextModel *)model {
     if (!model || !model.attributedString) {
@@ -218,7 +206,6 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 
     NSString *currentText = model.attributedString.string;
     NSMutableAttributedString *newString = nil;
-    BOOL modified = NO;
     BOOL textChanged = NO;
 
     // --- Tweet source label colouring ---
@@ -244,7 +231,6 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
                         [newString addAttribute:NSForegroundColorAttributeName
                                           value:accentColor
                                           range:sourceRange];
-                        modified = YES;
                     }
                 }
                 break; // Only colour the first matching source.
@@ -252,18 +238,18 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
         }
     }
 
-    // --- Restore Twitter terminology ---
-    if ([BHTSettings boolForKey:@"restore_twitter_names"]) {
+    // --- Restore Twitter terminology (never on tweet bodies) ---
+    if ([BHTSettings boolForKey:@"restore_twitter_names"] &&
+        ![self isKindOfClass:%c(TTAStatusBodyAttributedTextView)]) {
         NSAttributedString *source = newString ?: model.attributedString;
         NSAttributedString *renamed = BHRestoreTwitterAttributed(source);
         if (renamed != source) {
             newString = [renamed mutableCopy];
-            modified = YES;
             textChanged = YES;
         }
     }
 
-    if (!modified || !newString) {
+    if (!newString) {
         %orig(model);
         return;
     }
@@ -286,40 +272,40 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 %end
 
 // MARK: Relabel the "new posts" refresh pill, controlled by "refresh_pill_label"
-// TFNPillControl backs other pills too ("Back to top", counts…); gate on the pill's
-// own text mentioning posts/tweets so only the new-content pill is relabelled.
-static BOOL BHPillLabelOverrideEnabled(void) {
-    return [BHTSettings boolForKey:@"refresh_pill_label"];
-}
-
-static BOOL BHPillTextIsNewContent(id text) {
-    if (![text isKindOfClass:[NSString class]]) {
+// TFNPillControl backs several unrelated pills (voice tab, onboarding, broadcast). Only
+// TUIUpdateIndicator's home "new posts" pill sets a navigateToEntryID, so gate on that:
+// it's exact and language-independent, where sniffing the text for "post"/"tweet" would
+// only match English. Skip the empty-text (facepile) variant, which has nothing to label.
+static BOOL BHPillIsNewContentPill(__unsafe_unretained id pill, id text) {
+    if (![BHTSettings boolForKey:@"refresh_pill_label"]) {
         return NO;
     }
-    NSString *s = [(NSString *)text lowercaseString];
-    return [s containsString:@"post"] || [s containsString:@"tweet"];
+    if (![text isKindOfClass:[NSString class]] || [(NSString *)text length] == 0) {
+        return NO;
+    }
+    return [pill valueForKey:@"navigateToEntryID"] != nil;
 }
 
 %hook TFNPillControl
 
 - (id)text {
     id origText = %orig;
-    if (!BHPillLabelOverrideEnabled() || !BHPillTextIsNewContent(origText)) {
+    if (!BHPillIsNewContentPill(self, origText)) {
         return origText;
     }
 
     NSString *localizedText = [[BHTBundle sharedBundle] localizedStringForKey:@"REFRESH_PILL_TEXT"];
-    return localizedText ?: @"Tweeted";
+    return localizedText ?: origText;
 }
 
 - (void)setText:(id)arg1 {
-    if (!BHPillLabelOverrideEnabled() || !BHPillTextIsNewContent(arg1)) {
+    if (!BHPillIsNewContentPill(self, arg1)) {
         %orig(arg1);
         return;
     }
 
     NSString *localizedText = [[BHTBundle sharedBundle] localizedStringForKey:@"REFRESH_PILL_TEXT"];
-    %orig(localizedText ?: (arg1 ?: @"Tweeted"));
+    %orig(localizedText ?: arg1);
 }
 
 %end

@@ -5,41 +5,11 @@
 
 #import "BHTHookHelpers.h"
 
-static UIFont * _Nullable TFNUIDefaultFontGroupReplacement(UIFont *self, SEL _cmd, CGFloat arg1, CGFloat arg2) {
-    BH_BaseImp orig  = originalFontsIMP[NSStringFromSelector(_cmd)].pointerValue;
-    NSUInteger nArgs = [[self class] instanceMethodSignatureForSelector:_cmd].numberOfArguments;
-    UIFont *origFont;
-    switch (nArgs) {
-        case 2:
-            origFont = orig(self, _cmd);
-            break;
-        case 3:
-            origFont = orig(self, _cmd, arg1);
-            break;
-        case 4:
-            origFont = orig(self, _cmd, arg1, arg2);
-            break;
-        default:
-            // Should not be reachable, as it was verified before swizzling
-            origFont = orig(self, _cmd);
-            break;
-    };
-
-    UIFont *newFont  = BH_getDefaultFont(origFont);
+static UIFont * _Nonnull BH_remapFont(UIFont *origFont) {
+    UIFont *newFont = BH_getDefaultFont(origFont);
     return newFont != nil ? newFont : origFont;
 }
-static void batchSwizzlingOnClass(Class cls, NSArray<NSString*>*origSelectors, IMP newIMP){
-    for (NSString *sel in origSelectors) {
-        SEL origSel = NSSelectorFromString(sel);
-        Method origMethod = class_getInstanceMethod(cls, origSel);
-        if (origMethod != NULL) {
-            IMP oldImp = class_replaceMethod(cls, origSel, newIMP, method_getTypeEncoding(origMethod));
-            [originalFontsIMP setObject:[NSValue valueWithPointer:oldImp] forKey:sel];
-        } else {
-            NSLog(@"[BHTwitter] Can't find method (%@) in Class (%@)", sel, NSStringFromClass(cls));
-        }
-    }
-}
+
 // MARK: BHTwitter settings entry
 
 // The settings root (revamp and legacy alike) is a diffable TFNItemsDataViewController
@@ -115,11 +85,10 @@ static void BHT_insertNeoFreeBirdSettings(TFNItemsDataViewController *settingsVC
         NSMutableArray *actions = [[NSMutableArray alloc] init];
         [actions addObject:title];
 
-        NSPropertyListFormat plistFormat;
-        NSMutableDictionary *plistDictionary = [NSPropertyListSerialization propertyListWithData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:@"/var/mobile/Library/Fonts/AddedFontCache.plist"]] options:NSPropertyListImmutable format:&plistFormat error:nil];
+        NSDictionary *plistDictionary = [NSPropertyListSerialization propertyListWithData:[NSData dataWithContentsOfURL:[NSURL fileURLWithPath:@"/var/mobile/Library/Fonts/AddedFontCache.plist"]] options:NSPropertyListImmutable format:NULL error:nil];
         [plistDictionary enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
             @try {
-                NSString *fontName = ((NSMutableArray *)[[plistDictionary valueForKey:key] valueForKey:@"psNames"]).firstObject;
+                NSString *fontName = ((NSArray *)[obj valueForKey:@"psNames"]).firstObject;
                 TFNActionItem *fontAction = [%c(TFNActionItem) actionItemWithTitle:fontName action:^{
                     if (self.configuration.includeFaces) {
                         [self setSelectedFontDescriptor:[UIFontDescriptor fontDescriptorWithFontAttributes:@{
@@ -152,45 +121,29 @@ static void BHT_insertNeoFreeBirdSettings(TFNItemsDataViewController *settingsVC
 }
 %end
 
+// Every named getter on TFNUIDefaultFontGroup (bodyFont, title1Font, navigationTitleFont, ...)
+// computes a size and dynamically dispatches to one of these five methods, the only ones that
+// actually build a UIFont. Remapping at the root covers the whole font surface.
 %hook TFNUIDefaultFontGroup
-+ (id)sharedFontGroup {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSMutableArray *fontsMethods = [NSMutableArray arrayWithArray:@[]];
-
-        unsigned int methodCount = 0;
-        Method *methods = class_copyMethodList([self class], &methodCount);
-        for (unsigned int i = 0; i < methodCount; ++i) {
-            Method method = methods[i];
-            SEL sel = method_getName(method);
-            NSString *selStr = NSStringFromSelector(sel);
-
-            NSMethodSignature *methodSig = [self instanceMethodSignatureForSelector:sel];
-            if (strcmp(methodSig.methodReturnType, @encode(void)) == 0) {
-                // Only add methods that return an object
-                continue;
-            } else if (methodSig.numberOfArguments == 2) {
-                // - (id)bodyFont; ...
-                [fontsMethods addObject:selStr];
-            } else if (methodSig.numberOfArguments == 3
-                       && strcmp([methodSig getArgumentTypeAtIndex:2], @encode(CGFloat)) == 0) {
-                // - (id)fontOfSize:(CGFloat); ...
-                [fontsMethods addObject:selStr];
-            } else if (methodSig.numberOfArguments == 4
-                       && strcmp([methodSig getArgumentTypeAtIndex:2], @encode(CGFloat)) == 0
-                       && strcmp([methodSig getArgumentTypeAtIndex:3], @encode(CGFloat)) == 0) {
-                // - (id)monospacedDigitalFontOfSize:(CGFloat) weight:(CGFloat); ...
-                [fontsMethods addObject:selStr];
-            } else {
-                NSLog(@"[BHTwitter] Method (%@) with unknown signiture (%@) in TFNUIDefaultFontGroup", selStr, methodSig);
-            }
-        }
-        free(methods);
-
-        originalFontsIMP = [NSMutableDictionary new];
-        batchSwizzlingOnClass([self class], [fontsMethods copy], (IMP)TFNUIDefaultFontGroupReplacement);
-    });
-    return %orig;
+- (UIFont *)fontOfSize:(CGFloat)size {
+    UIFont *origFont = %orig;
+    return BH_remapFont(origFont);
+}
+- (UIFont *)mediumFontOfSize:(CGFloat)size {
+    UIFont *origFont = %orig;
+    return BH_remapFont(origFont);
+}
+- (UIFont *)boldFontOfSize:(CGFloat)size {
+    UIFont *origFont = %orig;
+    return BH_remapFont(origFont);
+}
+- (UIFont *)heavyFontOfSize:(CGFloat)size {
+    UIFont *origFont = %orig;
+    return BH_remapFont(origFont);
+}
+- (UIFont *)monospacedDigitFontOfSize:(CGFloat)size weight:(CGFloat)weight {
+    UIFont *origFont = %orig;
+    return BH_remapFont(origFont);
 }
 %end
 

@@ -495,12 +495,7 @@ void BHT_prewarmWebCookiesIfNeeded(void) {
         BHTWebCreateTweetQueryID = [savedQueryID copy];
     }
 
-    if (BHTWebHelperWebView) {
-        BHT_refreshXTID();
-    } else {
-        BHT_refreshWebCookiesViaWebView();
-    }
-
+    BHT_refreshWebCookiesViaWebView();
     BHT_harvestSharedCookies();
 
     id current = BHT_accountForAuthenticatedWebView();

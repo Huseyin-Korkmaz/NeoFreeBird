@@ -17,7 +17,7 @@ typedef NS_ENUM(NSInteger, BHTRefreshSound) {
 };
 
 @interface TFNPullToRefreshControl : UIView
-- (unsigned long long)_status;
+- (BOOL)loading;
 @end
 
 static void BHT_PlayRefreshSound(BHTRefreshSound type) {
@@ -52,7 +52,7 @@ static void BHT_PlayRefreshSound(BHTRefreshSound type) {
 static char kManualRefreshKey;
 
 - (void)_setStatus:(unsigned long long)status fromScrolling:(BOOL)fromScrolling {
-    BOOL wasActive = ([self _status] == 1);
+    BOOL wasActive = [self loading];
 
     %orig;
 

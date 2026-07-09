@@ -57,11 +57,6 @@ static NSString * const kBHTSourceBearer =
 
 @implementation TweetSourceHelper
 
-// Retained for the call sites in AppLifecycle.x. Cookies are now read fresh per
-// request and no timers are held, so nothing needs to happen here.
-+ (void)initializeCookiesWithRetry {}
-+ (void)cleanupTimersForBackground {}
-
 + (NSString *)unavailableString {
     return [[BHTBundle sharedBundle] localizedStringForKey:@"SOURCE_UNAVAILABLE"];
 }
@@ -156,10 +151,6 @@ static NSString * const kBHTSourceBearer =
 // Must be called on the main thread.
 + (void)fetchSourceForTweetID:(NSString *)tweetID {
     if (tweetID.length == 0) return;
-
-    if (!tweetSources) tweetSources = [NSMutableDictionary dictionary];
-    if (!fetchPending) fetchPending = [NSMutableDictionary dictionary];
-    if (!fetchRetries) fetchRetries = [NSMutableDictionary dictionary];
 
     [self pruneCacheIfNeeded];
 
@@ -270,7 +261,6 @@ static NSString * const kBHTSourceBearer =
                 objc_setAssociatedObject(self, &kBHTFooterObservingKey, @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             }
 
-            if (!tweetSources) tweetSources = [NSMutableDictionary dictionary];
             NSString *source = tweetSources[tweetID];
 
             if (source == nil) {
@@ -299,9 +289,8 @@ static NSString * const kBHTSourceBearer =
     NSString *tweetID = notification.userInfo[@"tweetID"];
     NSString *mine = objc_getAssociatedObject(self, &kBHTFooterTweetIDKey);
     if (tweetID.length > 0 && [tweetID isEqualToString:mine]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateFooterTextView];
-        });
+        // Posted from the main queue, so we are already on the main thread here.
+        [self updateFooterTextView];
     }
 }
 

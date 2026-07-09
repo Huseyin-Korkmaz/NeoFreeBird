@@ -183,13 +183,6 @@ static void BHT_presentAuthIfNeeded(void) {
         BHT_applySelectedThemeColor();
     });
 
-    // Start the cookie initialization process with retry mechanism
-    if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [TweetSourceHelper initializeCookiesWithRetry];
-        });
-    }
-
     return orig;
 }
 
@@ -197,12 +190,6 @@ static void BHT_presentAuthIfNeeded(void) {
     %orig;
 
     BHT_applySelectedThemeColor();
-    if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [TweetSourceHelper initializeCookiesWithRetry];
-        });
-    }
-
     BHT_prewarmWebCookiesIfNeeded();
 
     if ([BHTSettings boolForKey:@"padlock"]) {
@@ -214,14 +201,6 @@ static void BHT_presentAuthIfNeeded(void) {
                 BHT_presentAuthIfNeeded();
             });
         }
-
-        // Safety recheck in case Face ID completes very quickly
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)),
-                       dispatch_get_main_queue(), ^{
-            if (BHT_isAuthenticated()) {
-                BHT_removePadlockOverlay();
-            }
-        });
     } else {
         BHT_removePadlockOverlay();
     }
@@ -230,46 +209,16 @@ static void BHT_presentAuthIfNeeded(void) {
 - (void)applicationWillResignActive:(__unsafe_unretained id)arg1 {
     %orig;
 
-    if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
-        [TweetSourceHelper cleanupTimersForBackground];
-    }
-
     if ([BHTSettings boolForKey:@"padlock"]) {
-        // Cover UI immediately
+        // Cover the UI (and the app-switcher snapshot) and mark unauthenticated
+        // so the next activation prompts again. The overlay persists through the
+        // background transition, so covering here is sufficient.
         BHT_showPadlockOverlay();
-        // Mark unauthenticated so a reopen from background will prompt again
         BHT_setAuthenticated(NO);
     }
 
     if ([BHTSettings boolForKey:@"flex_twitter"]) {
         [[%c(FLEXManager) sharedManager] showExplorer];
-    }
-}
-
-- (void)applicationDidEnterBackground:(__unsafe_unretained id)arg1 {
-    %orig;
-
-    if ([BHTSettings boolForKey:@"padlock"]) {
-        // Redundant, ensures state is locked while backgrounded
-        BHT_setAuthenticated(NO);
-        BHT_showPadlockOverlay();
-    }
-}
-
-- (void)applicationWillEnterForeground:(__unsafe_unretained id)arg1 {
-    %orig;
-
-    if ([BHTSettings boolForKey:@"padlock"]) {
-        // Keep UI covered during transition
-        BHT_showPadlockOverlay();
-    }
-}
-
-- (void)applicationWillTerminate:(__unsafe_unretained id)arg1 {
-    %orig;
-    if ([BHTSettings boolForKey:@"padlock"]) {
-        BHT_setAuthenticated(NO);
-        BHT_removePadlockOverlay();
     }
 }
 
@@ -293,22 +242,25 @@ static void BHT_presentAuthIfNeeded(void) {
 // through an X-shaped portal. Detach that mask so the logo zoom is kept but the
 // splash simply fades out instead.
 
-%hook T1AnimatedLaunchScreenView
-
-- (void)layoutSubviews {
-    %orig;
-
-    ((UIView *)self).layer.mask = nil;
-    for (UIView *sub in ((UIView *)self).subviews) {
+static void BHT_stripLaunchRevealMask(UIView *view) {
+    // The X-shaped hole lives on the container subview's layer.mask; the top
+    // view itself is unmasked, but clear it too for safety.
+    view.layer.mask = nil;
+    for (UIView *sub in view.subviews) {
         sub.layer.mask = nil;
     }
 }
 
+%hook T1AnimatedLaunchScreenView
+
+- (void)layoutSubviews {
+    %orig;
+    // layoutSubviews re-installs the mask each pass, so re-strip after %orig.
+    BHT_stripLaunchRevealMask((UIView *)self);
+}
+
 - (void)animateRevealWithCompletion:(id)completion {
-    ((UIView *)self).layer.mask = nil;
-    for (UIView *sub in ((UIView *)self).subviews) {
-        sub.layer.mask = nil;
-    }
+    BHT_stripLaunchRevealMask((UIView *)self);
 
     [UIView animateWithDuration:0.5 animations:^{
         for (UIView *sub in ((UIView *)self).subviews) {

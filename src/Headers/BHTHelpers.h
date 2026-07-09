@@ -11,9 +11,6 @@
 #import <WebKit/WebKit.h>
 #import "TAEHeaders.h"
 
-typedef UIFont *(*BH_BaseImp)(id,SEL,...);
-static NSMutableDictionary<NSString*, NSValue*>* originalFontsIMP;
-
 @interface NSParagraphStyle ()
 + (NSWritingDirection)_defaultWritingDirection;
 @end
@@ -96,8 +93,6 @@ static UIViewController * _Nonnull topMostController() {
 // Forward declaration for TweetSourceHelper (implemented in SourceLabels.x)
 @interface TweetSourceHelper : NSObject
 + (void)fetchSourceForTweetID:(NSString *)tweetID;
-+ (void)initializeCookiesWithRetry;
-+ (void)cleanupTimersForBackground;
 @end
 
 // Forward declaration for WKWebView

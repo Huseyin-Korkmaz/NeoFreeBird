@@ -16,6 +16,12 @@
 @interface TFNUIDefaultFontGroup : NSObject
 + (instancetype)sharedFontGroup;
 - (UIFont *)headline2BoldFont;
+// The five root builders every named font getter dispatches through.
+- (UIFont *)fontOfSize:(CGFloat)size;
+- (UIFont *)mediumFontOfSize:(CGFloat)size;
+- (UIFont *)boldFontOfSize:(CGFloat)size;
+- (UIFont *)heavyFontOfSize:(CGFloat)size;
+- (UIFont *)monospacedDigitFontOfSize:(CGFloat)size weight:(CGFloat)weight;
 @end
 
 @protocol TAEColorPalette
