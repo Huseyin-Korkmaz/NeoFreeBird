@@ -30,8 +30,8 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                     @{ @"key": @"disable_rtl", @"default": @NO },
                     @{ @"key": @"show_scroll_indicator", @"default": @NO },
                     @{ @"key": @"custom_fonts", @"default": @NO },
-                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"regular_font_button", @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE", @"action": @"showRegularFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_1", @"subtitleDefault": [[BHTBundle sharedBundle] localizedStringForKey:@"FONT_SYSTEM_DEFAULT_SUBTITLE"] },
-                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"bold_font_button", @"titleKey": @"BOLD_FONTS_PICKER_OPTION_TITLE", @"action": @"showBoldFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_2", @"subtitleDefault": [[BHTBundle sharedBundle] localizedStringForKey:@"FONT_SYSTEM_DEFAULT_SUBTITLE"] }
+                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"regular_font_button", @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE", @"action": @"showRegularFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_1", @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE" },
+                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"bold_font_button", @"titleKey": @"BOLD_FONTS_PICKER_OPTION_TITLE", @"action": @"showBoldFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_2", @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE" }
                 ]
             },
             @"twitter_blue": @{
@@ -139,6 +139,24 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
     return pages;
 }
 
+static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
+    static NSDictionary<NSString *, NSDictionary *> *index;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSMutableDictionary<NSString *, NSDictionary *> *map = [NSMutableDictionary dictionary];
+        for (NSDictionary *page in BHTSettingsPages().allValues) {
+            for (NSDictionary *setting in page[@"settings"]) {
+                NSString *key = setting[@"key"];
+                if (key) {
+                    map[key] = setting;
+                }
+            }
+        }
+        index = [map copy];
+    });
+    return index;
+}
+
 @implementation BHTSettings
 
 // One-time migration of preferences saved under the old (inconsistent) key
@@ -207,17 +225,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
 }
 
 + (NSDictionary *)settingForKey:(NSString *)key {
-    if (!key) {
-        return nil;
-    }
-    for (NSDictionary *page in BHTSettingsPages().allValues) {
-        for (NSDictionary *setting in page[@"settings"]) {
-            if ([setting[@"key"] isEqualToString:key]) {
-                return setting;
-            }
-        }
-    }
-    return nil;
+    return key ? BHTSettingsIndex()[key] : nil;
 }
 
 + (BOOL)boolForKey:(NSString *)key {

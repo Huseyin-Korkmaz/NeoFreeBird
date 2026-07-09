@@ -161,7 +161,7 @@
     static BOOL branded = NO;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        branded = [[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"] isEqual:@"Twitter"];
+        branded = [[[NSBundle mainBundle] infoDictionary][@"CFBundleDisplayName"] isEqual:@"Twitter"];
     });
     return branded;
 }

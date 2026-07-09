@@ -120,6 +120,17 @@
     return [detail isEqualToString:detailKey] ? @"" : detail;
 }
 
+// Fallback subtitle for a button row when its backing preference is unset.
+// Localized here at render time rather than in the registry, which must stay
+// free of localizedStringForKey to avoid re-entering the settings lookup.
+- (NSString *)defaultSubtitleForEntry:(NSDictionary *)entry {
+    NSString *subtitleDefaultKey = entry[@"subtitleDefaultKey"];
+    if (subtitleDefaultKey) {
+        return [[BHTBundle sharedBundle] localizedStringForKey:subtitleDefaultKey];
+    }
+    return entry[@"subtitleDefault"];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSDictionary *toggleData = self.visibleToggles[indexPath.row];
     NSString *type = toggleData[@"type"];
@@ -129,8 +140,9 @@
         NSString *subtitle = @"";
         NSString *prefKey = toggleData[@"prefKeyForSubtitle"];
         if (prefKey) {
-            subtitle = [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ?: toggleData[@"subtitleDefault"];
-            if ([toggleData[@"isSecure"] boolValue] && subtitle.length > 0 && ![subtitle isEqualToString:toggleData[@"subtitleDefault"]]) {
+            NSString *defaultSubtitle = [self defaultSubtitleForEntry:toggleData];
+            subtitle = [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ?: defaultSubtitle;
+            if ([toggleData[@"isSecure"] boolValue] && subtitle.length > 0 && ![subtitle isEqualToString:defaultSubtitle]) {
                 subtitle = @"••••••••••••••••";
             }
         }
@@ -142,8 +154,9 @@
         NSString *subtitle = @"";
         NSString *prefKey = toggleData[@"prefKeyForSubtitle"];
         if (prefKey) {
-            subtitle = [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ?: toggleData[@"subtitleDefault"];
-            if ([toggleData[@"isSecure"] boolValue] && subtitle.length > 0 && ![subtitle isEqualToString:toggleData[@"subtitleDefault"]]) {
+            NSString *defaultSubtitle = [self defaultSubtitleForEntry:toggleData];
+            subtitle = [[NSUserDefaults standardUserDefaults] objectForKey:prefKey] ?: defaultSubtitle;
+            if ([toggleData[@"isSecure"] boolValue] && subtitle.length > 0 && ![subtitle isEqualToString:defaultSubtitle]) {
                 subtitle = @"••••••••••••••••";
             }
         }
