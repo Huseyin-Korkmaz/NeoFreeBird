@@ -141,6 +141,59 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
 
 @implementation BHTSettings
 
+// One-time migration of preferences saved under the old (inconsistent) key
+// names to the normalised keys, so existing installs keep their settings.
++ (void)load {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults boolForKey:@"nfb_key_migration_v1_done"]) {
+        return;
+    }
+
+    NSDictionary<NSString *, NSString *> *renamedKeys = @{
+        @"dis_rtl": @"disable_rtl",
+        @"showScollIndicator": @"show_scroll_indicator",
+        @"en_font": @"custom_fonts",
+        @"dw_v": @"download_videos",
+        @"video_layer_caption": @"disable_video_captions",
+        @"autoHighestLoad": @"auto_highest_load",
+        @"follow_con": @"follow_confirm",
+        @"CopyProfileInfo": @"copy_profile_info",
+        @"disableMediaTab": @"disable_media_tab",
+        @"disableArticles": @"disable_articles",
+        @"disableHighlights": @"disable_highlights",
+        @"TweetToImage": @"tweet_to_image",
+        @"like_con": @"like_confirm",
+        @"tweet_con": @"tweet_confirm",
+        @"disableSensitiveTweetWarnings": @"disable_sensitive_tweet_warnings",
+        @"no_his": @"no_history",
+        @"openInBrowser": @"always_open_safari",
+        @"reply_sorting_enabled": @"reply_sorting",
+        @"ios_in_app_article_webview_enabled": @"new_inapp_webview",
+    };
+
+    // These old names double as Twitter's own feature-switch keys, so copy the
+    // value across but leave the original in place rather than risk removing it.
+    NSSet<NSString *> *sharedWithTwitter = [NSSet setWithArray:@[
+        @"reply_sorting_enabled",
+        @"ios_in_app_article_webview_enabled",
+    ]];
+
+    [renamedKeys enumerateKeysAndObjectsUsingBlock:^(NSString *oldKey, NSString *newKey, BOOL *stop) {
+        id value = [defaults objectForKey:oldKey];
+        if (value == nil) {
+            return;
+        }
+        if ([defaults objectForKey:newKey] == nil) {
+            [defaults setObject:value forKey:newKey];
+        }
+        if (![sharedWithTwitter containsObject:oldKey]) {
+            [defaults removeObjectForKey:oldKey];
+        }
+    }];
+
+    [defaults setBool:YES forKey:@"nfb_key_migration_v1_done"];
+}
+
 + (NSArray<NSDictionary *> *)settingsForPage:(NSString *)pageKey {
     return pageKey ? BHTSettingsPages()[pageKey][@"settings"] : nil;
 }
