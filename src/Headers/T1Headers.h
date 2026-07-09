@@ -166,15 +166,6 @@
 @end
 
 @interface T1WebViewController : T1BaseWebViewController
-// 12.3 initializer. The 7-arg shouldAuthenticate:/shouldPresentAsNativePage:
-// variant below no longer exists on this class (it moved to the Swift
-// T1PaymentsWebViewController); it is kept only so existing callers compile,
-// and their -instancesRespondToSelector: guards make it a no-op at runtime.
-- (instancetype)initWithRootURL:(NSURL *)rootURL
-                        account:(id)account
-                   sourceStatus:(id)sourceStatus
-                scribeComponent:(id)scribeComponent
-               scribeParameters:(id)scribeParameters;
 - (instancetype)initWithRootURL:(NSURL *)rootURL
                         account:(id)account
              shouldAuthenticate:(BOOL)shouldAuthenticate
