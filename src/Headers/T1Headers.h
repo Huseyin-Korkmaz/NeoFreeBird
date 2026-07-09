@@ -62,13 +62,9 @@
 @property (nonatomic, strong) TFNTwitterAccount *account;
 @end
 
-@interface T1ProfileActionButtonsView : UIView
-@property(nonatomic, retain) UIView *_innerContentView;
-@property(nonatomic, retain) UIView *_outerContentView;
-@end
-
-@interface T1ProfileHeaderView : UIView
-@property(readonly, nonatomic) T1ProfileActionButtonsView *actionButtonsView;
+@interface T1ProfileActionButtonSpec : NSObject
+@property(readonly, copy, nonatomic) UIView *(^buttonCreationBlock)(void);
+- (instancetype)initWithPosition:(NSUInteger)position priority:(NSUInteger)priority visibilityBlock:(BOOL (^)(double))visibilityBlock buttonCreationBlock:(UIView *(^)(void))buttonCreationBlock;
 @end
 
 @interface T1ProfileUserViewModel : NSObject
@@ -80,7 +76,6 @@
 @end
 
 @interface T1ProfileHeaderViewController: UIViewController
-- (void)copyButtonHandler;
 @property(retain, nonatomic) T1ProfileUserViewModel *viewModel;
 @end
 

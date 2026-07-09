@@ -30,3 +30,7 @@
 @interface TFSTwitterEntityURL : NSObject
 @property(readonly, copy, nonatomic) NSString *expandedURL;
 @end
+
+@interface NSNumber (TFSTwitter)
+- (NSString *)tfs_twitterAbbreviated;
+@end

@@ -55,6 +55,12 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @YES;
     }
 
+    // The profile hooks build on the classic header; the header rework
+    // replaces the action-buttons row with a separate catalog system.
+    if ([key isEqualToString:@"ios_profile_redesign_header_rework_enabled"]) {
+        return @NO;
+    }
+
     // Profile tabs
     if ([key isEqualToString:@"articles_timeline_profile_tab_enabled"]) {
         return @(![BHTSettings boolForKey:@"disable_articles"]);

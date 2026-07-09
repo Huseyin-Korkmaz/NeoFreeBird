@@ -81,6 +81,7 @@
 
 @interface TFNButton : UIButton
 + (id)buttonWithImage:(id)arg1 style:(long long)arg2 sizeClass:(long long)arg3;
++ (id)buttonWithTitle:(id)arg1 imageNamed:(id)arg2 style:(long long)arg3 sizeClass:(long long)arg4;
 @end
 
 @interface TFNTwitterStatus : NSObject
