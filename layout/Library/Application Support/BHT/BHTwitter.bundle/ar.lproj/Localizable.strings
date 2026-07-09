@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "تابع NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "لا تغريدات مواضيع";
-"HIDE_TOPICS_DETAIL" = "إزالة التغريدات المرتبطة بالمواضيع المقترحة.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "لا 'مواضيع للمتابعة'";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "إزالة المواضيع المقترحة.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "لا 'من تتابع'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "إخفاء اقتراحات المتابعة.";

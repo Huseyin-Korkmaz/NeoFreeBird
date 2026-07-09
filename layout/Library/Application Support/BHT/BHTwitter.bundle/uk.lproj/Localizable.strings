@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Стежте за NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "Без твітів за темами";
-"HIDE_TOPICS_DETAIL" = "Прибрати твіти, пов'язані з рекомендованими темами.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "Без «Тем для стеження»";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Прибрати пропозиції тем.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Приховати «Кого читати»";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Прибрати рекомендації профілів.";

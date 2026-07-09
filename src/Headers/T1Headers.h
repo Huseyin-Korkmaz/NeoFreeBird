@@ -186,12 +186,6 @@
 @interface T1DirectMessageEntryMediaCell () <BHDownloadDelegate, UIContextMenuInteractionDelegate>
 @end
 
-@interface T1URTTimelineStatusItemViewModel : NSObject
-@property(nonatomic, readonly) NSString *text;
-@property(nonatomic, readonly) _Bool isPromoted;
-@property(nonatomic, retain) id <TFNTwitterStatusBanner> banner;
-@end
-
 @interface T1HostViewController : UIViewController
 + (instancetype)sharedHostViewController;
 - (id)currentAccount;

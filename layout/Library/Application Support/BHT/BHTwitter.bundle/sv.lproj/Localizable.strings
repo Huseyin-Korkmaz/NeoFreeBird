@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Följ NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "Inga ämnes-Tweets";
-"HIDE_TOPICS_DETAIL" = "Ta bort Tweets kopplade till föreslagna ämnen.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "Inga ’Ämnen att följa’";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Ta bort föreslagna ämnen.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Ingen ’Vem att följa’";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Ta bort förslag om vem du kan följa från profiler.";

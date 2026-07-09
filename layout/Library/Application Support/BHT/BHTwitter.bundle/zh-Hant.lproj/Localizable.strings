@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "跟隨 NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "不顯示主題推文";
-"HIDE_TOPICS_DETAIL" = "移除與建議主題相關的推文。";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "不顯示「推薦主題」";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "移除主題建議。";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "不顯示「推薦關注」";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "在個人頁面中移除推薦帳戶。";

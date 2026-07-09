@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "NeoFreeBird 팔로우하기";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "토픽 트윗 제거";
-"HIDE_TOPICS_DETAIL" = "토픽에 대한 트윗을 제거합니다.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "팔로우할 토픽 제거";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "팔로우할 토픽 제안을 제거합니다.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "팔로우 추천 제거";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "팔로우 추천을 제거합니다.";

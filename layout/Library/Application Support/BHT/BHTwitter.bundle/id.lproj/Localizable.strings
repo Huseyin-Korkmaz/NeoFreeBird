@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Ikuti NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "Tanpa topik Tweet";
-"HIDE_TOPICS_DETAIL" = "Hilangkan Tweet yang terhubung dengan topik yang disarankan.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "Tanpa 'Topik untuk diikuti'";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Sembunyikan saran topik.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Tanpa 'Siapa yang harus diikuti'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Sembunyikan saran akun dari profil.";

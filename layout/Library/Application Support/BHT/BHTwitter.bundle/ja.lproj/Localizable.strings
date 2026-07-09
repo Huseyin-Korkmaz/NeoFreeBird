@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "NeoFreeBirdをフォロー";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "トピックツイートを非表示";
-"HIDE_TOPICS_DETAIL" = "「おすすめトピック」に関連付けられたツイートを非表示にします。";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "トピックを非表示";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "「おすすめトピック」を非表示にします。";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "「おすすめアカウント」を非表示";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "フォロー候補を非表示にします。";

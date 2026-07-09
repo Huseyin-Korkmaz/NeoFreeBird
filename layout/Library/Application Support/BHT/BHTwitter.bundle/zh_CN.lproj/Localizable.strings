@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "关注 NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "不显示话题推文";
-"HIDE_TOPICS_DETAIL" = "移除与推荐话题相关的推文。";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "不显示“推荐话题”";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "移除推荐话题。";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "不显示“推荐关注”";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "在个人资料中移除关注推荐。";

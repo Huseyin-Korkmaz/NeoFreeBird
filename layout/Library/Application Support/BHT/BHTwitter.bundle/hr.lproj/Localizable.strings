@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Prati NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "Bez tweetova o temama";
-"HIDE_TOPICS_DETAIL" = "Ukloni tweetove vezane uz preporučene teme.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "Bez 'Tema za praćenje'";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Ukloni preporučene teme.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Bez 'Koga pratiti'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Ukloni prijedloge za praćenje iz profila.";

@@ -19,8 +19,6 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"subtitleKey": @"MODERN_SETTINGS_LAYOUT_SUBTITLE",
                 @"settings": @[
                     @{ @"key": @"padlock", @"default": @NO },
-                    @{ @"key": @"hide_topics", @"default": @YES },
-                    @{ @"key": @"hide_topics_to_follow", @"default": @YES },
                     @{ @"key": @"hide_who_to_follow", @"default": @YES },
                     @{ @"key": @"hide_spaces", @"default": @NO },
                     @{ @"key": @"hide_custom_timelines", @"default": @NO },

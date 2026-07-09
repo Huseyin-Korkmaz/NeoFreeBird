@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Follow NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "No topic Tweets";
-"HIDE_TOPICS_DETAIL" = "Remove Tweets tied to suggested topics.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "No 'Topics to follow'";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Remove suggested topics.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "No 'Who to follow'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Remove follow suggestions.";

@@ -5,192 +5,163 @@
 
 #import "BHTHookHelpers.h"
 
-// MARK: hide ADS - New Implementation
-%hook TFNItemsDataViewAdapterRegistry
-- (id)dataViewAdapterForItem:(id)item {
+// Timeline items are removed from the section data before it reaches the data
+// view controller, so no empty cells or gaps are left behind. This covers every
+// timeline surface (home, profile, search, conversations) regardless of whether
+// it renders through a table view or the newer diffable collection view path.
+
+// The promoted state of a status item is only reachable through its Swift-side
+// `status` stored property, which is still registered as an ObjC ivar.
+static BOOL BHTStatusItemIsPromoted(id item) {
+    Ivar statusIvar = class_getInstanceVariable([item class], "status");
+    if (!statusIvar) {
+        return NO;
+    }
+
+    TFNTwitterStatus *status = object_getIvar(item, statusIvar);
+    return [status respondsToSelector:@selector(isPromoted)] && status.isPromoted;
+}
+
+static BOOL BHTScribeItemIsPromoted(id item) {
+    if (![item respondsToSelector:@selector(scribeItem)]) {
+        return NO;
+    }
+
+    NSDictionary *scribeItem = [item performSelector:@selector(scribeItem)];
+    return [scribeItem isKindOfClass:[NSDictionary class]] && scribeItem[@"promoted_id"] != nil;
+}
+
+static BOOL BHTIsModuleHeader(id item) {
+    return [NSStringFromClass([item classForCoder]) isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"];
+}
+
+static BOOL BHTIsModuleFooter(id item) {
+    return [NSStringFromClass([item classForCoder]) isEqualToString:@"TwitterURT.URTModuleFooterViewModel"];
+}
+
+static BOOL BHTShouldHideItem(id item, NSString *location) {
+    NSString *className = NSStringFromClass([item classForCoder]);
+
     if ([BHTSettings boolForKey:@"hide_promoted"]) {
-        //Old Ads
-        if ([item isKindOfClass:objc_getClass("T1URTTimelineStatusItemViewModel")] && ((T1URTTimelineStatusItemViewModel *)item).isPromoted) {
-            return nil;
+        if ([item isKindOfClass:objc_getClass("T1URTTimelineStatusItemViewModel")] && BHTStatusItemIsPromoted(item)) {
+            return YES;
         }
-        //New Ads
-        if ([item isKindOfClass:objc_getClass("TwitterURT.URTTimelineGoogleNativeAdViewModel")]) {
-            return nil;
+
+        if ([className isEqualToString:@"TwitterURT.URTTimelineGoogleNativeAdViewModel"]) {
+            return YES;
+        }
+
+        if (([className isEqualToString:@"TwitterURT.URTTimelineTrendViewModel"] || [className isEqualToString:@"TwitterURT.URTTimelineEventSummaryViewModel"]) && BHTScribeItemIsPromoted(item)) {
+            return YES;
         }
     }
-    return %orig;
+
+    if ([BHTSettings boolForKey:@"hide_who_to_follow"] && ([location isEqualToString:@"TIMELINE_HOME"] || [location isEqualToString:@"PROFILE_TWEETS"])) {
+        if ([className isEqualToString:@"T1URTTimelineUserItemViewModel"] || [className isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"]) {
+            return YES;
+        }
+    }
+
+    if ([BHTSettings boolForKey:@"hide_premium_offer"]) {
+        if ([className isEqualToString:@"T1URTTimelineMessageItemViewModel"]) {
+            return YES;
+        }
+    }
+
+    if ([BHTSettings boolForKey:@"hide_trend_videos"] && [location isEqualToString:@"OTHER"]) {
+        if ([className isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"]) {
+            return YES;
+        }
+    }
+
+    return NO;
 }
-%end
+
+static NSArray *BHTFilteredSections(TFNItemsDataViewController *dataViewController, NSArray *sections) {
+    if (!([BHTSettings boolForKey:@"hide_promoted"] || [BHTSettings boolForKey:@"hide_who_to_follow"] || [BHTSettings boolForKey:@"hide_premium_offer"] || [BHTSettings boolForKey:@"hide_trend_videos"])) {
+        return sections;
+    }
+
+    NSString *location = [dataViewController respondsToSelector:@selector(adDisplayLocation)] ? dataViewController.adDisplayLocation : nil;
+
+    BOOL modified = NO;
+    NSMutableArray *filteredSections = [NSMutableArray arrayWithCapacity:sections.count];
+
+    for (id section in sections) {
+        if (![section isKindOfClass:[NSArray class]]) {
+            [filteredSections addObject:section];
+            continue;
+        }
+
+        NSArray *items = section;
+        NSUInteger count = items.count;
+        NSMutableIndexSet *removed = [NSMutableIndexSet indexSet];
+
+        for (NSUInteger i = 0; i < count; i++) {
+            if (BHTShouldHideItem(items[i], location)) {
+                [removed addIndex:i];
+            }
+        }
+
+        if (removed.count == 0) {
+            [filteredSections addObject:section];
+            continue;
+        }
+
+        // A module renders as a consecutive run of header, content, footer. When
+        // a module's content is removed entirely, drop its header and footer too.
+        for (NSUInteger i = 0; i < count; i++) {
+            if ([removed containsIndex:i] || !BHTIsModuleHeader(items[i])) {
+                continue;
+            }
+
+            NSUInteger contentCount = 0;
+            BOOL contentRemoved = YES;
+            NSUInteger j = i + 1;
+            while (j < count && !BHTIsModuleHeader(items[j]) && !BHTIsModuleFooter(items[j])) {
+                contentCount++;
+                if (![removed containsIndex:j]) {
+                    contentRemoved = NO;
+                }
+                j++;
+            }
+
+            if (contentCount > 0 && contentRemoved) {
+                [removed addIndex:i];
+                if (j < count && BHTIsModuleFooter(items[j])) {
+                    [removed addIndex:j];
+                }
+            }
+        }
+
+        NSMutableArray *keptItems = [items mutableCopy];
+        [keptItems removeObjectsAtIndexes:removed];
+        modified = YES;
+
+        if (keptItems.count > 0) {
+            [filteredSections addObject:keptItems];
+        }
+    }
+
+    return modified ? filteredSections : sections;
+}
 
 %hook TFNItemsDataViewController
-- (id)tableViewCellForItem:(id)arg1 atIndexPath:(id)arg2 {
-    UITableViewCell *_orig = %orig;
-    id tweet = [self itemAtIndexPath:arg2];
-    NSString *class_name = NSStringFromClass([tweet classForCoder]);
 
-
-
-    if ([BHTSettings boolForKey:@"hide_promoted"] && [tweet respondsToSelector:@selector(isPromoted)] && [tweet performSelector:@selector(isPromoted)]) {
-        [_orig setHidden:YES];
-    }
-
-    if ([self.adDisplayLocation isEqualToString:@"PROFILE_TWEETS"]) {
-        if ([BHTSettings boolForKey:@"hide_who_to_follow"]) {
-            if ([class_name isEqualToString:@"T1URTTimelineUserItemViewModel"] || [class_name isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleFooterViewModel"]) {
-                [_orig setHidden:true];
-            }
-        }
-
-        if ([BHTSettings boolForKey:@"hide_topics_to_follow"]) {
-            if ([class_name isEqualToString:@"T1TwitterSwift.URTTimelineTopicCollectionViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleFooterViewModel"] || [class_name isEqualToString:@"TwitterURT.URTTimelineCarouselViewModel"]) {
-                [_orig setHidden:true];
-            }
-        }
-    }
-
-    if ([self.adDisplayLocation isEqualToString:@"OTHER"]) {
-        if ([BHTSettings boolForKey:@"hide_promoted"] && ([class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleFooterViewModel"] || [class_name isEqualToString:@"T1URTTimelineMessageItemViewModel"])) {
-            [_orig setHidden:true];
-        }
-
-        if ([BHTSettings boolForKey:@"hide_promoted"] && [class_name isEqualToString:@"TwitterURT.URTTimelineEventSummaryViewModel"]) {
-            // Hide all EventSummaryViewModel items, not just promoted ones
-            [_orig setHidden:true];
-        }
-        if ([BHTSettings boolForKey:@"hide_promoted"] && [class_name isEqualToString:@"TwitterURT.URTTimelineTrendViewModel"]) {
-            _TtC10TwitterURT25URTTimelineTrendViewModel *trendModel = tweet;
-            if ([[trendModel.scribeItem allKeys] containsObject:@"promoted_id"]) {
-                [_orig setHidden:true];
-            }
-        }
-        if ([BHTSettings boolForKey:@"hide_trend_videos"] && ([class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"])) {
-            [_orig setHidden:true];
-        }
-    }
-
-    if ([self.adDisplayLocation isEqualToString:@"TIMELINE_HOME"]) {
-        if ([tweet isKindOfClass:%c(T1URTTimelineStatusItemViewModel)]) {
-            T1URTTimelineStatusItemViewModel *fullTweet = tweet;
-            if ([BHTSettings boolForKey:@"hide_topics"]) {
-                if ((fullTweet.banner != nil) && [fullTweet.banner isKindOfClass:%c(TFNTwitterURTTimelineStatusTopicBanner)]) {
-                    [_orig setHidden:true];
-                }
-            }
-        }
-
-        if ([BHTSettings boolForKey:@"hide_topics"]) {
-            if ([tweet isKindOfClass:%c(_TtC10TwitterURT26URTTimelinePromptViewModel)]) {
-                [_orig setHidden:true];
-            }
-        }
-
-        if ([BHTSettings boolForKey:@"hide_who_to_follow"]) {
-            if ([class_name isEqualToString:@"T1URTTimelineUserItemViewModel"] || [class_name isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleFooterViewModel"]) {
-                [_orig setHidden:true];
-            }
-        }
-
-        if ([BHTSettings boolForKey:@"hide_premium_offer"]) {
-            if ([class_name isEqualToString:@"T1URTTimelineMessageItemViewModel"]) {
-                [_orig setHidden:true];
-            }
-        }
-    }
-
-
-
-    return _orig;
-}
-- (double)tableView:(id)arg1 heightForRowAtIndexPath:(id)arg2 {
-    id tweet = [self itemAtIndexPath:arg2];
-    NSString *class_name = NSStringFromClass([tweet classForCoder]);
-
-    if ([BHTSettings boolForKey:@"hide_promoted"] && [tweet respondsToSelector:@selector(isPromoted)] && [tweet performSelector:@selector(isPromoted)]) {
-        return 0;
-    }
-
-    if ([self.adDisplayLocation isEqualToString:@"PROFILE_TWEETS"]) {
-        if ([BHTSettings boolForKey:@"hide_who_to_follow"]) {
-            if ([class_name isEqualToString:@"T1URTTimelineUserItemViewModel"] || [class_name isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleFooterViewModel"]) {
-                return 0;
-            }
-        }
-        if ([BHTSettings boolForKey:@"hide_topics_to_follow"]) {
-            if ([class_name isEqualToString:@"T1TwitterSwift.URTTimelineTopicCollectionViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleFooterViewModel"] || [class_name isEqualToString:@"TwitterURT.URTTimelineCarouselViewModel"]) {
-                return 0;
-            }
-        }
-    }
-
-    if ([self.adDisplayLocation isEqualToString:@"OTHER"]) {
-        if ([BHTSettings boolForKey:@"hide_promoted"] && ([class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleFooterViewModel"] || [class_name isEqualToString:@"T1URTTimelineMessageItemViewModel"])) {
-            return 0;
-        }
-
-        if ([BHTSettings boolForKey:@"hide_promoted"] && [class_name isEqualToString:@"TwitterURT.URTTimelineEventSummaryViewModel"]) {
-            // Hide all EventSummaryViewModel items, not just promoted ones
-            return 0;
-        }
-        if ([BHTSettings boolForKey:@"hide_promoted"] && [class_name isEqualToString:@"TwitterURT.URTTimelineTrendViewModel"]) {
-            _TtC10TwitterURT25URTTimelineTrendViewModel *trendModel = tweet;
-            if ([[trendModel.scribeItem allKeys] containsObject:@"promoted_id"]) {
-                return 0;
-            }
-        }
-
-        if ([BHTSettings boolForKey:@"hide_trend_videos"] && ([class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleFooterViewModel"] || [class_name isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"])) {
-            return 0;
-        }
-    }
-
-    if ([self.adDisplayLocation isEqualToString:@"TIMELINE_HOME"]) {
-        if ([tweet isKindOfClass:%c(T1URTTimelineStatusItemViewModel)]) {
-            T1URTTimelineStatusItemViewModel *fullTweet = tweet;
-
-            if ([BHTSettings boolForKey:@"hide_topics"]) {
-                if ((fullTweet.banner != nil) && [fullTweet.banner isKindOfClass:%c(TFNTwitterURTTimelineStatusTopicBanner)]) {
-                    return 0;
-                }
-            }
-        }
-
-        if ([BHTSettings boolForKey:@"hide_topics"]) {
-            if ([tweet isKindOfClass:%c(_TtC10TwitterURT26URTTimelinePromptViewModel)]) {
-                return 0;
-            }
-        }
-
-        if ([BHTSettings boolForKey:@"hide_who_to_follow"]) {
-            if ([class_name isEqualToString:@"T1URTTimelineUserItemViewModel"] || [class_name isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] || [class_name isEqualToString:@"TwitterURT.URTModuleFooterViewModel"]) {
-                return 0;
-            }
-        }
-
-        if ([BHTSettings boolForKey:@"hide_premium_offer"]) {
-            if ([class_name isEqualToString:@"T1URTTimelineMessageItemViewModel"]) {
-                return 0;
-            }
-        }
-    }
-
-
-
-    return %orig;
+- (void)setSections:(NSArray *)sections restoreScrollPosition:(BOOL)restoreScrollPosition {
+    %orig(BHTFilteredSections(self, sections), restoreScrollPosition);
 }
 
-- (double)tableView:(id)arg1 heightForHeaderInSection:(long long)arg2 {
-    if (self.sections && self.sections[arg2] && ((NSArray* )self.sections[arg2]).count && self.sections[arg2][0]) {
-        NSString *sectionClassName = NSStringFromClass([self.sections[arg2][0] classForCoder]);
-        if ([sectionClassName isEqualToString:@"TFNTwitterUser"]) {
-            return 0;
-        }
-    }
-    return %orig;
+- (void)updateSections:(NSArray *)sections reconfigureItemIdentifiers:(NSArray *)identifiers withRowAnimation:(long long)animation completion:(id)completion {
+    %orig(BHTFilteredSections(self, sections), identifiers, animation, completion);
 }
+
 %end
 
 %hook TFNTwitterStatus
+
 - (_Bool)isCardHidden {
     return ([BHTSettings boolForKey:@"hide_promoted"] && [self isPromoted]) ? true : %orig;
 }
+
 %end

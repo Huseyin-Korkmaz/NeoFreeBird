@@ -83,15 +83,6 @@
 + (id)buttonWithImage:(id)arg1 style:(long long)arg2 sizeClass:(long long)arg3;
 @end
 
-@protocol TFNTwitterStatusBanner <NSObject>
-@end
-
-@interface TFNTwitterURTTimelineStatusBanner : NSObject <TFNTwitterStatusBanner>
-@end
-
-@interface TFNTwitterURTTimelineStatusTopicBanner : TFNTwitterURTTimelineStatusBanner
-@end
-
 @interface TFNTwitterStatus : NSObject
 @property(readonly, nonatomic) NSDictionary *scribeParameters;
 @property(readonly, nonatomic) _Bool isPromoted;

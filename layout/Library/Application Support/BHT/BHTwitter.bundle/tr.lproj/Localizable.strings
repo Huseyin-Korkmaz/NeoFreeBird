@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "NeoFreeBird'i takip et";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "Konu Tweetleri yok";
-"HIDE_TOPICS_DETAIL" = "Önerilen konulara ait Tweetleri kaldır.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "‘Takip edilecek konular’ yok";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Konu önerilerini kaldır.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "‘Kimi takip etmeli’ yok";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Profildeki takip önerilerini kaldır.";

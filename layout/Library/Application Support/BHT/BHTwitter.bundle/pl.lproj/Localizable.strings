@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Obserwuj NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "Bez Tweetów o tematach";
-"HIDE_TOPICS_DETAIL" = "Usuń Tweety powiązane z sugerowanymi tematami.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "Bez \"Tematów do obserwowania\"";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Usuń sugerowane tematy.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Bez \"Kogo obserwować\"";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Usuń sugestie obserwowania.";

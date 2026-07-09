@@ -59,11 +59,6 @@
 "FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE" = "Подписаться на NeoFreeBird";
 
 /*General*/
-"HIDE_TOPICS_TITLE" = "Без твитов по темам";
-"HIDE_TOPICS_DETAIL" = "Удалить твиты, связанные с предложенными темами.";
-
-"HIDE_TOPICS_TO_FOLLOW_TITLE" = "Без «Тем для подписки»";
-"HIDE_TOPICS_TO_FOLLOW_DETAIL" = "Убрать рекомендации тем.";
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Без «Кого читать»";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Убрать рекомендации из профилей.";
