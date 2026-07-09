@@ -56,13 +56,6 @@
 @property (nonatomic, strong) TFNTwitterAccount *account;
 @end
 
-@interface TTSSearchTypeaheadViewController : TFNItemsDataViewController
-- (void)clearActionControlWantsClear:(id)arg1;
-@end
-@interface T1SearchTypeaheadViewController : TFNItemsDataViewController
-- (void)clearActionControlWantsClear:(id)arg1;
-@end
-
 @interface T1SettingsViewController : UIViewController
 @property (nonatomic, strong) TFNItemsDataViewControllerBackingStore *backingStore;
 @property (nonatomic, strong) NSArray *sections;

@@ -68,6 +68,36 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
 
 %end
 
+// The fullscreen media viewer's heart has its own action path.
+%hook T1SlideshowStatusView
+
+- (void)_favoriteAction:(id)sender {
+    if (![BHTSettings boolForKey:@"like_confirm"]) {
+        return %orig;
+    }
+
+    BHTShowConfirmation(^{
+        %orig;
+    });
+}
+
+%end
+
+// Double tap to like in the immersive video player; the gesture never unlikes.
+%hook _TtC14T1TwitterSwift32ImmersiveDoubleTapLikePluginView
+
+- (void)handleDoubleTap:(id)gesture {
+    if (![BHTSettings boolForKey:@"like_confirm"]) {
+        return %orig;
+    }
+
+    BHTShowConfirmation(^{
+        %orig;
+    });
+}
+
+%end
+
 // MARK: Undo tweet
 
 %hook TFNTwitterToastNudgeExperimentModel
