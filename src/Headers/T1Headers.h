@@ -231,14 +231,3 @@
 - (void)BHT_restoreOriginalText;
 - (BOOL)BHT_isShowingTranslatedText;
 @end
-
-// Forward declaration for the immersive view controller
-@interface T1ImmersiveFullScreenViewController : UIViewController
-- (void)immersiveViewController:(id)immersiveViewController showHideNavigationButtons:(_Bool)showButtons;
-- (void)playerViewController:(id)playerViewController playerStateDidChange:(NSInteger)state;
-@end
-
-// Now declare the category, after the main interface is known
-@interface T1ImmersiveFullScreenViewController (BHTwitter)
-- (BOOL)BHT_findAndPrepareTimestampLabelForVC:(T1ImmersiveFullScreenViewController *)activePlayerVC;
-@end
