@@ -55,6 +55,11 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @YES;
     }
 
+    // Session token appended to shared/copied links (&t=)
+    if ([key isEqualToString:@"rehire_share_update_url_enabled"]) {
+        return [BHTSettings boolForKey:@"strip_tracking_params"] ? @NO : nil;
+    }
+
     // The profile hooks build on the classic header; the header rework
     // replaces the action-buttons row with a separate catalog system.
     if ([key isEqualToString:@"ios_profile_redesign_header_rework_enabled"]) {

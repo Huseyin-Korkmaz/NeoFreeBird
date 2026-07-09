@@ -7,6 +7,7 @@
 
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
+#import <SafariServices/SafariServices.h>
 #import "Download/BHDownload.h"
 #import "JGProgressHUD/JGProgressHUD.h"
 #import "TFNHeaders.h"
@@ -176,6 +177,10 @@
                scribeParameters:(id)scribeParameters;
 @property(nonatomic, strong) id account;
 - (BOOL)doesURLResultTypeOpenInWebview:(long long)resultType;
+@end
+
+@interface T1SafariViewController : SFSafariViewController
+@property(nonatomic, readonly) NSURL *rootURL;
 @end
 
 @interface T1StatusBodyTextView : UIView

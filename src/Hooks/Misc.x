@@ -5,24 +5,51 @@
 
 #import "BHTHookHelpers.h"
 
-static id _PasteboardChangeObserver;
-static NSDictionary<NSString*, NSArray<NSString*>*> *trackingParams;
-static NSString *_lastCopiedURL;
-
 // MARK: Always open in Safari
 
+// In-app browser is used for two-factor authentication with security key,
+// login will not complete successfully if it's redirected to Safari
+static BOOL BHTShouldKeepBrowserURLInApp(NSURL *url) {
+    NSString *urlStr = [url absoluteString];
+
+    return [urlStr containsString:@"twitter.com/account/"] || [urlStr containsString:@"twitter.com/i/flow/"] ||
+           [urlStr containsString:@"x.com/account/"] || [urlStr containsString:@"x.com/i/flow/"];
+}
+
+// Every tapped link that resolves to the in-app Safari goes through this single
+// present funnel, so diverting here avoids presenting anything at all.
+%hook T1SafariViewController
+
+- (void)tfnPresentedCustomPresentFromViewController:(UIViewController *)fromViewController animated:(BOOL)animated completion:(void (^)(void))completion {
+    if (![BHTSettings boolForKey:@"always_open_safari"]) {
+        return %orig;
+    }
+
+    NSURL *url = [self rootURL] ?: [self initialURL];
+    if (url == nil || BHTShouldKeepBrowserURLInApp(url)) {
+        return %orig;
+    }
+
+    [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+
+    if (completion) {
+        completion();
+    }
+}
+
+%end
+
+// Fallback for the plain SFSafariViewController surfaces (help pages, Grok,
+// XLinkWebView), which don't go through the T1SafariViewController funnel.
 %hook SFSafariViewController
+
 - (void)viewWillAppear:(BOOL)animated {
     if (![BHTSettings boolForKey:@"always_open_safari"]) {
         return %orig;
     }
 
     NSURL *url = [self initialURL];
-    NSString *urlStr = [url absoluteString];
-
-    // In-app browser is used for two-factor authentication with security key,
-    // login will not complete successfully if it's redirected to Safari
-    if ([urlStr containsString:@"twitter.com/account/"] || [urlStr containsString:@"twitter.com/i/flow/"]) {
+    if (url == nil || BHTShouldKeepBrowserURLInApp(url)) {
         return %orig;
     }
 
@@ -30,123 +57,143 @@ static NSString *_lastCopiedURL;
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
-- (instancetype)initWithURL:(NSURL *)URL configuration:(SFSafariViewControllerConfiguration *)configuration {
-    if (![BHTSettings boolForKey:@"always_open_safari"]) {
-        return %orig;
-    }
-
-    NSString *urlStr = [URL absoluteString];
-
-    // In-app browser is used for two-factor authentication with security key,
-    // login will not complete successfully if it's redirected to Safari
-    if ([urlStr containsString:@"twitter.com/account/"] || [urlStr containsString:@"twitter.com/i/flow/"]) {
-        return %orig;
-    }
-
-    // Open in Safari instead and return nil to prevent SFSafariViewController creation
-    [[UIApplication sharedApplication] openURL:URL options:@{} completionHandler:nil];
-    return nil;
-}
-
-- (instancetype)initWithURL:(NSURL *)URL {
-    if (![BHTSettings boolForKey:@"always_open_safari"]) {
-        return %orig;
-    }
-
-    NSString *urlStr = [URL absoluteString];
-
-    // In-app browser is used for two-factor authentication with security key,
-    // login will not complete successfully if it's redirected to Safari
-    if ([urlStr containsString:@"twitter.com/account/"] || [urlStr containsString:@"twitter.com/i/flow/"]) {
-        return %orig;
-    }
-
-    // Open in Safari instead and return nil to prevent SFSafariViewController creation
-    [[UIApplication sharedApplication] openURL:URL options:@{} completionHandler:nil];
-    return nil;
-}
 %end
 
-%hook SFInteractiveDismissController
-- (void)animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext {
-    if (![BHTSettings boolForKey:@"always_open_safari"]) {
-        return %orig;
-    }
-    [transitionContext completeTransition:NO];
-}
-%end
+// MARK: Expand t.co links
 
 %hook TFSTwitterEntityURL
+
 - (NSString *)url {
-    // https://github.com/haoict/twitter-no-ads/blob/master/Tweak.xm#L195
-    return self.expandedURL;
+    // The entity is also used for URLs that never had a t.co wrapper (e.g.
+    // share links), where expandedURL is nil.
+    NSString *expandedURL = self.expandedURL;
+    return expandedURL ?: %orig;
 }
+
 %end
 
 // MARK: Disable RTL
-%hook NSParagraphStyle
-+ (NSWritingDirection)defaultWritingDirectionForLanguage:(id)lang {
-    return [BHTSettings boolForKey:@"disable_rtl"] ? NSWritingDirectionLeftToRight : %orig;
+
+// Tweet text is rendered with CoreText, which resolves the writing direction
+// from the first strong directional character. Forcing LTR on the paragraph
+// style of the render input is the only reliable override.
+%hook TFNAttributedTextModel
+
+- (void)setAttributedString:(NSAttributedString *)attributedString {
+    if (![BHTSettings boolForKey:@"disable_rtl"] || attributedString.length == 0) {
+        return %orig;
+    }
+
+    NSMutableAttributedString *text = [attributedString mutableCopy];
+    [text enumerateAttribute:NSParagraphStyleAttributeName inRange:NSMakeRange(0, text.length) options:0 usingBlock:^(NSParagraphStyle *value, NSRange range, BOOL *stop) {
+        NSMutableParagraphStyle *style = value ? [value mutableCopy] : [NSMutableParagraphStyle new];
+        style.baseWritingDirection = NSWritingDirectionLeftToRight;
+        [text addAttribute:NSParagraphStyleAttributeName value:style range:range];
+    }];
+
+    %orig(text);
 }
-+ (NSWritingDirection)_defaultWritingDirection {
-    return [BHTSettings boolForKey:@"disable_rtl"] ? NSWritingDirectionLeftToRight : %orig;
-}
+
 %end
 
 // MARK: Bio Translate
+
+// The translate-bio button additionally requires the grok_translations_bio_*
+// feature switches, which are overridden in FeatureSwitches.x.
 %hook TFNTwitterCanonicalUser
+
 - (_Bool)isProfileBioTranslatable {
     return [BHTSettings boolForKey:@"bio_translate"] ? true : %orig;
 }
+
 %end
+
 // MARK: Show Scroll Bar
+
 %hook TFNTableView
+
 - (void)setShowsVerticalScrollIndicator:(BOOL)arg1 {
     %orig([BHTSettings boolForKey:@"show_scroll_indicator"]);
 }
+
 %end
 
-%ctor {
-    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    NSOperationQueue *mainQueue = [NSOperationQueue mainQueue];
-    // Someone needs to hold reference the to Notification
-    _PasteboardChangeObserver = [center addObserverForName:UIPasteboardChangedNotification object:nil queue:mainQueue usingBlock:^(NSNotification * _Nonnull note){
+// MARK: Strip tracking params from shared links
 
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            trackingParams = @{
-                @"twitter.com" : @[@"s", @"t"],
-                @"x.com" : @[@"s", @"t"],
-            };
-        });
+// The ?s= source param is baked into the share URL format strings, and the
+// &t= session token is appended by _t1_transformShareURL: (disabled at the
+// source via the rehire_share_update_url_enabled switch in FeatureSwitches.x).
+static NSString *BHTCleanedShareURLString(NSString *urlString) {
+    if (urlString == nil || ![BHTSettings boolForKey:@"strip_tracking_params"]) {
+        return urlString;
+    }
 
-        if ([BHTSettings boolForKey:@"strip_tracking_params"]) {
-            if (UIPasteboard.generalPasteboard.hasURLs) {
-                NSURL *pasteboardURL = UIPasteboard.generalPasteboard.URL;
-                NSArray<NSString*>* params = trackingParams[pasteboardURL.host];
+    NSURLComponents *components = [NSURLComponents componentsWithString:urlString];
+    if (components == nil) {
+        return urlString;
+    }
 
-                if ([pasteboardURL.absoluteString isEqualToString:_lastCopiedURL] == NO && params != nil && pasteboardURL.query != nil) {
-                    // to prevent endless copy loop
-                    _lastCopiedURL = pasteboardURL.absoluteString;
-                    NSURLComponents *cleanedURL = [NSURLComponents componentsWithURL:pasteboardURL resolvingAgainstBaseURL:NO];
-                    NSMutableArray<NSURLQueryItem*> *safeParams = [NSMutableArray arrayWithCapacity:0];
-
-                    for (NSURLQueryItem *item in cleanedURL.queryItems) {
-                        if ([params containsObject:item.name] == NO) {
-                            [safeParams addObject:item];
-                        }
-                    }
-                    cleanedURL.queryItems = safeParams.count > 0 ? safeParams : nil;
-
-                    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"tweet_url_host"]) {
-                        NSString *selectedHost = [[NSUserDefaults standardUserDefaults] objectForKey:@"tweet_url_host"];
-                        cleanedURL.host = selectedHost;
-                    }
-                    UIPasteboard.generalPasteboard.URL = cleanedURL.URL;
-                }
-            }
+    NSMutableArray<NSURLQueryItem *> *safeParams = [NSMutableArray arrayWithCapacity:0];
+    for (NSURLQueryItem *item in components.queryItems) {
+        if (![item.name isEqualToString:@"s"] && ![item.name isEqualToString:@"t"]) {
+            [safeParams addObject:item];
         }
-    }];
+    }
+    components.queryItems = safeParams.count > 0 ? safeParams : nil;
 
-    %init;
+    NSString *selectedHost = [[NSUserDefaults standardUserDefaults] objectForKey:@"tweet_url_host"];
+    if (selectedHost) {
+        components.host = selectedHost;
+    }
+
+    return components.URL.absoluteString ?: urlString;
 }
+
+%hook TFNTwitterStatus
+
+- (NSString *)twitterURLForShare {
+    NSString *url = %orig;
+    return BHTCleanedShareURLString(url);
+}
+
+- (NSString *)twitterURLForCopy {
+    NSString *url = %orig;
+    return BHTCleanedShareURLString(url);
+}
+
+- (NSString *)twitterURLForMessage {
+    NSString *url = %orig;
+    return BHTCleanedShareURLString(url);
+}
+
+- (NSString *)twitterURLForEmail {
+    NSString *url = %orig;
+    return BHTCleanedShareURLString(url);
+}
+
+- (NSString *)twitterURLForShareToSnap {
+    NSString *url = %orig;
+    return BHTCleanedShareURLString(url);
+}
+
++ (NSString *)twitterURLForCopyWithUsername:(NSString *)username statusID:(long long)statusID {
+    NSString *url = %orig;
+    return BHTCleanedShareURLString(url);
+}
+
+%end
+
+// Profile links
+%hook TFSTwitterUserReference
+
+- (NSString *)twitterURLForShare {
+    NSString *url = %orig;
+    return BHTCleanedShareURLString(url);
+}
+
+- (NSString *)twitterURLForCopy {
+    NSString *url = %orig;
+    return BHTCleanedShareURLString(url);
+}
+
+%end
