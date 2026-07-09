@@ -177,13 +177,10 @@ static void BHT_presentAuthIfNeeded(void) {
         [[%c(FLEXManager) sharedManager] showExplorer];
     }
 
-    // Apply theme immediately after launch - simplified version using our new system
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bh_color_theme_selectedColor"]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            // Force synchronize our theme with Twitter's internal theme system
-            BHT_ensureThemingEngineSynchronized(YES);
-        });
-    }
+    // Apply the custom theme color immediately after launch
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BHT_applySelectedThemeColor();
+    });
 
     // Start the cookie initialization process with retry mechanism
     if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
@@ -198,10 +195,7 @@ static void BHT_presentAuthIfNeeded(void) {
 - (void)applicationDidBecomeActive:(id)arg1 {
     %orig;
 
-    // Re-apply theming and other existing logic …
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:@"bh_color_theme_selectedColor"]) {
-        BHT_ensureThemingEngineSynchronized(YES);
-    }
+    BHT_applySelectedThemeColor();
     if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [TweetSourceHelper initializeCookiesWithRetry];

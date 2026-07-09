@@ -44,6 +44,10 @@
 @property(readonly, nonatomic) UILabel *titleLabel;
 @property(readonly, nonatomic) long long panelID;
 @property(copy, nonatomic) NSString *scribePage;
+@property(retain, nonatomic) UIColor *iconColor;
+@property(readonly, nonatomic, getter=isSelected) BOOL selected;
+- (void)_t1_updateTitleLabel;
+- (void)_t1_updateImageViewAnimated:(BOOL)animated;
 @end
 
 @interface T1TabBarViewController : UIViewController

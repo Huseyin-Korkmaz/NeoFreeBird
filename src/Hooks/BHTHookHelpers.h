@@ -35,10 +35,8 @@ void BH_EnumerateSubviewsRecursively(UIView *view, void (^block)(UIView *current
 // Live square-avatar restyling (Avatars.x)
 void BHT_applySquareAvatarsSetting(void);
 
-// Theme engine synchronisation (Theme.x)
-void BHT_UpdateAllTabBarIcons(void);
-void BHT_applyThemeToWindow(UIWindow *window);
-void BHT_ensureThemingEngineSynchronized(BOOL forceSynchronize);
+// Custom theme color re-apply (Theme.x)
+void BHT_applySelectedThemeColor(void);
 
 // Restored tweet source labels, keyed by tweet ID (SourceLabels.x)
 extern NSMutableDictionary *tweetSources;

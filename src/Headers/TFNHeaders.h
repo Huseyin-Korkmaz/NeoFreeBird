@@ -107,10 +107,6 @@
 + (instancetype)titleViewWithTitle:(NSString *)title subtitle:(NSString *)subTitle;
 @end
 
-@interface TFNBarButtonItemButtonV1 : UIView
-@property (nonatomic, strong) UIColor *tintColor;
-@end
-
 // UIImage category for TFN vector image methods
 @interface UIImage (TFNAdditions)
 + (id)tfn_vectorImageNamed:(id)arg1 fitsSize:(struct CGSize)arg2 fillColor:(id)arg3;

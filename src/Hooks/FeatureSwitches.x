@@ -102,11 +102,9 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return [BHTSettings boolForKey:@"disable_video_captions"] ? @NO : nil;
     }
 
-    // Tab bar configuration
-    if ([key isEqualToString:@"ios_tab_bar_default_show_grok"]) {
-        return @([[NSUserDefaults standardUserDefaults] boolForKey:@"ios_tab_bar_default_show_grok"]);
-    }
-
+    // Tab bar configuration. The grok switch is not overridden here: its only
+    // read site ORs it with the premium tier we force on, so the tab has to be
+    // dropped in setTabViews: instead.
     if ([key isEqualToString:@"ios_tab_bar_default_show_profile"]) {
         return @([[NSUserDefaults standardUserDefaults] boolForKey:@"ios_tab_bar_default_show_profile"]);
     }
