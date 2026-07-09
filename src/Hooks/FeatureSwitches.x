@@ -5,16 +5,6 @@
 
 #import "BHTHookHelpers.h"
 
-static NSString *BHTFeatureSwitchKeyForFeature(id feature) {
-    if (!feature || ![feature respondsToSelector:@selector(key)]) {
-        return nil;
-    }
-
-    NSString *(*keyMessage)(id, SEL) = (NSString *(*)(id, SEL))objc_msgSend;
-    NSString *key = keyMessage(feature, @selector(key));
-    return [key isKindOfClass:[NSString class]] ? key : nil;
-}
-
 static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     if (![key isKindOfClass:[NSString class]]) {
         return nil;
@@ -25,11 +15,11 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     if ([key isEqualToString:@"hometimeline_pinned_tabs_topics_enabled"] ||
         [key isEqualToString:@"hometimeline_pinned_tabs_generic_timelines_enabled"] ||
         [key isEqualToString:@"hometimeline_pinned_tabs_sticky_warm_start_enabled"] ||
-        [key isEqualToString:@"home_timeline_sticky_pinned_tab_enabled"] ||
         [key isEqualToString:@"super_follow_subscriptions_home_timeline_tab_sticky_enabled"]) {
         return hideCustomTimelines ? @NO : @YES;
     }
 
+    // Keeps the selected timeline tab across sessions.
     if ([key isEqualToString:@"home_timeline_non_sticky_tab_on_new_session_enabled"]) {
         return @NO;
     }
@@ -41,10 +31,8 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     }
 
     // Edit tweet
-    if ([key isEqualToString:@"edit_tweet_enabled"] ||
-        [key isEqualToString:@"edit_tweet_ga_composition_enabled"] ||
-        [key isEqualToString:@"edit_tweet_pdp_dialog_enabled"] ||
-        [key isEqualToString:@"edit_tweet_upsell_enabled"]) {
+    if ([key isEqualToString:@"edit_tweet_ga_composition_enabled"] ||
+        [key isEqualToString:@"edit_tweet_pdp_dialog_enabled"]) {
         return @YES;
     }
 
@@ -59,6 +47,14 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @YES;
     }
 
+    // Grok buttons under posts
+    if ([key isEqualToString:@"grok_ask_grok_button_under_post_focal_enabled"] ||
+        [key isEqualToString:@"grok_ask_grok_button_under_post_preview_enabled"] ||
+        [key isEqualToString:@"grok_edit_with_grok_button_under_post_focal_enabled"] ||
+        [key isEqualToString:@"grok_edit_with_grok_button_under_post_preview_enabled"]) {
+        return @YES;
+    }
+
     // Profile tabs
     if ([key isEqualToString:@"articles_timeline_profile_tab_enabled"]) {
         return @(![BHTSettings boolForKey:@"disable_articles"]);
@@ -68,11 +64,10 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @(![BHTSettings boolForKey:@"disable_highlights"]);
     }
 
-    if ([key isEqualToString:@"media_tab_profile_videos_tab_enabled"] ||
-        [key isEqualToString:@"media_tab_profile_photos_tab_enabled"] ||
-        [key isEqualToString:@"media_tab_enabled"] ||
-        [key isEqualToString:@"media_tab_profile_videos_tab_new_design_enabled"]) {
-        return @(![BHTSettings boolForKey:@"disable_media_tab"]);
+    // media_tab_enabled is an integer switch where 99 means enabled, so only
+    // override it when hiding.
+    if ([key isEqualToString:@"media_tab_enabled"]) {
+        return [BHTSettings boolForKey:@"disable_media_tab"] ? @0 : nil;
     }
 
     // Age verification bypass
@@ -83,10 +78,6 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     }
 
     // Conversation / tweet detail
-    if ([key isEqualToString:@"conversational_replies_ios_minimal_detail_enabled"]) {
-        return @YES;
-    }
-
     if ([key isEqualToString:@"reply_sorting_enabled"]) {
         return @(![BHTSettings boolForKey:@"reply_sorting"]);
     }
@@ -97,6 +88,12 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
     if ([key isEqualToString:@"ios_tweet_detail_conversation_context_removal_enabled"]) {
         return @(![BHTSettings boolForKey:@"restore_reply_context"]);
+    }
+
+    // Video captions
+    if ([key isEqualToString:@"ios_tav_default_closed_captions_enabled"] ||
+        [key isEqualToString:@"ios_audio_transcription_subtitles_vod_enabled"]) {
+        return [BHTSettings boolForKey:@"disable_video_captions"] ? @NO : nil;
     }
 
     // Tab bar configuration
@@ -117,17 +114,20 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @([BHTSettings boolForKey:@"new_inapp_webview"]);
     }
 
+    // Premium features gate on subscriptions_enabled || (gating bypass && premium tier).
+    if ([key isEqualToString:@"subscriptions_gating_bypass"]) {
+        return @YES;
+    }
+
     // Premium / subscription upsell disables
     if ([key isEqualToString:@"creator_purchases_dashboard_enabled"] ||
         [key isEqualToString:@"subscriptions_settings_item_enabled"] ||
         [key isEqualToString:@"grok_ios_profile_summary_enabled"] ||
         [key isEqualToString:@"creator_monetization_dashboard_enabled"] ||
         [key isEqualToString:@"creator_monetization_profile_subscription_tweets_tab_enabled"] ||
-        [key isEqualToString:@"ios_subscription_journey_enabled"] ||
         [key isEqualToString:@"subscriptions_upsells_get_verified_profile"] ||
         [key isEqualToString:@"ios_profile_analytics_upsell_possible_enabled"] ||
         [key isEqualToString:@"ios_profile_analytics_upsell_enabled"] ||
-        [key isEqualToString:@"subscriptions_verification_info_is_identity_verified"] ||
         [key isEqualToString:@"subscriptions_verification_info_reason_enabled"] ||
         [key isEqualToString:@"subscriptions_verification_info_verified_since_enabled"] ||
         [key isEqualToString:@"communities_enable_explore_tab"] ||
@@ -138,178 +138,103 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     return nil;
 }
 
-// MARK: Voice, SensitiveTweetWarnings, autoHighestLoad, VideoZoom, VODCaptions, disableSpacesBar feature
-%hook TPSTwitterFeatureSwitches
-// Twitter save all the features and keys in side JSON file in bundle of application fs_embedded_defaults_production.json, and use it in TFNTwitterAccount class but with DM voice maybe developers forget to add boolean variable in the class, so i had to change it from the file.
-// also, you can find every key for every feature i used in this tweak, i can remove all the codes below and find every key for it but I'm lazy to do that, :)
-- (BOOL)boolForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override.boolValue;
-    }
+// MARK: Feature switch overrides
 
-    return %orig;
-}
-
-- (id)featureSwitchValueForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override;
-    }
-
-    return %orig;
-}
-
-- (NSInteger)integerForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override.integerValue;
-    }
-
-    return %orig;
-}
-
-- (NSNumber *)numberForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override;
-    }
-
-    return %orig;
-}
-
-- (id)rawValueForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override;
-    }
-
-    return %orig;
-}
-
-- (BOOL)unsafePeekBoolForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override.boolValue;
-    }
-
-    return %orig;
-}
-
-- (NSInteger)unsafePeekIntegerForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override.integerValue;
-    }
-
-    return %orig;
-}
-%end
-
-%hook TFSAccountFeatureSwitches
-- (BOOL)boolForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override.boolValue;
-    }
-
-    return %orig;
-}
-
-- (id)featureSwitchValueForFeature:(id)feature {
-    NSString *key = BHTFeatureSwitchKeyForFeature(feature);
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override;
-    }
-
-    return %orig;
-}
-
-- (NSNumber *)numberValueForFeature:(id)feature {
-    NSString *key = BHTFeatureSwitchKeyForFeature(feature);
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override;
-    }
-
-    return %orig;
-}
-%end
+// Every feature switch facade (TPSTwitterFeatureSwitches, TFSAccountFeatureSwitches,
+// TFSFeatureSwitchesService) bottoms out in per-account TFSFeatureSwitches
+// instances, but those can be wrapped in TFSInstrumentedFeatureSwitches, which
+// implements its own typed getters, so both classes need the same hooks.
 
 %hook TFSFeatureSwitches
+
 - (BOOL)boolForKey:(NSString *)key {
     NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override.boolValue;
-    }
-
-    return %orig;
-}
-
-- (id)featureSwitchValueForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override;
-    }
-
-    return %orig;
+    return override ? override.boolValue : %orig;
 }
 
 - (NSInteger)integerForKey:(NSString *)key {
     NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override.integerValue;
-    }
-
-    return %orig;
+    return override ? override.integerValue : %orig;
 }
 
 - (NSNumber *)numberForKey:(NSString *)key {
     NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override;
-    }
-
-    return %orig;
+    return override ?: %orig;
 }
 
 - (id)rawValueForKey:(NSString *)key {
     NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override;
-    }
-
-    return %orig;
+    return override ?: %orig;
 }
 
 - (BOOL)unsafePeekBoolForKey:(NSString *)key {
     NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override.boolValue;
-    }
-
-    return %orig;
+    return override ? override.boolValue : %orig;
 }
 
 - (NSInteger)unsafePeekIntegerForKey:(NSString *)key {
     NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
-    if (override) {
-        return override.integerValue;
-    }
-
-    return %orig;
+    return override ? override.integerValue : %orig;
 }
+
+// Some reads, like the default captions setup, only consult the value when the
+// switch reports a non-default one.
+- (BOOL)hasNonDefaultValueForKey:(NSString *)key {
+    return BHTFeatureSwitchOverrideValueForKey(key) ? YES : %orig;
+}
+
+%end
+
+%hook TFSInstrumentedFeatureSwitches
+
+- (BOOL)boolForKey:(NSString *)key {
+    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    return override ? override.boolValue : %orig;
+}
+
+- (NSInteger)integerForKey:(NSString *)key {
+    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    return override ? override.integerValue : %orig;
+}
+
+- (NSNumber *)numberForKey:(NSString *)key {
+    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    return override ?: %orig;
+}
+
+- (id)rawValueForKey:(NSString *)key {
+    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    return override ?: %orig;
+}
+
+- (BOOL)unsafePeekBoolForKey:(NSString *)key {
+    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    return override ? override.boolValue : %orig;
+}
+
+- (NSInteger)unsafePeekIntegerForKey:(NSString *)key {
+    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    return override ? override.integerValue : %orig;
+}
+
+- (BOOL)hasNonDefaultValueForKey:(NSString *)key {
+    return BHTFeatureSwitchOverrideValueForKey(key) ? YES : %orig;
+}
+
 %end
 
 // MARK: Override the login screens
+
 %hook T1AccountsViewController
+
 - (void)private_startLoginFlowWithSender:(id)sender {
     [BHTLegacyLoginViewController presentLoginFrom:(UIViewController *)self];
 }
+
 %end
 
 %hook T1HostViewController
+
 - (void)makeOnboardingViewControllerWithCompletion:(void (^)(id))completion {
     if (completion == nil) {
         %orig;
@@ -317,121 +242,102 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     }
     completion([BHTLegacyLoginViewController loginRootNavigationController]);
 }
-%end
-%hook TFNTwitterMediaUploadConfiguration
-- (_Bool)photoUploadHighQualityImagesSettingIsVisible {
-    return [BHTSettings boolForKey:@"auto_highest_load"] ? true : %orig;
-}
+
 %end
 
-%hook T1SlideshowViewController
-- (_Bool)_t1_shouldDisplayLoadHighQualityImageItemForImageDisplayView:(id)arg1 highestQuality:(_Bool)arg2 {
-    return [BHTSettings boolForKey:@"auto_highest_load"] ? true : %orig;
-}
-- (id)_t1_loadHighQualityActionItemWithTitle:(id)arg1 forImageDisplayView:(id)arg2 highestQuality:(_Bool)arg3 {
-    if ([BHTSettings boolForKey:@"auto_highest_load"]) {
-        arg3 = true;
-    }
-    return %orig(arg1, arg2, arg3);
-}
-%end
+// MARK: High quality images
 
 %hook T1ImageDisplayView
-- (_Bool)_tfn_shouldUseHighestQualityImage {
-    return [BHTSettings boolForKey:@"auto_highest_load"] ? true : %orig;
+
+- (BOOL)_tfn_shouldUseHighestQualityImage {
+    return [BHTSettings boolForKey:@"auto_highest_load"] ? YES : %orig;
 }
-- (_Bool)_tfn_shouldUseHighQualityImage {
-    return [BHTSettings boolForKey:@"auto_highest_load"] ? true : %orig;
+
+- (BOOL)_tfn_shouldUseHighQualityImage {
+    return [BHTSettings boolForKey:@"auto_highest_load"] ? YES : %orig;
 }
+
 %end
 
-%hook T1HighQualityImagesUploadSettings
-- (_Bool)shouldUploadHighQualityImages {
-    return [BHTSettings boolForKey:@"auto_highest_load"] ? true : %orig;
-}
-%end
+// MARK: Promoted content
 
-%hook TFSTwitterAPICommandAccountStateProvider
+// API commands copy this off their context when building requests.
+%hook TFNTwitterAPICommandContext
+
 - (BOOL)allowPromotedContent {
     return [BHTSettings boolForKey:@"hide_promoted"] ? NO : %orig;
 }
+
 %end
 
+// MARK: Account feature gates
+
 %hook TFNTwitterAccount
-- (BOOL)_isSubscriptionsGatingBypassEnabled {
-    return YES;
-}
 
 - (BOOL)canAccessXPayments {
     return YES;
 }
 
-- (BOOL)isGrokAskGrokButtonUnderPostFocalEnabled {
-    return YES;
-}
-
-- (BOOL)isGrokAskGrokButtonUnderPostPreviewEnabled {
-    return YES;
-}
-
-- (BOOL)isGrokEditWithGrokButtonUnderPostFocalEnabled {
-    return YES;
-}
-
-- (BOOL)isGrokEditWithGrokButtonUnderPostPreviewEnabled {
-    return YES;
-}
-
-- (BOOL)isPremiumTierUser {
-    return YES;
+// Premium tier state funnels through -isSubscribedTo:, which reads the account's
+// subscription claims: isPremiumTierUser checks tiers 0/7/8, isVerifiedPremiumTierUser
+// checks 0/8, and isSubscribedToAnyPremiumTier builds on those. Forcing the premium
+// tiers here unlocks premium across every account-level check from one stable seam.
+- (BOOL)isSubscribedTo:(NSUInteger)tier {
+    if (tier == 0 || tier == 7 || tier == 8) {
+        return YES;
+    }
+    return %orig;
 }
 
 - (BOOL)isXPaymentsEnrolled {
     return YES;
 }
 
-- (_Bool)isEditProfileUsernameEnabled {
-    return true;
+- (BOOL)isEditProfileUsernameEnabled {
+    return YES;
 }
-- (_Bool)isEditTweetConsumptionEnabled {
-    return true;
+
+- (BOOL)isSensitiveTweetWarningsComposeEnabled {
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? NO : %orig;
 }
-- (_Bool)isSensitiveTweetWarningsComposeEnabled {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? false : %orig;
+
+- (BOOL)isSensitiveTweetWarningsConsumeEnabled {
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? NO : %orig;
 }
-- (_Bool)isSensitiveTweetWarningsConsumeEnabled {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? false : %orig;
-}
+
 - (BOOL)isAgeAssuranceAgeVerificationFlowEnabled {
     return [BHTSettings boolForKey:@"bypass_age_verification"] ? NO : %orig;
 }
-- (_Bool)isVideoDynamicAdEnabled {
-    return [BHTSettings boolForKey:@"hide_promoted"] ? false : %orig;
+
+- (BOOL)isVideoDynamicAdEnabled {
+    return [BHTSettings boolForKey:@"hide_promoted"] ? NO : %orig;
 }
 
-- (_Bool)isVODCaptionsEnabled {
-    return [BHTSettings boolForKey:@"disable_video_captions"] ? false : %orig;
+- (BOOL)isDoubleMaxZoomFor4KImagesEnabled {
+    return [BHTSettings boolForKey:@"auto_highest_load"] ? YES : %orig;
 }
-- (_Bool)photoUploadHighQualityImagesSettingIsVisible {
-    return [BHTSettings boolForKey:@"auto_highest_load"] ? true : %orig;
-}
-- (_Bool)loadingHighestQualityImageVariantPermitted {
-    return [BHTSettings boolForKey:@"auto_highest_load"] ? true : %orig;
-}
-- (_Bool)isDoubleMaxZoomFor4KImagesEnabled {
-    return [BHTSettings boolForKey:@"auto_highest_load"] ? true : %orig;
-}
+
 %end
 
+// Grok reads its premium state from the subscription claims directly through a
+// Swift feature-access type, bypassing -isSubscribedTo:, so the account hook above
+// doesn't reach it. The claim objects are Swift with no ObjC initializer to forge,
+// leaving this mangled-name hook as the only seam. Re-verify the class name on
+// every app update.
 %hook _TtCV4Grok12GrokRootView9ViewModel
+
 - (BOOL)_isPremiumUser {
     return YES;
 }
+
 %end
 
+// MARK: Sensitive media warnings
+
 %hook TFNTwitterStatus
+
 - (BOOL)hasImageInterstitial {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? false : %orig;
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? NO : %orig;
 }
 
 - (id)imageInterstitial {
@@ -442,13 +348,12 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? nil : %orig;
 }
 
-- (BOOL)isPossiblySensitiveViewModelForAccount:(id)account {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? false : %orig;
-}
 %end
 
 %hook HFHealthSafetyFeature
+
 + (BOOL)isTweetMedialInterstitialEnabled:(id)featureSwitches {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? false : %orig;
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? NO : %orig;
 }
+
 %end
