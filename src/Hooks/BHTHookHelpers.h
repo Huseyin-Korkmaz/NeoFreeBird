@@ -32,10 +32,8 @@
 // Recursive view traversal (BHTHookHelpers.m)
 void BH_EnumerateSubviewsRecursively(UIView *view, void (^block)(UIView *currentView));
 
-// View controller lookup helpers (BHTHookHelpers.m)
-UIViewController *getViewControllerForView(UIView *view);
-BOOL isViewInsideT1ProfileHeaderViewController(UIView *view);
-BOOL isViewInsideDashHostingController(UIView *view);
+// Live square-avatar restyling (Avatars.x)
+void BHT_applySquareAvatarsSetting(void);
 
 // Theme engine synchronisation (Theme.x)
 void BHT_UpdateAllTabBarIcons(void);

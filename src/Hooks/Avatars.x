@@ -5,122 +5,105 @@
 
 #import "BHTHookHelpers.h"
 
-// MARK: - Square Avatars (TFNAvatarImageView)
+// Avatar style 2 is the circular default; style 3 is the rounded-square style
+// the app itself uses for organization accounts (corner radius = width / 8).
+// Coercing the style makes the views handle masking, corner radius, shadow
+// layers and the image pipeline natively.
 
-@interface TFNAvatarImageView : UIView // Assuming it's a UIView subclass, adjust if necessary
-- (void)setStyle:(NSInteger)style;
-- (NSInteger)style;
+@interface TFNAvatarImageView : UIView
+@property (nonatomic) NSInteger style;
 @end
+
+@interface TUIAvatarImageView : TFNAvatarImageView
+@end
+
+// Coerced views are marked so disabling the setting can restore just those,
+// leaving avatars that are natively rounded squares alone.
+static char kBHTCoercedAvatarStyle;
+
+static NSInteger BHTCoercedStyle(UIView *view, NSInteger style) {
+    if (style == 2) {
+        if ([BHTSettings boolForKey:@"square_avatars"]) {
+            objc_setAssociatedObject(view, &kBHTCoercedAvatarStyle, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            return 3;
+        }
+        objc_setAssociatedObject(view, &kBHTCoercedAvatarStyle, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return style;
+}
+
+void BHT_applySquareAvatarsSetting(void) {
+    BOOL enabled = [BHTSettings boolForKey:@"square_avatars"];
+    Class avatarClass = objc_getClass("TFNAvatarImageView");
+
+    for (UIWindow *window in UIApplication.sharedApplication.windows) {
+        BH_EnumerateSubviewsRecursively(window, ^(UIView *view) {
+            if (![view isKindOfClass:avatarClass]) {
+                return;
+            }
+
+            TFNAvatarImageView *avatar = (TFNAvatarImageView *)view;
+            if (enabled ? avatar.style == 2 : objc_getAssociatedObject(avatar, &kBHTCoercedAvatarStyle) != nil) {
+                // Re-sent as circular; the hook coerces it when the setting is on.
+                [avatar setStyle:2];
+            }
+        });
+    }
+}
 
 %hook TFNAvatarImageView
 
 - (void)setStyle:(NSInteger)style {
-    if ([BHTSettings boolForKey:@"square_avatars"]) {
-        CGFloat activeCornerRadius;
-        NSString *selfClassName = NSStringFromClass([self class]); // Get class name as string
-
-        BOOL isDashAvatar = [selfClassName isEqualToString:@"TwitterDash.DashAvatarImageView"];
-        BOOL isDashDrawerAvatar = [selfClassName isEqualToString:@"TwitterDash.DashDrawerAvatarImageView"];
-
-        BOOL inDashHostingContext = isViewInsideDashHostingController(self);
-
-        if (isDashDrawerAvatar) {
-            // DashDrawerAvatarImageView always gets 8.0f regardless of context
-            activeCornerRadius = 8.0f;
-        } else if (isDashAvatar && inDashHostingContext) {
-            // Regular DashAvatarImageView in hosting context gets 8.0f
-            activeCornerRadius = 8.0f;
-        } else if (isViewInsideT1ProfileHeaderViewController(self)) {
-            // Avatars in profile header get 8.0f
-            activeCornerRadius = 8.0f;
-        } else {
-            // Default for all other avatars is 12.0f
-            activeCornerRadius = 12.0f;
-        }
-
-        %orig(3); // Call original with forced style 3
-
-        // Force slightly rounded square on the main TFNAvatarImageView layer
-        self.layer.cornerRadius = activeCornerRadius;
-        self.layer.masksToBounds = YES; // Ensure the main view clips
-
-        // Find TIPImageViewObserver and force it to be slightly rounded
-        for (NSUInteger i = 0; i < self.subviews.count; i++) {
-            UIView *subview = [self.subviews objectAtIndex:i];
-            NSString *subviewClassString = NSStringFromClass([subview class]);
-            if ([subviewClassString isEqualToString:@"TIPImageViewObserver"]) {
-                subview.layer.cornerRadius = activeCornerRadius;
-                subview.layer.mask = nil;
-                subview.clipsToBounds = YES;        // View property
-                subview.layer.masksToBounds = YES;  // Layer property
-                subview.contentMode = UIViewContentModeScaleAspectFill; // Set contentMode
-
-                // Check for subviews of TIPImageViewObserver
-                if (subview.subviews.count > 0) {
-                    for (NSUInteger j = 0; j < subview.subviews.count; j++) {
-                        UIView *tipSubview = [subview.subviews objectAtIndex:j];
-                        tipSubview.layer.cornerRadius = activeCornerRadius;
-                        tipSubview.layer.mask = nil;
-                        tipSubview.clipsToBounds = YES;
-                        tipSubview.layer.masksToBounds = YES;
-                        tipSubview.contentMode = UIViewContentModeScaleAspectFill; // Set contentMode
-                    }
-                }
-                break; // Assuming only one TIPImageViewObserver, exit loop
-            }
-        }
-    } else {
-        %orig;
-    }
-}
-
-- (NSInteger)style {
-    if ([BHTSettings boolForKey:@"square_avatars"]) {
-        return 3;
-    }
-    return %orig;
+    %orig(BHTCoercedStyle(self, style));
 }
 
 %end
 
+// TUIAvatarImageView installs the circular pre-clip image transformer based on
+// the incoming style, so it needs the coercion before its own logic runs. Its
+// style mapping class method also feeds the Swift avatar views, whose style
+// setter is not reachable from ObjC.
+%hook TUIAvatarImageView
+
+- (void)setStyle:(NSInteger)style {
+    %orig(BHTCoercedStyle(self, style));
+}
+
++ (NSInteger)avatarImageViewStyleWithProfileImageShape:(NSInteger)shape identityType:(NSInteger)identityType {
+    return [BHTSettings boolForKey:@"square_avatars"] ? 3 : %orig;
+}
+
+%end
+
+// Some fetch helpers install the circular transformer unconditionally, so
+// images that get pre-clipped are rounded as squares instead of circles.
 %hook UIImage
 
-// Hook the specific TFN rounding method
 - (UIImage *)tfn_roundImageWithTargetDimensions:(CGSize)targetDimensions targetContentMode:(UIViewContentMode)targetContentMode {
-    if ([BHTSettings boolForKey:@"square_avatars"]) {
-        if (targetDimensions.width <= 0 || targetDimensions.height <= 0) {
-            return self; // Avoid issues with zero/negative size
-        }
-
-        CGFloat cornerRadius = 12.0f;
-        CGRect imageRect = CGRectMake(0, 0, targetDimensions.width, targetDimensions.height);
-
-        // Ensure cornerRadius is not too large for the dimensions
-        CGFloat minSide = MIN(targetDimensions.width, targetDimensions.height);
-        if (cornerRadius > minSide / 2.0f) {
-            cornerRadius = minSide / 2.0f; // Cap radius to avoid weird shapes
-        }
-
-        UIGraphicsBeginImageContextWithOptions(targetDimensions, NO, self.scale); // Use self.scale for retina, NO for opaque if image has alpha
-        if (!UIGraphicsGetCurrentContext()) {
-            UIGraphicsEndImageContext(); // Defensive call
-            return self;
-        }
-
-        [[UIBezierPath bezierPathWithRoundedRect:imageRect cornerRadius:cornerRadius] addClip];
-        [self drawInRect:imageRect];
-
-        UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-
-        if (roundedImage) {
-            return roundedImage;
-        } else {
-            return self; // Fallback to original image if rounding fails
-        }
-    } else {
+    if (![BHTSettings boolForKey:@"square_avatars"]) {
         return %orig;
     }
+
+    if (targetDimensions.width <= 0 || targetDimensions.height <= 0) {
+        return self;
+    }
+
+    CGRect imageRect = CGRectMake(0, 0, targetDimensions.width, targetDimensions.height);
+    CGFloat cornerRadius = MIN(targetDimensions.width, targetDimensions.height) / 8.0;
+
+    UIGraphicsBeginImageContextWithOptions(targetDimensions, NO, self.scale);
+    if (!UIGraphicsGetCurrentContext()) {
+        UIGraphicsEndImageContext();
+        return self;
+    }
+
+    [[UIBezierPath bezierPathWithRoundedRect:imageRect cornerRadius:cornerRadius] addClip];
+    [self drawInRect:imageRect];
+
+    UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return roundedImage ?: self;
 }
 
 %end
@@ -128,11 +111,7 @@
 %hook TFNCircularAvatarShadowLayer
 
 - (void)setHidden:(BOOL)hidden {
-    if ([BHTSettings boolForKey:@"square_avatars"]) {
-        %orig(YES); // Always hide this layer when square avatars are enabled
-    } else {
-        %orig;
-    }
+    %orig([BHTSettings boolForKey:@"square_avatars"] ? YES : hidden);
 }
 
 %end
