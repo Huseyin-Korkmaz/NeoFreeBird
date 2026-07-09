@@ -1,9 +1,8 @@
 //
 //  BHDownload.h
-//  DIYTableView
+//  NeoFreeBird
 //
-//  Created by BandarHelal on 12/01/1442 AH.
-//  Copyright © 1442 BandarHelal. All rights reserved.
+//  Original author: BandarHelal at 12/01/1442 AH
 //
 
 #import <UIKit/UIKit.h>
@@ -18,18 +17,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)downloadDidFailureWithError:(NSError *)error;
 @end
 
+// Thin NSURLSession wrapper that downloads a single remote file to a stable
+// location in the temporary directory and reports progress/completion on the
+// main queue. One instance drives one download.
 @interface BHDownload : NSObject
-{
-   id delegate;
-}
-- (void)setDelegate:(id)newDelegate;
-- (instancetype)init;
-- (void)downloadFileWithURL:(NSURL *)url;
-@property (nonatomic, strong) NSString *fileName;
-@end
 
-@interface BHDownload () <NSURLSessionDelegate, NSURLSessionDataDelegate, NSURLSessionDownloadDelegate, NSURLSessionStreamDelegate>
-@property (nonatomic, strong) NSURLSession *Session;
+@property (nonatomic, weak, nullable) id<BHDownloadDelegate> delegate;
+@property (nonatomic, copy, nullable) NSString *fileName;
+
+- (void)downloadFileWithURL:(NSURL *)url;
+
 @end
 
 NS_ASSUME_NONNULL_END

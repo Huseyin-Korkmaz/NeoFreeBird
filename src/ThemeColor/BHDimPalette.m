@@ -8,42 +8,74 @@
 #import "ThemeColor/BHDimPalette.h"
 #import <objc/runtime.h>
 
-// Interface declaration for Twitter's internal classes
+@protocol BHTAEColorPalette <NSObject>
+- (UIColor *)backgroundColor;
+@end
+
 @interface TAETwitterColorPaletteSettingInfo : NSObject
-@property(readonly, nonatomic) BOOL isDark;
-@property(readonly, copy, nonatomic) NSString *name;
+@property (nonatomic, readonly) BOOL isDark;
+- (id <BHTAEColorPalette>)colorPalette;
 @end
 
 @interface TAEColorSettings : NSObject
 + (instancetype)sharedSettings;
-- (id)currentColorPalette;
+- (TAETwitterColorPaletteSettingInfo *)currentColorPalette;
 @end
 
 @implementation BHDimPalette
 
-+ (BOOL)isDimMode {
-    TAETwitterColorPaletteSettingInfo *paletteInfo = (TAETwitterColorPaletteSettingInfo *)[[objc_getClass("TAEColorSettings") sharedSettings] currentColorPalette];
-    
-    // Check if we're in dim mode by checking palette info
-    if ([paletteInfo respondsToSelector:@selector(isDark)] && [paletteInfo isDark]) {
-        // Access _name using KVC since name property might not be directly accessible
-        NSString *name = [paletteInfo valueForKey:@"_name"];
-        return [name isEqualToString:@"dark"];
++ (TAETwitterColorPaletteSettingInfo *)currentPaletteInfo {
+    Class settingsClass = objc_getClass("TAEColorSettings");
+    if (![settingsClass respondsToSelector:@selector(sharedSettings)]) {
+        return nil;
+    }
+
+    id settings = [settingsClass sharedSettings];
+    if (![settings respondsToSelector:@selector(currentColorPalette)]) {
+        return nil;
+    }
+
+    return [settings currentColorPalette];
+}
+
++ (BOOL)isDarkMode {
+    TAETwitterColorPaletteSettingInfo *info = [self currentPaletteInfo];
+    if ([info respondsToSelector:@selector(isDark)]) {
+        return [info isDark];
+    }
+
+    if (@available(iOS 13.0, *)) {
+        return UITraitCollection.currentTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
     }
     return NO;
 }
 
 + (UIColor *)currentBackgroundColor {
-    if ([self isDimMode]) {
-        return [self dimModeColor];
-    } else {
-        return [UIColor systemBackgroundColor];
+    TAETwitterColorPaletteSettingInfo *info = [self currentPaletteInfo];
+    if ([info respondsToSelector:@selector(colorPalette)]) {
+        id <BHTAEColorPalette> palette = [info colorPalette];
+        if ([palette respondsToSelector:@selector(backgroundColor)]) {
+            UIColor *background = [palette backgroundColor];
+            if (background) {
+                return background;
+            }
+        }
     }
+    return [UIColor systemBackgroundColor];
 }
 
-+ (UIColor *)dimModeColor {
-    // Twitter's dim dark mode color (#15202b)
-    return [UIColor colorWithRed:0.082 green:0.125 blue:0.169 alpha:1.0];
++ (BOOL)isDimMode {
+    if (![self isDarkMode]) {
+        return NO;
+    }
+
+    // Dim and Lights Out share the "dark" palette; only the background color
+    // tells them apart (Dim is #15202b, Lights Out is pure black).
+    CGFloat red = 0, green = 0, blue = 0, alpha = 0;
+    if ([[self currentBackgroundColor] getRed:&red green:&green blue:&blue alpha:&alpha]) {
+        return (red + green + blue) > 0.01;
+    }
+    return YES;
 }
 
-@end 
+@end

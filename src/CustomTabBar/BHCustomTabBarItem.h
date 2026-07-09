@@ -9,7 +9,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BHCustomTabBarItem : NSObject <NSCoding>
+@interface BHCustomTabBarItem : NSObject <NSSecureCoding>
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *pageID;
 - (instancetype)initWithTitle:(NSString *)title pageID:(NSString *)pageID;

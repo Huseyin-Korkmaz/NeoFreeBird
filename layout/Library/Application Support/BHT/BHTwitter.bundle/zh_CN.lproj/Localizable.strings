@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "更换 App 图标";
 "APP_ICON_HEADER_TITLE" = "选择新的 Twitter 图标或主题。";
-"APP_ICON_SEASONS_HEADER_TITLE" = "季节";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "让 Twitter 的图标随季节变化。";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "节日";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "通过自定义图标庆祝节日。";
-"APP_ICON_SPORTS_HEADER_TITLE" = "体育";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "用自定义图标展示您喜爱的体育运动。";
-"APP_ICON_EVENTS_HEADER_TITLE" = "活动";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "通过自定义图标庆祝特殊活动。";
-"APP_ICON_PRIDE_HEADER_TITLE" = "骄傲";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "用彩虹主题图标表达自我。";
-"APP_ICON_LEGACY_HEADER_TITLE" = "经典";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "使用旧版 Twitter 图标回到过去。";
-"APP_ICON_OTHER_HEADER_TITLE" = "其他";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "复制简介";

@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "Ändra appikon";
 "APP_ICON_HEADER_TITLE" = "Välj en anpassad appikon för din enhets hemskärm. Byt när som helst.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Årstider";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Matcha appikonen efter årstid.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Helgdagar";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Fira helger med en specialdesignad ikon.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Idrott";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Visa din favoritidrott med en appikon.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "Evenemang";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Fira speciella händelser med en anpassad appikon.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Pride";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Uttryck dig med ett pride-tema.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Klassisk";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Gå tillbaka i tiden med äldre Twitter-ikoner.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Övrigt";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Kopiera biografi";

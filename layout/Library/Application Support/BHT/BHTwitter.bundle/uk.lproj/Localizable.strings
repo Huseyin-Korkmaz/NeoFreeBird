@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "Змінити іконку";
 "APP_ICON_HEADER_TITLE" = "Оберіть нову іконку чи тему для Twitter.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Сезони";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Піктограма додатка відповідно до сезону.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Свята";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Відзначайте свята за допомогою святкової піктограми.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Спорт";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Піктограма з улюбленим видом спорту.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "Події";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Відзначайте події за допомогою піктограми додатка.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Прайд";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Піктограма у кольорах Прайду.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Класичні";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Старі іконки Twitter.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Інше";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Копіювати біо";

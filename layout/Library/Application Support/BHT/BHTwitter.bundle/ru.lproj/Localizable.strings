@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "Сменить иконку";
 "APP_ICON_HEADER_TITLE" = "Выбери новую иконку или тему для Twitter.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Сезоны";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Иконка приложения меняется в зависимости от времени года.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Праздники";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Праздничная иконка Twitter.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Спорт";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Отразите любимый вид спорта через иконку приложения.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "События";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Празднуйте особые события с новой иконкой.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Прайд";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Используйте иконку в цветах Прайда.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Классика";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Вернитесь к старым иконкам Twitter.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Другое";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Скопировать био";

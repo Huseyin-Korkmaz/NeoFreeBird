@@ -12,8 +12,18 @@
 #import "Core/BHTSettings.h"
 
 #pragma mark - Helpers
-static inline UIViewController *BHTopMostController(void) {
-    UIViewController *top = UIApplication.sharedApplication.keyWindow.rootViewController;
+static UIWindow *BHTKeyWindow(void) {
+    for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+        if (scene.activationState != UISceneActivationStateForegroundActive || ![scene isKindOfClass:UIWindowScene.class]) continue;
+        for (UIWindow *window in ((UIWindowScene *)scene).windows) {
+            if (window.isKeyWindow) return window;
+        }
+    }
+    return UIApplication.sharedApplication.windows.firstObject;
+}
+
+static UIViewController *BHTopMostController(void) {
+    UIViewController *top = BHTKeyWindow().rootViewController;
     while (top.presentedViewController) top = top.presentedViewController;
     return top;
 }
@@ -32,9 +42,6 @@ static inline UIViewController *BHTopMostController(void) {
                                                                          attributes:@{ NSFontAttributeName : [BHTManager menuTitleFont],
                                                                                        NSForegroundColorAttributeName : UIColor.labelColor }];
         TFNActiveTextItem *title = [[objc_getClass("TFNActiveTextItem") alloc] initWithTextModel:[[objc_getClass("TFNAttributedTextModel") alloc] initWithAttributedString:titleString] activeRanges:nil];
-
-        NSMutableArray *actions      = [NSMutableArray arrayWithObject:title];
-        NSMutableArray *innerActions = [NSMutableArray arrayWithObject:title];
 
         // HUD helpers
         void (^startHUD)(NSString *) = ^(NSString *key) {
@@ -71,28 +78,45 @@ static inline UIViewController *BHTopMostController(void) {
             }];
         };
 
-        // Media enumeration
-        if (mediaEntities.count > 1) {
-            [mediaEntities enumerateObjectsUsingBlock:^(TFSTwitterEntityMedia *obj, NSUInteger idx, BOOL *stop) {
-                if (obj.mediaType == 2 || obj.mediaType == 3) {
-                    TFNActionItem *videoGroup = [objc_getClass("TFNActionItem") actionItemWithTitle:[NSString stringWithFormat:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_VIDEO_NUMBER_TITLE"], (unsigned long)idx + 1]
-                                                                                       imageName:@"arrow_down_circle_stroke" action:^{
-                        for (TFSTwitterEntityMediaVideoVariant *variant in obj.videoInfo.variants) {
-                            if ([variant.contentType isEqualToString:@"video/mp4"])          [innerActions addObject:makeMP4Item([NSURL URLWithString:variant.url])];
-                            if ([variant.contentType isEqualToString:@"application/x-mpegURL"]) [innerActions addObject:makeM3U8Item([NSURL URLWithString:variant.url])];
-                        }
-                        TFNMenuSheetViewController *inner = [[objc_getClass("TFNMenuSheetViewController") alloc] initWithActionItems:innerActions.copy];
-                        [inner tfnPresentedCustomPresentFromViewController:BHTopMostController() animated:YES completion:nil];
-                    }];
-                    [actions addObject:videoGroup];
-                }
-            }];
-        } else if (mediaEntities.firstObject) {
-            TFSTwitterEntityMedia *first = mediaEntities.firstObject;
-            for (TFSTwitterEntityMediaVideoVariant *variant in first.videoInfo.variants) {
-                if ([variant.contentType isEqualToString:@"video/mp4"])          [actions addObject:makeMP4Item([NSURL URLWithString:variant.url])];
-                if ([variant.contentType isEqualToString:@"application/x-mpegURL"]) [actions addObject:makeM3U8Item([NSURL URLWithString:variant.url])];
+        // Appends a download item per playable variant of a single media entity.
+        // -[TFSTwitterEntityMediaVideoInfo variants] backs both video (mediaType 3)
+        // and animated-GIF (mediaType 2) entities; photos carry no videoInfo.
+        void (^appendVariants)(NSMutableArray *, TFSTwitterEntityMedia *) = ^(NSMutableArray *dest, TFSTwitterEntityMedia *media) {
+            for (TFSTwitterEntityMediaVideoVariant *variant in media.videoInfo.variants) {
+                NSURL *url = variant.url.length ? [NSURL URLWithString:variant.url] : nil;
+                if (!url) continue;
+
+                if ([variant.contentType isEqualToString:@"video/mp4"])                 [dest addObject:makeMP4Item(url)];
+                else if ([variant.contentType isEqualToString:@"application/x-mpegURL"]) [dest addObject:makeM3U8Item(url)];
             }
+        };
+
+        // Keep only downloadable entities: video/GIF whose variants resolved. This
+        // drops photos the caller may have handed us and decides grouping on the
+        // real video count rather than the raw media count.
+        NSMutableArray<TFSTwitterEntityMedia *> *videoEntities = [NSMutableArray new];
+        for (TFSTwitterEntityMedia *media in mediaEntities) {
+            if ((media.mediaType == 2 || media.mediaType == 3) && media.videoInfo.variants.count > 0) {
+                [videoEntities addObject:media];
+            }
+        }
+
+        NSMutableArray *actions = [NSMutableArray arrayWithObject:title];
+
+        if (videoEntities.count > 1) {
+            [videoEntities enumerateObjectsUsingBlock:^(TFSTwitterEntityMedia *media, NSUInteger idx, BOOL *stop) {
+                TFNActionItem *videoGroup = [objc_getClass("TFNActionItem") actionItemWithTitle:[NSString stringWithFormat:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_VIDEO_NUMBER_TITLE"], (unsigned long)idx + 1]
+                                                                                   imageName:@"arrow_down_circle_stroke" action:^{
+                    NSMutableArray *innerActions = [NSMutableArray arrayWithObject:title];
+                    appendVariants(innerActions, media);
+
+                    TFNMenuSheetViewController *inner = [[objc_getClass("TFNMenuSheetViewController") alloc] initWithActionItems:innerActions.copy];
+                    [inner tfnPresentedCustomPresentFromViewController:BHTopMostController() animated:YES completion:nil];
+                }];
+                [actions addObject:videoGroup];
+            }];
+        } else {
+            appendVariants(actions, videoEntities.firstObject);
         }
 
         TFNMenuSheetViewController *sheet = [[objc_getClass("TFNMenuSheetViewController") alloc] initWithActionItems:actions.copy];
@@ -116,7 +140,11 @@ static inline UIViewController *BHTopMostController(void) {
     NSURL *dst = [[NSURL fileURLWithPath:doc]
                   URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", NSUUID.UUID.UUIDString]];
 
-    [[NSFileManager defaultManager] moveItemAtURL:tmpURL toURL:dst error:nil];
+    NSError *moveError = nil;
+    if (![[NSFileManager defaultManager] moveItemAtURL:tmpURL toURL:dst error:&moveError]) {
+        [self downloadDidFailureWithError:moveError];
+        return;
+    }
 
     if (![BHTSettings boolForKey:@"direct_save"]) {
         [self.hud dismiss];

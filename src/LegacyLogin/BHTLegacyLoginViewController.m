@@ -91,12 +91,12 @@ static id BHTKnownDeviceToken(void) {
 
 static id BHTHTTPConfig(void) {
     Class cls = objc_getClass("TNUServiceHTTPConfiguration");
-    if (!cls) {
+    SEL sel = @selector(configurationForForegroundRetriableRequest);
+    if (!cls || ![cls respondsToSelector:sel]) {
         return nil;
     }
 
-    SEL sel = @selector(configurationForForegroundRetriableRequestWithTotalPermittedRetryCount:);
-    return ((id (*)(id, SEL, unsigned long long))objc_msgSend)(cls, sel, 10);
+    return ((id (*)(id, SEL))objc_msgSend)(cls, sel);
 }
 
 

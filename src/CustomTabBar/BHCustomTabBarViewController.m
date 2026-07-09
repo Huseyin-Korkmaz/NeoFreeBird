@@ -239,7 +239,10 @@ extern UIColor *BHTCurrentAccentColor(void);
         ] mutableCopy];
         self.enabledPageIDs = [NSMutableSet setWithArray:@[@"home", @"guide", @"ntab", @"messages"]];
     }
-    
+
+    // Home is the landing surface and must always stay visible
+    [self.enabledPageIDs addObject:BHCustomTabBarHomePageID];
+
     // Store initial state for comparison later
     self.originalEnabledPageIDs = [self.enabledPageIDs mutableCopy];
     
@@ -257,7 +260,9 @@ extern UIColor *BHTCurrentAccentColor(void);
 - (NSArray<BHCustomTabBarItem *> *)getItemsForKey:(NSString *)key {
     NSData *savedItems = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     if (savedItems) {
-        return [NSKeyedUnarchiver unarchiveObjectWithData:savedItems];
+        return [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:[BHCustomTabBarItem class]
+                                                         fromData:savedItems
+                                                            error:nil];
     }
     return nil;
 }
@@ -279,6 +284,9 @@ extern UIColor *BHTCurrentAccentColor(void);
 }
 
 - (void)persistChanges {
+    // Home can never be hidden, regardless of the on-screen selection state
+    [self.enabledPageIDs addObject:BHCustomTabBarHomePageID];
+
     NSMutableArray *enabledItems = [NSMutableArray array];
     NSMutableArray *disabledItems = [NSMutableArray array];
 
@@ -289,8 +297,8 @@ extern UIColor *BHTCurrentAccentColor(void);
             [disabledItems addObject:item];
         }
     }
-    NSData *enabledData = [NSKeyedArchiver archivedDataWithRootObject:enabledItems];
-    NSData *disabledData = [NSKeyedArchiver archivedDataWithRootObject:disabledItems];
+    NSData *enabledData = [NSKeyedArchiver archivedDataWithRootObject:enabledItems requiringSecureCoding:YES error:nil];
+    NSData *disabledData = [NSKeyedArchiver archivedDataWithRootObject:disabledItems requiringSecureCoding:YES error:nil];
     [[NSUserDefaults standardUserDefaults] setObject:enabledData forKey:@"allowed"];
     [[NSUserDefaults standardUserDefaults] setObject:disabledData forKey:@"hidden"];
     // Keep feature flags in sync with tab choices
@@ -416,6 +424,12 @@ extern UIColor *BHTCurrentAccentColor(void);
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     BHCustomTabBarItem *item = self.allItems[indexPath.item];
+
+    // Home is always visible and cannot be toggled off
+    if ([item.pageID isEqualToString:BHCustomTabBarHomePageID]) {
+        return;
+    }
+
     if ([self.enabledPageIDs containsObject:item.pageID]) {
         [self.enabledPageIDs removeObject:item.pageID];
     } else {

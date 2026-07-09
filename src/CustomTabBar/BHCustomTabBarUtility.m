@@ -7,17 +7,32 @@
 
 #import "BHCustomTabBarUtility.h"
 
+// The Home tab is the app's landing surface, so it is always kept visible and
+// can never end up in the hidden list.
+NSString * const BHCustomTabBarHomePageID = @"home";
+
 @implementation BHCustomTabBarUtility
+
 + (NSArray<NSString *> *)getHiddenTabBars {
     NSData *savedItems = [[NSUserDefaults standardUserDefaults] objectForKey:@"hidden"];
-    if (savedItems) {
-        NSArray<BHCustomTabBarItem *> *savedList = [NSKeyedUnarchiver unarchiveObjectWithData:savedItems];
-        NSMutableArray<NSString *> *tmpArr = [NSMutableArray array];
-        for (BHCustomTabBarItem *item in savedList) {
-            [tmpArr addObject:item.pageID];
-        }
-        return tmpArr;
+    if (!savedItems) {
+        return nil;
     }
-    return nil;
+
+    NSArray<BHCustomTabBarItem *> *savedList = [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:[BHCustomTabBarItem class]
+                                                                                        fromData:savedItems
+                                                                                           error:nil];
+    if (!savedList) {
+        return nil;
+    }
+
+    NSMutableArray<NSString *> *pageIDs = [NSMutableArray array];
+    for (BHCustomTabBarItem *item in savedList) {
+        if ([item.pageID isEqualToString:BHCustomTabBarHomePageID]) {
+            continue;
+        }
+        [pageIDs addObject:item.pageID];
+    }
+    return pageIDs;
 }
 @end

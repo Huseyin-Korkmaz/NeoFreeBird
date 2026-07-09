@@ -11,6 +11,6 @@
 - (NSString *)localizedStringForKey:(NSString *)key;
 - (NSURL *)pathForFile:(NSString *)fileName;
 
-@property (nonatomic, strong, readonly) NSBundle *mainBundle;  // <-- ADD THIS LINE
+@property (nonatomic, strong, readonly) NSBundle *mainBundle;
 
 @end

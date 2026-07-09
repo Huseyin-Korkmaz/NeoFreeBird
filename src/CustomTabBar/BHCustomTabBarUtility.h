@@ -10,6 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+// pageID of the Home tab, which is always kept visible.
+extern NSString * const BHCustomTabBarHomePageID;
+
 @interface BHCustomTabBarUtility : NSObject
 + (NSArray<NSString *> *)getHiddenTabBars;
 @end

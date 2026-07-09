@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "App-Symbol";
 "APP_ICON_HEADER_TITLE" = "Wähle ein benutzerdefiniertes App-Symbol für den Home-Bildschirm deines Geräts. Du kannst es jederzeit ändern.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Jahreszeiten";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Passt das App-Symbol an die aktuelle Jahreszeit an.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Feiertage";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Feiere Feiertage mit einem besonderen App-Symbol.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Sport";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Zeige deine Lieblingssportart mit einem angepassten Symbol.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "Events";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Feiere besondere Ereignisse mit einem speziellen App-Symbol.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Pride";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Drücke dich mit einem Pride-App-Symbol aus.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Klassisch";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Verwende die alten Twitter-Symbole.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Andere";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Bio kopieren";

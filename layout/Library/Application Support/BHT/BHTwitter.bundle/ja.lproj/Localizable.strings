@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "アプリアイコン";
 "APP_ICON_HEADER_TITLE" = "Twitterアプリのアイコンを選択できます。いつでも変更できます。";
-"APP_ICON_SEASONS_HEADER_TITLE" = "シーズン";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Twitterアプリのアイコンを現在のシーズンに合わせて変更します。";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "祝日";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "カスタムアプリアイコンで祝日を祝いましょう。";
-"APP_ICON_SPORTS_HEADER_TITLE" = "スポーツ";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "カスタムアプリアイコンでお気に入りのスポーツを披露しましょう。";
-"APP_ICON_EVENTS_HEADER_TITLE" = "イベント";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "カスタムアプリアイコンで特別なイベントをお祝いしましょう。";
-"APP_ICON_PRIDE_HEADER_TITLE" = "プライド";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "プライドをテーマにしたアプリアイコンを使用して、あなた自身を表現しましょう。";
-"APP_ICON_LEGACY_HEADER_TITLE" = "レガシー";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "昔のTwitterアプリアイコンで過去に戻りましょう。";
-"APP_ICON_OTHER_HEADER_TITLE" = "その他";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "プロフィールをコピー";

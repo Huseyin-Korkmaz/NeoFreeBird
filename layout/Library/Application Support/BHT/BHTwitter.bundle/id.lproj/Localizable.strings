@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "Ganti ikon aplikasi";
 "APP_ICON_HEADER_TITLE" = "Pilih ikon atau tema baru untuk Twitter.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Musim";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Sesuaikan ikon aplikasi Twitter dengan musim saat ini.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Liburan";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Rayakan liburan dengan ikon aplikasi khusus.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Olahraga";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Tampilkan olahraga favorit Anda dengan ikon khusus.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "Acara";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Rayakan acara khusus dengan ikon aplikasi khusus.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Pride";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Tampilkan jati diri Anda dengan ikon bertema Pride.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Klasik";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Kembali ke masa lalu dengan ikon lama Twitter.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Lainnya";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Salin bio";

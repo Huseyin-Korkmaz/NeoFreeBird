@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "Changer l’icône";
 "APP_ICON_HEADER_TITLE" = "Choisis une nouvelle icône ou thème pour Twitter.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Saisons";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Adapter l'icône de l'application Twitter à la saison en cours.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Vacances";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Célébrez les vacances avec une icône personnalisée.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Sports";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Affichez votre sport préféré avec une icône personnalisée.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "Événements";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Célébrez des événements spéciaux avec une icône personnalisée.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Fierté";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Exprimez-vous avec une icône aux couleurs de la fierté.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Classique";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Revenez en arrière avec les anciennes icônes de Twitter.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Autres";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Copier la bio";

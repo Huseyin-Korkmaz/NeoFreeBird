@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "İkonu değiştir";
 "APP_ICON_HEADER_TITLE" = "Twitter için yeni bir ikon veya tema seç.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Mevsimler";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Twitter uygulama simgesini mevsime göre değiştirin.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Tatiller";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Özel uygulama simgesiyle tatilleri kutlayın.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Spor";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Favori sporu özel bir simgeyle gösterin.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "Etkinlikler";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Özel uygulama simgesiyle özel etkinlikleri kutlayın.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Pride";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Kendinizi pride temalı bir simgeyle ifade edin.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Eski";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Eski Twitter simgeleriyle geçmişe dönün.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Diğer";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Biyografiyi kopyala";

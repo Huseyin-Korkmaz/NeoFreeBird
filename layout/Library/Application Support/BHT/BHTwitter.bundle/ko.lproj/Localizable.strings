@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "앱 아이콘";
 "APP_ICON_HEADER_TITLE" = "기기의 홈 화면에 사용할 커스텀 앱 아이콘을 선택합니다. 언제든지 변경할 수 있습니다.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "계절";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "앱 아이콘을 계절과 어울리는 분위기로 만들어보세요.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "공휴일";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "앱 아이콘으로 공휴일을 기념해보세요.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "스포츠";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "앱 아이콘으로 당신이 좋아하는 스포츠를 뽐내세요.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "이벤트";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "앱 아이콘으로 이벤트를 기념해보세요.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "프라이드";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "당신이 프라이드 앱 아이콘 사용자임을 표현하세요.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "레거시";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "옛날 트위터 앱 아이콘을 사용하여 추억을 되살려 보세요.";
-"APP_ICON_OTHER_HEADER_TITLE" = "기타";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "자기소개 복사";

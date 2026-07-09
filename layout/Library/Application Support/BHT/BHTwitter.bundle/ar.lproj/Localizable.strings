@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "تغيير أيقونة التطبيق";
 "APP_ICON_HEADER_TITLE" = "اختر أيقونة أو مظهرًا جديدًا لتويتر.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "الفصول";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "اجعل أيقونة التطبيق تتطابق مع الفصل الحالي.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "العطلات";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "احتفل بالمناسبات مع أيقونة تطبيق مخصصة.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "الرياضة";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "اعرض رياضتك المفضلة بأيقونة مخصصة.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "الفعاليات";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "احتفل بالفعاليات الخاصة بأيقونة تطبيق مخصصة.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "الفخر";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "عبّر عن نفسك بأيقونة بتصميم فخر.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "قديم";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "العودة إلى أيقونات تويتر القديمة.";
-"APP_ICON_OTHER_HEADER_TITLE" = "أخرى";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "نسخ النبذة";

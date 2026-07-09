@@ -7,12 +7,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TAEStandardFontGroup : NSObject
-+ (instancetype)sharedFontGroup;
-- (UIFont *)headline2BoldFont;
-@end
-
-// TAEStandardFontGroup was renamed to TFNUIDefaultFontGroup in 12.3.
+// The font group (TAEStandardFontGroup on older versions) is TFNUIDefaultFontGroup in 12.3.
 @interface TFNUIDefaultFontGroup : NSObject
 + (instancetype)sharedFontGroup;
 - (UIFont *)headline2BoldFont;

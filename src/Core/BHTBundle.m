@@ -17,7 +17,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSFileManager *fileManager = [NSFileManager defaultManager];
-        NSURL *bundlePath = [NSURL new];
+        NSURL *bundlePath = nil;
         if ([fileManager fileExistsAtPath:@"/Library/Application Support/BHT/BHTwitter.bundle"]) {
             bundlePath = [NSURL fileURLWithPath:@"/Library/Application Support/BHT/BHTwitter.bundle"];
         } else if ([fileManager fileExistsAtPath:@"/var/jb/Library/Application Support/BHT/BHTwitter.bundle"]) {

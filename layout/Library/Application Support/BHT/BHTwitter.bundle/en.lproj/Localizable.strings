@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "App icon";
 "APP_ICON_HEADER_TITLE" = "Choose a custom app icon for your device's home screen. Change it any time.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Seasons";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Make Twitter's app icon match the current season.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Holidays";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Celebrate the holidays with a custom app icon.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Sports";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Show off your favourite sport with a custom app icon.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "Events";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Celebrate special events with a custom app icon.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Pride";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Express who you are using a pride-themed app icon.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Legacy";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Go back in time with the older Twitter app icons.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Other";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Copy bio";

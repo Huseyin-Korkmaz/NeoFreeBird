@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "Ikona aplikacji";
 "APP_ICON_HEADER_TITLE" = "Wybierz własną ikonę aplikacji na ekran główny. Możesz zmienić ją w dowolnym momencie.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Pory roku";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Dopasuj ikonę Twittera do aktualnej pory roku.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Święta";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Świętuj z własną ikoną aplikacji.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Sport";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Pokaż ulubiony sport dzięki własnej ikonie.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "Wydarzenia";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Świętuj wyjątkowe wydarzenia własną ikoną aplikacji.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Pride";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Wyraź siebie ikoną w barwach Pride.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Klasyczne";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Wróć do dawnych ikon aplikacji Twittera.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Inne";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Kopiuj bio";

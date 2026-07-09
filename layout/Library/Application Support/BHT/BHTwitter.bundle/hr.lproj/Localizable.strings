@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "Promijeni ikonu";
 "APP_ICON_HEADER_TITLE" = "Odaberi novu ikonu ili temu za Twitter.";
-"APP_ICON_SEASONS_HEADER_TITLE" = "Godišnja doba";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "Ikona aplikacije u skladu s godišnjim dobom.";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "Praznici";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "Proslavite praznike prilagođenom ikonom aplikacije.";
-"APP_ICON_SPORTS_HEADER_TITLE" = "Sport";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "Prikažite omiljeni sport s prilagođenom ikonom aplikacije.";
-"APP_ICON_EVENTS_HEADER_TITLE" = "Događaji";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "Obilježite posebne događaje prilagođenom ikonom.";
-"APP_ICON_PRIDE_HEADER_TITLE" = "Ponos";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "Izrazite tko ste ikonom u bojama ponosa.";
-"APP_ICON_LEGACY_HEADER_TITLE" = "Klasik";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "Vratite se u prošlost starim Twitter ikonama.";
-"APP_ICON_OTHER_HEADER_TITLE" = "Ostalo";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Kopiraj biografiju";

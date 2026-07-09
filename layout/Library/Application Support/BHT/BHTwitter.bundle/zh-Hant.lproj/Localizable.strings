@@ -237,19 +237,6 @@
 /*App icon*/
 "APP_ICON_NAV_TITLE" = "更換 App 圖示";
 "APP_ICON_HEADER_TITLE" = "選擇新的 Twitter 圖示或主題。";
-"APP_ICON_SEASONS_HEADER_TITLE" = "季節";
-"APP_ICON_SEASONS_HEADER_DETAIL" = "讓 Twitter 圖示隨季節變化。";
-"APP_ICON_HOLIDAYS_HEADER_TITLE" = "節慶";
-"APP_ICON_HOLIDAYS_HEADER_DETAIL" = "使用自訂圖示慶祝節日。";
-"APP_ICON_SPORTS_HEADER_TITLE" = "運動";
-"APP_ICON_SPORTS_HEADER_DETAIL" = "使用自訂圖示展現您喜愛的運動。";
-"APP_ICON_EVENTS_HEADER_TITLE" = "活動";
-"APP_ICON_EVENTS_HEADER_DETAIL" = "使用自訂圖示慶祝特別活動。";
-"APP_ICON_PRIDE_HEADER_TITLE" = "驕傲";
-"APP_ICON_PRIDE_HEADER_DETAIL" = "使用彩虹主題圖示展現自我。";
-"APP_ICON_LEGACY_HEADER_TITLE" = "經典";
-"APP_ICON_LEGACY_HEADER_DETAIL" = "回味舊版 Twitter 應用圖示。";
-"APP_ICON_OTHER_HEADER_TITLE" = "其它";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "複製簡介";

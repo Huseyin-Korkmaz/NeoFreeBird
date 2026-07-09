@@ -8,6 +8,11 @@
 #import "BHCustomTabBarItem.h"
 
 @implementation BHCustomTabBarItem
+
++ (BOOL)supportsSecureCoding {
+    return YES;
+}
+
 - (instancetype)initWithTitle:(NSString *)title pageID:(NSString *)pageID {
     self = [super init];
     if (self) {
@@ -25,8 +30,8 @@
 - (instancetype)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (self) {
-        _title = [decoder decodeObjectForKey:@"title"];
-        _pageID = [decoder decodeObjectForKey:@"pageID"];
+        _title = [decoder decodeObjectOfClass:[NSString class] forKey:@"title"];
+        _pageID = [decoder decodeObjectOfClass:[NSString class] forKey:@"pageID"];
     }
     return self;
 }

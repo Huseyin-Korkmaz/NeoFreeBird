@@ -54,9 +54,8 @@
     return [numberFormatter stringFromNumber:number];
 }
 + (id)sharedFontGroup {
-    id group = [objc_getClass("TFNUIDefaultFontGroup") sharedFontGroup];
-    if (!group) group = [objc_getClass("TAEStandardFontGroup") sharedFontGroup];
-    return group;
+    // TAEStandardFontGroup was renamed to TFNUIDefaultFontGroup in 12.3.
+    return [objc_getClass("TFNUIDefaultFontGroup") sharedFontGroup];
 }
 + (UIFont *)menuTitleFont {
     UIFont *font = [[self sharedFontGroup] headline2BoldFont];

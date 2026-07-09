@@ -14,18 +14,14 @@
 #import <UIKit/UIKit.h>
 #import "Core/TwitterChirpFont.h"
 
-// Key for storing last selected app icon
-#define kBHLastSelectedAppIconKey @"bh_last_selected_app_icon"
-
 
 @interface BHAppIconViewController () <
     UICollectionViewDelegate,
     UICollectionViewDataSource,
     UICollectionViewDelegateFlowLayout
 >
-@property (nonatomic, strong) UICollectionView     *appIconCollectionView;
-@property (nonatomic, copy)   NSArray<NSString *>  *sectionTitles;
-@property (nonatomic, copy)   NSArray<NSArray<BHAppIconItem *> *> *sectionedIcons;
+@property (nonatomic, strong) UICollectionView            *appIconCollectionView;
+@property (nonatomic, copy)   NSArray<BHAppIconItem *>    *icons;
 @end
 
 @implementation BHAppIconViewController
@@ -37,7 +33,7 @@
       [[BHTBundle sharedBundle] localizedStringForKey:@"APP_ICON_NAV_TITLE"];
 
     UICollectionViewFlowLayout *flow = [UICollectionViewFlowLayout new];
-    flow.sectionInset            = UIEdgeInsetsMake(16,16,16,16);
+    flow.sectionInset            = UIEdgeInsetsMake(16, 16, 16, 16);
     flow.minimumLineSpacing      = 10;
     flow.minimumInteritemSpacing = 10;
 
@@ -47,20 +43,17 @@
     self.appIconCollectionView.contentInsetAdjustmentBehavior =
       UIScrollViewContentInsetAdjustmentAlways;
     [self.appIconCollectionView registerClass:[BHAppIconCell class]
-                      forCellWithReuseIdentifier:[BHAppIconCell reuseIdentifier]];
+                   forCellWithReuseIdentifier:[BHAppIconCell reuseIdentifier]];
     [self.appIconCollectionView registerClass:[UICollectionReusableView class]
-                forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                       withReuseIdentifier:@"HeaderView"];
+                   forSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                          withReuseIdentifier:@"HeaderView"];
     self.appIconCollectionView.delegate   = self;
     self.appIconCollectionView.dataSource = self;
     self.appIconCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    // Apply background color from BHDimPalette to collection view
     self.appIconCollectionView.backgroundColor = [BHDimPalette currentBackgroundColor];
 
-    // Use BHDimPalette for background color
     self.view.backgroundColor = [BHDimPalette currentBackgroundColor];
-    
+
     [self.view addSubview:self.appIconCollectionView];
 
     [NSLayoutConstraint activateConstraints:@[
@@ -70,166 +63,97 @@
       [self.appIconCollectionView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
     ]];
 
-    [self setupAppIcons];
+    [self loadAppIcons];
 }
 
-- (void)setupAppIcons {
+// Icons are derived from the app's own Info.plist, so the picker always matches
+// whatever the current build actually ships (the primary icon plus every
+// declared alternate). The default icon is listed first so it can be restored.
+- (void)loadAppIcons {
     NSDictionary *iconsDict =
       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIcons"];
-    NSMutableArray<BHAppIconItem*> *flat = [NSMutableArray new];
 
-    NSDictionary *pri = iconsDict[@"CFBundlePrimaryIcon"];
-    [flat addObject:[[BHAppIconItem alloc]
-         initWithBundleIconName:pri[@"CFBundleIconName"]
-                  iconFileNames:pri[@"CFBundleIconFiles"]
-                   isPrimaryIcon:YES]];
+    NSMutableArray<BHAppIconItem *> *items = [NSMutableArray new];
 
-    NSDictionary *alts = iconsDict[@"CFBundleAlternateIcons"];
-    [alts enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSDictionary *alt, BOOL *stop) {
-        [flat addObject:[[BHAppIconItem alloc]
-           initWithBundleIconName:alt[@"CFBundleIconName"]
-                    iconFileNames:alt[@"CFBundleIconFiles"]
-                     isPrimaryIcon:NO]];
-    }];
-
-    NSArray<NSString*> *allCats = @[@"Icons", @"Seasonal", @"Holidays", @"Sports", @"Events", @"Pride", @"Legacy", @"Other"];
-    NSMutableDictionary *buckets = [NSMutableDictionary new];
-    for (NSString *c in allCats) buckets[c] = [NSMutableArray new];
-
-    NSSet *seasonKeys = [NSSet setWithArray:@[@"Autumn",@"Summer",@"Winter",@"Spring",@"Fall"]];
-    NSSet *holidayKeys = [NSSet setWithArray:@[@"BlackHistory",@"Holi",@"EarthHour",@"WomansDay",@"LunarNewYear",@"StPatricksDay",@"Christmas",@"NewYears",@"Halloween",@"Thanksgiving",@"ValentinesDay",@"Ramadan",@"Easter",@"Eid",@"Anzac",@"Diwali",@"MayTheFourth",@"MothersDay",@"CanadaDay",@"CanadaIndigenous",@"FathersDay",@"IndependenceDay",@"LaborDay",@"MemorialDay",@"VeteransDay",@"NationalDay",@"FlagDay",@"Juneteenth", @"Euro"]];
-    NSSet *sportKeys = [NSSet setWithArray:@[@"BeijingOlympics",@"FormulaOne",@"Daytona",@"Nba",@"Ncaa",@"Masters",@"Nfl",@"Nhl",@"UefaChampionsLeague",@"WorldCup",@"Wimbledon",@"WorldSeries",@"SuperBowl",@"Olympics",@"KentuckyDerby",@"Rugby",@"Cricket",@"Tennis",@"Golf",@"Baseball",@"Football",@"Soccer",@"Basketball",@"Hockey",@"Mlb",@"NBA", @"NHL", @"NFL", @"MLS", @"UFC", @"WWE", @"NBAFinals", @"NHLPlayoffs", @"WorldCup2022", @"Euro2020", @"ChampionsLeagueFinal", @"SuperBowlLV", @"Wimbledon2021", @"FrenchOpen2021", @"USOpen2021", @"StanleyCup"]];
-    NSSet *eventsKeys = [NSSet setWithArray:@[@"Eurovision"]];
-    NSSet *prideKeys = [NSSet setWithArray:@[@"Pride",@"LGBTQ",@"Rainbow",@"Gay"]];
-    NSSet *legacyKeys = [NSSet setWithArray:@[@"Legacy",@"Old",@"Classic",@"Retro",@"Vintage"]];
-
- for (BHAppIconItem *item in flat) {
-    if (item.isPrimaryIcon || [item.bundleIconName hasPrefix:@"Custom-Icon"]) {
-        [buckets[@"Icons"] addObject:item];
-        continue;
+    NSDictionary *primary = iconsDict[@"CFBundlePrimaryIcon"];
+    if ([primary isKindOfClass:[NSDictionary class]]) {
+        [items addObject:[[BHAppIconItem alloc]
+             initWithBundleIconName:primary[@"CFBundleIconName"]
+                      iconFileNames:primary[@"CFBundleIconFiles"]
+                      isPrimaryIcon:YES]];
     }
 
-    if ([item.bundleIconName hasPrefix:@"Legacy-Icon"]) {
-        [buckets[@"Legacy"] addObject:item];
-        continue;
-    }
-
-    BOOL placed = NO;
-
-    for (NSString *k in seasonKeys) {
-        if ([item.bundleIconName containsString:k]) {
-            [buckets[@"Seasonal"] addObject:item];
-            placed = YES;
-            break;
+    NSDictionary *alternates = iconsDict[@"CFBundleAlternateIcons"];
+    if ([alternates isKindOfClass:[NSDictionary class]]) {
+        NSArray<NSString *> *sortedKeys =
+          [alternates.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        for (NSString *key in sortedKeys) {
+            NSDictionary *alt = alternates[key];
+            NSString *name = alt[@"CFBundleIconName"] ?: key;
+            [items addObject:[[BHAppIconItem alloc]
+                 initWithBundleIconName:name
+                          iconFileNames:alt[@"CFBundleIconFiles"]
+                          isPrimaryIcon:NO]];
         }
     }
-    if (placed) continue;
 
-    for (NSString *k in holidayKeys) {
-        if ([item.bundleIconName containsString:k]) {
-            [buckets[@"Holidays"] addObject:item];
-            placed = YES;
-            break;
-        }
-    }
-    if (placed) continue;
-
-    for (NSString *k in sportKeys) {
-        if ([item.bundleIconName containsString:k]) {
-            [buckets[@"Sports"] addObject:item];
-            placed = YES;
-            break;
-        }
-    }
-    if (placed) continue;
-
-    for (NSString *k in eventsKeys) {
-        if ([item.bundleIconName containsString:k]) {
-            [buckets[@"Events"] addObject:item];
-            placed = YES;
-            break;
-        }
-    }
-    if (placed) continue;
-
-    for (NSString *k in prideKeys) {
-        if ([item.bundleIconName containsString:k]) {
-            [buckets[@"Pride"] addObject:item];
-            placed = YES;
-            break;
-        }
-    }
-    if (placed) continue;
-
-    for (NSString *k in legacyKeys) {
-        if ([item.bundleIconName containsString:k]) {
-            [buckets[@"Legacy"] addObject:item];
-            placed = YES;
-            break;
-        }
-    }
-    if (placed) continue;
-
-    [buckets[@"Other"] addObject:item];
+    self.icons = items;
+    [self.appIconCollectionView reloadData];
 }
 
-    NSMutableArray<NSString*> *titles   = [NSMutableArray new];
-    NSMutableArray<NSArray*>   *sections = [NSMutableArray new];
-    for (NSString *cat in allCats) {
-      NSArray *arr = buckets[cat];
-      if (arr.count > 0) {
-        [titles addObject:cat];
-        [sections addObject:arr];
-      }
+// The picker thumbnails live in the asset catalog as "<name>-settings"; the
+// primary icon uses the "Icon-<Name>-settings" convention instead. Both fall
+// back to the icon art itself if a dedicated thumbnail is missing.
+- (UIImage *)thumbnailForItem:(BHAppIconItem *)item {
+    UITraitCollection *tc = self.traitCollection;
+    NSBundle *bundle = [NSBundle mainBundle];
+
+    NSString *settingsName;
+    if (item.isPrimaryIcon) {
+        NSString *base = item.bundleIconName;
+        if ([base hasSuffix:@"AppIcon"]) {
+            base = [base substringToIndex:base.length - @"AppIcon".length];
+        }
+        settingsName = [NSString stringWithFormat:@"Icon-%@-settings", base];
+    } else {
+        settingsName = [item.bundleIconName stringByAppendingString:@"-settings"];
     }
-    self.sectionTitles  = titles;
-    self.sectionedIcons = sections;
-    [self.appIconCollectionView reloadData];
+
+    UIImage *img = [UIImage imageNamed:settingsName inBundle:bundle compatibleWithTraitCollection:tc];
+    if (!img && item.bundleIconName) {
+        img = [UIImage imageNamed:item.bundleIconName inBundle:bundle compatibleWithTraitCollection:tc];
+    }
+    if (!img) {
+        for (NSString *file in [item.bundleIconFiles reverseObjectEnumerator]) {
+            img = [UIImage imageNamed:file inBundle:bundle compatibleWithTraitCollection:tc];
+            if (img) break;
+        }
+    }
+    return img;
+}
+
+- (BOOL)isItemActive:(BHAppIconItem *)item {
+    NSString *current = [UIApplication sharedApplication].alternateIconName;
+    return item.isPrimaryIcon ? (current == nil)
+                              : [current isEqualToString:item.bundleIconName];
 }
 
 #pragma mark – UICollectionViewDataSource
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView*)cv {
-    return self.sectionedIcons.count;
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv {
+    return 1;
 }
 
-- (NSInteger)collectionView:(UICollectionView*)cv numberOfItemsInSection:(NSInteger)section {
-    return self.sectionedIcons[section].count;
+- (NSInteger)collectionView:(UICollectionView *)cv numberOfItemsInSection:(NSInteger)section {
+    return self.icons.count;
 }
 
-- (UICollectionViewCell*)collectionView:(UICollectionView*)cv cellForItemAtIndexPath:(NSIndexPath*)ip {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)ip {
     BHAppIconCell *cell = [cv dequeueReusableCellWithReuseIdentifier:[BHAppIconCell reuseIdentifier] forIndexPath:ip];
-    BHAppIconItem *item = self.sectionedIcons[ip.section][ip.row];
+    BHAppIconItem *item = self.icons[ip.row];
 
-    // Determine settings asset name
-    NSString *settings;
-    if (item.isPrimaryIcon) {
-      NSString *nm = item.bundleIconName;
-      if ([nm hasSuffix:@"AppIcon"]) nm = [nm substringToIndex:nm.length - @"AppIcon".length];
-      settings = [NSString stringWithFormat:@"Icon-%@-settings", nm];
-    } else {
-      settings = [item.bundleIconName stringByAppendingString:@"-settings"];
-    }
+    cell.imageView.image = [self thumbnailForItem:item];
 
-    // Load the highest-resolution image available
-    NSBundle *iconBundle = [NSBundle mainBundle];
-    // If your icons are packaged in BHTBundle, use:
-    // iconBundle = [BHTBundle sharedBundle].bundle;
-    UITraitCollection *tc = self.traitCollection;
-
-    UIImage *img = [UIImage imageNamed:settings inBundle:iconBundle compatibleWithTraitCollection:tc];
-    if (!img) {
-      img = [UIImage imageNamed:item.bundleIconName inBundle:iconBundle compatibleWithTraitCollection:tc];
-    }
-    if (!img) {
-      for (NSString *base in [item.bundleIconFiles reverseObjectEnumerator]) {
-        img = [UIImage imageNamed:base inBundle:iconBundle compatibleWithTraitCollection:tc];
-        if (img) break;
-      }
-    }
-    cell.imageView.image = img;
-    
-    // Create a background view for the icon with shadow
     if (!cell.backgroundView) {
         UIView *shadowView = [[UIView alloc] init];
         shadowView.backgroundColor = [UIColor clearColor];
@@ -240,163 +164,68 @@
         shadowView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 98, 98) cornerRadius:22].CGPath;
         cell.backgroundView = shadowView;
     }
-    
-    // Make sure the image view has correct corner radius
+
     cell.imageView.layer.cornerRadius = 22;
     cell.imageView.clipsToBounds = YES;
 
-    // Update checkmark state - first check system state, then our saved state
-    NSString *curr = [UIApplication sharedApplication].alternateIconName;
-    BOOL isCurrentlyActive = curr ? [curr isEqualToString:item.bundleIconName] : item.isPrimaryIcon;
-    
-    // Check if this item matches our saved selection
-    NSString *savedIconIdentifier = [[NSUserDefaults standardUserDefaults] objectForKey:kBHLastSelectedAppIconKey];
-    BOOL isSavedSelection = NO;
-    
-    if (savedIconIdentifier) {
-        if ([savedIconIdentifier isEqualToString:@"PrimaryIcon"] && item.isPrimaryIcon) {
-            isSavedSelection = YES;
-        } else if ([savedIconIdentifier isEqualToString:item.bundleIconName]) {
-            isSavedSelection = YES;
-        }
-    }
-    
-    // Clear all checkmarks first
-    cell.checkIMG.image = [UIImage systemImageNamed:@"circle"];
-    
-    // Highlight if it's the active icon or our saved selection
-    if (isCurrentlyActive || isSavedSelection) {
-        cell.checkIMG.image = [UIImage systemImageNamed:@"checkmark.circle"];
-    }
-    
+    cell.checkIMG.image = [self isItemActive:item]
+        ? [UIImage systemImageNamed:@"checkmark.circle"]
+        : [UIImage systemImageNamed:@"circle"];
+
     return cell;
 }
 
 #pragma mark – UICollectionViewDelegate
 
-- (void)collectionView:(UICollectionView*)cv didSelectItemAtIndexPath:(NSIndexPath*)ip {
-    BHAppIconItem *item = self.sectionedIcons[ip.section][ip.row];
-    [cv.visibleCells enumerateObjectsUsingBlock:^(UICollectionViewCell *c, NSUInteger idx, BOOL *stop) {
-        ((BHAppIconCell*)c).checkIMG.image = [UIImage systemImageNamed:@"circle"];
-    }];
-    BHAppIconCell *cell = (BHAppIconCell*)[cv cellForItemAtIndexPath:ip];
+- (void)collectionView:(UICollectionView *)cv didSelectItemAtIndexPath:(NSIndexPath *)ip {
+    if (![UIApplication sharedApplication].supportsAlternateIcons) return;
+
+    BHAppIconItem *item = self.icons[ip.row];
+    if ([self isItemActive:item]) return;
+
     NSString *toSet = item.isPrimaryIcon ? nil : item.bundleIconName;
-    
-    // Save selection to NSUserDefaults
-    NSString *iconIdentifier = item.isPrimaryIcon ? @"PrimaryIcon" : item.bundleIconName;
-    [[NSUserDefaults standardUserDefaults] setObject:iconIdentifier forKey:kBHLastSelectedAppIconKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
+
     [[UIApplication sharedApplication] setAlternateIconName:toSet completionHandler:^(NSError *_Nullable error) {
-      if (!error) {
-        cell.checkIMG.image = [UIImage systemImageNamed:@"checkmark.circle"];
-      }
+        if (error) return;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [cv reloadData];
+        });
     }];
 }
 
-#pragma mark – Section Headers
+#pragma mark – Section Header
 
-- (UICollectionReusableView*)collectionView:(UICollectionView*)cv viewForSupplementaryElementOfKind:(NSString*)kind atIndexPath:(NSIndexPath*)ip {
+- (UICollectionReusableView *)collectionView:(UICollectionView *)cv viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)ip {
     UICollectionReusableView *header = [cv dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"HeaderView" forIndexPath:ip];
     [header.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
-    if (ip.section == 0) {
-        UILabel *detail = [UILabel new];
-        detail.translatesAutoresizingMaskIntoConstraints = NO;
-        detail.font = [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:13];
-        detail.textColor = [UIColor secondaryLabelColor];
-        detail.numberOfLines = 0;
-        detail.textAlignment = NSTextAlignmentLeft;
-        detail.text = [[BHTBundle sharedBundle] localizedStringForKey:@"APP_ICON_HEADER_TITLE"];
-        [header addSubview:detail];
-        [NSLayoutConstraint activateConstraints:@[
-          [detail.leadingAnchor constraintEqualToAnchor:header.leadingAnchor constant:16],
-          [detail.trailingAnchor constraintEqualToAnchor:header.trailingAnchor constant:-16],
-          [detail.topAnchor constraintEqualToAnchor:header.topAnchor constant:8],
-          [detail.bottomAnchor constraintEqualToAnchor:header.bottomAnchor constant:-8]
-        ]];
-        return header;
-    }
+    UILabel *detail = [UILabel new];
+    detail.translatesAutoresizingMaskIntoConstraints = NO;
+    detail.font = [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:13];
+    detail.textColor = [UIColor secondaryLabelColor];
+    detail.numberOfLines = 0;
+    detail.textAlignment = NSTextAlignmentLeft;
+    detail.text = [[BHTBundle sharedBundle] localizedStringForKey:@"APP_ICON_HEADER_TITLE"];
+    [header addSubview:detail];
 
-    NSString *cat = self.sectionTitles[ip.section];
-    NSString *titleKey, *detailKey;
-    if ([cat isEqualToString:@"Seasonal"]) {
-      titleKey  = @"APP_ICON_SEASONS_HEADER_TITLE";
-      detailKey = @"APP_ICON_SEASONS_HEADER_DETAIL";
-    } else if ([cat isEqualToString:@"Holidays"]) {
-      titleKey  = @"APP_ICON_HOLIDAYS_HEADER_TITLE";
-      detailKey = @"APP_ICON_HOLIDAYS_HEADER_DETAIL";
-    } else if ([cat isEqualToString:@"Sports"]) {
-      titleKey  = @"APP_ICON_SPORTS_HEADER_TITLE";
-      detailKey = @"APP_ICON_SPORTS_HEADER_DETAIL";
-    } else if ([cat isEqualToString:@"Events"]) {
-      titleKey  = @"APP_ICON_EVENTS_HEADER_TITLE";
-      detailKey = @"APP_ICON_EVENTS_HEADER_DETAIL";
-    } else if ([cat isEqualToString:@"Pride"]) {
-      titleKey  = @"APP_ICON_PRIDE_HEADER_TITLE";
-      detailKey = @"APP_ICON_PRIDE_HEADER_DETAIL";
-    } else if ([cat isEqualToString:@"Legacy"]) {
-      titleKey  = @"APP_ICON_LEGACY_HEADER_TITLE";
-      detailKey = @"APP_ICON_LEGACY_HEADER_DETAIL";
-    } else if ([cat isEqualToString:@"Other"]) {
-      titleKey  = @"APP_ICON_OTHER_HEADER_TITLE";
-      detailKey = nil;
-    }
-
-    UILabel *titleLabel = [UILabel new];
-    titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    titleLabel.font      = [TwitterChirpFont(TwitterFontStyleBold) fontWithSize:16];
-    titleLabel.textColor = [UIColor labelColor];
-    titleLabel.text      = [[BHTBundle sharedBundle] localizedStringForKey:titleKey];
-    [header addSubview:titleLabel];
-
-    UILabel *detailLabel = nil;
-    if (detailKey) {
-      detailLabel = [UILabel new];
-      detailLabel.translatesAutoresizingMaskIntoConstraints = NO;
-      detailLabel.font          = [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:13];
-      detailLabel.textColor     = [UIColor secondaryLabelColor];
-      detailLabel.numberOfLines = 0;
-      detailLabel.textAlignment = NSTextAlignmentLeft;
-      detailLabel.text          = [[BHTBundle sharedBundle] localizedStringForKey:detailKey];
-      [header addSubview:detailLabel];
-    }
-
-    NSMutableArray *cons = [NSMutableArray new];
-    [cons addObjectsFromArray:@[
-      [titleLabel.leadingAnchor constraintEqualToAnchor:header.leadingAnchor constant:16],
-      [titleLabel.trailingAnchor constraintEqualToAnchor:header.trailingAnchor constant:-16],
-      [titleLabel.topAnchor constraintEqualToAnchor:header.topAnchor constant:8],
+    [NSLayoutConstraint activateConstraints:@[
+      [detail.leadingAnchor constraintEqualToAnchor:header.leadingAnchor constant:16],
+      [detail.trailingAnchor constraintEqualToAnchor:header.trailingAnchor constant:-16],
+      [detail.topAnchor constraintEqualToAnchor:header.topAnchor constant:8],
+      [detail.bottomAnchor constraintEqualToAnchor:header.bottomAnchor constant:-8]
     ]];
-    if (detailLabel) {
-      [cons addObjectsFromArray:@[
-        [detailLabel.leadingAnchor constraintEqualToAnchor:header.leadingAnchor constant:16],
-        [detailLabel.trailingAnchor constraintEqualToAnchor:header.trailingAnchor constant:-16],
-        [detailLabel.topAnchor constraintEqualToAnchor:titleLabel.bottomAnchor constant:4],
-      ]];
-    }
-    [NSLayoutConstraint activateConstraints:cons];
+
     return header;
 }
 
-- (CGSize)collectionView:(UICollectionView*)cv layout:(UICollectionViewLayout*)layout referenceSizeForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
-        return CGSizeMake(cv.bounds.size.width, 60);
-    }
-    NSString *cat = self.sectionTitles[section];
-BOOL hasDetail = [cat isEqualToString:@"Seasonal"]       ||
-                 [cat isEqualToString:@"Holidays"]       ||
-                 [cat isEqualToString:@"Sports"]         ||
-                 [cat isEqualToString:@"Events"]         ||
-                 [cat isEqualToString:@"Pride"]          ||
-                 [cat isEqualToString:@"Legacy"];
-    return CGSizeMake(cv.bounds.size.width, hasDetail ? 60 : 30);
+- (CGSize)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout *)layout referenceSizeForHeaderInSection:(NSInteger)section {
+    return CGSizeMake(cv.bounds.size.width, 60);
 }
 
 #pragma mark – FlowLayout sizing
 
-- (CGSize)collectionView:(UICollectionView*)cv layout:(UICollectionViewLayout*)layout sizeForItemAtIndexPath:(NSIndexPath*)indexPath {
-    return CGSizeMake(98,136);
+- (CGSize)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout *)layout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(98, 136);
 }
 
 @end
