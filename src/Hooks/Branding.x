@@ -20,9 +20,9 @@ static NSDictionary<NSString *, NSString *> *BHTRenameTable(NSString *name) {
     NSString *localization = [NSBundle preferredLocalizationsFromArray:bundle.localizations
                                                         forPreferences:@[appLanguage]].firstObject;
 
-    // preferredLocalizationsFromArray: if there's no match, it silently
-    // returns the development region (en) instead, and rejects that so unsupported
-    // languages skip renaming rather than getting English rules
+    // preferredLocalizationsFromArray: silently returns the development region (en)
+    // when nothing matches, so reject a locale that disagrees with the app language:
+    // unsupported languages then skip renaming instead of getting English rules.
     NSString *appCode = [appLanguage componentsSeparatedByString:@"-"].firstObject;
     NSString *lprojCode = [[localization stringByReplacingOccurrencesOfString:@"_" withString:@"-"]
                               componentsSeparatedByString:@"-"].firstObject;
@@ -185,6 +185,9 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
     return result;
 }
 
+// MARK: Rename localized strings, controlled by "restore_twitter_names"
+// Every UI string routes through this Foundation method in 12.3, so the rename
+// applies broadly. Skip our own bundle so the tweak's strings aren't reprocessed.
 %hook NSBundle
 - (NSString *)localizedStringForKey:(NSString *)key value:(NSString *)value table:(NSString *)tableName {
     NSString *result = %orig;
@@ -200,6 +203,12 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 }
 %end
 
+// MARK: Rename server-composed text + colour restored source labels
+// TFNAttributedTextView renders interface chrome and server-composed URT text
+// (notification headers, footers, timestamps, counts…) that carries no localization
+// key, so the NSBundle hook can't reach it. Tweet bodies use the separate
+// TTAStatusBodyTextView view-model path, so they never reach this hook and are
+// left untouched.
 %hook TFNAttributedTextView
 - (void)setTextModel:(TFNAttributedTextModel *)model {
     if (!model || !model.attributedString) {
@@ -212,7 +221,7 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
     BOOL modified = NO;
     BOOL textChanged = NO;
 
-    // --- Tweet source label coloring ---
+    // --- Tweet source label colouring ---
     if ([BHTSettings boolForKey:@"restore_tweet_labels"] && tweetSources.count > 0) {
         NSString *unavailable = [[BHTBundle sharedBundle] localizedStringForKey:@"SOURCE_UNAVAILABLE"];
         for (NSString *sourceText in tweetSources.allValues) {
@@ -231,25 +240,19 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
                         if (!newString) {
                             newString = [[NSMutableAttributedString alloc] initWithAttributedString:model.attributedString];
                         }
-                        // Add only the color attribute, do not overwrite the run
+                        // Add only the colour attribute, don't overwrite the run.
                         [newString addAttribute:NSForegroundColorAttributeName
                                           value:accentColor
                                           range:sourceRange];
                         modified = YES;
-                        // attributes only, textChanged stays NO
                     }
                 }
-                break; // Only color the first matching source
+                break; // Only colour the first matching source.
             }
         }
     }
 
     // --- Restore Twitter terminology ---
-    // TFNAttributedTextView renders interface chrome (notification headers, footers,
-    // timestamps, counts…). Tweet bodies use T1StatusBodyTextView /
-    // TTAStatusBodySelectableContentTextView, so they never reach this hook and are
-    // left untouched. The rewrite is driven by the shared word-boundary transform, so
-    // it changes the actual rendered text rather than a hardcoded list of phrases.
     if ([BHTSettings boolForKey:@"restore_twitter_names"]) {
         NSAttributedString *source = newString ?: model.attributedString;
         NSAttributedString *renamed = BHRestoreTwitterAttributed(source);
@@ -260,67 +263,63 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
         }
     }
 
-    // --- Apply modifications if needed ---
-    if (modified && newString) {
-        if (textChanged) {
-            // Text changed, use a new model so length-related state is rebuilt
-            TFNAttributedTextModel *newModel =
-                [[%c(TFNAttributedTextModel) alloc] initWithAttributedString:newString];
-            %orig(newModel);
-        } else if ([model respondsToSelector:@selector(setAttributedString:)]) {
-            // Attributes only, keep model to preserve layout metadata
-            [model setAttributedString:newString];
-            %orig(model);
-        } else {
-            TFNAttributedTextModel *newModel =
-                [[%c(TFNAttributedTextModel) alloc] initWithAttributedString:newString];
-            %orig(newModel);
-        }
-    } else {
+    if (!modified || !newString) {
         %orig(model);
+        return;
+    }
+
+    if (textChanged) {
+        // Text length changed, so rebuild the model to refresh length-derived state.
+        TFNAttributedTextModel *newModel =
+            [[%c(TFNAttributedTextModel) alloc] initWithAttributedString:newString];
+        %orig(newModel);
+    } else if ([model respondsToSelector:@selector(setAttributedString:)]) {
+        // Attributes only: keep the model to preserve its layout metadata.
+        [model setAttributedString:newString];
+        %orig(model);
+    } else {
+        TFNAttributedTextModel *newModel =
+            [[%c(TFNAttributedTextModel) alloc] initWithAttributedString:newString];
+        %orig(newModel);
     }
 }
 %end
 
-// Helper for the refresh pill setting
+// MARK: Relabel the "new posts" refresh pill, controlled by "refresh_pill_label"
+// TFNPillControl backs other pills too ("Back to top", counts…); gate on the pill's
+// own text mentioning posts/tweets so only the new-content pill is relabelled.
 static BOOL BHPillLabelOverrideEnabled(void) {
     return [BHTSettings boolForKey:@"refresh_pill_label"];
 }
 
-// Only the "new posts/Tweets" refresh pill should be relabelled. TFNPillControl
-// is used for other pills too ("Back to top", counts, …); the old code forced
-// every pill's text to "Tweeted" and corrupted their reads. Gate on the pill's
-// own text mentioning posts/tweets.
 static BOOL BHPillTextIsNewContent(id text) {
-    if (![text isKindOfClass:[NSString class]]) return NO;
+    if (![text isKindOfClass:[NSString class]]) {
+        return NO;
+    }
     NSString *s = [(NSString *)text lowercaseString];
     return [s containsString:@"post"] || [s containsString:@"tweet"];
 }
 
-// MARK: Change Pill text, controlled by "refresh_pill_label"
 %hook TFNPillControl
 
 - (id)text {
     id origText = %orig;
     if (!BHPillLabelOverrideEnabled() || !BHPillTextIsNewContent(origText)) {
-        // Setting off, or not the new-content pill: keep original behavior
         return origText;
     }
 
     NSString *localizedText = [[BHTBundle sharedBundle] localizedStringForKey:@"REFRESH_PILL_TEXT"];
-    NSString *fallback = @"Tweeted";
-    return localizedText ?: fallback;
+    return localizedText ?: @"Tweeted";
 }
 
 - (void)setText:(id)arg1 {
     if (!BHPillLabelOverrideEnabled() || !BHPillTextIsNewContent(arg1)) {
-        // Setting off, or not the new-content pill: pass through original argument
-        return %orig(arg1);
+        %orig(arg1);
+        return;
     }
 
     NSString *localizedText = [[BHTBundle sharedBundle] localizedStringForKey:@"REFRESH_PILL_TEXT"];
-    NSString *fallback = arg1 ?: @"Tweeted";
-    %orig(localizedText ?: fallback);
+    %orig(localizedText ?: (arg1 ?: @"Tweeted"));
 }
 
 %end

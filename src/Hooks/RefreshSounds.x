@@ -7,122 +7,70 @@
 
 // MARK: - Restore Pull-To-Refresh Sounds
 
-// Helper function to play sounds since we can't directly call methods on TFNPullToRefreshControl
-static void PlayRefreshSound(int soundType) {
+// 12.3's TFNPullToRefreshControl has no built-in sound path (no soundEffects gate,
+// no bundled psst/pop assets), so we play the tweak-bundled sounds ourselves at the
+// control's state transitions.
+
+typedef NS_ENUM(NSInteger, BHTRefreshSound) {
+    BHTRefreshSoundPull = 0, // Dragging down past the threshold to refresh
+    BHTRefreshSoundPop  = 1  // Manual refresh completed
+};
+
+@interface TFNPullToRefreshControl : UIView
+- (unsigned long long)_status;
+@end
+
+static void BHT_PlayRefreshSound(BHTRefreshSound type) {
+    // SystemSoundIDs are a global audio resource rather than per-control state, so
+    // caching them in statics keyed by sound type is correct and avoids re-decoding.
     static SystemSoundID sounds[2] = {0, 0};
-    static BOOL soundsInitialized[2] = {NO, NO};
+    static BOOL initialized[2] = {NO, NO};
 
-    // Ensure the sounds are only initialized once per type
-    if (!soundsInitialized[soundType]) {
-        NSString *soundFile = nil;
-        if (soundType == 0) {
-            // Sound when pulling down
-            soundFile = @"psst2.aac";
-        } else if (soundType == 1) {
-            // Sound when refresh completes
-            soundFile = @"pop.aac";
-        }
+    if (!initialized[type]) {
+        NSString *soundFile = (type == BHTRefreshSoundPull) ? @"psst2.aac" : @"pop.aac";
+        NSURL *soundURL = [[BHTBundle sharedBundle] pathForFile:soundFile];
 
-        if (soundFile) {
-            NSURL *soundURL = [[BHTBundle sharedBundle] pathForFile:soundFile];
-            if (soundURL) {
-                OSStatus status = AudioServicesCreateSystemSoundID((__bridge CFURLRef)soundURL, &sounds[soundType]);
-                if (status == kAudioServicesNoError) {
-                    soundsInitialized[soundType] = YES;
-                } else {
-                    NSLog(@"[BHTwitter] Failed to initialize sound %@ (type %d), status: %d", soundFile, soundType, (int)status);
-                }
-            } else {
-                NSLog(@"[BHTwitter] Could not find sound file: %@", soundFile);
-            }
+        if (soundURL && AudioServicesCreateSystemSoundID((__bridge CFURLRef)soundURL, &sounds[type]) == kAudioServicesNoError) {
+            initialized[type] = YES;
         }
     }
 
-    // Play the sound if it was successfully initialized
-    if (soundsInitialized[soundType]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            AudioServicesPlaySystemSound(sounds[soundType]);
-        });
+    if (initialized[type]) {
+        AudioServicesPlaySystemSound(sounds[type]);
     }
 }
 
+// Every status transition funnels through -_setStatus:fromScrolling:, so it's the
+// single closest-to-source seam: a drag past the threshold commits a refresh
+// (status 1, fromScrolling), and -setLoading:completion: clears it (status 0) once
+// the refresh finishes.
 %hook TFNPullToRefreshControl
 
-// Track state with instance-specific variables using associated objects
-static char kPreviousLoadingStateKey;
-static char kManualRefreshInProgressKey;
+// Whether the in-flight refresh was started by the user dragging. Per-instance
+// (several scroll views can each own a control), so it lives on the instance rather
+// than in a static. Gates the completion "pop" to manual pulls only.
+static char kManualRefreshKey;
 
-// Always enable sound effects
-+ (_Bool)_areSoundEffectsEnabled {
-    return YES;
-}
-
-// Hook the simple loading property setter
-- (void)setLoading:(_Bool)loading {
-    static BOOL previousLoading = NO;
-    static BOOL manualRefresh = NO;
-
-    if (!loading && previousLoading && manualRefresh) {
-        PlayRefreshSound(1);
-        manualRefresh = NO;
-    }
-
-    if (!loading && previousLoading) {
-        manualRefresh = NO;
-    } else if (loading && !previousLoading) {
-        // This is likely a manual refresh
-        manualRefresh = YES;
-    }
-
-    previousLoading = loading;
-    %orig;
-}
-
-// Hook the completion-based loading setter
-- (void)setLoading:(_Bool)loading completion:(void(^)(void))completion {
-    // Get previous loading state
-    NSNumber *previousLoadingState = objc_getAssociatedObject(self, &kPreviousLoadingStateKey);
-    BOOL wasLoading = previousLoadingState ? [previousLoadingState boolValue] : NO;
-
-    // Check if we're in a manual refresh
-    NSNumber *manualRefresh = objc_getAssociatedObject(self, &kManualRefreshInProgressKey);
-    BOOL isManualRefresh = manualRefresh ? [manualRefresh boolValue] : NO;
+- (void)_setStatus:(unsigned long long)status fromScrolling:(BOOL)fromScrolling {
+    BOOL wasActive = ([self _status] == 1);
 
     %orig;
 
-    // Store the new state AFTER calling original
-    objc_setAssociatedObject(self, &kPreviousLoadingStateKey, @(loading), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-
-    // If loading went from YES to NO AND we're in a manual refresh, play pop sound
-    if (wasLoading && !loading && isManualRefresh) {
-        PlayRefreshSound(1);
-        // Clear the manual refresh flag
-        objc_setAssociatedObject(self, &kManualRefreshInProgressKey, @NO, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
-
-    if (!wasLoading && loading) {
-        NSLog(@"[BHTwitter] Loading changed from NO to YES (completion) - refresh started");
-    }
-}
-
-// Detect manual pull-to-refresh and play pull sound
-- (void)_setStatus:(unsigned long long)status fromScrolling:(_Bool)fromScrolling {
-    %orig;
-
-    if (status == 1 && fromScrolling) {
-        PlayRefreshSound(0);
-
-        // Mark that we're in a manual refresh
-        objc_setAssociatedObject(self, &kManualRefreshInProgressKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        // Mark that loading started (even though setLoading: might not be called with loading=1)
-        objc_setAssociatedObject(self, &kPreviousLoadingStateKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    if (status == 1 && !wasActive && fromScrolling) {
+        BHT_PlayRefreshSound(BHTRefreshSoundPull);
+        objc_setAssociatedObject(self, &kManualRefreshKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    } else if (status == 0 && wasActive) {
+        if ([objc_getAssociatedObject(self, &kManualRefreshKey) boolValue]) {
+            BHT_PlayRefreshSound(BHTRefreshSoundPop);
+        }
+        objc_setAssociatedObject(self, &kManualRefreshKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
 }
 
 %end
 
 %ctor {
-    // Import AudioServices framework
+    // AudioToolbox isn't in the tweak's linked frameworks; bind its symbols lazily.
     dlopen("/System/Library/Frameworks/AudioToolbox.framework/AudioToolbox", RTLD_LAZY);
 
     %init;

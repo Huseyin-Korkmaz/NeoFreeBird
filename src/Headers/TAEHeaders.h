@@ -12,6 +12,12 @@
 - (UIFont *)headline2BoldFont;
 @end
 
+// TAEStandardFontGroup was renamed to TFNUIDefaultFontGroup in 12.3.
+@interface TFNUIDefaultFontGroup : NSObject
++ (instancetype)sharedFontGroup;
+- (UIFont *)headline2BoldFont;
+@end
+
 @protocol TAEColorPalette
 - (id)colorPalette;
 - (UIColor *)primaryColorForOption:(NSUInteger)colorOption;

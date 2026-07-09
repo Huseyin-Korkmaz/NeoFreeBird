@@ -5,7 +5,7 @@
 
 #import "BHTHookHelpers.h"
 
-static UIFont * _Nullable TAEStandardFontGroupReplacement(UIFont *self, SEL _cmd, CGFloat arg1, CGFloat arg2) {
+static UIFont * _Nullable TFNUIDefaultFontGroupReplacement(UIFont *self, SEL _cmd, CGFloat arg1, CGFloat arg2) {
     BH_BaseImp orig  = originalFontsIMP[NSStringFromSelector(_cmd)].pointerValue;
     NSUInteger nArgs = [[self class] instanceMethodSignatureForSelector:_cmd].numberOfArguments;
     UIFont *origFont;
@@ -40,92 +40,61 @@ static void batchSwizzlingOnClass(Class cls, NSArray<NSString*>*origSelectors, I
         }
     }
 }
-// MARK: BHTwitter settings
-%hook T1GenericSettingsViewController
-- (void)viewWillAppear:(BOOL)arg1 {
-    %orig;
-    if ([self.sections count] == 1) {
-        TFNItemsDataViewControllerBackingStore *backingStore = self.backingStore;
+// MARK: BHTwitter settings entry
 
-        // Use Twitter's internal vector image system to get the Twitter bird icon
-        UIImage *twitterIcon = nil;
+// The settings root (revamp and legacy alike) is a diffable TFNItemsDataViewController
+// subclass. A section is just an array of items, so a one-item section carrying our
+// TFNSettingsNavigationItem is inserted near the top. The generic controller also backs
+// the settings sub-pages, so the entry is only added to the root (the first controller in
+// its navigation stack) and only once per controller instance.
+static void BHT_insertNeoFreeBirdSettings(TFNItemsDataViewController *settingsVC, id account) {
+    if (settingsVC.navigationController.viewControllers.firstObject != settingsVC) {
+        return;
+    }
 
-        // Choose color based on interface style
-        UIColor *iconColor;
-        if (@available(iOS 12.0, *)) {
-            if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-                iconColor = [UIColor systemGray2Color];
-            } else {
-                iconColor = [UIColor secondaryLabelColor];
-            }
+    static const void *insertedKey = &insertedKey;
+    if ([objc_getAssociatedObject(settingsVC, insertedKey) boolValue]) {
+        return;
+    }
+
+    UIColor *iconColor;
+    if (@available(iOS 12.0, *)) {
+        if (settingsVC.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+            iconColor = [UIColor systemGray2Color];
         } else {
             iconColor = [UIColor secondaryLabelColor];
         }
-
-        // Twitter vector image
-        twitterIcon = [UIImage tfn_vectorImageNamed:@"twitter" fitsSize:CGSizeMake(20, 20) fillColor:iconColor];
-
-        // Create the settings item
-        TFNSettingsNavigationItem *bhtwitter = [[%c(TFNSettingsNavigationItem) alloc] initWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_TITLE"] detail:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_DETAIL"] iconName:nil controllerFactory:^UIViewController *{
-            return [BHTManager BHTSettingsWithAccount:self.account];
-        }];
-
-        // Set our Twitter icon
-        if (twitterIcon) {
-            [bhtwitter setValue:twitterIcon forKey:@"_icon"];
-        }
-
-        if ([backingStore respondsToSelector:@selector(insertSection:atIndex:)]) {
-            [backingStore insertSection:0 atIndex:1];
-        } else {
-            [backingStore _tfn_insertSection:0 atIndex:1];
-        }
-        if ([backingStore respondsToSelector:@selector(insertItem:atIndexPath:)]) {
-            [backingStore insertItem:bhtwitter atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-        } else {
-            [backingStore _tfn_insertItem:bhtwitter atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-        }
+    } else {
+        iconColor = [UIColor secondaryLabelColor];
     }
+
+    UIImage *twitterIcon = [UIImage tfn_vectorImageNamed:@"twitter" fitsSize:CGSizeMake(20, 20) fillColor:iconColor];
+
+    TFNSettingsNavigationItem *bhtwitter = [[objc_getClass("TFNSettingsNavigationItem") alloc] initWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_TITLE"] detail:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_DETAIL"] iconName:nil controllerFactory:^UIViewController *{
+        return [BHTManager BHTSettingsWithAccount:account];
+    }];
+
+    if (twitterIcon) {
+        [bhtwitter setValue:twitterIcon forKey:@"icon"];
+    }
+
+    NSUInteger sectionIndex = (settingsVC.sections.count > 0) ? 1 : 0;
+    [settingsVC insertSection:@[bhtwitter] atIndex:sectionIndex];
+
+    objc_setAssociatedObject(settingsVC, insertedKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+%hook T1GenericSettingsViewController
+- (void)viewWillAppear:(BOOL)arg1 {
+    %orig;
+    BHT_insertNeoFreeBirdSettings(self, self.account);
 }
 %end
 
 %hook T1SettingsViewController
 - (void)viewWillAppear:(BOOL)arg1 {
     %orig;
-    if ([self.sections count] == 2) {
-        TFNItemsDataViewControllerBackingStore *DataViewControllerBackingStore = self.backingStore;
-        [DataViewControllerBackingStore insertSection:0 atIndex:1];
-        [DataViewControllerBackingStore insertItem:@"Row 0 " atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-        [DataViewControllerBackingStore insertItem:@"Row1" atIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
-    }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0 && indexPath.row == 1) {
-
-        TFNTextCell *Tweakcell = [[%c(TFNTextCell) alloc] init];
-        [Tweakcell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
-        [Tweakcell.textLabel setText:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_DETAIL"]];
-        return Tweakcell;
-    } else if (indexPath.section == 0 && indexPath.row == 0) {
-
-        TFNTextCell *Settingscell = [[%c(TFNTextCell) alloc] init];
-        [Settingscell setBackgroundColor:[UIColor clearColor]];
-        Settingscell.textLabel.textColor = [UIColor colorWithRed:0.40 green:0.47 blue:0.53 alpha:1.0];
-        [Settingscell.textLabel setText:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_TITLE"]];
-        return Settingscell;
-    }
-
-
-    return %orig;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath section]== 0 && [indexPath row]== 1) {
-        [self.navigationController pushViewController:[BHTManager BHTSettingsWithAccount:self.account] animated:true];
-    } else {
-        return %orig;
-    }
+    BHT_insertNeoFreeBirdSettings(self, self.account);
 }
 %end
 
@@ -183,8 +152,8 @@ static void batchSwizzlingOnClass(Class cls, NSArray<NSString*>*origSelectors, I
 }
 %end
 
-%hook TAEStandardFontGroup
-+ (TAEStandardFontGroup *)sharedFontGroup {
+%hook TFNUIDefaultFontGroup
++ (id)sharedFontGroup {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         NSMutableArray *fontsMethods = [NSMutableArray arrayWithArray:@[]];
@@ -213,13 +182,13 @@ static void batchSwizzlingOnClass(Class cls, NSArray<NSString*>*origSelectors, I
                 // - (id)monospacedDigitalFontOfSize:(CGFloat) weight:(CGFloat); ...
                 [fontsMethods addObject:selStr];
             } else {
-                NSLog(@"[BHTwitter] Method (%@) with unknown signiture (%@) in TAEStandardFontGroup", selStr, methodSig);
+                NSLog(@"[BHTwitter] Method (%@) with unknown signiture (%@) in TFNUIDefaultFontGroup", selStr, methodSig);
             }
         }
         free(methods);
 
         originalFontsIMP = [NSMutableDictionary new];
-        batchSwizzlingOnClass([self class], [fontsMethods copy], (IMP)TAEStandardFontGroupReplacement);
+        batchSwizzlingOnClass([self class], [fontsMethods copy], (IMP)TFNUIDefaultFontGroupReplacement);
     });
     return %orig;
 }

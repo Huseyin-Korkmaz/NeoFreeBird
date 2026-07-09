@@ -33,14 +33,6 @@ static TFNTwitterStatus *BHT_statusFromObject(id object) {
     return nil;
 }
 
-static TFNTwitterStatus *BHT_statusFromTweetView(T1StatusCell *tweetView) {
-    @try {
-        return BHT_statusFromObject([tweetView valueForKey:@"viewModel"]);
-    } @catch (__unused NSException *exception) {}
-
-    return nil;
-}
-
 static const void *BHTKeepReplyInWebViewKey = &BHTKeepReplyInWebViewKey;
 static const void *BHTReplyWebViewDismissingKey = &BHTReplyWebViewDismissingKey;
 
@@ -152,40 +144,26 @@ static BOOL BHT_openAuthenticatedTweetWebView(NSString *statusID) {
     return YES;
 }
 
-static T1StatusCell *BHT_tweetViewFromInlineActionsView(TTAStatusInlineActionsView *actionsView) {
-    if ([actionsView.superview isKindOfClass:%c(T1StandardStatusView)]) {
-        return (T1StatusCell *)[(T1StandardStatusView *)actionsView.superview eventHandler];
-    }
-
-    if ([actionsView.superview isKindOfClass:%c(T1TweetDetailsFocalStatusView)]) {
-        return (T1StatusCell *)[(T1TweetDetailsFocalStatusView *)actionsView.superview eventHandler];
-    }
-
-    if ([actionsView.superview isKindOfClass:%c(T1ConversationFocalStatusView)]) {
-        return (T1StatusCell *)[(T1ConversationFocalStatusView *)actionsView.superview eventHandler];
-    }
-
-    return nil;
-}
-
-%hook TTAStatusInlineReplyButton
-- (void)didTap {
+// In 12.3 the inline reply button is a Swift TTAStatusInlineActionButton with no
+// dedicated ObjC subclass; every inline reply tap funnels through this single event
+// handler, whose originalStatus argument is the TFNTwitterStatus being replied to.
+%hook T1StatusViewInlineActionTapEventHandler
+- (void)performReplyActionWithAccount:(__unsafe_unretained id)account
+                                event:(__unsafe_unretained id)event
+                           controller:(__unsafe_unretained id)controller
+                        scribeContext:(__unsafe_unretained id)scribeContext
+                        scribeElement:(__unsafe_unretained id)scribeElement
+                           parameters:(__unsafe_unretained id)parameters
+                       originalStatus:(__unsafe_unretained TFNTwitterStatus *)originalStatus {
     if (![BHTSettings boolForKey:@"reply_in_webview"]) {
         return %orig;
     }
 
-    id delegate = self.delegate;
-    if (![delegate isKindOfClass:%c(TTAStatusInlineActionsView)]) {
+    if (![originalStatus respondsToSelector:@selector(statusID)]) {
         return %orig;
     }
 
-    TTAStatusInlineActionsView *actionsView = (TTAStatusInlineActionsView *)delegate;
-    TFNTwitterStatus *status = BHT_statusFromTweetView(BHT_tweetViewFromInlineActionsView(actionsView));
-    if (!status) {
-        status = BHT_statusFromObject(actionsView.viewModel);
-    }
-
-    NSInteger statusID = status.statusID;
+    NSInteger statusID = originalStatus.statusID;
     if (statusID <= 0) {
         return %orig;
     }

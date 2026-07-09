@@ -93,19 +93,10 @@ static UIViewController * _Nonnull topMostController() {
 - (void)setImage:(UIImage *)image;
 @end
 
-// Forward declaration for TweetSourceHelper to be used in early hooks
+// Forward declaration for TweetSourceHelper (implemented in SourceLabels.x)
 @interface TweetSourceHelper : NSObject
 + (void)fetchSourceForTweetID:(NSString *)tweetID;
-+ (void)timeoutFetchForTweetID:(NSTimer *)timer;
-+ (void)handleAppForeground:(NSNotification *)notification;
-+ (NSDictionary *)fetchCookies;
-+ (void)cacheCookies:(NSDictionary *)cookies;
-+ (NSDictionary *)loadCachedCookies;
-+ (void)handleClearCacheNotification:(NSNotification *)notification;
-+ (void)pruneSourceCachesIfNeeded;
-+ (void)logDebugInfo:(NSString *)message;
 + (void)initializeCookiesWithRetry;
-+ (void)updateFooterTextViewsForTweetID:(NSString *)tweetID;
 + (void)cleanupTimersForBackground;
 @end
 

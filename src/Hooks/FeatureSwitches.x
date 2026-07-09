@@ -36,6 +36,11 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @YES;
     }
 
+    // Restore the animated launch screen (AppLifecycle.x strips its X-shaped reveal mask)
+    if ([key isEqualToString:@"app_launch_animated_launch_screen_enabled"]) {
+        return @YES;
+    }
+
     // Grok translations
     if ([key isEqualToString:@"grok_translations_bio_inline_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_bio_translation_is_enabled"]) {

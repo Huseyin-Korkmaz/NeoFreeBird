@@ -28,6 +28,8 @@
 @interface TFNItemsDataViewController : TFNDataViewController
 @property(copy, nonatomic) NSArray *sections;
 - (id)itemAtIndexPath:(id)arg1;
+- (void)insertSection:(id)section atIndex:(NSUInteger)index;
+- (void)insertItem:(id)item atIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @interface TFNItemsDataViewControllerBackingStore: NSObject

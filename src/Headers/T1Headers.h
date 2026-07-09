@@ -15,7 +15,6 @@
 
 @interface T1AppDelegate : UIResponder <UIApplicationDelegate>
 @property(retain, nonatomic) UIWindow *window;
-+ (id)launchTransitionProvider;
 @end
 
 
@@ -55,15 +54,14 @@
 @property(copy, nonatomic) NSArray *tabViews;
 @end
 
-@interface T1GenericSettingsViewController: UIViewController
-@property (nonatomic, strong) TFNItemsDataViewControllerBackingStore *backingStore;
-@property (nonatomic, strong) NSArray *sections;
+// The settings root is a collection/diffable TFNItemsDataViewController subclass in 12.3.
+// T1GenericSettingsViewController backs the "settings revamp" root (and, driven by a page
+// model, the sub-pages); T1SettingsViewController is the legacy fallback root.
+@interface T1GenericSettingsViewController: TFNItemsDataViewController
 @property (nonatomic, strong) TFNTwitterAccount *account;
 @end
 
-@interface T1SettingsViewController : UIViewController
-@property (nonatomic, strong) TFNItemsDataViewControllerBackingStore *backingStore;
-@property (nonatomic, strong) NSArray *sections;
+@interface T1SettingsViewController: TFNItemsDataViewController
 @property (nonatomic, strong) TFNTwitterAccount *account;
 @end
 

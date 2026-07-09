@@ -5,7 +5,7 @@
 
 #import "BHTHookHelpers.h"
 
-// ===== Padlock helpers (new) =====
+// ===== Padlock helpers =====
 
 static const NSInteger BHTPadlockOverlayTag = 909;
 
@@ -165,11 +165,12 @@ static void BHT_presentAuthIfNeeded(void) {
         }];
     }
 }
+
 // MARK: App Delegate hooks
 
-
 %hook T1AppDelegate
-- (_Bool)application:(UIApplication *)application didFinishLaunchingWithOptions:(id)arg2 {
+
+- (_Bool)application:(__unsafe_unretained UIApplication *)application didFinishLaunchingWithOptions:(__unsafe_unretained id)arg2 {
     _Bool orig = %orig;
 
     [BHTManager cleanCache];
@@ -192,7 +193,7 @@ static void BHT_presentAuthIfNeeded(void) {
     return orig;
 }
 
-- (void)applicationDidBecomeActive:(id)arg1 {
+- (void)applicationDidBecomeActive:(__unsafe_unretained id)arg1 {
     %orig;
 
     BHT_applySelectedThemeColor();
@@ -226,7 +227,7 @@ static void BHT_presentAuthIfNeeded(void) {
     }
 }
 
-- (void)applicationWillResignActive:(id)arg1 {
+- (void)applicationWillResignActive:(__unsafe_unretained id)arg1 {
     %orig;
 
     if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
@@ -245,7 +246,7 @@ static void BHT_presentAuthIfNeeded(void) {
     }
 }
 
-- (void)applicationDidEnterBackground:(id)arg1 {
+- (void)applicationDidEnterBackground:(__unsafe_unretained id)arg1 {
     %orig;
 
     if ([BHTSettings boolForKey:@"padlock"]) {
@@ -255,7 +256,7 @@ static void BHT_presentAuthIfNeeded(void) {
     }
 }
 
-- (void)applicationWillEnterForeground:(id)arg1 {
+- (void)applicationWillEnterForeground:(__unsafe_unretained id)arg1 {
     %orig;
 
     if ([BHTSettings boolForKey:@"padlock"]) {
@@ -264,7 +265,7 @@ static void BHT_presentAuthIfNeeded(void) {
     }
 }
 
-- (void)applicationWillTerminate:(id)arg1 {
+- (void)applicationWillTerminate:(__unsafe_unretained id)arg1 {
     %orig;
     if ([BHTSettings boolForKey:@"padlock"]) {
         BHT_setAuthenticated(NO);
@@ -284,34 +285,27 @@ static void BHT_presentAuthIfNeeded(void) {
 }
 
 %end
+
 // MARK: Restore Launch Animation
 
-%hook T1AppDelegate
-+ (id)launchTransitionProvider {
-    Class T1AppLaunchTransitionClass = NSClassFromString(@"T1AppLaunchTransition");
-    if (T1AppLaunchTransitionClass) {
-        return [[T1AppLaunchTransitionClass alloc] init];
-    }
-    return nil;
-}
-%end
-
-// MARK: Remove the X-shaped reveal mask from the animated launch screen
-// The animated launch screen masks its container layer with an X-shaped hole
-// and grows it to reveal the app through an X-shaped portal. Detach that mask
-// so the logo zoom is kept but the splash simply fades out instead.
+// When the animated launch screen plays it masks its container layer with an
+// X-shaped hole (revealMaskLayer / holePathInView) and grows it to reveal the app
+// through an X-shaped portal. Detach that mask so the logo zoom is kept but the
+// splash simply fades out instead.
 
 %hook T1AnimatedLaunchScreenView
 
 - (void)layoutSubviews {
     %orig;
 
+    ((UIView *)self).layer.mask = nil;
     for (UIView *sub in ((UIView *)self).subviews) {
         sub.layer.mask = nil;
     }
 }
 
 - (void)animateRevealWithCompletion:(id)completion {
+    ((UIView *)self).layer.mask = nil;
     for (UIView *sub in ((UIView *)self).subviews) {
         sub.layer.mask = nil;
     }
