@@ -96,18 +96,6 @@ static BOOL BHTShouldKeepBrowserURLInApp(NSURL *url) {
 
 %end
 
-// MARK: Bio Translate
-
-// The translate-bio button additionally requires the grok_translations_bio_*
-// feature switches, which are overridden in FeatureSwitches.x.
-%hook TFNTwitterCanonicalUser
-
-- (_Bool)isProfileBioTranslatable {
-    return [BHTSettings boolForKey:@"bio_translate"] ? true : %orig;
-}
-
-%end
-
 // MARK: Show Scroll Bar
 
 %hook TFNTableView

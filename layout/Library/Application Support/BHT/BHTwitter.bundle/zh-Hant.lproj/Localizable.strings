@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "複製個人資料資訊";
 "COPY_PROFILE_INFO_DETAIL" = "一鍵複製用戶名稱、簡介等資訊。";
 
-"BIO_TRANSLATE_TITLE" = "翻譯簡介";
-"BIO_TRANSLATE_DETAIL" = "將簡介翻譯為你的語言。";
-
 "DISABLE_MEDIA_TAB_TITLE" = "合併媒體分頁";
 "DISABLE_MEDIA_TAB_DETAIL" = "將照片與影片合併至一個分頁中。";
 

@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Kopiraj podatke profila";
 "COPY_PROFILE_INFO_DETAIL" = "Kopiraj korisnička imena, biografiju i drugo jednim dodirom.";
 
-"BIO_TRANSLATE_TITLE" = "Prevedi biografije";
-"BIO_TRANSLATE_DETAIL" = "Prikaži biografije na svom jeziku.";
-
 "DISABLE_MEDIA_TAB_TITLE" = "Bez odvojenih kartica za medije";
 "DISABLE_MEDIA_TAB_DETAIL" = "Spoji kartice za fotografije i videozapise.";
 

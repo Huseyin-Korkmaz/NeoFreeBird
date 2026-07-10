@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Copiar detalles del perfil";
 "COPY_PROFILE_INFO_DETAIL" = "Copia nombres, biografías y más con un toque.";
 
-"BIO_TRANSLATE_TITLE" = "Traducir biografías";
-"BIO_TRANSLATE_DETAIL" = "Ver bios en tu idioma.";
-
 "DISABLE_MEDIA_TAB_TITLE" = "Sin pestañas de medios separadas";
 "DISABLE_MEDIA_TAB_DETAIL" = "Combina Fotos y Videos en una sola pestaña.";
 

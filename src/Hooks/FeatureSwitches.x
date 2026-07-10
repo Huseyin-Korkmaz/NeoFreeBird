@@ -43,20 +43,18 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
     // Grok translations
     if ([key isEqualToString:@"grok_translations_bio_inline_translation_is_enabled"] ||
-        [key isEqualToString:@"grok_translations_bio_translation_is_enabled"]) {
-        return @([BHTSettings boolForKey:@"bio_translate"]);
-    }
-
-    if ([key isEqualToString:@"grok_translations_post_inline_translation_is_enabled"] ||
+        [key isEqualToString:@"grok_translations_bio_translation_is_enabled"] ||
+        [key isEqualToString:@"grok_translations_post_inline_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_post_translation_is_enabled"]) {
         return @YES;
     }
 
-    // Grok buttons under posts
+    // Grok buttons
     if ([key isEqualToString:@"grok_ask_grok_button_under_post_focal_enabled"] ||
         [key isEqualToString:@"grok_ask_grok_button_under_post_preview_enabled"] ||
         [key isEqualToString:@"grok_edit_with_grok_button_under_post_focal_enabled"] ||
-        [key isEqualToString:@"grok_edit_with_grok_button_under_post_preview_enabled"]) {
+        [key isEqualToString:@"grok_edit_with_grok_button_under_post_preview_enabled"] ||
+        [key isEqualToString:@"grok_ios_profile_summary_enabled"]) {
         return @YES;
     }
 
@@ -146,7 +144,6 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     // Premium / subscription upsell disables
     if ([key isEqualToString:@"creator_purchases_dashboard_enabled"] ||
         [key isEqualToString:@"subscriptions_settings_item_enabled"] ||
-        [key isEqualToString:@"grok_ios_profile_summary_enabled"] ||
         [key isEqualToString:@"creator_monetization_dashboard_enabled"] ||
         [key isEqualToString:@"creator_monetization_profile_subscription_tweets_tab_enabled"] ||
         [key isEqualToString:@"subscriptions_upsells_get_verified_profile"] ||
@@ -339,19 +336,6 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 - (BOOL)isDoubleMaxZoomFor4KImagesEnabled {
     return [BHTSettings boolForKey:@"auto_highest_load"] ? YES : %orig;
-}
-
-%end
-
-// Grok reads its premium state from the subscription claims directly through a
-// Swift feature-access type, bypassing -isSubscribedTo:, so the account hook above
-// doesn't reach it. The claim objects are Swift with no ObjC initializer to forge,
-// leaving this mangled-name hook as the only seam. Re-verify the class name on
-// every app update.
-%hook _TtCV4Grok12GrokRootView9ViewModel
-
-- (BOOL)_isPremiumUser {
-    return YES;
 }
 
 %end

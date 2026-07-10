@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Profil bilgilerini kopyala";
 "COPY_PROFILE_INFO_DETAIL" = "Kullanıcı adı, bio ve daha fazlasını tek dokunuşla kopyala.";
 
-"BIO_TRANSLATE_TITLE" = "Biyografileri çevir";
-"BIO_TRANSLATE_DETAIL" = "Biyografileri kendi dilinde gör.";
-
 "DISABLE_MEDIA_TAB_TITLE" = "Ayrı Medya sekmesi olmasın";
 "DISABLE_MEDIA_TAB_DETAIL" = "Fotoğraflar ve Videolar sekmelerini birleştir.";
 

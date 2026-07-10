@@ -63,7 +63,6 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"settings": @[
                     @{ @"key": @"follow_confirm", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"copy_profile_info", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"bio_translate", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"disable_media_tab", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"disable_articles", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"disable_highlights", @"default": @YES, @"type": @"toggle" },

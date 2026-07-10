@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "复制个人资料信息";
 "COPY_PROFILE_INFO_DETAIL" = "一键复制用户名、简介等信息。";
 
-"BIO_TRANSLATE_TITLE" = "翻译简介";
-"BIO_TRANSLATE_DETAIL" = "将简介翻译为你的语言。";
-
 "DISABLE_MEDIA_TAB_TITLE" = "合并媒体标签页";
 "DISABLE_MEDIA_TAB_DETAIL" = "将照片和视频合并到一个标签页中。";
 

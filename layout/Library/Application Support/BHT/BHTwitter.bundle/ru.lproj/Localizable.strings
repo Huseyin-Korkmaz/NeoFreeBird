@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Копировать информацию профиля";
 "COPY_PROFILE_INFO_DETAIL" = "Копировать имя, био и другое одним нажатием.";
 
-"BIO_TRANSLATE_TITLE" = "Переводить био";
-"BIO_TRANSLATE_DETAIL" = "Показывать биографии на твоём языке.";
-
 "DISABLE_MEDIA_TAB_TITLE" = "Объединить вкладки Медиа";
 "DISABLE_MEDIA_TAB_DETAIL" = "Фото и видео будут в одной вкладке.";
 

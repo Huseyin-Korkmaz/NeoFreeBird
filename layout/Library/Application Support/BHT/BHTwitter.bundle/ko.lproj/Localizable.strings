@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "프로필 정보 복사 버튼 표시";
 "COPY_PROFILE_INFO_DETAIL" = "닉네임, 사용자 이름, 자기소개 등을 복사할 수 있는 버튼을 표시합니다.";
 
-"BIO_TRANSLATE_TITLE" = "자기소개 번역";
-"BIO_TRANSLATE_DETAIL" = "사용자의 언어로 자기소개를 표시합니다.";
-
 "DISABLE_MEDIA_TAB_TITLE" = "분리된 미디어 탭 복원";
 "DISABLE_MEDIA_TAB_DETAIL" = "사진과 비디오 탭을 합쳐 미디어 탭으로 표시합니다.";
 

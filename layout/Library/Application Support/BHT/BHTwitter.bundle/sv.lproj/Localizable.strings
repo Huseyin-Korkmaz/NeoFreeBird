@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Kopiera profilinfo";
 "COPY_PROFILE_INFO_DETAIL" = "Kopiera användarnamn, biografier, och mer med ett tryck.";
 
-"BIO_TRANSLATE_TITLE" = "Översätt biografi";
-"BIO_TRANSLATE_DETAIL" = "Se biografier på ditt språk.";
-
 "DISABLE_MEDIA_TAB_TITLE" = "Separera inte Mediafilken";
 "DISABLE_MEDIA_TAB_DETAIL" = "Slår ihop Foto- och Videoflikarna.";
 

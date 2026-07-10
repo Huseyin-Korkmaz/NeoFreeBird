@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Copier les infos du profil";
 "COPY_PROFILE_INFO_DETAIL" = "Copie les pseudos, bios, etc. en un tap.";
 
-"BIO_TRANSLATE_TITLE" = "Traduire les bios";
-"BIO_TRANSLATE_DETAIL" = "Affiche les bios dans ta langue.";
-
 "DISABLE_MEDIA_TAB_TITLE" = "Pas d’onglets Médias séparés";
 "DISABLE_MEDIA_TAB_DETAIL" = "Fusionne Photos et Vidéos en un seul onglet.";
 

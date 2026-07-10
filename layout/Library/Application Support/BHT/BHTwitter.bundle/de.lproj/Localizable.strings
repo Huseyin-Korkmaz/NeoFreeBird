@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Profildetails kopieren";
 "COPY_PROFILE_INFO_DETAIL" = "Benutzernamen, Bios und mehr mit einem Tipp kopieren.";
 
-"BIO_TRANSLATE_TITLE" = "Bios übersetzen";
-"BIO_TRANSLATE_DETAIL" = "Bios in deiner Sprache anzeigen.";
-
 "DISABLE_MEDIA_TAB_TITLE" = "Kein separater Medien-Tab";
 "DISABLE_MEDIA_TAB_DETAIL" = "Fasst die Tabs „Fotos“ und „Videos“ zu einem Tab zusammen.";
 

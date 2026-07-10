@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "نسخ معلومات الملف الشخصي";
 "COPY_PROFILE_INFO_DETAIL" = "نسخ الاسم أو النبذة أو غيرها بنقرة واحدة.";
 
-"BIO_TRANSLATE_TITLE" = "ترجمة النبذات";
-"BIO_TRANSLATE_DETAIL" = "عرض النبذة بلغتك.";
-
 "DISABLE_MEDIA_TAB_TITLE" = "بدون تبويبات وسائط منفصلة";
 "DISABLE_MEDIA_TAB_DETAIL" = "دمج الصور والفيديو في تبويب واحد.";
 

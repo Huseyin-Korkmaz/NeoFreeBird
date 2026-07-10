@@ -115,9 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "プロフィールの詳細をコピー";
 "COPY_PROFILE_INFO_DETAIL" = "ユーザー名、プロフィールなどをワンタップでコピーできるようにします。";
 
-"BIO_TRANSLATE_TITLE" = "プロフィールを翻訳";
-"BIO_TRANSLATE_DETAIL" = "プロフィールを翻訳できるようにします。";
-
 "DISABLE_MEDIA_TAB_TITLE" = "メディアタブを一体化";
 "DISABLE_MEDIA_TAB_DETAIL" = "[動画] タブと [画像] タブを一つに統合して表示します。";
 
