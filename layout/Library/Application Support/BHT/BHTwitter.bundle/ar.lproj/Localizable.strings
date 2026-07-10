@@ -7,8 +7,6 @@
 "NFB_SETTINGS_DETAIL" = "عدّل تويتر: أخفِ الإعلانات، فعّل ميزات Blue، والمزيد.";
 
 /*Alerts and popups*/
-"RESTART_REQUIRED_ALERT_TITLE" = "مطلوب إعادة التشغيل";
-"RESTART_REQUIRED_ALERT_MESSAGE" = "يجب إعادة تشغيل تويتر لتفعيل هذا التغيير.";
 
 "CONFIRM_ALERT_MESSAGE" = "هل أنت متأكد أنك تقصد ذلك؟";
 "YES_BUTTON_TITLE" = "نعم";
@@ -16,8 +14,6 @@
 "OK_BUTTON_TITLE" = "موافق";
 "CANCEL_BUTTON_TITLE" = "إلغاء";
 "SAVE_BUTTON_TITLE" = "حفظ";
-"RESTART_NOW_BUTTON_TITLE" = "أعد التشغيل الآن";
-"NOT_NOW_BUTTON_TITLE" = "ليس الآن";
 "CONTINUE_BUTTON_TITLE" = "متابعة";
 
 /*Settings*/
@@ -257,16 +253,7 @@
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "تعديل شريط التبويبات";
-"CUSTOM_TAB_BAR_NAVIGATION_DETAIL" = "خصص شريط التنقل باستخدام أقسام تويتر التي تستخدمها أكثر.";
-"CUSTOM_TAB_BAR_HOME" = "الرئيسية";
-"CUSTOM_TAB_BAR_EXPLORE" = "استكشاف";
-"CUSTOM_TAB_BAR_SPACES" = "مساحات";
-"CUSTOM_TAB_BAR_COMMUNITIES" = "مجتمعات";
-"CUSTOM_TAB_BAR_NOTIFICATIONS" = "الإشعارات";
-"CUSTOM_TAB_BAR_MESSAGES" = "الرسائل";
-"CUSTOM_TAB_BAR_GROK" = "Grok";
-"CUSTOM_TAB_BAR_VIDEO" = "فيديو";
-"CUSTOM_TAB_BAR_PROFILE" = "الملف الشخصي";
+"CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
 "CUSTOM_TAB_BAR_RESET_BUTTON" = "إعادة للوضع الافتراضي";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "هل أنت متأكد أنك تريد استعادة شريط التنقل إلى الإعدادات الافتراضية؟";
 

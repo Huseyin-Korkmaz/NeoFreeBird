@@ -7,8 +7,6 @@
 "NFB_SETTINGS_DETAIL" = "Twitterをカスタマイズしましょう。広告を非表示にしたり、Twitter Blueの機能を有効にしたり、その他にもさまざまなことができます。";
 
 /*Alerts and popups*/
-"RESTART_REQUIRED_ALERT_TITLE" = "再起動が必要です";
-"RESTART_REQUIRED_ALERT_MESSAGE" = "この変更を反映するには、Twitterを再起動する必要があります。";
 
 "CONFIRM_ALERT_MESSAGE" = "続行しますか？";
 "YES_BUTTON_TITLE" = "はい";
@@ -16,8 +14,6 @@
 "OK_BUTTON_TITLE" = "OK";
 "CANCEL_BUTTON_TITLE" = "キャンセル";
 "SAVE_BUTTON_TITLE" = "保存";
-"RESTART_NOW_BUTTON_TITLE" = "再起動";
-"NOT_NOW_BUTTON_TITLE" = "今はしない";
 "CONTINUE_BUTTON_TITLE" = "続行";
 
 /*Settings*/
@@ -257,16 +253,7 @@
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "カスタムナビゲーション";
-"CUSTOM_TAB_BAR_NAVIGATION_DETAIL" = "最も使用するナビゲーションバーをカスタマイズしましょう。";
-"CUSTOM_TAB_BAR_HOME" = "ホーム";
-"CUSTOM_TAB_BAR_EXPLORE" = "話題を検索";
-"CUSTOM_TAB_BAR_SPACES" = "スペース";
-"CUSTOM_TAB_BAR_COMMUNITIES" = "コミュニティ";
-"CUSTOM_TAB_BAR_NOTIFICATIONS" = "通知";
-"CUSTOM_TAB_BAR_MESSAGES" = "ダイレクトメッセージ";
-"CUSTOM_TAB_BAR_GROK" = "Grok";
-"CUSTOM_TAB_BAR_VIDEO" = "動画";
-"CUSTOM_TAB_BAR_PROFILE" = "プロフィール";
+"CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
 "CUSTOM_TAB_BAR_RESET_BUTTON" = "デフォルトに戻す";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "ナビゲーションバーをデフォルトの状態に戻してもよろしいですか？";
 

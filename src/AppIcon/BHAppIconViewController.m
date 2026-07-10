@@ -14,6 +14,8 @@
 #import <UIKit/UIKit.h>
 #import "Core/TwitterChirpFont.h"
 
+// Import external function to get theme color
+extern UIColor *BHTCurrentAccentColor(void);
 
 @interface BHAppIconViewController () <
     UICollectionViewDelegate,
@@ -152,25 +154,9 @@
     BHAppIconCell *cell = [cv dequeueReusableCellWithReuseIdentifier:[BHAppIconCell reuseIdentifier] forIndexPath:ip];
     BHAppIconItem *item = self.icons[ip.row];
 
-    cell.imageView.image = [self thumbnailForItem:item];
-
-    if (!cell.backgroundView) {
-        UIView *shadowView = [[UIView alloc] init];
-        shadowView.backgroundColor = [UIColor clearColor];
-        shadowView.layer.shadowColor = [UIColor blackColor].CGColor;
-        shadowView.layer.shadowOffset = CGSizeMake(0, 4);
-        shadowView.layer.shadowOpacity = 0.15;
-        shadowView.layer.shadowRadius = 8;
-        shadowView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 98, 98) cornerRadius:22].CGPath;
-        cell.backgroundView = shadowView;
-    }
-
-    cell.imageView.layer.cornerRadius = 22;
-    cell.imageView.clipsToBounds = YES;
-
-    cell.checkIMG.image = [self isItemActive:item]
-        ? [UIImage systemImageNamed:@"checkmark.circle"]
-        : [UIImage systemImageNamed:@"circle"];
+    [cell configureWithImage:[self thumbnailForItem:item]
+                      active:[self isItemActive:item]
+                 accentColor:BHTCurrentAccentColor()];
 
     return cell;
 }
@@ -225,7 +211,12 @@
 #pragma mark – FlowLayout sizing
 
 - (CGSize)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout *)layout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake(98, 136);
+    // Native layout: 3 columns, icon width capped at 96pt, height = width + 38
+    // (icon square + 14pt gap + 24pt indicator).
+    UICollectionViewFlowLayout *flow = (UICollectionViewFlowLayout *)layout;
+    CGFloat available = CGRectGetWidth(cv.bounds) - flow.sectionInset.left - flow.sectionInset.right - flow.minimumInteritemSpacing * 2;
+    CGFloat width = MIN(floor(available / 3.0), 96.0);
+    return CGSizeMake(width, width + 38.0);
 }
 
 @end

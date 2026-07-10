@@ -7,8 +7,6 @@
 "NFB_SETTINGS_DETAIL" = "自定义你的 Twitter：隐藏广告、启用 Blue 功能等。";
 
 /*Alerts and popups*/
-"RESTART_REQUIRED_ALERT_TITLE" = "需要重新启动";
-"RESTART_REQUIRED_ALERT_MESSAGE" = "您需要重新启动 Twitter 以使更改生效。";
 
 "CONFIRM_ALERT_MESSAGE" = "你确定要这样做吗？";
 "YES_BUTTON_TITLE" = "是";
@@ -16,8 +14,6 @@
 "OK_BUTTON_TITLE" = "确定";
 "CANCEL_BUTTON_TITLE" = "取消";
 "SAVE_BUTTON_TITLE" = "保存";
-"RESTART_NOW_BUTTON_TITLE" = "立即重启";
-"NOT_NOW_BUTTON_TITLE" = "暂不";
 "CONTINUE_BUTTON_TITLE" = "继续";
 
 /*Settings*/
@@ -257,16 +253,7 @@
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "自定义标签栏";
-"CUSTOM_TAB_BAR_NAVIGATION_DETAIL" = "使用最常访问的页面自定义导航栏。";
-"CUSTOM_TAB_BAR_HOME" = "首页";
-"CUSTOM_TAB_BAR_EXPLORE" = "探索";
-"CUSTOM_TAB_BAR_SPACES" = "Spaces";
-"CUSTOM_TAB_BAR_COMMUNITIES" = "社群";
-"CUSTOM_TAB_BAR_NOTIFICATIONS" = "通知";
-"CUSTOM_TAB_BAR_MESSAGES" = "消息";
-"CUSTOM_TAB_BAR_GROK" = "Grok";
-"CUSTOM_TAB_BAR_VIDEO" = "视频";
-"CUSTOM_TAB_BAR_PROFILE" = "个人资料";
+"CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
 "CUSTOM_TAB_BAR_RESET_BUTTON" = "恢复默认";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "您确定要将导航栏恢复为默认设置吗？";
 

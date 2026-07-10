@@ -7,8 +7,6 @@
 "NFB_SETTINGS_DETAIL" = "Tweak your Twitter. Hide ads, enable Blue features, and much more.";
 
 /*Alerts and popups*/
-"RESTART_REQUIRED_ALERT_TITLE" = "Restart required";
-"RESTART_REQUIRED_ALERT_MESSAGE" = "You need to restart Twitter for this change to take effect.";
 
 "CONFIRM_ALERT_MESSAGE" = "Sure you meant to do that?";
 "YES_BUTTON_TITLE" = "Yes";
@@ -16,8 +14,6 @@
 "OK_BUTTON_TITLE" = "OK";
 "CANCEL_BUTTON_TITLE" = "Cancel";
 "SAVE_BUTTON_TITLE" = "Save";
-"RESTART_NOW_BUTTON_TITLE" = "Restart";
-"NOT_NOW_BUTTON_TITLE" = "Not now";
 "CONTINUE_BUTTON_TITLE" = "Continue";
 
 /*Settings*/
@@ -257,16 +253,7 @@
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "Custom navigation";
-"CUSTOM_TAB_BAR_NAVIGATION_DETAIL" = "Customize the naviagtion bar with your most-used Twitter destinations.";
-"CUSTOM_TAB_BAR_HOME" = "Home";
-"CUSTOM_TAB_BAR_EXPLORE" = "Explore";
-"CUSTOM_TAB_BAR_SPACES" = "Spaces";
-"CUSTOM_TAB_BAR_COMMUNITIES" = "Communities";
-"CUSTOM_TAB_BAR_NOTIFICATIONS" = "Notifications";
-"CUSTOM_TAB_BAR_MESSAGES" = "Messages";
-"CUSTOM_TAB_BAR_GROK" = "Grok";
-"CUSTOM_TAB_BAR_VIDEO" = "Video";
-"CUSTOM_TAB_BAR_PROFILE" = "Profile";
+"CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
 "CUSTOM_TAB_BAR_RESET_BUTTON" = "Restore to default";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "Are you sure you'd like to restore the navigation bar to its default state?";
 

@@ -6,35 +6,88 @@
 //
 
 #import "BHAppIconCell.h"
+#import <QuartzCore/QuartzCore.h>
+
+// The native cell rounds the icon to width / 4.491 (~22.27%).
+static const CGFloat kAppIconCornerDivisor = 4.491;
+
+@interface UIImage (TFNAdditions)
++ (id)tfn_vectorImageNamed:(id)arg1 fitsSize:(struct CGSize)arg2 fillColor:(id)arg3;
+@end
+
+@interface UIColor (BHNativeTokens)
++ (id)tfnuiColors;
+@end
+
+@interface NSObject (BHNativeTokens)
+- (UIColor *)dividerColor;
+@end
+
+// The native icon border / unselected indicator use tfnuiColors.dividerColor.
+static UIColor *BHAppIconDividerColor(void) {
+    id colors = [UIColor respondsToSelector:@selector(tfnuiColors)] ? [UIColor tfnuiColors] : nil;
+    if (colors && [colors respondsToSelector:@selector(dividerColor)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        UIColor *divider = [colors performSelector:@selector(dividerColor)];
+#pragma clang diagnostic pop
+        if ([divider isKindOfClass:[UIColor class]]) {
+            return divider;
+        }
+    }
+    return [UIColor separatorColor];
+}
+
+// The 24pt selection indicator: a filled check-circle when active, an outline
+// circle otherwise. Uses the app's own vector art, falling back to SF Symbols.
+static UIImage *BHAppIconIndicator(BOOL active, UIColor *accentColor) {
+    UIColor *fill = active ? accentColor : BHAppIconDividerColor();
+    NSString *vectorName = active ? @"checkmark_circle_fill_white" : @"circle";
+    UIImage *image = [UIImage tfn_vectorImageNamed:vectorName fitsSize:CGSizeMake(24, 24) fillColor:fill];
+    if (!image) {
+        UIImage *symbol = [UIImage systemImageNamed:(active ? @"checkmark.circle.fill" : @"circle")];
+        image = [symbol imageWithTintColor:fill renderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    return image;
+}
+
+@interface BHAppIconCell ()
+@property (nonatomic, strong) UIImageView *iconView;
+@property (nonatomic, strong) UIImageView *checkView;
+@end
 
 @implementation BHAppIconCell
+
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.imageView = [[UIImageView alloc] init];
-        self.imageView.translatesAutoresizingMaskIntoConstraints = false;
-        self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-        self.imageView.clipsToBounds = YES;
-        self.imageView.layer.cornerRadius = 22;
-        
-        self.checkIMG = [[UIImageView alloc] init];
-        self.checkIMG.image = [UIImage systemImageNamed:@"circle"];
-        self.checkIMG.translatesAutoresizingMaskIntoConstraints = false;
-        
-        [self addSubview:self.imageView];
-        [self addSubview:self.checkIMG];
+        self.clipsToBounds = YES;
+
+        self.iconView = [UIImageView new];
+        self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
+        self.iconView.contentMode = UIViewContentModeScaleAspectFit;
+        self.iconView.clipsToBounds = YES;
+        self.iconView.layer.cornerCurve = kCACornerCurveContinuous;
+        self.iconView.layer.borderColor = BHAppIconDividerColor().CGColor;
+        self.iconView.layer.borderWidth = 1.0 / UIScreen.mainScreen.scale;
+        self.iconView.accessibilityIgnoresInvertColors = YES;
+        [self.contentView addSubview:self.iconView];
+
+        self.checkView = [UIImageView new];
+        self.checkView.translatesAutoresizingMaskIntoConstraints = NO;
+        self.checkView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.contentView addSubview:self.checkView];
 
         [NSLayoutConstraint activateConstraints:@[
-            [self.imageView.topAnchor constraintEqualToAnchor:self.topAnchor],
-            [self.imageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-            [self.imageView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-            [self.imageView.heightAnchor constraintEqualToConstant:98],
-            [self.imageView.widthAnchor constraintEqualToConstant:98],
+            [self.iconView.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
+            [self.iconView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
+            [self.iconView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor],
+            [self.iconView.heightAnchor constraintEqualToAnchor:self.contentView.widthAnchor],
 
-            [self.checkIMG.topAnchor constraintEqualToAnchor:self.imageView.bottomAnchor constant:12],
-            [self.checkIMG.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
-            [self.checkIMG.widthAnchor constraintEqualToConstant:24],
-            [self.checkIMG.heightAnchor constraintEqualToConstant:24],
+            [self.checkView.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
+            [self.checkView.topAnchor constraintEqualToAnchor:self.iconView.bottomAnchor constant:14],
+            [self.checkView.widthAnchor constraintEqualToConstant:24],
+            [self.checkView.heightAnchor constraintEqualToConstant:24]
         ]];
     }
     return self;
@@ -42,16 +95,22 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
-    // Update shadow path based on current bounds
-    if ([self.backgroundView isKindOfClass:[UIView class]]) {
-        UIView *shadowView = self.backgroundView;
-        shadowView.frame = self.imageView.frame;
-        shadowView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:self.imageView.bounds cornerRadius:22].CGPath;
-    }
+    self.iconView.layer.cornerRadius = round(CGRectGetWidth(self.iconView.bounds) / kAppIconCornerDivisor);
+}
+
+- (void)configureWithImage:(UIImage *)image active:(BOOL)active accentColor:(UIColor *)accentColor {
+    self.iconView.image = image;
+    self.iconView.layer.borderColor = BHAppIconDividerColor().CGColor;
+    self.checkView.image = BHAppIconIndicator(active, accentColor);
+}
+
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    self.iconView.image = nil;
 }
 
 + (NSString *)reuseIdentifier {
     return @"appicon";
 }
+
 @end

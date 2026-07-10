@@ -44,6 +44,8 @@
 @property(readonly, nonatomic) UILabel *titleLabel;
 @property(readonly, nonatomic) long long panelID;
 @property(copy, nonatomic) NSString *scribePage;
+@property(readonly, nonatomic) NSString *title;
+@property(readonly, nonatomic) NSString *imageName;
 @property(retain, nonatomic) UIColor *iconColor;
 @property(readonly, nonatomic, getter=isSelected) BOOL selected;
 - (void)_t1_updateTitleLabel;
@@ -52,6 +54,18 @@
 
 @interface T1TabBarViewController : UIViewController
 @property(copy, nonatomic) NSArray *tabViews;
+@end
+
+// Each entry backs one tab and owns its T1TabView; the app orders both the tab
+// buttons and their content view controllers from this single array.
+@protocol T1AppNavigationTabEntry <NSObject>
+- (T1TabView *)tabView;
+@end
+
+@interface T1TabbedAppNavigationViewController : UIViewController
+- (void)setVisibleTabEntries:(NSArray<id<T1AppNavigationTabEntry>> *)entries;
+// Recomputes the visible tab set at runtime (rebuilds buttons and content).
+- (void)recalculateVisiblePanels;
 @end
 
 // The settings root is a collection/diffable TFNItemsDataViewController subclass in 12.3.

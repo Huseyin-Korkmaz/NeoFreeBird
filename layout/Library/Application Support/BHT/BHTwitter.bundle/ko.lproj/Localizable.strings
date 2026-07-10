@@ -7,8 +7,6 @@
 "NFB_SETTINGS_DETAIL" = "트위터를 커스텀 해보세요. 광고를 숨기거나 Twitter Blue의 기능을 활성화할 수 있으며, 이외에도 다양한 기능이 있습니다.";
 
 /*Alerts and popups*/
-"RESTART_REQUIRED_ALERT_TITLE" = "재시작 필요";
-"RESTART_REQUIRED_ALERT_MESSAGE" = "변경 사항을 적용하기 위해서는 트위터를 재시작해야 합니다.";
 
 "CONFIRM_ALERT_MESSAGE" = "진행 하시겠습니까?";
 "YES_BUTTON_TITLE" = "네";
@@ -16,8 +14,6 @@
 "OK_BUTTON_TITLE" = "확인";
 "CANCEL_BUTTON_TITLE" = "취소";
 "SAVE_BUTTON_TITLE" = "저장";
-"RESTART_NOW_BUTTON_TITLE" = "재시작";
-"NOT_NOW_BUTTON_TITLE" = "나중에";
 "CONTINUE_BUTTON_TITLE" = "계속하기";
 
 /*Settings*/
@@ -257,16 +253,7 @@
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "내비게이션 바 편집";
-"CUSTOM_TAB_BAR_NAVIGATION_DETAIL" = "자주 사용하는 기능을 선택해 내비게이션 바를 커스텀하세요.";
-"CUSTOM_TAB_BAR_HOME" = "홈";
-"CUSTOM_TAB_BAR_EXPLORE" = "탐색하기";
-"CUSTOM_TAB_BAR_SPACES" = "스페이스";
-"CUSTOM_TAB_BAR_COMMUNITIES" = "커뮤니티";
-"CUSTOM_TAB_BAR_NOTIFICATIONS" = "알림";
-"CUSTOM_TAB_BAR_MESSAGES" = "쪽지";
-"CUSTOM_TAB_BAR_GROK" = "Grok";
-"CUSTOM_TAB_BAR_VIDEO" = "비디오";
-"CUSTOM_TAB_BAR_PROFILE" = "프로필";
+"CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
 "CUSTOM_TAB_BAR_RESET_BUTTON" = "기본값으로 복원";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "정말 내비게이션 바를 기본값으로 복원하겠습니까?";
 

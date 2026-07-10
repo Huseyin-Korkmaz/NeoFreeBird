@@ -37,23 +37,85 @@ void BHT_applySelectedThemeColor(void) {
 
 // MARK: - Tab bar visibility
 
-static NSArray *BHT_filteredTabViews(NSArray *tabViews) {
-    NSArray <NSString *> *hiddenBars = [BHCustomTabBarUtility getHiddenTabBars];
-    BOOL hideGrokByDefault = ![NSUserDefaults.standardUserDefaults boolForKey:@"ios_tab_bar_default_show_grok"];
+static NSString *BHT_scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
+    if (![entry respondsToSelector:@selector(tabView)]) {
+        return nil;
+    }
+    return [entry tabView].scribePage;
+}
 
-    NSMutableArray *visibleTabViews = [NSMutableArray new];
-    for (T1TabView *tabView in tabViews) {
-        if ([hiddenBars containsObject:tabView.scribePage]) {
-            continue;
+// Filtering and ordering happen on the tab ENTRIES (not the button views) because
+// the app derives both the tab buttons and their content view controllers from
+// this one array. Reordering the buttons alone would leave the content behind and
+// desync taps from panels.
+static NSArray *BHT_orderedTabEntries(NSArray *entries) {
+    // Record the underlying tab views so the editor can show real titles and icons.
+    NSMutableArray *tabViews = [NSMutableArray new];
+    for (id<T1AppNavigationTabEntry> entry in entries) {
+        T1TabView *tabView = [entry respondsToSelector:@selector(tabView)] ? [entry tabView] : nil;
+        if (tabView) {
+            [tabViews addObject:tabView];
         }
-        if (hideGrokByDefault && [tabView.scribePage isEqualToString:@"grok"]) {
-            continue;
+    }
+    [BHCustomTabBarUtility recordTabViews:tabViews];
+
+    NSArray <NSString *> *visibleOrder = [BHCustomTabBarUtility visiblePageIDsInOrder];
+
+    NSMutableDictionary <NSString *, id> *entriesByPage = [NSMutableDictionary new];
+    for (id<T1AppNavigationTabEntry> entry in entries) {
+        NSString *page = BHT_scribePageForEntry(entry);
+        if (page && !entriesByPage[page]) {
+            entriesByPage[page] = entry;
         }
-        [visibleTabViews addObject:tabView];
     }
 
-    return visibleTabViews;
+    // Not customised yet: show the default set (Home, Search, Notifications, Chats)
+    // in that order, hiding everything else the app builds.
+    if (!visibleOrder) {
+        NSMutableArray *defaultEntries = [NSMutableArray new];
+        for (NSString *pageID in [BHCustomTabBarUtility defaultVisiblePageIDs]) {
+            id entry = entriesByPage[pageID];
+            if (entry) {
+                [defaultEntries addObject:entry];
+            }
+        }
+        return defaultEntries;
+    }
+
+    NSSet <NSString *> *hiddenBars = [NSSet setWithArray:[BHCustomTabBarUtility hiddenPageIDs]];
+
+    NSMutableArray *orderedEntries = [NSMutableArray new];
+    NSMutableSet *placed = [NSMutableSet new];
+    for (NSString *pageID in visibleOrder) {
+        id entry = entriesByPage[pageID];
+        if (entry && ![placed containsObject:pageID]) {
+            [orderedEntries addObject:entry];
+            [placed addObject:pageID];
+        }
+    }
+
+    // Preserve any tab the editor doesn't know about (unless the user hid it),
+    // keeping it in its original position at the end.
+    for (id<T1AppNavigationTabEntry> entry in entries) {
+        NSString *page = BHT_scribePageForEntry(entry);
+        if (!page || [placed containsObject:page] || [hiddenBars containsObject:page]) {
+            continue;
+        }
+        [orderedEntries addObject:entry];
+    }
+
+    return orderedEntries;
 }
+
+// The single ordered spine that feeds both the tab buttons and their content, so
+// filtering/reordering here keeps taps mapped to the right panel.
+%hook T1TabbedAppNavigationViewController
+
+- (void)setVisibleTabEntries:(NSArray *)entries {
+    %orig(BHT_orderedTabEntries(entries));
+}
+
+%end
 
 %hook T1TabBarViewController
 
@@ -66,19 +128,6 @@ static NSArray *BHT_filteredTabViews(NSArray *tabViews) {
     } else {
         %orig(ratio);
     }
-}
-
-- (void)setTabViews:(NSArray *)tabViews {
-    %orig(BHT_filteredTabViews(tabViews));
-}
-
-%end
-
-// iOS 26 tab bar
-%hook T1LiquidGlassTabBarController
-
-- (void)setTabViews:(NSArray *)tabViews {
-    %orig(BHT_filteredTabViews(tabViews));
 }
 
 %end

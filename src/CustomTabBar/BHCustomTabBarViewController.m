@@ -4,13 +4,18 @@
 //  Created by Bandar Alruwaili on 11/12/2023.
 //  Modified by actuallyaridan on 31/05/2025.
 //
+//  Clones the app's native tab-customization screen: a grid of every available
+//  tab (tap to add/remove) above a drag-reorderable tab-bar preview row.
+//
 
 #import "BHCustomTabBarViewController.h"
 #import "BHCustomTabBarUtility.h"
+#import "BHCustomTabBarCell.h"
+#import "BHCustomTabBarPreviewCell.h"
+#import "BHCustomTabBarNativeColors.h"
 #import "Core/BHTBundle.h"
-#import "Colours/Colours.h"
-#import "ThemeColor/BHDimPalette.h"
 #import "Core/TwitterChirpFont.h"
+#import <objc/runtime.h>
 
 // Import external function to get theme color
 extern UIColor *BHTCurrentAccentColor(void);
@@ -20,54 +25,52 @@ extern UIColor *BHTCurrentAccentColor(void);
 - (void)hideAnimated:(_Bool)animated completion:(id)completion;
 @end
 
-// UIImage category for TFN vector image methods
-@interface UIImage (TFNAdditions)
-+ (id)tfn_vectorImageNamed:(id)arg1 fitsSize:(struct CGSize)arg2 fillColor:(id)arg3;
+// The app's standard button, used for the restore control.
+@interface TFNButton : UIButton
++ (id)buttonWithTitle:(id)arg1 imageNamed:(id)arg2 style:(long long)arg3 sizeClass:(long long)arg4;
 @end
 
+// The app's tab navigation, asked to recompute its tabs so changes apply live.
+@interface T1TabbedAppNavigationViewController : UIViewController
+- (void)recalculateVisiblePanels;
+@end
+
+static NSString * const kGridHeaderID = @"gridHeader";
+static NSString * const kGridFooterID = @"gridFooter";
 
 @interface BHCustomTabBarViewController () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
-@property (nonatomic, strong) UIScrollView *scrollView;
-@property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic, strong) UIButton *restoreButton;
-@property (nonatomic, strong) NSMutableArray<BHCustomTabBarItem *> *allItems;
-@property (nonatomic, strong) NSMutableSet<NSString *> *enabledPageIDs;
+@property (nonatomic, strong) UICollectionView *gridView;
+@property (nonatomic, strong) UICollectionView *previewView;
+@property (nonatomic, strong) UIView *separator;
+
+// All available tab pageIDs; and the selected ones in tab-bar order (Home first).
+@property (nonatomic, strong) NSMutableArray<NSString *> *allPages;
+@property (nonatomic, strong) NSMutableArray<NSString *> *selectedPages;
+@property (nonatomic, strong) NSArray<NSString *> *originalSelection;
 @property (nonatomic, assign) BOOL hasChanges;
-@property (nonatomic, strong) NSLayoutConstraint *collectionViewHeightConstraint;
-@property (nonatomic, strong) NSMutableSet<NSString *> *originalEnabledPageIDs;
-@property (nonatomic, strong) UILabel *headerLabel;
 @end
 
 @implementation BHCustomTabBarViewController
 
-- (CGSize)collectionView:(UICollectionView *)collectionView
-                  layout:(UICollectionViewLayout *)collectionViewLayout
-  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    UICollectionViewFlowLayout *flow = (UICollectionViewFlowLayout *)collectionViewLayout;
-    UIEdgeInsets insets = flow.sectionInset;
-    CGFloat spacing = flow.minimumInteritemSpacing;
+#pragma mark - Lifecycle
 
-    CGFloat width = CGRectGetWidth(collectionView.bounds);
-    CGFloat available = width - insets.left - insets.right;
+- (void)viewDidLoad {
+    [super viewDidLoad];
 
-    // Choose columns by common device widths
-    NSInteger columns = 3;               // small iPhones
-    if (width >= 428)  columns = 4;      // iPhone Pro Max / Plus
-    if (width >= 768)  columns = 5;      // iPad portrait
-    if (width >= 834)  columns = 5;      // iPad Air/Pro portrait
-    if (width >= 1024) columns = 6;      // iPad landscape
+    self.view.backgroundColor = BHCustomTabBarScreenBackgroundColor();
+    self.hasChanges = NO;
 
-    CGFloat itemWidth = floor((available - spacing * (columns - 1)) / columns);
-    // Add label height like before
-    return CGSizeMake(itemWidth, itemWidth + 30.0);
+    [self setupGridView];
+    [self setupPreviewRow];
+    [self setupSaveButton];
+    [self loadData];
+    [self updateSaveButtonState];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-    // Find and hide the floating action button using recursive search
+
+    // Hide the floating compose button so it doesn't overlap the editor.
     for (UIWindow *window in [UIApplication sharedApplication].windows) {
         [self findAndHideFloatingActionButtonInView:window];
     }
@@ -75,242 +78,127 @@ extern UIColor *BHTCurrentAccentColor(void);
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
-    [self.collectionView.collectionViewLayout invalidateLayout];
+    [self.gridView.collectionViewLayout invalidateLayout];
+    [self.previewView.collectionViewLayout invalidateLayout];
 }
 
 - (void)findAndHideFloatingActionButtonInView:(UIView *)view {
-    // Direct check for the current view
     if ([view isKindOfClass:NSClassFromString(@"TFNFloatingActionButton")]) {
         [(TFNFloatingActionButton *)view hideAnimated:YES completion:nil];
         return;
     }
-    
-    // Recursively check subviews
     for (UIView *subview in view.subviews) {
         [self findAndHideFloatingActionButtonInView:subview];
     }
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    // Use BHDimPalette for background color
-    self.view.backgroundColor = [BHDimPalette currentBackgroundColor];
-    
-    self.hasChanges = NO;
-    [self setupScrollView];
-    
-    // Setup header label
-    self.headerLabel = [UILabel new];
-    self.headerLabel.text = [[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_NAVIGATION_DETAIL"];
-    self.headerLabel.font = [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:13];
-    self.headerLabel.textColor = [UIColor secondaryLabelColor];
-    self.headerLabel.numberOfLines = 0;
-    self.headerLabel.textAlignment = NSTextAlignmentLeft;
-    self.headerLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    self.headerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.contentView addSubview:self.headerLabel];
-    
-    [self setupCollectionView];
-    [self setupRestoreButton];
-    [self loadData];
-    [self updateSaveButtonState];
-    [self setupSaveButton];
-}
-
 #pragma mark - UI Setup
 
 - (void)setupSaveButton {
-    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"SAVE_BUTTON_TITLE"]
-                                                                    style:UIBarButtonItemStyleDone
-                                                                   target:self
-                                                                   action:@selector(saveButtonTapped)];
-    
-    // Explicitly set the disabled appearance for better visibility in dark mode
-    [saveButton setTitleTextAttributes:@{NSForegroundColorAttributeName: [UIColor systemGray2Color]} forState:UIControlStateDisabled];
-    
+    UIBarButtonItem *saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave
+                                                                                target:self
+                                                                                action:@selector(saveButtonTapped)];
     self.navigationItem.rightBarButtonItem = saveButton;
     saveButton.enabled = NO;
 }
 
-- (void)setupScrollView {
-    self.scrollView = [[UIScrollView alloc] init];
-    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.view addSubview:self.scrollView];
-    
-    self.contentView = [[UIView alloc] init];
-    self.contentView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.scrollView addSubview:self.contentView];
-    
-    [NSLayoutConstraint activateConstraints:@[
-        [self.scrollView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
-        [self.scrollView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
-        [self.scrollView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
-        [self.scrollView.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
-        
-        [self.contentView.topAnchor constraintEqualToAnchor:self.scrollView.topAnchor],
-        [self.contentView.leadingAnchor constraintEqualToAnchor:self.scrollView.leadingAnchor],
-        [self.contentView.trailingAnchor constraintEqualToAnchor:self.scrollView.trailingAnchor],
-        [self.contentView.bottomAnchor constraintEqualToAnchor:self.scrollView.bottomAnchor],
-        [self.contentView.widthAnchor constraintEqualToAnchor:self.scrollView.widthAnchor]
-    ]];
-}
-
-- (void)setupCollectionView {
-    // Add constraints for header first
-    [NSLayoutConstraint activateConstraints:@[
-        [self.headerLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:16],
-        [self.headerLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:16],
-        [self.headerLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-16]
-    ]];
-    
+- (void)setupGridView {
+    // Grid metrics mirror the native TabCustomizationGridViewController.
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.minimumInteritemSpacing = 10;
-    layout.minimumLineSpacing = 10;
-    layout.sectionInset = UIEdgeInsetsMake(16, 16, 16, 16);
+    layout.minimumInteritemSpacing = 20;
+    layout.minimumLineSpacing = 24;
+    layout.sectionInset = UIEdgeInsetsMake(8, 20, 24, 20);
 
-    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-    self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    // Use BHDimPalette for collection view background color
-    self.collectionView.backgroundColor = [BHDimPalette currentBackgroundColor];
-    
-    self.collectionView.delegate = self;
-    self.collectionView.dataSource = self;
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"tabItemCell"];
-    [self.contentView addSubview:self.collectionView];
-
-    self.collectionViewHeightConstraint = [self.collectionView.heightAnchor constraintEqualToConstant:100];
-    self.collectionViewHeightConstraint.active = YES;
+    self.gridView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+    self.gridView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.gridView.backgroundColor = [UIColor clearColor];
+    self.gridView.alwaysBounceVertical = YES;
+    self.gridView.delegate = self;
+    self.gridView.dataSource = self;
+    [self.gridView registerClass:[BHCustomTabBarCell class] forCellWithReuseIdentifier:[BHCustomTabBarCell reuseIdentifier]];
+    [self.gridView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kGridHeaderID];
+    [self.gridView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:kGridFooterID];
+    [self.view addSubview:self.gridView];
 }
 
-- (void)setupRestoreButton {
-    self.restoreButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.restoreButton setTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_RESET_BUTTON"] forState:UIControlStateNormal];
-    self.restoreButton.titleLabel.font = [TwitterChirpFont(TwitterFontStyleSemibold) fontWithSize:16];
-    [self.restoreButton setTitleColor:[UIColor labelColor] forState:UIControlStateNormal];
-    
-    // Use BHDimPalette for restore button background color
-    self.restoreButton.backgroundColor = [BHDimPalette currentBackgroundColor];
-    
-    self.restoreButton.layer.cornerRadius = 26;
-    self.restoreButton.layer.borderWidth = 2.0;
-    self.restoreButton.layer.borderColor = [UIColor.systemGray6Color resolvedColorWithTraitCollection:self.traitCollection].CGColor;
-    self.restoreButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.restoreButton addTarget:self action:@selector(resetSettingsBarButtonHandler:) forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView addSubview:self.restoreButton];
+- (void)setupPreviewRow {
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    layout.minimumLineSpacing = 0;
+    layout.minimumInteritemSpacing = 0;
 
+    self.previewView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+    self.previewView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.previewView.backgroundColor = [UIColor clearColor];
+    self.previewView.showsHorizontalScrollIndicator = NO;
+    self.previewView.delegate = self;
+    self.previewView.dataSource = self;
+    [self.previewView registerClass:[BHCustomTabBarPreviewCell class] forCellWithReuseIdentifier:[BHCustomTabBarPreviewCell reuseIdentifier]];
+    [self.view addSubview:self.previewView];
+
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleReorderGesture:)];
+    [self.previewView addGestureRecognizer:longPress];
+
+    // Hairline separator above the preview row.
+    self.separator = [UIView new];
+    self.separator.translatesAutoresizingMaskIntoConstraints = NO;
+    self.separator.backgroundColor = BHCustomTabBarSeparatorColor();
+    [self.view addSubview:self.separator];
+
+    CGFloat hairline = 1.0 / UIScreen.mainScreen.scale;
     [NSLayoutConstraint activateConstraints:@[
-        [self.collectionView.topAnchor constraintEqualToAnchor:self.headerLabel.bottomAnchor constant:16],
-        [self.collectionView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
-        [self.collectionView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor],
+        [self.previewView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.previewView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [self.previewView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+        [self.previewView.heightAnchor constraintEqualToConstant:49],
 
-        [self.restoreButton.topAnchor constraintEqualToAnchor:self.collectionView.bottomAnchor constant:20],
-        [self.restoreButton.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:20],
-        [self.restoreButton.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-20],
-        [self.restoreButton.heightAnchor constraintEqualToConstant:52],
-        [self.restoreButton.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-20]
+        [self.separator.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.separator.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [self.separator.bottomAnchor constraintEqualToAnchor:self.previewView.topAnchor],
+        [self.separator.heightAnchor constraintEqualToConstant:hairline],
+
+        [self.gridView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+        [self.gridView.leadingAnchor constraintEqualToAnchor:self.view.leadingAnchor],
+        [self.gridView.trailingAnchor constraintEqualToAnchor:self.view.trailingAnchor],
+        [self.gridView.bottomAnchor constraintEqualToAnchor:self.separator.topAnchor]
     ]];
 }
 
-#pragma mark - Data Loading
+#pragma mark - Data
 
 - (void)loadData {
-    NSArray<BHCustomTabBarItem *> *savedAllowed = [self getItemsForKey:@"allowed"];
-    NSArray<BHCustomTabBarItem *> *savedHidden = [self getItemsForKey:@"hidden"];
-
-    if (savedAllowed && savedHidden) {
-        self.allItems = [[savedAllowed arrayByAddingObjectsFromArray:savedHidden] mutableCopy];
-        self.enabledPageIDs = [NSMutableSet set];
-        for (BHCustomTabBarItem *item in savedAllowed) {
-            [self.enabledPageIDs addObject:item.pageID];
-        }
-    } else {
-        self.allItems = [@[
-            [[BHCustomTabBarItem alloc] initWithTitle:@"CUSTOM_TAB_BAR_HOME" pageID:@"home"],
-            [[BHCustomTabBarItem alloc] initWithTitle:@"CUSTOM_TAB_BAR_EXPLORE" pageID:@"guide"],
-            [[BHCustomTabBarItem alloc] initWithTitle:@"CUSTOM_TAB_BAR_SPACES" pageID:@"audiospace"],
-            [[BHCustomTabBarItem alloc] initWithTitle:@"CUSTOM_TAB_BAR_COMMUNITIES" pageID:@"communities"],
-            [[BHCustomTabBarItem alloc] initWithTitle:@"CUSTOM_TAB_BAR_NOTIFICATIONS" pageID:@"ntab"],
-            [[BHCustomTabBarItem alloc] initWithTitle:@"CUSTOM_TAB_BAR_MESSAGES" pageID:@"messages"],
-            [[BHCustomTabBarItem alloc] initWithTitle:@"CUSTOM_TAB_BAR_GROK" pageID:@"grok"],
-            [[BHCustomTabBarItem alloc] initWithTitle:@"CUSTOM_TAB_BAR_PROFILE" pageID:@"profile"],
-            [[BHCustomTabBarItem alloc] initWithTitle:@"CUSTOM_TAB_BAR_VIDEO" pageID:@"media"]
-        ] mutableCopy];
-        self.enabledPageIDs = [NSMutableSet setWithArray:@[@"home", @"guide", @"ntab", @"messages"]];
+    self.allPages = [NSMutableArray array];
+    for (NSDictionary *entry in [BHCustomTabBarUtility availableTabs]) {
+        [self.allPages addObject:entry[BHTabPageKey]];
     }
 
-    // Home is the landing surface and must always stay visible
-    [self.enabledPageIDs addObject:BHCustomTabBarHomePageID];
+    NSArray<NSString *> *saved = [BHCustomTabBarUtility visiblePageIDsInOrder];
+    NSArray<NSString *> *source = saved ?: [BHCustomTabBarUtility defaultVisiblePageIDs];
 
-    // Store initial state for comparison later
-    self.originalEnabledPageIDs = [self.enabledPageIDs mutableCopy];
-    
-    [self.collectionView reloadData];
-    [self updateCollectionViewHeight];
-}
-
-- (void)updateCollectionViewHeight {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        CGFloat height = self.collectionView.collectionViewLayout.collectionViewContentSize.height;
-        self.collectionViewHeightConstraint.constant = height;
-    });
-}
-
-- (NSArray<BHCustomTabBarItem *> *)getItemsForKey:(NSString *)key {
-    NSData *savedItems = [[NSUserDefaults standardUserDefaults] objectForKey:key];
-    if (savedItems) {
-        return [NSKeyedUnarchiver unarchivedArrayOfObjectsOfClass:[BHCustomTabBarItem class]
-                                                         fromData:savedItems
-                                                            error:nil];
-    }
-    return nil;
-}
-
-#pragma mark - Save Logic
-
-- (void)saveButtonTapped {
-    [self persistChanges];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_REQUIRED_ALERT_TITLE"]
-                                                                   message:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_REQUIRED_ALERT_MESSAGE"]
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"NOT_NOW_BUTTON_TITLE"] style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        [self.navigationController popViewControllerAnimated:YES];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"RESTART_NOW_BUTTON_TITLE"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        exit(0);
-    }]];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)persistChanges {
-    // Home can never be hidden, regardless of the on-screen selection state
-    [self.enabledPageIDs addObject:BHCustomTabBarHomePageID];
-
-    NSMutableArray *enabledItems = [NSMutableArray array];
-    NSMutableArray *disabledItems = [NSMutableArray array];
-
-    for (BHCustomTabBarItem *item in self.allItems) {
-        if ([self.enabledPageIDs containsObject:item.pageID]) {
-            [enabledItems addObject:item];
-        } else {
-            [disabledItems addObject:item];
+    self.selectedPages = [NSMutableArray array];
+    for (NSString *page in source) {
+        if ([self.allPages containsObject:page] && ![self.selectedPages containsObject:page]) {
+            [self.selectedPages addObject:page];
         }
     }
-    NSData *enabledData = [NSKeyedArchiver archivedDataWithRootObject:enabledItems requiringSecureCoding:YES error:nil];
-    NSData *disabledData = [NSKeyedArchiver archivedDataWithRootObject:disabledItems requiringSecureCoding:YES error:nil];
-    [[NSUserDefaults standardUserDefaults] setObject:enabledData forKey:@"allowed"];
-    [[NSUserDefaults standardUserDefaults] setObject:disabledData forKey:@"hidden"];
-    // Keep feature flags in sync with tab choices
-    BOOL grokEnabled = [self.enabledPageIDs containsObject:@"grok"];
-    [[NSUserDefaults standardUserDefaults] setBool:grokEnabled forKey:@"ios_tab_bar_default_show_grok"];
-    BOOL profileEnabled = [self.enabledPageIDs containsObject:@"profile"];
-    [[NSUserDefaults standardUserDefaults] setBool:profileEnabled forKey:@"ios_tab_bar_default_show_profile"];
-    BOOL communitiesEnabled = [self.enabledPageIDs containsObject:@"communities"];
-    [[NSUserDefaults standardUserDefaults] setBool: communitiesEnabled forKey:@"ios_tab_bar_default_show_communities"];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self pinHomeFirst];
 
+    self.originalSelection = [self.selectedPages copy];
     self.hasChanges = NO;
+
+    [self.gridView reloadData];
+    [self.previewView reloadData];
+}
+
+- (void)pinHomeFirst {
+    [self.selectedPages removeObject:BHCustomTabBarHomePageID];
+    if ([BHCustomTabBarUtility metadataForPage:BHCustomTabBarHomePageID]) {
+        [self.selectedPages insertObject:BHCustomTabBarHomePageID atIndex:0];
+    }
+}
+
+- (void)recomputeChanges {
+    self.hasChanges = ![self.selectedPages isEqualToArray:self.originalSelection];
     [self updateSaveButtonState];
 }
 
@@ -318,135 +206,244 @@ extern UIColor *BHTCurrentAccentColor(void);
     self.navigationItem.rightBarButtonItem.enabled = self.hasChanges;
 }
 
-#pragma mark - Reset Logic
+#pragma mark - Save / Reset
 
-- (void)resetSettingsBarButtonHandler:(UIBarButtonItem *)sender {
+- (void)saveButtonTapped {
+    [self persistChanges];
+
+    // Apply the new layout live by asking the app to recompute its visible tabs;
+    // this re-runs the tab-entry hook with the freshly saved order.
+    [self applyLiveLayout];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+static UIViewController *BHT_findViewControllerOfClass(UIViewController *vc, Class cls) {
+    if (!vc) {
+        return nil;
+    }
+    if ([vc isKindOfClass:cls]) {
+        return vc;
+    }
+    for (UIViewController *child in vc.childViewControllers) {
+        UIViewController *found = BHT_findViewControllerOfClass(child, cls);
+        if (found) {
+            return found;
+        }
+    }
+    return BHT_findViewControllerOfClass(vc.presentedViewController, cls);
+}
+
+- (BOOL)applyLiveLayout {
+    Class navClass = objc_getClass("T1TabbedAppNavigationViewController");
+    if (!navClass) {
+        return NO;
+    }
+
+    UIViewController *tabNav = nil;
+    for (UIWindow *window in UIApplication.sharedApplication.windows) {
+        tabNav = BHT_findViewControllerOfClass(window.rootViewController, navClass);
+        if (tabNav) {
+            break;
+        }
+    }
+
+    if (![tabNav respondsToSelector:@selector(recalculateVisiblePanels)]) {
+        return NO;
+    }
+
+    [(T1TabbedAppNavigationViewController *)tabNav recalculateVisiblePanels];
+    return YES;
+}
+
+- (void)persistChanges {
+    [self pinHomeFirst];
+
+    NSMutableArray<NSString *> *hidden = [NSMutableArray array];
+    for (NSString *page in self.allPages) {
+        if (![self.selectedPages containsObject:page]) {
+            [hidden addObject:page];
+        }
+    }
+    [BHCustomTabBarUtility setVisiblePageIDs:self.selectedPages hiddenPageIDs:hidden];
+
+    self.originalSelection = [self.selectedPages copy];
+    self.hasChanges = NO;
+    [self updateSaveButtonState];
+}
+
+- (void)restoreTapped {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_RESET_BUTTON"]
                                                                    message:[[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_RESET_MESSAGE"]
                                                             preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CONTINUE_BUTTON_TITLE"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"allowed"];
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:@"hidden"];
+        [BHCustomTabBarUtility resetSelection];
         [self loadData];
-        [self persistChanges];
+        [self recomputeChanges];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CANCEL_BUTTON_TITLE"] style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-#pragma mark - UICollectionView
+#pragma mark - Reordering (preview row)
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView { return 1; }
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section { return self.allItems.count; }
+- (void)handleReorderGesture:(UILongPressGestureRecognizer *)gesture {
+    CGPoint location = [gesture locationInView:self.previewView];
+
+    switch (gesture.state) {
+        case UIGestureRecognizerStateBegan: {
+            NSIndexPath *indexPath = [self.previewView indexPathForItemAtPoint:location];
+            // Home stays pinned first and can't be dragged.
+            if (!indexPath || indexPath.item == 0) {
+                return;
+            }
+            [self.previewView beginInteractiveMovementForItemAtIndexPath:indexPath];
+            break;
+        }
+        case UIGestureRecognizerStateChanged:
+            [self.previewView updateInteractiveMovementTargetPosition:location];
+            break;
+        case UIGestureRecognizerStateEnded:
+            [self.previewView endInteractiveMovement];
+            break;
+        default:
+            [self.previewView cancelInteractiveMovement];
+            break;
+    }
+}
+
+#pragma mark - UICollectionViewDataSource
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return collectionView == self.gridView ? self.allPages.count : self.selectedPages.count;
+}
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"tabItemCell" forIndexPath:indexPath];
-    [cell.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-
-    BHCustomTabBarItem *item = self.allItems[indexPath.item];
-    BOOL isEnabled = [self.enabledPageIDs containsObject:item.pageID];
-    CGFloat boxSize = cell.contentView.bounds.size.width;
-
-    UIView *container = [[UIView alloc] initWithFrame:CGRectMake(0, 0, boxSize, boxSize)];
-    UIColor *accentColor = BHTCurrentAccentColor();
-    container.layer.cornerRadius = 12;
-
-    if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-        container.backgroundColor = [UIColor colorWithRed:28/255.0 green:32/255.0 blue:35/255.0 alpha:1.0];
-        container.layer.borderWidth = isEnabled ? 2 : 0;
-        container.layer.borderColor = isEnabled ? accentColor.CGColor : nil;
-    } else {
-        container.backgroundColor = [UIColor systemBackgroundColor];
-        container.layer.borderWidth = 2;
-        UIColor *borderColor = isEnabled ? accentColor : [UIColor whiteColor];
-        container.layer.borderColor = borderColor.CGColor;
-        container.layer.shadowColor = [UIColor blackColor].CGColor;
-        container.layer.shadowOffset = CGSizeMake(0, 4);
-        container.layer.shadowOpacity = 0.10;
-        container.layer.shadowRadius = 12;
-        container.layer.masksToBounds = NO;
+    if (collectionView == self.previewView) {
+        BHCustomTabBarPreviewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[BHCustomTabBarPreviewCell reuseIdentifier] forIndexPath:indexPath];
+        NSDictionary *meta = [BHCustomTabBarUtility metadataForPage:self.selectedPages[indexPath.item]];
+        [cell configureWithImageName:meta[BHTabImageKey]];
+        return cell;
     }
 
-    [cell.contentView addSubview:container];
-
-    // Use Twitter's internal vector images based on pageID
-    NSString *iconName = nil;
-    
-    // Choose the right icon name based on tab ID and enabled state
-    if ([item.pageID isEqualToString:@"home"]) {
-        iconName = isEnabled ? @"home" : @"home_stroke";
-    } else if ([item.pageID isEqualToString:@"guide"]) {
-        iconName = isEnabled ? @"search" : @"search_stroke";
-    } else if ([item.pageID isEqualToString:@"audiospace"]) {
-        iconName = isEnabled ? @"spaces" : @"spaces_stroke";
-    } else if ([item.pageID isEqualToString:@"communities"]) {
-        iconName = isEnabled ? @"communities" : @"communities_stroke";
-    } else if ([item.pageID isEqualToString:@"profile"]) {
-        iconName = isEnabled ? @"person" : @"person_stroke";
-    } else if ([item.pageID isEqualToString:@"ntab"]) {
-        iconName = isEnabled ? @"notifications" : @"notifications_stroke";
-    } else if ([item.pageID isEqualToString:@"messages"]) {
-        iconName = isEnabled ? @"messages" : @"messages_stroke";
-    } else if ([item.pageID isEqualToString:@"grok"]) {
-        iconName = isEnabled ? @"grok_icon_blackhole" : @"grok_icon_blackhole_stroke";
-    } else if ([item.pageID isEqualToString:@"media"]) {
-        iconName = isEnabled ? @"media_tab" : @"media_tab_stroke";
-    }
-    
-    // Choose icon color based on light/dark mode, not selection state
-    UIColor *iconColor;
-    if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-        iconColor = [UIColor whiteColor];
-    } else {
-        iconColor = [UIColor blackColor];
-    }
-    
-    // Generate vector image with proper color
-    UIImage *iconImage = [UIImage tfn_vectorImageNamed:iconName 
-                                             fitsSize:CGSizeMake(28, 28) 
-                                            fillColor:iconColor];
-    
-    UIImageView *iconView = [[UIImageView alloc] initWithImage:iconImage];
-    iconView.frame = CGRectMake(0, 0, 28, 28);
-    iconView.center = CGPointMake(container.bounds.size.width / 2, container.bounds.size.height / 2);
-    iconView.contentMode = UIViewContentModeScaleAspectFit;
-    [container addSubview:iconView];
-
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(container.frame) + 8, boxSize, 22)];
-    label.text = [[BHTBundle sharedBundle] localizedStringForKey:item.title];
-    label.font = [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:14];
-    label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = [UIColor labelColor];
-    [cell.contentView addSubview:label];
-
+    BHCustomTabBarCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:[BHCustomTabBarCell reuseIdentifier] forIndexPath:indexPath];
+    NSString *page = self.allPages[indexPath.item];
+    NSDictionary *meta = [BHCustomTabBarUtility metadataForPage:page];
+    [cell configureWithTitle:(meta[BHTabTitleKey] ?: page)
+                   imageName:meta[BHTabImageKey]
+                    selected:[self.selectedPages containsObject:page]
+                       fixed:[page isEqualToString:BHCustomTabBarHomePageID]
+                 accentColor:BHTCurrentAccentColor()];
     return cell;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    BHCustomTabBarItem *item = self.allItems[indexPath.item];
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        UICollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kGridHeaderID forIndexPath:indexPath];
+        [header.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
-    // Home is always visible and cannot be toggled off
-    if ([item.pageID isEqualToString:BHCustomTabBarHomePageID]) {
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectInset(header.bounds, 4, 0)];
+        label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        label.numberOfLines = 0;
+        label.font = [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:13];
+        label.textColor = [UIColor secondaryLabelColor];
+        label.text = [[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_GRID_DETAIL"];
+        [header addSubview:label];
+        return header;
+    }
+
+    UICollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kGridFooterID forIndexPath:indexPath];
+    [footer.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+
+    NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_RESET_BUTTON"];
+    UIButton *restore = [objc_getClass("TFNButton") buttonWithTitle:title imageNamed:nil style:2 sizeClass:2];
+    restore.translatesAutoresizingMaskIntoConstraints = NO;
+    [restore addTarget:self action:@selector(restoreTapped) forControlEvents:UIControlEventTouchUpInside];
+    [footer addSubview:restore];
+    [NSLayoutConstraint activateConstraints:@[
+        [restore.centerXAnchor constraintEqualToAnchor:footer.centerXAnchor],
+        [restore.centerYAnchor constraintEqualToAnchor:footer.centerYAnchor]
+    ]];
+    return footer;
+}
+
+#pragma mark - UICollectionViewDelegate
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    // Only the grid toggles selection; the preview row is reorder-only.
+    if (collectionView != self.gridView) {
         return;
     }
 
-    if ([self.enabledPageIDs containsObject:item.pageID]) {
-        [self.enabledPageIDs removeObject:item.pageID];
-    } else {
-        [self.enabledPageIDs addObject:item.pageID];
+    NSString *page = self.allPages[indexPath.item];
+    if ([page isEqualToString:BHCustomTabBarHomePageID]) {
+        return;
     }
-    
-    // Check if current state differs from original state
-    self.hasChanges = ![self.enabledPageIDs isEqual:self.originalEnabledPageIDs];
-    
-    [self updateSaveButtonState];
-    
-    // Use a faster animation for selection changes
-    [UIView animateWithDuration:0.15 animations:^{
-        [collectionView performBatchUpdates:^{
-            [collectionView reloadItemsAtIndexPaths:@[indexPath]];
-        } completion:nil];
-    }];
+
+    if ([self.selectedPages containsObject:page]) {
+        [self.selectedPages removeObject:page];
+    } else {
+        [self.selectedPages addObject:page];
+    }
+
+    [self recomputeChanges];
+    [self.gridView reloadItemsAtIndexPaths:@[indexPath]];
+    [self.previewView reloadData];
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath {
+    return collectionView == self.previewView && indexPath.item != 0;
+}
+
+- (NSIndexPath *)collectionView:(UICollectionView *)collectionView targetIndexPathForMoveFromItemAtIndexPath:(NSIndexPath *)originalIndexPath toProposedIndexPath:(NSIndexPath *)proposedIndexPath {
+    // Keep Home pinned first.
+    if (proposedIndexPath.item == 0) {
+        return [NSIndexPath indexPathForItem:1 inSection:0];
+    }
+    return proposedIndexPath;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    NSString *page = self.selectedPages[sourceIndexPath.item];
+    [self.selectedPages removeObjectAtIndex:sourceIndexPath.item];
+    [self.selectedPages insertObject:page atIndex:destinationIndexPath.item];
+    [self recomputeChanges];
+}
+
+#pragma mark - UICollectionViewDelegateFlowLayout
+
+- (CGSize)collectionView:(UICollectionView *)collectionView
+                  layout:(UICollectionViewLayout *)collectionViewLayout
+  sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (collectionView == self.previewView) {
+        // Native sizes each preview item to 1/6 of the width; full row height.
+        CGFloat width = floor(CGRectGetWidth(collectionView.bounds) / 6.0);
+        return CGSizeMake(width, CGRectGetHeight(collectionView.bounds));
+    }
+
+    UICollectionViewFlowLayout *flow = (UICollectionViewFlowLayout *)collectionViewLayout;
+    UIEdgeInsets insets = flow.sectionInset;
+    CGFloat spacing = flow.minimumInteritemSpacing;
+
+    // Native grid: 3 columns, tile width capped at 98pt, height = width + 27.
+    CGFloat available = CGRectGetWidth(collectionView.bounds) - insets.left - insets.right;
+    CGFloat itemWidth = floor((available - spacing * 2) / 3.0);
+    itemWidth = MIN(itemWidth, 98.0);
+    return CGSizeMake(itemWidth, itemWidth + 27.0);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
+    if (collectionView != self.gridView) {
+        return CGSizeZero;
+    }
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds), 60);
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+    if (collectionView != self.gridView) {
+        return CGSizeZero;
+    }
+    return CGSizeMake(CGRectGetWidth(collectionView.bounds), 72);
 }
 
 @end

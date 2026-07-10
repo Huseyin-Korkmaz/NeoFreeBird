@@ -7,8 +7,6 @@
 "NFB_SETTINGS_DETAIL" = "Настрой Twitter: убери рекламу, включи Blue-функции и многое другое.";
 
 /*Alerts and popups*/
-"RESTART_REQUIRED_ALERT_TITLE" = "Требуется перезапуск";
-"RESTART_REQUIRED_ALERT_MESSAGE" = "Необходимо перезапустить Twitter, чтобы изменения вступили в силу.";
 
 "CONFIRM_ALERT_MESSAGE" = "Ты точно этого хотел?";
 "YES_BUTTON_TITLE" = "Да";
@@ -16,8 +14,6 @@
 "OK_BUTTON_TITLE" = "ОК";
 "CANCEL_BUTTON_TITLE" = "Отмена";
 "SAVE_BUTTON_TITLE" = "Сохранить";
-"RESTART_NOW_BUTTON_TITLE" = "Перезапустить";
-"NOT_NOW_BUTTON_TITLE" = "Не сейчас";
 "CONTINUE_BUTTON_TITLE" = "Продолжить";
 
 /*Settings*/
@@ -257,16 +253,7 @@
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "Настройка вкладок";
-"CUSTOM_TAB_BAR_NAVIGATION_DETAIL" = "Настройте навигацию под часто используемые разделы.";
-"CUSTOM_TAB_BAR_HOME" = "Главная";
-"CUSTOM_TAB_BAR_EXPLORE" = "Обзор";
-"CUSTOM_TAB_BAR_SPACES" = "Spaces";
-"CUSTOM_TAB_BAR_COMMUNITIES" = "Сообщества";
-"CUSTOM_TAB_BAR_NOTIFICATIONS" = "Уведомления";
-"CUSTOM_TAB_BAR_MESSAGES" = "Сообщения";
-"CUSTOM_TAB_BAR_GROK" = "Grok";
-"CUSTOM_TAB_BAR_VIDEO" = "Видео";
-"CUSTOM_TAB_BAR_PROFILE" = "Профиль";
+"CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
 "CUSTOM_TAB_BAR_RESET_BUTTON" = "Сбросить";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "Вы уверены, что хотите сбросить навигацию к настройкам по умолчанию?";
 

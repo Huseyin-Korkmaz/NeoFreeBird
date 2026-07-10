@@ -112,15 +112,14 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return [BHTSettings boolForKey:@"disable_video_captions"] ? @NO : nil;
     }
 
-    // Tab bar configuration. The grok switch is not overridden here: its only
-    // read site ORs it with the premium tier we force on, so the tab has to be
-    // dropped in setTabViews: instead.
-    if ([key isEqualToString:@"ios_tab_bar_default_show_profile"]) {
-        return @([[NSUserDefaults standardUserDefaults] boolForKey:@"ios_tab_bar_default_show_profile"]);
-    }
-
-    if ([key isEqualToString:@"ios_tab_bar_default_show_communities"]) {
-        return @([[NSUserDefaults standardUserDefaults] boolForKey:@"ios_tab_bar_default_show_communities"]);
+    // Always build the Profile and Communities tabs so they can be captured and
+    // toggled in the tab bar editor; the editor's visible/hidden lists decide
+    // whether they actually appear. Grok is likewise force-shown (its read site ORs
+    // with the premium tier we force on), and all three are hidden by default in the
+    // setTabViews: filter until the user opts in.
+    if ([key isEqualToString:@"ios_tab_bar_default_show_profile"] ||
+        [key isEqualToString:@"ios_tab_bar_default_show_communities"]) {
+        return @YES;
     }
 
     // In-app article webview

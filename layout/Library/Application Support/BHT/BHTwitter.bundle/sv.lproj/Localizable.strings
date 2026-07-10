@@ -7,8 +7,6 @@
 "NFB_SETTINGS_DETAIL" = "Justera Twitter. Dölj annonser, aktivera Blue-funktioner och mycket mer.";
 
 /*Alerts and popups*/
-"RESTART_REQUIRED_ALERT_TITLE" = "Omstart krävs";
-"RESTART_REQUIRED_ALERT_MESSAGE" = "Du måste starta om Twitter för att ändringen ska träda i kraft.";
 
 "CONFIRM_ALERT_MESSAGE" = "Säker på att du menade det?";
 "YES_BUTTON_TITLE" = "Ja";
@@ -16,8 +14,6 @@
 "OK_BUTTON_TITLE" = "OK";
 "CANCEL_BUTTON_TITLE" = "Avbryt";
 "SAVE_BUTTON_TITLE" = "Spara";
-"RESTART_NOW_BUTTON_TITLE" = "Starta om";
-"NOT_NOW_BUTTON_TITLE" = "Inte nu";
 "CONTINUE_BUTTON_TITLE" = "Fortsätt";
 
 /*Settings*/
@@ -257,16 +253,7 @@
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "Redigera flikfältet";
-"CUSTOM_TAB_BAR_NAVIGATION_DETAIL" = "Anpassa navigeringsfältet med dina mest använda Twitter-destinationer.";
-"CUSTOM_TAB_BAR_HOME" = "Hem";
-"CUSTOM_TAB_BAR_EXPLORE" = "Utforska";
-"CUSTOM_TAB_BAR_SPACES" = "Områden";
-"CUSTOM_TAB_BAR_COMMUNITIES" = "Grupper";
-"CUSTOM_TAB_BAR_NOTIFICATIONS" = "Notiser";
-"CUSTOM_TAB_BAR_MESSAGES" = "Meddelanden";
-"CUSTOM_TAB_BAR_GROK" = "Grok";
-"CUSTOM_TAB_BAR_VIDEO" = "Video";
-"CUSTOM_TAB_BAR_PROFILE" = "Profil";
+"CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
 "CUSTOM_TAB_BAR_RESET_BUTTON" = "Återställ till standard";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "Vill du verkligen återställa navigeringsfältet till standard?";
 
