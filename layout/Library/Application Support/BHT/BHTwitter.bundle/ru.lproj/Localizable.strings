@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "Открывать во внешнем браузере";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Открывать ссылки в Safari или браузере по умолчанию.";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "Настроить ссылки";
-"STRIP_TRACKING_PARAMS_DETAIL" = "Убрать параметры отслеживания и задать свой URL.";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Выбрать свой URL";
+"SHARING_DOMAIN_TITLE" = "Домен для ссылок";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "Сохранять твит как изображение";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Показывает метку времени в полноэкранном режиме.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "Без прокрутки видеоленты";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Запрещает пролистывание видео в полноэкранном плеере и отключает автопереход.";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Убрать рекламу";

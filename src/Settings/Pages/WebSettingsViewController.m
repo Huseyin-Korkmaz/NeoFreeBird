@@ -6,8 +6,8 @@
 //
 
 #import "Settings/Pages/WebSettingsViewController.h"
-#import "Settings/ModernSettingsCells.h"
 #import "Headers/TWHeaders.h"
+#import "Core/BHTBundle.h"
 
 @implementation WebSettingsViewController
 
@@ -15,41 +15,9 @@
     return @"web";
 }
 
-- (NSInteger)indexForToggleKey:(NSString *)key inArray:(NSArray<NSDictionary *> *)array {
-    __block NSInteger foundIndex = NSNotFound;
-    [array enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
-        if ([obj[@"key"] isEqualToString:key]) {
-            foundIndex = (NSInteger)idx;
-            *stop = YES;
-        }
-    }];
-    return foundIndex;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
-    NSDictionary *toggleData = self.visibleToggles[indexPath.row];
-
-    // Attach modern URL host menu for this specific row on iOS 14+.
-    if (@available(iOS 14.0, *)) {
-        if ([toggleData[@"key"] isEqualToString:@"url_host_button"]) {
-            [self configureURLHostMenuForCell:(ModernSettingsCompactButtonCell *)cell atIndexPath:indexPath];
-        }
-    }
-
-    return cell;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *data = self.visibleToggles[indexPath.row];
-
-    // For the URL host row on iOS 14+, the cell itself shows the menu.
-    if (@available(iOS 14.0, *)) {
-        if ([data[@"key"] isEqualToString:@"url_host_button"]) {
-            return;
-        }
-    }
 
     if ([data[@"type"] isEqualToString:@"button"] || [data[@"type"] isEqualToString:@"compactButton"]) {
         NSString *actionName = data[@"action"];
@@ -68,124 +36,59 @@
     }
 }
 
-- (void)switchChanged:(UISwitch *)sender {
-    NSString *key = objc_getAssociatedObject(sender, @"prefKey");
-    if (!key) {
-        return;
+// Reduces user input like "https://fxtwitter.com/" to a bare host, so the
+// value can be assigned straight to NSURLComponents.host when rewriting.
+- (NSString *)sharingDomainFromInput:(NSString *)input {
+    NSString *domain = [input stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
+    NSRange schemeRange = [domain rangeOfString:@"://"];
+    if (schemeRange.location != NSNotFound) {
+        domain = [domain substringFromIndex:NSMaxRange(schemeRange)];
     }
 
-    BOOL isOn = sender.isOn;
-
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setBool:isOn forKey:key];
-    [defaults synchronize];
-
-    if ([key isEqualToString:@"strip_tracking_params"]) {
-        // Find where the domain selector row was and will be
-        NSInteger oldIndex = [self indexForToggleKey:@"url_host_button" inArray:self.visibleToggles];
-
-        // Update the data model
-        [self updateVisibleToggles];
-
-        NSInteger newIndex = [self indexForToggleKey:@"url_host_button" inArray:self.visibleToggles];
-
-        [self.tableView beginUpdates];
-
-        if (oldIndex == NSNotFound && newIndex != NSNotFound) {
-            // Row appeared
-            NSIndexPath *ip = [NSIndexPath indexPathForRow:newIndex inSection:0];
-            [self.tableView insertRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
-        } else if (oldIndex != NSNotFound && newIndex == NSNotFound) {
-            // Row disappeared
-            NSIndexPath *ip = [NSIndexPath indexPathForRow:oldIndex inSection:0];
-            [self.tableView deleteRowsAtIndexPaths:@[ip] withRowAnimation:UITableViewRowAnimationAutomatic];
-        }
-
-        [self.tableView endUpdates];
+    NSRange pathRange = [domain rangeOfString:@"/"];
+    if (pathRange.location != NSNotFound) {
+        domain = [domain substringToIndex:pathRange.location];
     }
 
-    if ([key isEqualToString:@"flex_twitter"]) {
-        if (isOn) {
-            [[objc_getClass("FLEXManager") sharedManager] showExplorer];
-        } else {
-            [[objc_getClass("FLEXManager") sharedManager] hideExplorer];
-        }
-    }
+    return domain;
 }
 
-- (void)configureURLHostMenuForCell:(ModernSettingsCompactButtonCell *)cell
-                        atIndexPath:(NSIndexPath *)indexPath {
-    if (!cell) {
-        return;
-    }
-
-    if (!@available(iOS 14.0, *)) {
-        return;
-    }
-
+- (void)showSharingDomainPrompt:(NSDictionary *)data {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *currentHost = [defaults objectForKey:@"tweet_url_host"] ?: @"x.com";
+    NSString *currentHost = [defaults objectForKey:@"sharing_domain"];
 
-    NSArray<NSString *> *hosts = @[
-        @"x.com",
-        @"twitter.com",
-        @"fxtwitter.com",
-        @"vxtwitter.com",
-        @"fixvx.com"
-    ];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"SHARING_DOMAIN_TITLE"]
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleAlert];
 
-    // Create or reuse a button that will host the menu.
-    UIButton *menuButton = [cell.contentView viewWithTag:4242];
-    if (!menuButton) {
-        menuButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        menuButton.tag = 4242;
-        menuButton.backgroundColor = [UIColor clearColor];
-        // No title or image, purely functional.
-        [cell.contentView addSubview:menuButton];
-    }
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.text = currentHost;
+        textField.placeholder = @"x.com";
+        textField.keyboardType = UIKeyboardTypeURL;
+        textField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        textField.autocorrectionType = UITextAutocorrectionTypeNo;
+    }];
 
-    // Place the button over the right half of the cell so the menu anchor
-    // is near the domain text instead of the center of the cell.
-    CGFloat width = cell.contentView.bounds.size.width;
-    CGFloat height = cell.contentView.bounds.size.height;
-    CGFloat buttonWidth = width * 0.5; // right half
-    menuButton.frame = CGRectMake(width - buttonWidth, 0.0, buttonWidth, height);
-    menuButton.autoresizingMask = UIViewAutoresizingFlexibleWidth |
-                                  UIViewAutoresizingFlexibleHeight |
-                                  UIViewAutoresizingFlexibleLeftMargin;
-    [cell.contentView bringSubviewToFront:menuButton];
+    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CANCEL_BUTTON_TITLE"] style:UIAlertActionStyleCancel handler:nil]];
 
-    NSMutableArray<UIAction *> *actions = [NSMutableArray array];
+    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"SAVE_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        NSString *domain = [self sharingDomainFromInput:alert.textFields.firstObject.text];
 
-    for (NSString *host in hosts) {
-        UIAction *action = [UIAction actionWithTitle:host
-                                               image:nil
-                                          identifier:nil
-                                             handler:^(__kindof UIAction * _Nonnull a) {
-            [defaults setObject:host forKey:@"tweet_url_host"];
-            [defaults synchronize];
-
-            if (indexPath) {
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath]
-                                      withRowAnimation:UITableViewRowAnimationNone];
-            }
-        }];
-
-        if ([host isEqualToString:currentHost]) {
-            action.state = UIMenuElementStateOn;
+        if (domain.length > 0) {
+            [defaults setObject:domain forKey:@"sharing_domain"];
+        } else {
+            [defaults removeObjectForKey:@"sharing_domain"];
         }
+        [defaults synchronize];
 
-        [actions addObject:action];
-    }
+        NSIndexPath *indexPath = data[@"indexPath"];
+        if (indexPath) {
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }]];
 
-    UIMenu *menu = [UIMenu menuWithTitle:@"URL"
-                                   image:nil
-                              identifier:nil
-                                 options:0
-                                children:actions];
-
-    menuButton.menu = menu;
-    menuButton.showsMenuAsPrimaryAction = YES;
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end

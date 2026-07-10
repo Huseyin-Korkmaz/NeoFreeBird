@@ -120,8 +120,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"titleKey": @"MODERN_SETTINGS_WEB_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_WEB_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"strip_tracking_params", @"default": @NO },
-                    @{ @"type": @"compactButton", @"parentKey": @"strip_tracking_params", @"key": @"url_host_button", @"titleKey": @"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE", @"action": @"showURLHostSelectionViewController:", @"prefKeyForSubtitle": @"tweet_url_host", @"subtitleDefault": @"x.com" },
+                    @{ @"type": @"compactButton", @"key": @"sharing_domain", @"action": @"showSharingDomainPrompt:", @"prefKeyForSubtitle": @"sharing_domain", @"subtitleDefault": @"x.com" },
                     @{ @"key": @"always_open_safari", @"default": @NO },
                     @{ @"key": @"new_inapp_webview", @"default": @YES }
                 ]
@@ -186,6 +185,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
         @"openInBrowser": @"always_open_safari",
         @"reply_sorting_enabled": @"reply_sorting",
         @"ios_in_app_article_webview_enabled": @"new_inapp_webview",
+        @"tweet_url_host": @"sharing_domain",
     };
 
     // These old names double as Twitter's own feature-switch keys, so copy the

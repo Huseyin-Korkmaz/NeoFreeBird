@@ -62,7 +62,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
     // Session token appended to shared/copied links (&t=)
     if ([key isEqualToString:@"rehire_share_update_url_enabled"]) {
-        return [BHTSettings boolForKey:@"strip_tracking_params"] ? @NO : nil;
+        return @NO;
     }
 
     // The profile hooks build on the classic header; the header rework

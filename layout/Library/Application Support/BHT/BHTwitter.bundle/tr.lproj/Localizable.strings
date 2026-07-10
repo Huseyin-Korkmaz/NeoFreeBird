@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "Harici tarayıcı kullan";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Linkleri Safari veya varsayılan tarayıcıda aç.";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "Bağlantıları özelleştir";
-"STRIP_TRACKING_PARAMS_DETAIL" = "Takip parametrelerini kaldır ve özel URL seç.";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Özel bir URL seç";
+"SHARING_DOMAIN_TITLE" = "Paylaşım alan adı";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "Tweet’i görsel olarak kaydet";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Tam ekran oynatıcıda zaman bilgisini gösterir.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "Video akışında kaydırma yok";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Tam ekran oynatıcıda videolar arasında kaydırmayı engeller ve otomatik geçişi kapatır.";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Reklam yok";

@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "인앱 브라우저 끄기";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "링크를 Safari나 사용자의 기본 브라우저로 엽니다.";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "커스텀 URL";
-"STRIP_TRACKING_PARAMS_DETAIL" = "링크 복사 및 추적 제거를 위해 사용할 커스텀 URL을 선택하세요.";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "도메인 선택";
+"SHARING_DOMAIN_TITLE" = "공유 도메인";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "트윗을 사진으로 저장";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "전체 화면 플레이어에서 영상의 현재/전체 재생시간을 표시합니다.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "동영상 피드 스크롤 사용 안 함";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "전체 화면 플레이어에서 스와이프로 동영상을 넘기는 기능과 자동 진행을 비활성화합니다.";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "광고 제거";

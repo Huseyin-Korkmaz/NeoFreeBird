@@ -124,7 +124,7 @@ static BOOL BHTShouldKeepBrowserURLInApp(NSURL *url) {
 // &t= session token is appended by _t1_transformShareURL: (disabled at the
 // source via the rehire_share_update_url_enabled switch in FeatureSwitches.x).
 static NSString *BHTCleanedShareURLString(NSString *urlString) {
-    if (urlString == nil || ![BHTSettings boolForKey:@"strip_tracking_params"]) {
+    if (urlString == nil) {
         return urlString;
     }
 
@@ -141,42 +141,25 @@ static NSString *BHTCleanedShareURLString(NSString *urlString) {
     }
     components.queryItems = safeParams.count > 0 ? safeParams : nil;
 
-    NSString *selectedHost = [[NSUserDefaults standardUserDefaults] objectForKey:@"tweet_url_host"];
-    if (selectedHost) {
+    NSString *selectedHost = [[NSUserDefaults standardUserDefaults] objectForKey:@"sharing_domain"];
+    if (selectedHost.length > 0) {
         components.host = selectedHost;
     }
 
     return components.URL.absoluteString ?: urlString;
 }
 
+// Every share surface (copy link, share sheet, DM, email, Snap) funnels into
+// these two builders; the legacy twitterURLFor* selectors wrap the instance
+// one, and the Swift share kit calls it directly with its own s value.
 %hook TFNTwitterStatus
 
-- (NSString *)twitterURLForShare {
+- (NSString *)twitterURLForShareWithSParam:(unsigned int)sParam {
     NSString *url = %orig;
     return BHTCleanedShareURLString(url);
 }
 
-- (NSString *)twitterURLForCopy {
-    NSString *url = %orig;
-    return BHTCleanedShareURLString(url);
-}
-
-- (NSString *)twitterURLForMessage {
-    NSString *url = %orig;
-    return BHTCleanedShareURLString(url);
-}
-
-- (NSString *)twitterURLForEmail {
-    NSString *url = %orig;
-    return BHTCleanedShareURLString(url);
-}
-
-- (NSString *)twitterURLForShareToSnap {
-    NSString *url = %orig;
-    return BHTCleanedShareURLString(url);
-}
-
-+ (NSString *)twitterURLForCopyWithUsername:(NSString *)username statusID:(long long)statusID {
++ (NSString *)twitterURLForShareWithSParam:(unsigned int)sParam username:(NSString *)username statusID:(long long)statusID {
     NSString *url = %orig;
     return BHTCleanedShareURLString(url);
 }

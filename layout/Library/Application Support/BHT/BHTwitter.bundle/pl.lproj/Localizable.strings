@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "Używaj zewnętrznej przeglądarki";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Otwieraj linki w Safari lub domyślnej przeglądarce.";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "Własne adresy URL linków";
-"STRIP_TRACKING_PARAMS_DETAIL" = "Wybierz własny adres URL linków i usuń śledzenie.";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Wybierz domenę";
+"SHARING_DOMAIN_TITLE" = "Domena udostępniania";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "Zapisz Tweeta jako obraz";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Pokazuje znacznik czasu w pełnoekranowym odtwarzaczu.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "Bez przewijania filmów";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Zapobiega przesuwaniu między filmami w odtwarzaczu pełnoekranowym i wyłącza automatyczne przechodzenie.";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Bez reklam";

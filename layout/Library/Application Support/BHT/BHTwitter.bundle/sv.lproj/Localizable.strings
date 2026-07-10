@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "Använd extern webbläsare";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Öppna länkar i Safari eller din standardwebbläsare.";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "Justera länkar";
-"STRIP_TRACKING_PARAMS_DETAIL" = "Välj en anpassad URL och ta bort spårningsparametrar.";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Välj anpassad URL";
+"SHARING_DOMAIN_TITLE" = "Delningsdomän";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "Spara Tweet som bild";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Visar tidsstämpel på den uppslukande spelaren.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "Ingen videorullning";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Förhindrar svepning mellan videor i helskärmsspelaren och stänger av automatisk övergång till nästa video.";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Inga annonser";

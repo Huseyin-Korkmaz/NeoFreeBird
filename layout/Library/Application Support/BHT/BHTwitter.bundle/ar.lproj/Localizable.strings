@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "استخدام متصفح خارجي";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "فتح الروابط في Safari أو المتصفح الافتراضي.";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "تخصيص الروابط";
-"STRIP_TRACKING_PARAMS_DETAIL" = "اختر رابطًا مخصصًا واحذف التتبع.";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "اختيار رابط مخصص";
+"SHARING_DOMAIN_TITLE" = "نطاق المشاركة";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "حفظ التغريدة كصورة";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "عرض الطابع الزمني في مشغل الفيديو الكامل.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "بدون تمرير في موجز الفيديو";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "يمنع التمرير بين مقاطع الفيديو في المشغل الكامل ويعطل التقدم التلقائي.";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "بدون إعلانات";

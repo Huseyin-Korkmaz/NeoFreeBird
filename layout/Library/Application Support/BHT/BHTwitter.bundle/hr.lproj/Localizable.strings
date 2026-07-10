@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "Koristi vanjski preglednik";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Otvaraj linkove u Safariju ili zadanim preglednicima.";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "Prilagodi poveznice";
-"STRIP_TRACKING_PARAMS_DETAIL" = "Ukloni praćenje iz URL-a i koristi svoj link.";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Odaberi prilagođeni URL";
+"SHARING_DOMAIN_TITLE" = "Domena za dijeljenje";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "Spremi tweet kao sliku";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Prikazuje vremensku oznaku u videu u punom prikazu.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "Bez pomicanja videosadržaja";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Sprječava klizanje između videozapisa u prikazu preko cijelog zaslona i isključuje automatski prijelaz.";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Bez oglasa";

@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "使用外部瀏覽器";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "在 Safari 或預設瀏覽器中開啟連結。";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "自訂連結";
-"STRIP_TRACKING_PARAMS_DETAIL" = "移除追蹤參數並使用自訂網址。";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "選擇自訂網址";
+"SHARING_DOMAIN_TITLE" = "分享網域";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "將推文存為圖片";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "在沉浸式播放器中顯示時間戳記。";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "停用影片動態捲動";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "禁止在全螢幕播放器中滑動切換影片，並關閉自動播放下一部影片。";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "不顯示廣告";

@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "Відкривати у браузері";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Відкривати посилання в Safari або браузері за замовчуванням.";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "Кастомізувати посилання";
-"STRIP_TRACKING_PARAMS_DETAIL" = "Видалити трекінг і задати власне посилання.";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Вибрати власний URL";
+"SHARING_DOMAIN_TITLE" = "Домен для посилань";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "Зберегти твіт як зображення";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Показує часову мітку в повноекранному режимі відео.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "Без прокручування відеострічки";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Забороняє гортання відео в повноекранному програвачі та вимикає автоперехід.";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Вимкнути рекламу";

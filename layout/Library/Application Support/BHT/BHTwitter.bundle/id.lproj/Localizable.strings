@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "Gunakan browser eksternal";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Buka tautan di Safari atau browser default.";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "Kustomisasi tautan";
-"STRIP_TRACKING_PARAMS_DETAIL" = "Pilih URL khusus dan hapus pelacak.";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "Pilih URL khusus";
+"SHARING_DOMAIN_TITLE" = "Domain berbagi";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "Simpan Tweet sebagai gambar";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Menampilkan penanda waktu pada pemutar penuh.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "Tanpa menggulir umpan video";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "Mencegah menggeser antar video di pemutar layar penuh dan menonaktifkan lanjut otomatis.";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Tanpa iklan";

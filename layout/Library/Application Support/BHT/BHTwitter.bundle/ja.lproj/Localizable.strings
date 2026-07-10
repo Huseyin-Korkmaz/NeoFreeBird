@@ -68,9 +68,7 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "外部ブラウザを使用";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Safariまたはデフォルトのブラウザでリンクを開きます。";
 
-"STRIP_TRACKING_PARAMS_TITLE" = "カスタムリンクURL";
-"STRIP_TRACKING_PARAMS_DETAIL" = "リンクのカスタムURLを選択し、トラッキングを削除します。";
-"SELECT_URL_HOST_AFTER_COPY_OPTION_TITLE" = "ドメインを選択";
+"SHARING_DOMAIN_TITLE" = "共有ドメイン";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "ツイートを画像として保存";
@@ -154,7 +152,6 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "没入型プレーヤー内にタイムスタンプを表示します。";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "動画フィードのスクロールを無効化";
-"DISABLE_IMMERSIVE_SCROLL_DETAIL" = "全画面プレーヤーでのスワイプによる動画切り替えと自動再生による次の動画への移動を無効にします。";
 
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "広告を非表示";
