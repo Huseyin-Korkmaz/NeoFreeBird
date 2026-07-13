@@ -238,6 +238,20 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %end
 
+// MARK: Show Scroll Bar
+
+// The vertical scroll indicator on every TFN data view is set from this typed
+// accessor in -[TFNDataViewController loadView]; its read bypasses the
+// boolForKey: funnels above via a Swift access-once provider.
+
+%hook TFSAccountFeatureSwitches
+
++ (BOOL)isShowsVerticalScrollIndicatorEnabled {
+    return [BHTSettings boolForKey:@"show_scroll_indicator"] ? YES : %orig;
+}
+
+%end
+
 // MARK: Override the login screens
 
 %hook T1AccountsViewController

@@ -17,7 +17,6 @@
 @end
 
 @interface TFNTableView : UITableView
-- (void)setShowsVerticalScrollIndicator:(BOOL)arg1;
 @end
 
 @interface TFNDataViewController : UIViewController

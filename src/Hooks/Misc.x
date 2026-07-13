@@ -147,16 +147,6 @@ static CTParagraphStyleRef BHTCreateLTRParagraphStyle(CTParagraphStyleRef origin
 
 %end
 
-// MARK: Show Scroll Bar
-
-%hook TFNTableView
-
-- (void)setShowsVerticalScrollIndicator:(BOOL)arg1 {
-    %orig([BHTSettings boolForKey:@"show_scroll_indicator"]);
-}
-
-%end
-
 // MARK: Strip tracking params from shared links
 
 // The ?s= source param is baked into the share URL format strings, and the
