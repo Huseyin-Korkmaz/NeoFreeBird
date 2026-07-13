@@ -80,6 +80,9 @@
 
 // The search bar is a direct subview of the container; all trending content
 // (page tabs and timelines) lives in the child URT chrome view controller.
+// The chrome property has no ObjC getter in 12.3, so find it among the
+// children that viewDidLoad adds. The page tab strip is separate: the
+// navigation bar requests it through tfn_navigationBarAccessoryView.
 
 %hook _TtC14T1TwitterSwift28GuideContainerViewController
 
@@ -87,9 +90,16 @@
     %orig;
 
     if ([BHTSettings boolForKey:@"hide_trends"]) {
-        UIViewController *chrome = [(id)self performSelector:@selector(urtChromeViewController)];
-        chrome.view.hidden = YES;
+        for (UIViewController *child in [(UIViewController *)self childViewControllers]) {
+            if ([child isKindOfClass:%c(_TtC14T1TwitterSwift23URTChromeViewController)]) {
+                child.view.hidden = YES;
+            }
+        }
     }
+}
+
+- (UIView *)tfn_navigationBarAccessoryView {
+    return [BHTSettings boolForKey:@"hide_trends"] ? nil : %orig;
 }
 
 %end
