@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Копировать информацию профиля";
 "COPY_PROFILE_INFO_DETAIL" = "Копировать имя, био и другое одним нажатием.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "Объединить вкладки Медиа";
-"DISABLE_MEDIA_TAB_DETAIL" = "Фото и видео будут в одной вкладке.";
 
 "DISABLE_ARTICLES_TITLE" = "Скрыть вкладку Статьи";
 "DISABLE_ARTICLES_DETAIL" = "Спрятать вкладку «Статьи» в профилях.";

@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Kopiuj dane profilu";
 "COPY_PROFILE_INFO_DETAIL" = "Kopiuj nazwy użytkowników, bio i więcej jednym stuknięciem.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "Bez osobnych kart Multimedia";
-"DISABLE_MEDIA_TAB_DETAIL" = "Łączy karty Zdjęcia i Wideo w jedną kartę.";
 
 "DISABLE_ARTICLES_TITLE" = "Bez karty Artykuły";
 "DISABLE_ARTICLES_DETAIL" = "Ukryj kartę Artykuły w profilach.";

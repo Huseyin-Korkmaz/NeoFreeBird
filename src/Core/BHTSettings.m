@@ -63,7 +63,6 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"settings": @[
                     @{ @"key": @"follow_confirm", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"copy_profile_info", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"disable_media_tab", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"disable_articles", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"disable_highlights", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"hide_follow_button", @"default": @NO, @"type": @"toggle" },
@@ -173,7 +172,6 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
         @"autoHighestLoad": @"auto_highest_load",
         @"follow_con": @"follow_confirm",
         @"CopyProfileInfo": @"copy_profile_info",
-        @"disableMediaTab": @"disable_media_tab",
         @"disableArticles": @"disable_articles",
         @"disableHighlights": @"disable_highlights",
         @"TweetToImage": @"tweet_to_image",

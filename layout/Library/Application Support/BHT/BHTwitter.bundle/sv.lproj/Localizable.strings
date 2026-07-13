@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Kopiera profilinfo";
 "COPY_PROFILE_INFO_DETAIL" = "Kopiera användarnamn, biografier, och mer med ett tryck.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "Separera inte Mediafilken";
-"DISABLE_MEDIA_TAB_DETAIL" = "Slår ihop Foto- och Videoflikarna.";
 
 "DISABLE_ARTICLES_TITLE" = "Ingen Artiklar-flik";
 "DISABLE_ARTICLES_DETAIL" = "Dölj Artiklar-fliken i profiler.";

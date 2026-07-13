@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Копіювати інформацію профілю";
 "COPY_PROFILE_INFO_DETAIL" = "Копіюйте біо, ім'я користувача та інше одним натисканням.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "Об'єднати вкладки медіа";
-"DISABLE_MEDIA_TAB_DETAIL" = "Об'єднати фото та відео в одній вкладці.";
 
 "DISABLE_ARTICLES_TITLE" = "Приховати Статті";
 "DISABLE_ARTICLES_DETAIL" = "Прибрати вкладку «Статті» в профілі.";

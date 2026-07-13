@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "複製個人資料資訊";
 "COPY_PROFILE_INFO_DETAIL" = "一鍵複製用戶名稱、簡介等資訊。";
 
-"DISABLE_MEDIA_TAB_TITLE" = "合併媒體分頁";
-"DISABLE_MEDIA_TAB_DETAIL" = "將照片與影片合併至一個分頁中。";
 
 "DISABLE_ARTICLES_TITLE" = "隱藏「文章」分頁";
 "DISABLE_ARTICLES_DETAIL" = "在個人資料頁面隱藏文章分頁。";

@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Profildetails kopieren";
 "COPY_PROFILE_INFO_DETAIL" = "Benutzernamen, Bios und mehr mit einem Tipp kopieren.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "Kein separater Medien-Tab";
-"DISABLE_MEDIA_TAB_DETAIL" = "Fasst die Tabs „Fotos“ und „Videos“ zu einem Tab zusammen.";
 
 "DISABLE_ARTICLES_TITLE" = "Kein Artikel-Tab";
 "DISABLE_ARTICLES_DETAIL" = "Blendet den Artikel-Tab in Profilen aus.";

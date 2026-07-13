@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Profil bilgilerini kopyala";
 "COPY_PROFILE_INFO_DETAIL" = "Kullanıcı adı, bio ve daha fazlasını tek dokunuşla kopyala.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "Ayrı Medya sekmesi olmasın";
-"DISABLE_MEDIA_TAB_DETAIL" = "Fotoğraflar ve Videolar sekmelerini birleştir.";
 
 "DISABLE_ARTICLES_TITLE" = "Makale sekmesini gizle";
 "DISABLE_ARTICLES_DETAIL" = "Profildeki ‘Makaleler’ sekmesini gizle.";

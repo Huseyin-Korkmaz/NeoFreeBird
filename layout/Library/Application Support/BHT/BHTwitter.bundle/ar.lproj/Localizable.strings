@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "نسخ معلومات الملف الشخصي";
 "COPY_PROFILE_INFO_DETAIL" = "نسخ الاسم أو النبذة أو غيرها بنقرة واحدة.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "بدون تبويبات وسائط منفصلة";
-"DISABLE_MEDIA_TAB_DETAIL" = "دمج الصور والفيديو في تبويب واحد.";
 
 "DISABLE_ARTICLES_TITLE" = "بدون تبويب مقالات";
 "DISABLE_ARTICLES_DETAIL" = "إخفاء تبويب المقالات.";

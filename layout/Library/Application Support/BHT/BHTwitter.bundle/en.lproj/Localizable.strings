@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Copy profile details";
 "COPY_PROFILE_INFO_DETAIL" = "Copy usernames, bios, and more with one tap.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "No separate Media tabs";
-"DISABLE_MEDIA_TAB_DETAIL" = "Merges the Photos and Videos tabs into one tab.";
 
 "DISABLE_ARTICLES_TITLE" = "No Articles tab";
 "DISABLE_ARTICLES_DETAIL" = "Hide the Articles tab in profiles.";

@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Kopiraj podatke profila";
 "COPY_PROFILE_INFO_DETAIL" = "Kopiraj korisnička imena, biografiju i drugo jednim dodirom.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "Bez odvojenih kartica za medije";
-"DISABLE_MEDIA_TAB_DETAIL" = "Spoji kartice za fotografije i videozapise.";
 
 "DISABLE_ARTICLES_TITLE" = "Sakrij karticu Članci";
 "DISABLE_ARTICLES_DETAIL" = "Ukloni karticu 'Članci' iz profila.";

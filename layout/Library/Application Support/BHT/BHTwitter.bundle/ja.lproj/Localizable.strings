@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "プロフィールの詳細をコピー";
 "COPY_PROFILE_INFO_DETAIL" = "ユーザー名、プロフィールなどをワンタップでコピーできるようにします。";
 
-"DISABLE_MEDIA_TAB_TITLE" = "メディアタブを一体化";
-"DISABLE_MEDIA_TAB_DETAIL" = "[動画] タブと [画像] タブを一つに統合して表示します。";
 
 "DISABLE_ARTICLES_TITLE" = "記事タブを非表示";
 "DISABLE_ARTICLES_DETAIL" = "プロフィールから [記事] タブを非表示にします。";

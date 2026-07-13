@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Salin info profil";
 "COPY_PROFILE_INFO_DETAIL" = "Salin username, bio, dan lainnya dengan sekali ketuk.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "Tanpa tab Media terpisah";
-"DISABLE_MEDIA_TAB_DETAIL" = "Gabungkan tab Foto dan Video jadi satu.";
 
 "DISABLE_ARTICLES_TITLE" = "Tanpa tab Artikel";
 "DISABLE_ARTICLES_DETAIL" = "Sembunyikan tab Artikel di profil.";

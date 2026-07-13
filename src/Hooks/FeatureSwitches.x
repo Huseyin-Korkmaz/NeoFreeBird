@@ -78,12 +78,6 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @(![BHTSettings boolForKey:@"disable_highlights"]);
     }
 
-    // media_tab_enabled is an integer switch where 99 means enabled, so only
-    // override it when hiding.
-    if ([key isEqualToString:@"media_tab_enabled"]) {
-        return [BHTSettings boolForKey:@"disable_media_tab"] ? @0 : nil;
-    }
-
     // Age verification bypass
     if ([key hasPrefix:@"ios_age_assurance"] || [key isEqualToString:@"grok_settings_age_restriction_enabled"]) {
         if ([BHTSettings boolForKey:@"bypass_age_verification"]) {

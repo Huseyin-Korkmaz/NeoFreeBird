@@ -115,8 +115,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Copier les infos du profil";
 "COPY_PROFILE_INFO_DETAIL" = "Copie les pseudos, bios, etc. en un tap.";
 
-"DISABLE_MEDIA_TAB_TITLE" = "Pas d’onglets Médias séparés";
-"DISABLE_MEDIA_TAB_DETAIL" = "Fusionne Photos et Vidéos en un seul onglet.";
 
 "DISABLE_ARTICLES_TITLE" = "Pas d’onglet Articles";
 "DISABLE_ARTICLES_DETAIL" = "Cache l’onglet Articles du profil.";
