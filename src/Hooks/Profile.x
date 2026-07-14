@@ -149,39 +149,3 @@ static char kBHTCopyProviderKey;
 }
 
 %end
-
-// MARK: - No Subscribe button
-
-// The Subscribe provider wraps the follow provider's specs, and its appearance
-// answers demote or hide the Follow button; dropping the T1SuperFollowControl
-// spec and answering NO restores plain Follow. HideUI.x covers Tweets.
-
-%hook T1ProfileActionSuperFollowButtonProvider
-
-- (NSArray *)buttonSpecs {
-    NSArray *specs = %orig;
-
-    if (![BHTSettings boolForKey:@"restore_follow_button"]) {
-        return specs;
-    }
-
-    NSMutableArray *keptSpecs = [NSMutableArray arrayWithCapacity:specs.count];
-    for (T1ProfileActionButtonSpec *spec in specs) {
-        UIView *(^creationBlock)(void) = spec.buttonCreationBlock;
-        if (creationBlock && [creationBlock() isKindOfClass:%c(T1SuperFollowControl)]) {
-            continue;
-        }
-        [keptSpecs addObject:spec];
-    }
-    return keptSpecs;
-}
-
-- (BOOL)shouldUseSecondaryAppearanceForFollowButtonProvider:(__unsafe_unretained id)followButtonProvider {
-    return [BHTSettings boolForKey:@"restore_follow_button"] ? NO : %orig;
-}
-
-- (BOOL)followButtonProvider:(__unsafe_unretained id)followButtonProvider shouldHideButtonForAvailableWidth:(double)availableWidth {
-    return [BHTSettings boolForKey:@"restore_follow_button"] ? NO : %orig;
-}
-
-%end

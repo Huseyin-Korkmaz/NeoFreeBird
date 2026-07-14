@@ -122,36 +122,20 @@
 
 // MARK: - No Subscribe button
 
-// The author view's layout delegate has a dedicated show-decision for the
-// Subscribe button, so the button never gets created or laid out.
+// Every Subscribe surface — the profile button provider (and its answers that
+// demote or hide the Follow button) and the tweet author row — shows only when
+// the relationship's eligible state is 1, so reporting "not eligible" (2) is
+// enough to keep the plain Follow button everywhere. Relationships that are
+// actively super-following stay genuine, so a real subscription keeps its
+// Subscribed button and subscriber timeline.
 
-%hook TTAStatusAuthorViewLayoutDelegate
+%hook TFSTwitterRelationship
 
-- (BOOL)_t1_shouldShowSubscribeButtonForViewModel:(__unsafe_unretained id)viewModel displayType:(long long)displayType account:(__unsafe_unretained id)account options:(unsigned long long)options {
-    return [BHTSettings boolForKey:@"restore_follow_button"] ? NO : %orig;
-}
-
-%end
-
-// The variant is a bitmask: bit 1 is the Subscribe styling, 0x20 the plain
-// Follow variant. The initializer writes the ivar directly, so setVariant:
-// alone isn't enough. Do NOT force the variant getter — it made every control
-// report Follow and hid the button (NeoFreeBird#2).
-static NSUInteger BHTFollowVariantRemovingSubscribe(NSUInteger variant) {
-    if ([BHTSettings boolForKey:@"restore_follow_button"] && (variant & 1)) {
-        return (variant & ~1) | 0x20;
+- (NSInteger)superFollowEligibleState {
+    if ([BHTSettings boolForKey:@"restore_follow_button"] && self.superFollowingState != 1) {
+        return 2;
     }
-    return variant;
-}
-
-%hook TUIFollowControl
-
-- (id)initWithFollowControlType:(NSUInteger)type variant:(NSUInteger)variant {
-    return %orig(type, BHTFollowVariantRemovingSubscribe(variant));
-}
-
-- (void)setVariant:(NSUInteger)variant {
-    %orig(BHTFollowVariantRemovingSubscribe(variant));
+    return %orig;
 }
 
 %end

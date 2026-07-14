@@ -94,7 +94,6 @@
 #pragma mark - Profile
 
 @interface T1ProfileActionButtonSpec : NSObject
-@property(readonly, copy, nonatomic) UIView *(^buttonCreationBlock)(void);
 - (instancetype)initWithPosition:(NSUInteger)position priority:(NSUInteger)priority visibilityBlock:(BOOL (^)(double))visibilityBlock buttonCreationBlock:(UIView *(^)(void))buttonCreationBlock;
 @end
 
