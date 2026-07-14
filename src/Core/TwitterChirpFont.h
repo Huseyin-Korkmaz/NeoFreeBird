@@ -15,9 +15,8 @@ typedef NS_ENUM(NSInteger, TwitterFontStyle) {
     TwitterFontStyleBold
 };
 
-// Pull the real Chirp font straight from Twitter's font group (renamed to
-// TFNUIDefaultFontGroup in 12.3) so weights track the app instead of relying on
-// fragile variable-font instance names. Fall back to a system font if missing.
+// Use Twitter's own font group (TFNUIDefaultFontGroup in 12.3) rather than
+// fragile variable-font instance names; falls back to system fonts.
 static inline UIFont *TwitterChirpFont(TwitterFontStyle style) {
     TFNUIDefaultFontGroup *group = [objc_getClass("TFNUIDefaultFontGroup") sharedFontGroup];
 

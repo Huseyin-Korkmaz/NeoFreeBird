@@ -17,9 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)downloadDidFailureWithError:(NSError *)error;
 @end
 
-// Thin NSURLSession wrapper that downloads a single remote file to a stable
-// location in the temporary directory and reports progress/completion on the
-// main queue. One instance drives one download.
+// One instance drives one download; delegate callbacks arrive on the main queue.
 @interface BHDownload : NSObject
 
 @property (nonatomic, weak, nullable) id<BHDownloadDelegate> delegate;

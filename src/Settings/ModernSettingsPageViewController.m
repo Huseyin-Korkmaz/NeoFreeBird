@@ -19,6 +19,8 @@
 
 @implementation ModernSettingsPageViewController
 
+#pragma mark - Lifecycle
+
 - (instancetype)initWithAccount:(TFNTwitterAccount *)account {
     return [self initWithAccount:account pageKey:nil];
 }
@@ -39,6 +41,8 @@
     [self setupTable];
 }
 
+#pragma mark - Page Registry
+
 - (NSString *)pageKey {
     return self.registryPageKey;
 }
@@ -54,6 +58,8 @@
 - (void)buildSettingsList {
     self.toggles = [BHTSettings settingsForPage:[self pageKey]];
 }
+
+#pragma mark - Setup
 
 - (void)setupNav {
     NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:[self pageTitleKey]];
@@ -82,6 +88,8 @@
     [self.view addSubview:self.tableView];
 }
 
+#pragma mark - Visible Toggles
+
 - (void)updateVisibleToggles {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableArray *visible = [NSMutableArray array];
@@ -99,12 +107,13 @@
     self.visibleToggles = [visible copy];
 }
 
+#pragma mark - UITableViewDataSource
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.visibleToggles.count;
 }
 
-// Localization keys are derived from the setting key: KEY_TITLE and KEY_DETAIL.
-// A button entry may instead carry an explicit titleKey, which takes precedence.
+// Title key defaults to KEY_TITLE; an explicit titleKey takes precedence.
 - (NSString *)localizedTitleForEntry:(NSDictionary *)entry {
     NSString *titleKey = entry[@"titleKey"];
     if (!titleKey) {
@@ -113,16 +122,15 @@
     return [[BHTBundle sharedBundle] localizedStringForKey:titleKey];
 }
 
-// Returns the detail string for a key, or an empty string when none is defined.
+// The bundle returns the key itself when no string exists, which counts as no detail.
 - (NSString *)localizedDetailForKey:(NSString *)key {
     NSString *detailKey = [NSString stringWithFormat:@"%@_DETAIL", [key uppercaseString]];
     NSString *detail = [[BHTBundle sharedBundle] localizedStringForKey:detailKey];
     return [detail isEqualToString:detailKey] ? @"" : detail;
 }
 
-// Fallback subtitle for a button row when its backing preference is unset.
-// Localized here at render time rather than in the registry, which must stay
-// free of localizedStringForKey to avoid re-entering the settings lookup.
+// Localized at render time; the registry can't call localizedStringForKey
+// without re-entering the settings lookup.
 - (NSString *)defaultSubtitleForEntry:(NSDictionary *)entry {
     NSString *subtitleDefaultKey = entry[@"subtitleDefaultKey"];
     if (subtitleDefaultKey) {
@@ -177,6 +185,8 @@
     }
 }
 
+#pragma mark - UITableViewDelegate
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSDictionary *data = self.visibleToggles[indexPath.row];
@@ -221,6 +231,8 @@
     return UITableViewAutomaticDimension;
 }
 
+#pragma mark - Switch Handling
+
 - (void)switchChanged:(UISwitch *)sender {
     NSString *key = objc_getAssociatedObject(sender, @"prefKey");
     if (key) {
@@ -257,6 +269,7 @@
         return;
     }
     BOOL isAdding = newVisibleToggles.count > oldVisibleToggles.count;
+    // Children are registered directly after their parent, so their rows are contiguous below it.
     NSMutableArray *indexPaths = [NSMutableArray array];
     for (int i = 0; i < children.count; i++) {
         [indexPaths addObject:[NSIndexPath indexPathForRow:toggleIndex + 1 + i inSection:0]];

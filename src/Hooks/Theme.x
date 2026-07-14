@@ -11,9 +11,8 @@ static NSNumber *BHT_selectedThemeColor(void) {
     return [NSUserDefaults.standardUserDefaults objectForKey:@"bh_color_theme_selectedColor"];
 }
 
-// Every apply path (Twitter's launch re-apply, trait changes and both the
-// legacy and Swift settings pickers) funnels through this setter, so coercing
-// the option here is enough to keep the custom color pinned.
+// Every apply path (launch re-apply, trait changes, both settings pickers)
+// funnels through this setter, so coercing here keeps the custom color pinned.
 %hook TAEColorSettings
 
 - (void)setPrimaryColorOption:(NSInteger)colorOption {
@@ -35,7 +34,7 @@ void BHT_applySelectedThemeColor(void) {
     }
 }
 
-// MARK: - Tab bar visibility
+// MARK: - Custom tab bar order and visibility
 
 static NSString *BHT_scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
     if (![entry respondsToSelector:@selector(tabView)]) {
@@ -44,10 +43,8 @@ static NSString *BHT_scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
     return [entry tabView].scribePage;
 }
 
-// Filtering and ordering happen on the tab ENTRIES (not the button views) because
-// the app derives both the tab buttons and their content view controllers from
-// this one array. Reordering the buttons alone would leave the content behind and
-// desync taps from panels.
+// Operates on the tab ENTRIES, not the button views: the app derives both the
+// buttons and their content view controllers from this one array.
 static NSArray *BHT_orderedTabEntries(NSArray *entries) {
     // Record the underlying tab views so the editor can show real titles and icons.
     NSMutableArray *tabViews = [NSMutableArray new];
@@ -107,11 +104,12 @@ static NSArray *BHT_orderedTabEntries(NSArray *entries) {
 
 %end
 
+// MARK: - Keep tab bar visible
+
 %hook T1TabBarViewController
 
-// The scroll-driven hide only ever reaches the tab bar as a collapse ratio,
-// so clamping it keeps the bar visible without touching the deliberate hide
-// paths (fullscreen media, immersive player)
+// The scroll-driven hide only reaches the tab bar as a collapse ratio, so
+// clamping it spares the deliberate hides (fullscreen media, immersive player).
 - (void)setTabBarCollapseRatio:(double)ratio {
     if ([BHTSettings boolForKey:@"no_tab_bar_hiding"]) {
         %orig(0.0);
@@ -173,7 +171,7 @@ static UIColor *BHT_tabItemColor(BOOL selected) {
 
 %end
 
-// MARK: - Top bar logo theming, controlled by "color_twitter_icon_in_top_bar"
+// MARK: - Top bar logo theming
 
 %hook _TtC11TwitterHome39HomeDefaultNavigationBarTitleViewPlugin
 

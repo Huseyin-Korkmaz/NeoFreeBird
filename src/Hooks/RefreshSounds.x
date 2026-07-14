@@ -21,8 +21,8 @@ typedef NS_ENUM(NSInteger, BHTRefreshSound) {
 @end
 
 static void BHT_PlayRefreshSound(BHTRefreshSound type) {
-    // SystemSoundIDs are a global audio resource rather than per-control state, so
-    // caching them in statics keyed by sound type is correct and avoids re-decoding.
+    // SystemSoundIDs are a global audio resource, so cache one per sound type
+    // instead of re-decoding.
     static SystemSoundID sounds[2] = {0, 0};
     static BOOL initialized[2] = {NO, NO};
 
@@ -40,15 +40,12 @@ static void BHT_PlayRefreshSound(BHTRefreshSound type) {
     }
 }
 
-// Every status transition funnels through -_setStatus:fromScrolling:, so it's the
-// single closest-to-source seam: a drag past the threshold commits a refresh
-// (status 1, fromScrolling), and -setLoading:completion: clears it (status 0) once
-// the refresh finishes.
+// Every status transition funnels through -_setStatus:fromScrolling:; a drag past
+// the threshold commits a refresh (status 1, fromScrolling) and status 0 clears it.
 %hook TFNPullToRefreshControl
 
-// Whether the in-flight refresh was started by the user dragging. Per-instance
-// (several scroll views can each own a control), so it lives on the instance rather
-// than in a static. Gates the completion "pop" to manual pulls only.
+// Whether the in-flight refresh was started by a drag; per-instance because
+// several scroll views each own a control. Gates the "pop" to manual pulls only.
 static char kManualRefreshKey;
 
 - (void)_setStatus:(unsigned long long)status fromScrolling:(BOOL)fromScrolling {

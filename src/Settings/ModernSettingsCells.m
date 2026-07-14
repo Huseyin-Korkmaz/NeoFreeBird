@@ -81,6 +81,7 @@
     [self updateIconColors];
 }
 
+// Vector images bake in their fill color, so they are re-rendered on every theme change.
 - (void)updateIconColors {
     NSString *iconName = objc_getAssociatedObject(self, @selector(iconName));
     if (iconName) {

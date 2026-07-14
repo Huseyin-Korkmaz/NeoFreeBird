@@ -69,7 +69,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    // Placeholder only, no rows
     return 0;
 }
 

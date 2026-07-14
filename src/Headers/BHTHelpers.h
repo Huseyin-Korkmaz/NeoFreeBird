@@ -90,18 +90,10 @@ static UIViewController * _Nonnull topMostController() {
 - (void)setImage:(UIImage *)image;
 @end
 
-// Forward declaration for TweetSourceHelper (implemented in SourceLabels.x)
+// Implemented in Hooks/SourceLabels.x
 @interface TweetSourceHelper : NSObject
 + (void)fetchSourceForTweetID:(NSString *)tweetID;
 @end
 
-// Forward declaration for WKWebView
-@interface WKWebView (BHTwitter)
-@end
-
-// Block type definitions for compatibility
-typedef void (^VoidBlock)(void);
-typedef id (^UnknownBlock)(void);
-
-// Forward declaration for the BHTwitter accent color function
+// Defined in Hooks/BHTHookHelpers.m
 extern UIColor *BHTCurrentAccentColor(void);

@@ -1,8 +1,6 @@
 // BHAppIconItem.h
 // BHTwitter
 //
-// Revised to hold Info.plist icon key & file list
-//
 
 #import <Foundation/Foundation.h>
 
@@ -19,7 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 /// is this the primary (default) icon?
 @property (nonatomic, assign, readonly) BOOL isPrimaryIcon;
 
-/// Designated initializer
 - (instancetype)initWithBundleIconName:(NSString *)iconName
                         iconFileNames:(NSArray<NSString*>*)files
                          isPrimaryIcon:(BOOL)isPrimary;

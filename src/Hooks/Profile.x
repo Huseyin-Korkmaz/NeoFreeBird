@@ -5,7 +5,7 @@
 
 #import "BHTHookHelpers.h"
 
-// MARK: Copy profile info
+// MARK: - Copy profile info
 
 static char kBHTCopyProviderKey;
 
@@ -72,9 +72,8 @@ static char kBHTCopyProviderKey;
 }
 
 - (NSArray *)buttonSpecs {
-    // Native positions run from the follow button (2) up to the mute button
-    // (10), so 100 places the copy button at the far end next to the overflow
-    // button; priority 1 lets every native button win the width fight.
+    // Native positions run from 2 (follow) to 10 (mute), so 100 lands at the
+    // far end; priority 1 lets every native button win the width fight.
     __weak BHTProfileCopyButtonProvider *weakSelf = self;
     T1ProfileActionButtonSpec *spec = [[%c(T1ProfileActionButtonSpec) alloc] initWithPosition:100
                                                                                      priority:1
@@ -109,7 +108,7 @@ static char kBHTCopyProviderKey;
 
 %end
 
-// MARK: Hide premium offer
+// MARK: - Hide premium offer
 
 %hook T1ProfileSummaryView
 
@@ -119,7 +118,7 @@ static char kBHTCopyProviderKey;
 
 %end
 
-// MARK: Show unrounded follower/following counts
+// MARK: - Show unrounded follower/following counts
 
 %hook T1ProfileFriendsFollowingViewModel
 
@@ -151,15 +150,11 @@ static char kBHTCopyProviderKey;
 
 %end
 
-// MARK: No Subscribe button
+// MARK: - No Subscribe button
 
-// The Subscribe provider wraps the follow-button provider: its buttonSpecs are
-// the follow specs plus a Subscribe spec, and its appearance-delegate answers
-// demote the Follow button to the outline style, or hide it entirely once
-// subscribed, while Subscribe is visible. Dropping the spec whose creation
-// block makes the T1SuperFollowControl and answering the appearance questions
-// with NO restores the plain Follow button. HideUI.x covers the Subscribe
-// button on Tweets.
+// The Subscribe provider wraps the follow provider's specs, and its appearance
+// answers demote or hide the Follow button; dropping the T1SuperFollowControl
+// spec and answering NO restores plain Follow. HideUI.x covers Tweets.
 
 %hook T1ProfileActionSuperFollowButtonProvider
 

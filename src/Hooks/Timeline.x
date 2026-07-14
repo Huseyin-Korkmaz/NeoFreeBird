@@ -5,17 +5,16 @@
 
 #import "BHTHookHelpers.h"
 
-// MARK: Hide custom timelines
+// MARK: - Hide custom timelines
 
 static __weak NSObject *BHTPinnedTimelinesRepository;
 static NSArray *BHTLastPinnedTimelineModels;
 static BOOL BHTPinnedTimelinesWriteBypass = NO;
 
-// Applies a toggle without relaunching. Hiding rewrites the unchanged pinned
-// list through the repository — updatePinnedTimelines: is the same write the
-// tab reorder uses, so anything but the real list would unpin the user's tabs
-// for real. The rewrite only serves to republish: the delegate hook below swaps
-// in the empty list on the way through, collapsing the strip.
+// Applies a toggle without relaunching. Hiding rewrites the UNCHANGED pinned
+// list purely to republish — updatePinnedTimelines: persists server-side, so
+// anything else would unpin for real; the delegate hook below swaps in the
+// empty list on the way through.
 void BHT_applyHideCustomTimelinesSetting(void) {
     NSObject *repository = BHTPinnedTimelinesRepository;
     if (!repository) {
@@ -34,10 +33,9 @@ void BHT_applyHideCustomTimelinesSetting(void) {
     }
 }
 
-// The app only reconfigures the tab bar's trailing accessory while the pinned
-// tab strip is showing, so a button built before hiding mid-session survives
-// (with its tap gated off); its visibility is synced here instead. The property
-// is a Swift lazy var, whose storage ivar KVC can't see, hence the fallback.
+// The trailing accessory is only reconfigured while the strip is showing, so a
+// button built before hiding mid-session survives; sync its visibility here. The
+// property is a Swift lazy var whose storage ivar KVC can't see, hence the fallback.
 static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
     UIView *button = nil;
 
@@ -61,9 +59,8 @@ static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
     }
 }
 
-// The repository publishes the pinned-timelines list to the home container
-// through this single delegate call, so handing it an empty array removes the
-// custom tabs without ever touching the persisted server-side state.
+// The repository publishes the pinned list through this single delegate call, so
+// handing it an empty array hides the tabs without touching persisted state.
 %hook _TtC32TwitterHomeFeatureImplementation35HomeTimelineContainerViewController
 
 - (void)pinnedTimelinesRepository:(id)repository didChangeWithPinnedTimelineModels:(NSArray *)models {
@@ -90,9 +87,8 @@ static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
 
 %end
 
-// While hiding, the overridden pinned-tabs feature switches make the app
-// compute an empty pinned list; freezing repository writes keeps it from
-// being persisted over the user's real tabs.
+// While hiding, the overridden pinned-tabs feature switches make the app compute
+// an empty pinned list; freeze writes so it can't overwrite the real tabs.
 %hook _TtC32TwitterHomeFeatureImplementation31CachedPinnedTimelinesRepository
 
 - (void)updatePinnedTimelines:(id)timelines {
@@ -105,7 +101,7 @@ static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
 
 %end
 
-// MARK: Force Tweets to show images as Full frame: https://github.com/BandarHL/BHTwitter/issues/101
+// MARK: - Force tweet images to full frame
 
 %hook T1StandardStatusAttachmentViewAdapter
 
@@ -120,11 +116,10 @@ static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
 
 %end
 
-// MARK: Hide the Spaces bar
+// MARK: - Hide the Spaces bar
 
-// The bar is still the repurposed Fleets line. Both home timeline
-// implementations create the same T1FleetLineHeaderController, and this is its
-// visibility gate, re-evaluated on every content or settings update.
+// The bar is still the repurposed Fleets line; both home timeline implementations
+// share this visibility gate, re-evaluated on every content or settings update.
 %hook T1FleetLineHeaderController
 
 - (BOOL)_t1_shouldShowFleetLine {
@@ -137,7 +132,7 @@ static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
 
 %end
 
-// MARK: Remove the "Discover more" section below conversations, who-to-follow modules and timeline prompts
+// MARK: - Hide "Discover more", who-to-follow and prompts
 
 static BOOL BHTIsInConversationHierarchy(UIViewController *viewController) {
     UIViewController *currentVC = viewController;
@@ -170,12 +165,10 @@ static NSString *BHTItemEntryID(id viewModel) {
     return [entryID isKindOfClass:[NSString class]] ? entryID : nil;
 }
 
-// The entry filters discriminate by entry ID (verified on device; the former
-// conversationTreeContext discriminator is never populated in 12.3). Discover More
-// items carry "tweetdetailrelatedtweets-…", who-to-follow entries "who-to-follow-…",
-// while replies are "conversationthread-…" and the focal tweet "tweet-…". Server-sent
-// prompt banners (add contacts, turn on notifications) all render through the one
-// prompt view model, so those are matched by class instead.
+// Discriminates by entry ID (conversationTreeContext is never populated in 12.3):
+// Discover More items carry "tweetdetailrelatedtweets-…" and who-to-follow entries
+// "who-to-follow-…". Server-sent prompt banners all render through the one prompt
+// view model, so those are matched by class instead.
 static BOOL BHTShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePrompts, BOOL inConversation) {
     id viewModel = BHT_unwrapDataViewItem(item);
 

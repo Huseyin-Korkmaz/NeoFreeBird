@@ -5,7 +5,7 @@
 
 #import "BHTHookHelpers.h"
 
-// ===== Padlock helpers =====
+// MARK: - Padlock helpers
 
 static const NSInteger BHTPadlockOverlayTag = 909;
 
@@ -166,7 +166,7 @@ static void BHT_presentAuthIfNeeded(void) {
     }
 }
 
-// MARK: App Delegate hooks
+// MARK: - App Delegate hooks
 
 %hook T1AppDelegate
 
@@ -178,7 +178,6 @@ static void BHT_presentAuthIfNeeded(void) {
         [[%c(FLEXManager) sharedManager] showExplorer];
     }
 
-    // Apply the custom theme color immediately after launch
     dispatch_async(dispatch_get_main_queue(), ^{
         BHT_applySelectedThemeColor();
     });
@@ -210,9 +209,8 @@ static void BHT_presentAuthIfNeeded(void) {
     %orig;
 
     if ([BHTSettings boolForKey:@"padlock"]) {
-        // Cover the UI (and the app-switcher snapshot) and mark unauthenticated
-        // so the next activation prompts again. The overlay persists through the
-        // background transition, so covering here is sufficient.
+        // Cover the UI (and the app-switcher snapshot) and mark unauthenticated so
+        // the next activation prompts again; the overlay persists into background.
         BHT_showPadlockOverlay();
         BHT_setAuthenticated(NO);
     }
@@ -235,12 +233,11 @@ static void BHT_presentAuthIfNeeded(void) {
 
 %end
 
-// MARK: Restore Launch Animation
+// MARK: - Restore Launch Animation
 
-// When the animated launch screen plays it masks its container layer with an
-// X-shaped hole (revealMaskLayer / holePathInView) and grows it to reveal the app
-// through an X-shaped portal. Detach that mask so the logo zoom is kept but the
-// splash simply fades out instead.
+// The launch animation reveals the app through a growing X-shaped mask
+// (revealMaskLayer / holePathInView); detach it so the logo zoom is kept but the
+// splash simply fades out.
 
 static void BHT_stripLaunchRevealMask(UIView *view) {
     // The X-shaped hole lives on the container subview's layer.mask; the top

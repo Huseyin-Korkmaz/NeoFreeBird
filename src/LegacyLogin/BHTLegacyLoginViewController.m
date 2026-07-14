@@ -8,10 +8,8 @@
 
 // Password login (no reset), matching 9.67's built-in sign-in:
 //   1. Generate ui_metrics from x.com/i/js_inst (anti-bot token).
-//   2. xauth_password -> OAuth token directly, or a 2FA challenge
-//   3. If 2FA is required, present the app's own T1LoginChallengeWebViewController (via
-//      T1LoginChallengeFactory), which loads the 2FA URL and polls xauth_challenge
-//      until it returns an account.
+//   2. xauth_password -> OAuth token directly, or a 2FA challenge.
+//   3. On 2FA, present the app's T1LoginChallengeFactory web challenge, which polls xauth_challenge.
 //   4. Add the account and switch to it.
 
 typedef void (^BHTCmdCompletion)(BOOL success, id response, id parseError);
@@ -236,9 +234,7 @@ static NSString *const kJSInstJS =
 
     self.userField = [self field:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"PHONE_OR_EMAIL_OR_USERNAME_LABEL"] secure:NO];
     self.userField.keyboardType = UIKeyboardTypeEmailAddress;
-    // Tag the fields so iOS Password AutoFill recognises the form and offers
-    // saved logins / the Passwords key in the QuickType bar (the native
-    // equivalent of autocomplete=username / current-password on a web form).
+    // Content types let iOS Password AutoFill offer saved logins.
     self.userField.textContentType = UITextContentTypeUsername;
 
     self.passField = [self field:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"PASSWORD_LABEL"] secure:YES];

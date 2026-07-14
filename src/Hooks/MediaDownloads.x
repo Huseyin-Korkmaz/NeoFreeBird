@@ -5,7 +5,7 @@
 
 #import "BHTHookHelpers.h"
 
-// MARK: DM download
+// MARK: - DM video download
 
 // The DM UI is Swift now: media messages live in DMConversation.MessageAttachmentView,
 // which hosts a shared TweetMediaAttachments media view exposing its models through
@@ -58,7 +58,10 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
 }
 %end
 
-// upload custom voice
+// MARK: - Upload custom voice
+
+// Overwrites the recording at the attachment's existing file path, so the
+// composer picks up the replacement without any model changes.
 %hook T1MediaAttachmentsViewCell
 %property (nonatomic, strong) UIButton *uploadButton;
 - (void)updateCellElements {
@@ -129,7 +132,7 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
 }
 %end
 
-// MARK: Save tweet as an image
+// MARK: - Save tweet as an image
 
 %hook TTAStatusInlineShareButton
 - (void)didLongPressActionButton:(UILongPressGestureRecognizer *)gestureRecognizer {
@@ -175,8 +178,10 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
 }
 %end
 
-// MARK: Download button
+// MARK: - Tweet video download
 
+// _t1_actionItemsForStatus:... is a category method on UIViewController, so the
+// hook has to land on the base class to cover every share/action sheet.
 %hook UIViewController
 - (NSArray *)_t1_actionItemsForStatus:(__unsafe_unretained id)status account:(__unsafe_unretained id)account shareableEntity:(__unsafe_unretained id)shareableEntity entityURL:(__unsafe_unretained id)entityURL source:(__unsafe_unretained id)source options:(NSUInteger)options scribeComponent:(__unsafe_unretained id)scribeComponent doneBlock:(__unsafe_unretained id)doneBlock {
     NSArray *origItems = %orig;
@@ -187,6 +192,7 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
 
     NSArray *mediaEntities = [[status entities] media];
     BOOL hasVideo = NO;
+    // mediaType 2 = video, 3 = GIF
     for (TFSTwitterEntityMedia *media in mediaEntities) {
         if ([media isKindOfClass:%c(TFSTwitterEntityMedia)] && (media.mediaType == 2 || media.mediaType == 3)) {
             hasVideo = YES;

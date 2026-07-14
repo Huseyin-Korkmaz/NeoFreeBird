@@ -59,10 +59,9 @@ void BHT_applySquareAvatarsSetting(void) {
 
 %end
 
-// TUIAvatarImageView installs the circular pre-clip image transformer based on
-// the incoming style, so it needs the coercion before its own logic runs. Its
-// style mapping class method also feeds the Swift avatar views, whose style
-// setter is not reachable from ObjC.
+// TUIAvatarImageView picks its circular pre-clip image transformer from the
+// incoming style, so coerce before its own logic runs. Its style mapping class
+// method also feeds the Swift avatar views, whose setter is unreachable from ObjC.
 %hook TUIAvatarImageView
 
 - (void)setStyle:(NSInteger)style {

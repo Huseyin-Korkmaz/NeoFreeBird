@@ -5,8 +5,7 @@
 //  Created by Bandar Alruwaili on 10/12/2023.
 //  Modified by actuallyaridan on 25/05/2025.
 //
-//  Clones the native accent picker (ColorThemePickerItem): an evenly-spread row
-//  of filled colour circles with a ring on the selected one.
+//  Clones the native accent picker (ColorThemePickerItem).
 //
 
 #import "BHColorThemeViewController.h"
@@ -17,9 +16,8 @@
 #import <UIKit/UIKit.h>
 #import "Core/TwitterChirpFont.h"
 
-// Single source of truth for the selected accent: prefer our override, then
-// Twitter's own primary color option, then the default (blue = option 1). Mirrors
-// BHTCurrentAccentColor so the default swatch shows selected before any change.
+// Mirrors BHTCurrentAccentColor's precedence (our override, then Twitter's own
+// option) so the default swatch shows selected before any change.
 static NSInteger BHCurrentSelectedColorOption(void) {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults objectForKey:@"bh_color_theme_selectedColor"]) {
@@ -31,9 +29,8 @@ static NSInteger BHCurrentSelectedColorOption(void) {
     return option >= 1 ? option : 1;
 }
 
-// Twitter's six accent options, and their colours from the app's own palette.
-// The accent picker itself ships no localized colour names, so the swatches
-// borrow the Fleets colour accessibility labels for the same six colours.
+// The accent picker ships no localized colour names, so the swatches borrow the
+// Fleets accessibility labels for the same six colours.
 static const NSUInteger kAccentOptionCount = 6;
 static NSString * const kAccentColorNames[kAccentOptionCount] = { @"BLUE", @"YELLOW", @"RED", @"PURPLE", @"ORANGE", @"GREEN" };
 
@@ -48,6 +45,8 @@ static UIColor *BHNativeAccentColor(NSUInteger option) {
 @end
 
 @implementation BHColorThemeViewController
+
+#pragma mark - Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -68,8 +67,7 @@ static UIColor *BHNativeAccentColor(NSUInteger option) {
     row.translatesAutoresizingMaskIntoConstraints = NO;
     row.axis = UILayoutConstraintAxisHorizontal;
     row.distribution = UIStackViewDistributionFillEqually;
-    // Fill so each swatch control takes the full row height (a real tap target);
-    // the circle stays centered inside it.
+    // Fill so each swatch spans the row height as a real tap target.
     row.alignment = UIStackViewAlignmentFill;
     [self.view addSubview:row];
 
@@ -99,6 +97,8 @@ static UIColor *BHNativeAccentColor(NSUInteger option) {
 
     [self refreshSelection];
 }
+
+#pragma mark - Selection
 
 - (void)refreshSelection {
     NSInteger selected = BHCurrentSelectedColorOption();

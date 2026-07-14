@@ -17,13 +17,12 @@
 #import "Core/TwitterChirpFont.h"
 #import <objc/runtime.h>
 
-// Import external function to get theme color
 extern UIColor *BHTCurrentAccentColor(void);
 
 // Whether the account genuinely has a panel's tab, ignoring the forced tab gates
 extern BOOL BHT_panelIsGenuinelyAvailable(long long panelID);
 
-// Interface declaration for TFNFloatingActionButton
+// The floating compose button, hidden while the editor is on screen.
 @interface TFNFloatingActionButton : UIView
 - (void)hideAnimated:(_Bool)animated completion:(id)completion;
 @end

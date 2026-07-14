@@ -35,7 +35,7 @@ static UIViewController *BHTopMostController(void) {
 
 @implementation BHDownloadInlineButton
 
-#pragma mark ••• Download handler
+#pragma mark - Download handler
 - (void)presentDownloadOptionsForMediaEntities:(NSArray *)mediaEntities {
     @try {
         NSAttributedString *titleString = [[NSAttributedString alloc] initWithString:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_MENU_TITLE"]
@@ -78,9 +78,8 @@ static UIViewController *BHTopMostController(void) {
             }];
         };
 
-        // Appends a download item per playable variant of a single media entity.
-        // -[TFSTwitterEntityMediaVideoInfo variants] backs both video (mediaType 3)
-        // and animated-GIF (mediaType 2) entities; photos carry no videoInfo.
+        // videoInfo.variants backs both video (mediaType 3) and GIF (mediaType 2);
+        // photos carry no videoInfo.
         void (^appendVariants)(NSMutableArray *, TFSTwitterEntityMedia *) = ^(NSMutableArray *dest, TFSTwitterEntityMedia *media) {
             for (TFSTwitterEntityMediaVideoVariant *variant in media.videoInfo.variants) {
                 NSURL *url = variant.url.length ? [NSURL URLWithString:variant.url] : nil;
@@ -91,9 +90,7 @@ static UIViewController *BHTopMostController(void) {
             }
         };
 
-        // Keep only downloadable entities: video/GIF whose variants resolved. This
-        // drops photos the caller may have handed us and decides grouping on the
-        // real video count rather than the raw media count.
+        // Filter to video/GIF so grouping keys off the real video count, not the raw media count.
         NSMutableArray<TFSTwitterEntityMedia *> *videoEntities = [NSMutableArray new];
         for (TFSTwitterEntityMedia *media in mediaEntities) {
             if ((media.mediaType == 2 || media.mediaType == 3) && media.videoInfo.variants.count > 0) {
@@ -130,7 +127,7 @@ static UIViewController *BHTopMostController(void) {
     }
 }
 
-#pragma mark ••• BHDownloadDelegate
+#pragma mark - BHDownloadDelegate
 - (void)downloadProgress:(float)pct {
     self.hud.detailTextLabel.text = [BHTManager getDownloadingPersent:pct];
 }

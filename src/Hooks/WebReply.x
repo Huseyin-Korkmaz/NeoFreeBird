@@ -2,10 +2,13 @@
 //  WebReply.x
 //  NeoFreeBird
 //
+//  Opens replies in an authenticated web composer instead of the native one and
+//  captures the posted reply's ID from the webview. Gated on `reply_in_webview`.
+//
 
 #import "BHTHookHelpers.h"
 
-// MARK: Open reply in webview
+// MARK: - Reply webview helpers
 
 static TFNTwitterStatus *BHT_statusFromObject(id object) {
     if (!object) {
@@ -36,8 +39,8 @@ static TFNTwitterStatus *BHT_statusFromObject(id object) {
 static const void *BHTKeepReplyInWebViewKey = &BHTKeepReplyInWebViewKey;
 static const void *BHTReplyWebViewDismissingKey = &BHTReplyWebViewDismissingKey;
 
-// Injected into the reply webview via -evaluateJavaScript
-// Grabs the ID of the new post
+// Injected into the reply webview: hooks fetch/XHR to capture the new post's ID from
+// the web CreateTweet response, since there's no native completion callback to read.
 static NSString *const BHTReplyCaptureScript =
     @"(function(){"
     "if(window.__bhtReplyHook)return;window.__bhtReplyHook=true;"
@@ -55,6 +58,7 @@ static NSString *const BHTReplyCaptureScript =
     "x.addEventListener('load',function(){try{save(JSON.parse(x.responseText));}catch(e){}});}}catch(e){}return os.apply(this,arguments);};"
     "})();";
 
+// Reads and clears the reply ID stashed by the capture script.
 static NSString *const BHTReplyReadScript =
     @"(function(){var v=sessionStorage.getItem('__bhtNewReply')||'';sessionStorage.removeItem('__bhtNewReply');return v;})();";
 
@@ -144,9 +148,10 @@ static BOOL BHT_openAuthenticatedTweetWebView(NSString *statusID) {
     return YES;
 }
 
-// In 12.3 the inline reply button is a Swift TTAStatusInlineActionButton with no
-// dedicated ObjC subclass; every inline reply tap funnels through this single event
-// handler, whose originalStatus argument is the TFNTwitterStatus being replied to.
+// MARK: - Hooks
+
+// The inline reply button has no dedicated ObjC subclass in 12.3; every inline
+// reply tap funnels through this handler with the status being replied to.
 %hook T1StatusViewInlineActionTapEventHandler
 - (void)performReplyActionWithAccount:(__unsafe_unretained id)account
                                 event:(__unsafe_unretained id)event

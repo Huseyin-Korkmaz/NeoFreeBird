@@ -1,8 +1,6 @@
 // BHAppIconItem.m
 // BHTwitter
 //
-// Revised to hold Info.plist icon key & file list
-//
 
 #import "BHAppIconItem.h"
 

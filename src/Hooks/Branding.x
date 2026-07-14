@@ -5,7 +5,7 @@
 
 #import "BHTHookHelpers.h"
 
-// MARK: Restore Twitter terminology, controlled by "restore_twitter_names"
+// MARK: - Restore Twitter terminology
 // Two layers, both driven by locale files in the tweak bundle:
 //   1. RenameOverrides.strings — Twitter localization key -> exact replacement,
 //      a missing key falls through to the generic replacement
@@ -20,9 +20,8 @@ static NSDictionary<NSString *, NSString *> *BHTRenameTable(NSString *name) {
     NSString *localization = [NSBundle preferredLocalizationsFromArray:bundle.localizations
                                                         forPreferences:@[appLanguage]].firstObject;
 
-    // preferredLocalizationsFromArray: silently returns the development region (en)
-    // when nothing matches, so reject a locale that disagrees with the app language:
-    // unsupported languages then skip renaming instead of getting English rules.
+    // preferredLocalizationsFromArray: falls back to en when nothing matches, so
+    // reject a mismatch: unsupported languages skip renaming, not get English rules.
     NSString *appCode = [appLanguage componentsSeparatedByString:@"-"].firstObject;
     NSString *lprojCode = [[localization stringByReplacingOccurrencesOfString:@"_" withString:@"-"]
                               componentsSeparatedByString:@"-"].firstObject;
@@ -50,10 +49,9 @@ static NSDictionary<NSString *, NSString *> *BHTwitterWordMap(void) {
     return map;
 }
 
-// Builds a case-insensitive \b(word|word…)\b from every map key, longest word first
-// so inflections win over their stems ("reposts" before "repost"). Matching is always
-// case-insensitive; per-match resolution (see BHRenameEdits) enforces exact case for
-// keys that carry an uppercase letter, so lowercase "x" never becomes "Twitter".
+// Builds a case-insensitive \b(word|word…)\b from the map keys, longest first so
+// inflections win over their stems. Exact case for uppercase-bearing keys is
+// enforced per match in BHRenameEdits, so lowercase "x" never becomes "Twitter".
 static NSRegularExpression *BHTRenameRegex(void) {
     NSMutableArray<NSString *> *words = [NSMutableArray array];
     for (NSString *word in BHTwitterWordMap()) {
@@ -93,10 +91,8 @@ static NSString *BHMatchCapitalisation(NSString *token, NSString *base) {
     return base;
 }
 
-// Returns the edits (@"range" -> NSValue, @"repl" -> NSString) to apply to `input`, in
-// ascending order — the single regex pass yields non-overlapping left-to-right matches,
-// so callers apply them back-to-front and no edit invalidates a later range.
-// Returns nil when there is nothing to change.
+// Returns the edits (@"range" -> NSValue, @"repl" -> NSString) in ascending,
+// non-overlapping order — apply them back-to-front. Nil when nothing changes.
 static NSArray<NSDictionary *> *BHRenameEdits(NSString *input) {
     if (input.length == 0) {
         return nil;
@@ -115,9 +111,8 @@ static NSArray<NSDictionary *> *BHRenameEdits(NSString *input) {
 
     for (NSTextCheckingResult *match in [regex matchesInString:input options:0 range:full]) {
         NSString *token = [input substringWithRange:match.range];
-        // Exact key wins (uppercase-bearing keys like "X" replace verbatim); otherwise
-        // fall back to the lowercase key and copy the token's capitalisation. A lowercase
-        // occurrence of an uppercase-only key resolves to neither and is left alone.
+        // Exact key wins; otherwise fall back to the lowercase key and copy the token's
+        // capitalisation. A lowercase hit on an uppercase-only key is left alone.
         NSString *repl = wordMap[token];
         if (!repl) {
             NSString *base = wordMap[token.lowercaseString];
@@ -172,7 +167,7 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
     return result;
 }
 
-// MARK: Rename localized strings, controlled by "restore_twitter_names"
+// MARK: - Rename localized strings
 // Every UI string routes through this Foundation method in 12.3, so the rename
 // applies broadly. Skip our own bundle so the tweak's strings aren't reprocessed.
 %hook NSBundle
@@ -190,13 +185,10 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 }
 %end
 
-// MARK: Rename server-composed text + colour restored source labels
-// TFNAttributedTextView renders interface chrome and server-composed URT text
-// (notification headers, footers, timestamps, counts…) that carries no localization
-// key, so the NSBundle hook can't reach it. Tweet bodies also flow through here:
-// TTAStatusBodyAttributedTextView is a TFNAttributedTextView subclass that doesn't
-// override setTextModel:, so the rename is skipped for it to avoid mangling a user's
-// own words ("Post", "Tweet", …) inside their tweet.
+// MARK: - Rename server-composed text
+// TFNAttributedTextView renders chrome and server-composed URT text that carries no
+// localization key, out of the NSBundle hook's reach. The TTAStatusBodyAttributedTextView
+// subclass (tweet bodies) is skipped so a user's own words aren't mangled.
 %hook TFNAttributedTextView
 - (void)setTextModel:(TFNAttributedTextModel *)model {
     if (!model || !model.attributedString) {
@@ -207,7 +199,6 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
     NSMutableAttributedString *newString = nil;
     BOOL textChanged = NO;
 
-    // --- Restore Twitter terminology (never on tweet bodies) ---
     if ([BHTSettings boolForKey:@"restore_twitter_names"] &&
         ![self isKindOfClass:%c(TTAStatusBodyAttributedTextView)]) {
         NSAttributedString *source = newString ?: model.attributedString;
@@ -240,11 +231,10 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 }
 %end
 
-// MARK: Label the "new posts" refresh pill, controlled by "refresh_pill_label"
-// TUIUpdateIndicator rebuilds its pill on every presentation and hardcodes blank text
-// on the facepile variant (no feature flag gates it); it used to say "posted". The
-// tweak ships that label in the app's terminology and routes it through the rename
-// pipeline, so "restore_twitter_names" converts it per-language like any app string.
+// MARK: - Label the "new posts" refresh pill
+// The facepile pill variant hardcodes blank text (no feature flag gates it). The
+// tweak ships the label in the app's terminology and routes it through the rename
+// pipeline, so "restore_twitter_names" converts it per-language.
 static NSString *BHPillLabelText(void) {
     NSString *label = [[BHTBundle sharedBundle] localizedStringForKey:@"REFRESH_PILL_TEXT"];
     if ([BHTSettings boolForKey:@"restore_twitter_names"]) {

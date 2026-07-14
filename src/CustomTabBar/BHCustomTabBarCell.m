@@ -11,7 +11,6 @@
 #import "Core/TwitterChirpFont.h"
 #import <QuartzCore/QuartzCore.h>
 
-// UIImage category for TFN vector image methods
 @interface UIImage (TFNAdditions)
 + (id)tfn_vectorImageNamed:(id)arg1 fitsSize:(struct CGSize)arg2 fillColor:(id)arg3;
 @end
@@ -90,7 +89,6 @@
         ? BHCustomTabBarInactiveCardBackgroundColor()
         : BHCustomTabBarCardBackgroundColor();
 
-    // Border is always 2pt: accent when selected, clear otherwise.
     self.container.layer.borderColor = (self.tabSelected ? self.accentColor : [UIColor clearColor]).CGColor;
 
     // Soft card shadow, always on (matches the native cell).

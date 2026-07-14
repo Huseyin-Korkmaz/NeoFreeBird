@@ -10,14 +10,12 @@
 // can read through the unlock.
 static __thread BOOL BHTReportGenuineSubscription = NO;
 
-// While set, the custom-navigation tab gates (below) report their real values,
-// so the tab bar editor and the dash spoof can tell panels the account genuinely
-// has from ones only unlocked for the tab pool.
+// While set, the custom-navigation tab gates (below) report their real values, so
+// callers can tell genuinely-held panels from ones only unlocked for the tab pool.
 static __thread BOOL BHTReportGenuineTabGates = NO;
 
-// Whether the active account is really a premium subscriber, ignoring the forced
-// unlock. Lets switch-gated surfaces that have no premium-aware seam of their own
-// follow the genuine status instead of the spoof.
+// Whether the account is really a premium subscriber, ignoring the forced unlock —
+// for switch-gated surfaces that have no premium-aware seam of their own.
 static BOOL BHTAccountIsGenuinelyPremium(void) {
     Class hostClass = objc_getClass("T1HostViewController");
     id host = ((id (*)(id, SEL))objc_msgSend)((id)hostClass, @selector(sharedHostViewController));
@@ -32,6 +30,8 @@ static BOOL BHTAccountIsGenuinelyPremium(void) {
     BHTReportGenuineSubscription = saved;
     return premium;
 }
+
+// MARK: - Feature switch overrides
 
 static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     if (![key isKindOfClass:[NSString class]]) {
@@ -84,9 +84,8 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @YES;
     }
 
-    // Auto translation decisions (GrokPostTranslationDisplayHelper and friends)
-    // check these before the per-language preference, so turning them off stops
-    // every surface from translating automatically while manual translate stays.
+    // Checked before the per-language preference, so turning these off stops all
+    // auto translation while manual translate stays.
     if ([key isEqualToString:@"grok_translations_post_auto_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_bio_auto_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_community_note_auto_translation_is_enabled"] ||
@@ -106,11 +105,8 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @(![BHTSettings boolForKey:@"hide_grok_create"]);
     }
 
-    // Grok creation surfaces: the composer toolbar buttons (the plain Grok button
-    // and its Grok Imagine replacement), the imagine menu on composer image
-    // attachments, the imagine menus in the media viewers, the Edit with Grok
-    // action-sheet item on photo posts, the imagine CTA buttons, and the immersive
-    // player's create-your-own button.
+    // Grok creation surfaces: composer buttons, imagine menus and CTAs, Edit with
+    // Grok on photo posts, and the immersive player's create-your-own button.
     if ([key isEqualToString:@"ios_composer_grok_button_enabled"] ||
         [key isEqualToString:@"grok_imagine_composer_enabled"] ||
         [key isEqualToString:@"grok_composer_imagine_is_enabled"] ||
@@ -127,16 +123,14 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return [BHTSettings boolForKey:@"hide_grok_create"] ? @NO : nil;
     }
 
-    // The edit-photo and create-own Grok buttons (media viewer share sheet, timeline
-    // and detail view images, profile picture prompts) hide behind this innocuously
-    // named switch family, which only Grok.GrokFeatureAccess reads.
+    // Disguised switch family for the Grok edit-photo and create-own buttons,
+    // read only by Grok.GrokFeatureAccess.
     if ([key hasPrefix:@"ios_button_layout_fix"] && [key hasSuffix:@"_enabled"]) {
         return [BHTSettings boolForKey:@"hide_grok_create"] ? @NO : nil;
     }
 
-    // Grok analyze: the tweet-side show decisions (timeline author view and post
-    // detail nav bar, including its context-menu variant) all gate on the
-    // backend-controlled switch before consulting the per-tweet flag.
+    // Grok analyze: every tweet-side show decision gates on this backend switch
+    // before consulting the per-tweet flag.
     if ([key isEqualToString:@"grok_ios_author_view_analyze_button_via_backend_enabled"]) {
         return [BHTSettings boolForKey:@"hide_grok_analyze"] ? @NO : nil;
     }
@@ -193,11 +187,9 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return [BHTSettings boolForKey:@"disable_video_captions"] ? @NO : nil;
     }
 
-    // Custom navigation: the per-panel eligibility gates the app reads when it
-    // decides which tab entries to build. Forced on so every panel that can host
-    // a tab exists for the editor to offer; the tab bar hook keeps them out of
-    // the bar until the user adds them, and the dash spoof (below) keeps the
-    // panels that are only unlocked here out of the side drawer.
+    // Custom navigation: per-panel tab gates, forced on so every panel exists for
+    // the editor to offer. The tab bar hook keeps them out of the bar and the dash
+    // spoof (below) keeps the panels only unlocked here out of the side drawer.
     if ([key isEqualToString:@"ios_tab_bar_default_show_profile"] ||
         [key isEqualToString:@"ios_tab_bar_default_show_communities"]) {
         return @YES;
@@ -228,9 +220,8 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         }
     }
 
-    // The Connect tab is left on its native gate (fresh accounts only): its drawer
-    // row doesn't consult the tab bar, so forcing the tab's gate would grow a
-    // drawer row there's no way to hide again.
+    // The Connect tab stays on its native gate (fresh accounts only): its drawer row
+    // doesn't consult the tab bar, so forcing it would grow a row that can't be hidden.
 
     // In-app article webview
     if ([key isEqualToString:@"ios_in_app_article_webview_enabled"]) {
@@ -253,9 +244,8 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @YES;
     }
 
-    // Premium / verification upsells and purchase prompts. The forced tier already
-    // self-hides the ones gated on !isPremiumTierUser, but the rest read their own
-    // switch regardless, so every upsell surface present in 12.3 is disabled here.
+    // Premium / verification upsells. Not all gate on !isPremiumTierUser, so every
+    // upsell surface present in 12.3 is disabled here.
     if ([key isEqualToString:@"ios_profile_analytics_upsell_enabled"] ||
         [key isEqualToString:@"ios_profile_analytics_upsell_possible_enabled"] ||
         [key isEqualToString:@"ios_profile_upgrade_upsell_enabled"] ||
@@ -282,10 +272,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     }
 
     // Boost (quick promote) button and its upsells. Each placement reads its own
-    // switch rather than the root one, so all of them are disabled: the tweet row
-    // and timeline buttons, the composer button, the overflow menu item, the tweet
-    // detail toolbars and analytics placements, the third-party boost author view
-    // button, and the "Boost" action on the toast shown after posting.
+    // switch rather than the root one, so all of them are disabled.
     if ([key isEqualToString:@"ios_tweet_promote_button_enabled"] ||
         [key isEqualToString:@"ios_tweet_promote_button_timeline_enabled"] ||
         [key isEqualToString:@"ios_tweet_promote_button_in_tweet_composer_enabled"] ||
@@ -301,17 +288,14 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @NO;
     }
 
-    // The Premium settings row is gated at its root instead (see the
-    // -isSubscriptionsSettingsItemEnabledWithProvider: hook), so it follows the
-    // genuine subscription state. The creator purchases dashboard and the
-    // subscriber-only profile tab are left untouched: the app already gates those
-    // on real creator eligibility, which the forced tier never affects.
+    // The Premium settings row is handled in the
+    // -isSubscriptionsSettingsItemEnabledWithProvider: hook. Creator purchases and
+    // the subscriber-only profile tab already gate on real creator eligibility,
+    // which the forced tier never affects.
 
-    // Creator Studio / Monetization sidebar item (and the Monetization settings
-    // row). Its builder gates purely on these switches with no premium check, so the
-    // forced tier can't reach it - follow the genuine status here. Monetization
-    // requires a real subscription anyway, so a genuine subscriber keeps it while
-    // the spoof hides it.
+    // Creator Studio / Monetization entries gate purely on these switches with no
+    // premium check, so follow the genuine status: a real subscriber keeps them
+    // while the spoof hides them.
     if ([key isEqualToString:@"creator_studio_nav_enabled"] ||
         [key isEqualToString:@"creator_monetization_dashboard_enabled"]) {
         if (!BHTAccountIsGenuinelyPremium()) {
@@ -322,12 +306,9 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     return nil;
 }
 
-// MARK: Feature switch overrides
-
-// Every feature switch facade (TPSTwitterFeatureSwitches, TFSAccountFeatureSwitches,
-// TFSFeatureSwitchesService) bottoms out in per-account TFSFeatureSwitches
-// instances, but those can be wrapped in TFSInstrumentedFeatureSwitches, which
-// implements its own typed getters, so both classes need the same hooks.
+// Every feature switch facade bottoms out in TFSFeatureSwitches, but instances can
+// be wrapped in TFSInstrumentedFeatureSwitches, which implements its own typed
+// getters, so both classes need the same hooks.
 
 %hook TFSFeatureSwitches
 
@@ -407,24 +388,19 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %end
 
-// MARK: Show Scroll Bar
-
-// The vertical scroll indicator on every TFN data view is set from this typed
-// accessor in -[TFNDataViewController loadView]; its read bypasses the
-// boolForKey: funnels above via a Swift access-once provider.
+// MARK: - Typed feature switch accessors
 
 %hook TFSAccountFeatureSwitches
 
+// Sets the scroll indicator in -[TFNDataViewController loadView]; the read
+// bypasses the boolForKey: funnels above via a Swift access-once provider.
 + (BOOL)isShowsVerticalScrollIndicatorEnabled {
     return [BHTSettings boolForKey:@"show_scroll_indicator"] ? YES : %orig;
 }
 
-// Root of the Premium row in Settings, which opens the subscribe paywall. Its own
-// gate is subscriptions_enabled || (gating_bypass && isPremiumTierUser), and
-// subscriptions_enabled is on for everyone so non-subscribers get the row as an
-// upsell - passing genuine status through %orig wouldn't hide it. Short-circuit to
-// NO for a genuinely non-premium account (provider is the account), keeping the row
-// only for a real subscriber to manage their subscription.
+// Premium row in Settings. Its gate (subscriptions_enabled || gating_bypass &&
+// isPremiumTierUser) is on for everyone as an upsell, so %orig can't hide it —
+// short-circuit to NO unless the account (the provider) is genuinely premium.
 - (BOOL)isSubscriptionsSettingsItemEnabledWithProvider:(id)provider {
     if (![provider respondsToSelector:@selector(isPremiumTierUser)]) {
         return %orig;
@@ -464,7 +440,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %end
 
-// MARK: Override the login screens
+// MARK: - Override the login screens
 
 %hook T1AccountsViewController
 
@@ -486,7 +462,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %end
 
-// MARK: High quality images
+// MARK: - High quality images
 
 %hook T1ImageDisplayView
 
@@ -500,7 +476,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %end
 
-// MARK: Promoted content
+// MARK: - Promoted content
 
 // API commands copy this off their context when building requests.
 %hook TFNTwitterAPICommandContext
@@ -511,14 +487,13 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %end
 
-// MARK: Account feature gates
+// MARK: - Account feature gates
 
 %hook TFNTwitterAccount
 
-// Premium tier state funnels through -isSubscribedTo:, which reads the account's
-// subscription claims: isPremiumTierUser checks tiers 0/7/8, isVerifiedPremiumTierUser
-// checks 0/8, and isSubscribedToAnyPremiumTier builds on those. Forcing the premium
-// tiers here unlocks premium across every account-level check from one stable seam.
+// Every account-level premium check funnels through -isSubscribedTo:
+// (isPremiumTierUser checks tiers 0/7/8, isVerifiedPremiumTierUser 0/8), so
+// forcing those tiers here unlocks premium from one stable seam.
 - (BOOL)isSubscribedTo:(NSUInteger)tier {
     if (!BHTReportGenuineSubscription && (tier == 0 || tier == 7 || tier == 8)) {
         return YES;
@@ -561,12 +536,11 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %end
 
-// MARK: Genuine subscription status for outward-facing paths
+// MARK: - Genuine subscription status
 
-// The forced tier unlocks features, but a few paths report subscription status
-// outward (to marketing) or expose the real subscription management. Running them
-// against the genuine status means a real subscriber is handled normally while a
-// forced unlock is never announced as premium.
+// A few paths report subscription status outward (to marketing) or expose real
+// subscription management; run them against the genuine status so a forced
+// unlock is never announced as premium.
 
 %hook T1AppServicesManager
 
@@ -583,9 +557,8 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %hook T1TabbedAppNavigation
 
-// Opens the real subscription management flow and fetches preferences from the
-// server; its own premium check should see the genuine status, so a forced unlock
-// stops here while a real subscriber keeps access.
+// Opens the real subscription management flow; its premium check should see the
+// genuine status so a forced unlock stops here.
 - (void)showPremiumHubManageSubscriptionWithSource:(NSInteger)source withCompletion:(id)completion {
     BOOL saved = BHTReportGenuineSubscription;
     BHTReportGenuineSubscription = YES;
@@ -597,11 +570,9 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %hook T1ProfileSummaryView
 
-// The profile "under review" verification prompt shows when the account is a
-// verified-premium tier user that isn't blue-verified yet - a state the forced tier
-// fabricates for a non-subscriber. Reading it against the genuine status hides the
-// prompt for a non-premium account while leaving it for a real subscriber awaiting
-// verification.
+// The "under review" prompt shows for a verified-premium user not yet blue-verified
+// — a state the forced tier fabricates for a non-subscriber, so read it against the
+// genuine status.
 - (BOOL)shouldShowUnderReviewButton {
     BOOL saved = BHTReportGenuineSubscription;
     BHTReportGenuineSubscription = YES;
@@ -612,11 +583,10 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %end
 
-// MARK: Custom navigation - genuine panel availability
+// MARK: - Custom navigation - genuine panel availability
 
-// Whether the app would consider a panel tab-eligible without the forced gates
-// above. The tab bar editor only offers genuinely available panels, and the dash
-// spoof below keeps the rest out of the side drawer.
+// Whether a panel would be tab-eligible without the forced gates: the tab bar editor
+// only offers genuine panels, and the dash spoof keeps the rest out of the drawer.
 
 static id BHT_accountFeatureSwitches(void) {
     Class switchesClass = objc_getClass("TFSAccountFeatureSwitches");
@@ -681,15 +651,12 @@ BOOL BHT_panelIsGenuinelyAvailable(long long panelID) {
     }
 }
 
-// MARK: Custom navigation - side drawer rows
+// MARK: - Custom navigation - side drawer rows
 
-// The drawer builds a row for most panels whenever that panel is absent from the
-// tab bar. Its builders read a visibility snapshot taken in updateVisiblePanelIDs,
-// so extra panels are injected there, scoped by a flag - other readers of
-// visiblePanelIDs (like the open-Grok navigation) must keep seeing the real tab
-// state. Injected are the panels only unlocked by the forced tab gates (the drawer
-// shouldn't grow rows for them), the Grok row when its setting hides it, and the
-// Premium row for a genuinely non-premium account, for whom it's just an upsell.
+// The drawer builds a row for each panel absent from the tab bar, reading a
+// snapshot taken in updateVisiblePanelIDs. Extra panels are injected only there,
+// scoped by a flag — other visiblePanelIDs readers must see the real tab state.
+// Premium is claimed for a non-premium account, for whom it's just an upsell.
 
 static __thread BOOL BHTDashPanelIDQuery = NO;
 
@@ -737,7 +704,7 @@ static __thread BOOL BHTDashPanelIDQuery = NO;
 
 %end
 
-// MARK: Grok creation - photo editor
+// MARK: - Grok creation - photo editor
 
 // The photo editor's Edit with Grok entry has no feature switch of its own; both
 // delegates hardcode YES.
@@ -758,7 +725,7 @@ static __thread BOOL BHTDashPanelIDQuery = NO;
 
 %end
 
-// MARK: Sensitive media warnings
+// MARK: - Sensitive media warnings
 
 %hook TFNTwitterStatus
 

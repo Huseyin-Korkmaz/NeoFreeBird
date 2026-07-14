@@ -35,7 +35,7 @@
 + (instancetype)sharedSettings;
 @end
 
-// Forward declare T1ColorSettings and its private method to satisfy the compiler
+// Applies the TAE color options above to the UI
 @interface T1ColorSettings : NSObject
 + (void)_t1_applyPrimaryColorOption;
 + (void)_t1_updateOverrideUserInterfaceStyle;

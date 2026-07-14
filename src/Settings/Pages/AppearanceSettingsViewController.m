@@ -37,6 +37,8 @@
     return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 }
 
+#pragma mark - Sub-page Navigation
+
 - (void)showThemeViewController:(NSDictionary *)sender {
     Class BHColorThemeViewControllerClass = objc_getClass("BHColorThemeViewController");
     if (BHColorThemeViewControllerClass) {
@@ -70,6 +72,8 @@
     }
 }
 
+#pragma mark - Tab Bar Refresh
+
 - (void)refreshAllTabViewsWithTheming {
     for (UIWindow *window in [UIApplication sharedApplication].windows) {
         if (window.isKeyWindow && window.rootViewController) {
@@ -96,6 +100,7 @@
             [view performSelector:@selector(_t1_layoutBadgeViewMinimized)];
         }
 
+        // Clearing the override lets the label fall back to its default color.
         if (![BHTSettings boolForKey:@"tab_bar_theming"]) {
             UILabel *titleLabel = [view valueForKey:@"titleLabel"];
             if (titleLabel) {
@@ -156,6 +161,8 @@
     }
 }
 
+#pragma mark - Font Pickers
+
 - (void)showRegularFontPicker:(NSDictionary *)sender {
     UIFontPickerViewControllerConfiguration *configuration = [[UIFontPickerViewControllerConfiguration alloc] init];
     [configuration setFilteredTraits:UIFontDescriptorClassMask];
@@ -174,7 +181,6 @@
 - (void)showBoldFontPicker:(NSDictionary *)sender {
     UIFontPickerViewControllerConfiguration *configuration = [[UIFontPickerViewControllerConfiguration alloc] init];
     [configuration setIncludeFaces:YES];
-    [configuration setFilteredTraits:UIFontDescriptorClassModernSerifs];
     [configuration setFilteredTraits:UIFontDescriptorClassMask];
     UIFontPickerViewController *fontPicker = [[UIFontPickerViewController alloc] initWithConfiguration:configuration];
     fontPicker.delegate = (id<UIFontPickerViewControllerDelegate>)self;

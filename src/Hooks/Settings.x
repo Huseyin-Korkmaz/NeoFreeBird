@@ -10,7 +10,7 @@ static UIFont * _Nonnull BH_remapFont(UIFont *origFont) {
     return newFont != nil ? newFont : origFont;
 }
 
-// MARK: BHTwitter settings entry
+// MARK: - NeoFreeBird settings entry
 
 static const void *BHTSettingsEntryKey = &BHTSettingsEntryKey;
 static const void *BHTSettingsRootKey = &BHTSettingsRootKey;
@@ -19,10 +19,8 @@ static BOOL BHT_isSettingsClass(UIViewController *viewController) {
     return [viewController isKindOfClass:objc_getClass("T1GenericSettingsViewController")] || [viewController isKindOfClass:objc_getClass("T1SettingsViewController")];
 }
 
-// The generic controller backs the root and every sub-page alike, and settings is
-// pushed onto the main navigation stack (home at its root), so the root page is the
-// first settings-class controller in the stack — sub-pages always have another one
-// beneath them.
+// The generic controller backs the root and every sub-page alike, so the root is
+// the first settings-class controller in the navigation stack.
 static BOOL BHT_settingsVCIsRoot(TFNItemsDataViewController *settingsVC) {
     for (UIViewController *viewController in settingsVC.navigationController.viewControllers) {
         if (viewController == settingsVC) {
@@ -87,13 +85,10 @@ static NSArray *BHT_sectionsByInsertingEntry(TFNItemsDataViewController *setting
     return newSections;
 }
 
-// The settings root rebuilds its sections from the page model whenever the account
-// updates, and appearing kicks off an async settings fetch that triggers exactly such
-// a rebuild — a one-shot insert gets discarded moments after the view appears. But the
-// first rebuild also runs before the controller joins the navigation stack, where
-// root-ness can't be determined yet. So the root is recognised and tagged in
-// viewWillAppear, which inserts the entry imperatively to repair the build that
-// already ran; the rebuild transform below re-adds it to every later snapshot.
+// Async settings fetches rebuild the sections and discard one-shot inserts, and
+// root-ness is unknowable during the first build (not yet on the nav stack). So
+// tag the root in viewWillAppear, insert once to repair the first build, and let
+// the rebuild transform below re-add the entry on every later snapshot.
 static void BHT_insertNeoFreeBirdSettingsIfRoot(TFNItemsDataViewController *settingsVC) {
     if (!BHT_settingsVCIsRoot(settingsVC)) {
         return;
@@ -147,7 +142,8 @@ static NSArray *BHT_sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController *set
 }
 %end
 
-// MARK: Change font
+// MARK: - Change font
+
 %hook UIFontPickerViewController
 - (void)viewWillAppear:(BOOL)arg1 {
     %orig(arg1);
@@ -200,9 +196,8 @@ static NSArray *BHT_sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController *set
 }
 %end
 
-// Every named getter on TFNUIDefaultFontGroup (bodyFont, title1Font, navigationTitleFont, ...)
-// computes a size and dynamically dispatches to one of these five methods, the only ones that
-// actually build a UIFont. Remapping at the root covers the whole font surface.
+// Every named getter (bodyFont, title1Font, ...) dispatches to one of these five
+// methods, the only ones that actually build a UIFont; remapping here covers all.
 %hook TFNUIDefaultFontGroup
 - (UIFont *)fontOfSize:(CGFloat)size {
     UIFont *origFont = %orig;
@@ -226,6 +221,8 @@ static NSArray *BHT_sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController *set
 }
 %end
 
+// Cephei blocks HBPreferences access from app processes unless this opt-in
+// returns YES.
 %hook HBForceCepheiPrefs
 + (BOOL)forceCepheiPrefsWhichIReallyNeedToAccessAndIKnowWhatImDoingISwear {
     return YES;

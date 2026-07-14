@@ -5,17 +5,14 @@
 
 #import "BHTHookHelpers.h"
 
-// MARK: Restore Tweet Source Labels
+// MARK: - Restore Tweet Source Labels
 //
-// Twitter removed the "via Twitter for iPhone" source line from the tweet detail
-// footer. The source is no longer present in the on-device status models, so we
-// fetch it from x.com's web GraphQL TweetDetail endpoint — reusing the same web
-// session (harvested auth_token + ct0 cookies) that WebCreateTweet.x establishes —
-// and cache it keyed by tweet ID. The label is then injected into the detail footer
-// by appending it to the footer item's time string, which the native footer builder
-// renders for us. Original idea by @nyaathea.
+// The source is gone from the on-device status models, so it's fetched from
+// x.com's web GraphQL TweetDetail endpoint (reusing the web session that
+// WebCreateTweet.x establishes), cached by tweet ID, and appended to the detail
+// footer item's time string. Original idea by @nyaathea.
 
-// Shared with Branding.x for source-label coloring (declared in BHTHookHelpers.h).
+// Source labels keyed by tweet ID (declared in BHTHookHelpers.h).
 NSMutableDictionary *tweetSources = nil;
 
 // Per-tweet fetch bookkeeping. All of these — including tweetSources — are only
@@ -76,9 +73,8 @@ static NSString *BHT_encodedQueryParameter(id object) {
     return [[BHTBundle sharedBundle] localizedStringForKey:@"SOURCE_UNAVAILABLE"];
 }
 
-// Builds the web GraphQL TweetDetail URL for a single tweet. `source` isn't gated
-// behind any feature flag, so the client's large `features` block is omitted; only
-// the query's required `variables` are sent (x rejects the request otherwise).
+// `source` isn't gated behind any feature flag, so the client's large `features`
+// block is omitted; the required `variables` must be sent or x rejects the request.
 + (NSURL *)tweetDetailURLForTweetID:(NSString *)tweetID {
     NSDictionary *variables = @{
         @"focalTweetId": tweetID,
@@ -275,12 +271,10 @@ static NSString *BHT_encodedQueryParameter(id object) {
 @end
 
 
-// MARK: Footer injection
+// MARK: - Footer injection
 //
-// -updateFooterTextView is the single funnel that rebuilds the detail footer's
-// attributed text from footerItem.timeAgo. Appending the source to timeAgo before
-// %orig lets the native builder lay it out; when the source arrives asynchronously
-// we simply re-run the method.
+// -updateFooterTextView rebuilds the footer text from footerItem.timeAgo, so the
+// source is appended there before %orig; when it arrives async we just re-run it.
 
 %hook T1ConversationFooterTextView
 

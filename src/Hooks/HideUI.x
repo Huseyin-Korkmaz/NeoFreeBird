@@ -5,15 +5,12 @@
 
 #import "BHTHookHelpers.h"
 
-// MARK: Hide Blue verified checkmark
+// MARK: - Hide Blue verified checkmark
 
-// The badge builders read the user model through ObjC dispatch, but the blue
-// checkmark no longer keys off isBlueVerified alone: the tweet author row
-// (SimpleBadgeable.init(statusViewModel:)) builds its badge from the merged
-// verified flag plus identityType and ignores isBlueVerified entirely, so both
-// getters have to be silenced. The brand/government badges come from the
-// separate identityType field and survive. TFNTwitterUser and
-// TFNTwitterCanonicalUser forward here and need no hooks.
+// The author-row badge (SimpleBadgeable.init(statusViewModel:)) builds from the
+// merged verified flag plus identityType and ignores isBlueVerified, so both
+// getters must be silenced; brand/government badges survive via identityType.
+// TFNTwitterUser and TFNTwitterCanonicalUser forward here and need no hooks.
 
 %hook TFSTwitterUser
 
@@ -64,9 +61,8 @@
 
 %end
 
-// Status view models cache the flags as Swift stored properties at init, so the
-// user model hooks don't reach consumers of this adapter. The author row badge
-// reads isFromUserVerified; composition and translated view models forward here.
+// Status view models cache these flags at init, beyond the user model hooks; the
+// author row badge reads isFromUserVerified, and other view models forward here.
 %hook T1TwitterCoreStatusViewModelAdapter
 
 - (BOOL)isFromUserBlueVerified {
@@ -79,11 +75,10 @@
 
 %end
 
-// MARK: No search history
+// MARK: - No search history
 
 // Every recent-search write funnels through _tse_setRecentSearch: and every read
-// through recentSearches, so these two cover both saving and display without
-// touching the separate saved-searches feature.
+// through recentSearches; the separate saved-searches feature stays untouched.
 
 %hook TTSRecentSearchesDatastore
 
@@ -99,13 +94,11 @@
 
 %end
 
-// MARK: Hide trending content on the Explore tab
+// MARK: - Hide trending content on the Explore tab
 
-// The search bar is a direct subview of the container; all trending content
-// (page tabs and timelines) lives in the child URT chrome view controller.
-// The chrome property has no ObjC getter in 12.3, so find it among the
-// children that viewDidLoad adds. The page tab strip is separate: the
-// navigation bar requests it through tfn_navigationBarAccessoryView.
+// Trending content lives in the child URT chrome view controller, whose property
+// has no ObjC getter in 12.3, so find it among the children. The page tab strip
+// arrives separately through tfn_navigationBarAccessoryView.
 
 %hook _TtC14T1TwitterSwift28GuideContainerViewController
 
@@ -127,7 +120,7 @@
 
 %end
 
-// MARK: No Subscribe button
+// MARK: - No Subscribe button
 
 // The author view's layout delegate has a dedicated show-decision for the
 // Subscribe button, so the button never gets created or laid out.
@@ -140,12 +133,10 @@
 
 %end
 
-// The control's variant is a bitmask: bit 1 is the Subscribe styling (it
-// suppresses the Follow title) and 0x20 is the plain Follow variant, so swap
-// the former for the latter. The variant enters through both the initializer
-// and setVariant:, and the initializer writes the ivar directly, so both need
-// the remap. Do NOT force the variant getter — it made every control report
-// Follow regardless of the real relationship and hid the button (NeoFreeBird#2).
+// The variant is a bitmask: bit 1 is the Subscribe styling, 0x20 the plain
+// Follow variant. The initializer writes the ivar directly, so setVariant:
+// alone isn't enough. Do NOT force the variant getter — it made every control
+// report Follow and hid the button (NeoFreeBird#2).
 static NSUInteger BHTFollowVariantRemovingSubscribe(NSUInteger variant) {
     if ([BHTSettings boolForKey:@"restore_follow_button"] && (variant & 1)) {
         return (variant & ~1) | 0x20;
@@ -165,11 +156,10 @@ static NSUInteger BHTFollowVariantRemovingSubscribe(NSUInteger variant) {
 
 %end
 
-// MARK: Hide Follow button on Tweets
+// MARK: - Hide Follow button on Tweets
 
 // The conversation focal tweet and the immersive player both render their author
-// row through TTAStatusAuthorView, which only creates its follow control when
-// un-hidden, so forcing the flag covers every surface.
+// row through TTAStatusAuthorView, so forcing the flag here covers every surface.
 
 %hook TTAStatusAuthorView
 
@@ -179,7 +169,7 @@ static NSUInteger BHTFollowVariantRemovingSubscribe(NSUInteger variant) {
 
 %end
 
-// MARK: Hide inline action buttons
+// MARK: - Hide inline action buttons
 
 %hook TTAStatusInlineActionsView
 

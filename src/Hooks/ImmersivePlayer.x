@@ -27,9 +27,8 @@ static const uint8_t *BHT_immersiveCardStateMetadata(void) {
     return metadata;
 }
 
-// Reads a Bool field through the struct's field offset vector, the same way
-// the app's own compiled accesses do, so the byte offset never has to be
-// hardcoded.
+// Reads a Bool field through the struct's field offset vector, the same way the
+// app's own compiled accesses do, so byte offsets never have to be hardcoded.
 static BOOL BHT_cardStateBoolField(const uint8_t *state, uint32_t fieldIndex, BOOL *outValue) {
     const uint8_t *metadata = BHT_immersiveCardStateMetadata();
     if (!metadata) {
@@ -92,9 +91,10 @@ static BOOL BHT_progressLabelAlphaFromState(id pluginView, CGFloat *outAlpha) {
 
 %end
 
-// MARK: - Immersive Feed Scrolling
+// MARK: - Disable Immersive Feed Scrolling
 
-// Restores swipe-to-dismiss gesture
+// The card pan drives vertical paging between videos; blocking it lets the
+// swipe-down dismiss gesture take over.
 static BOOL BHT_isImmersiveCardPan(id viewController, UIGestureRecognizer *gesture) {
     Ivar panIvar = class_getInstanceVariable([viewController class], "panRecognizer");
     return panIvar && object_getIvar(viewController, panIvar) == gesture;

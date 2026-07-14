@@ -6,7 +6,7 @@
 #import "BHTHookHelpers.h"
 #import <CoreText/CoreText.h>
 
-// MARK: Always open in Safari
+// MARK: - Always open in Safari
 
 // In-app browser is used for two-factor authentication with security key,
 // login will not complete successfully if it's redirected to Safari
@@ -60,7 +60,7 @@ static BOOL BHTShouldKeepBrowserURLInApp(NSURL *url) {
 
 %end
 
-// MARK: Expand t.co links
+// MARK: - Expand t.co links
 
 %hook TFSTwitterEntityURL
 
@@ -73,11 +73,10 @@ static BOOL BHTShouldKeepBrowserURLInApp(NSURL *url) {
 
 %end
 
-// MARK: Disable RTL
+// MARK: - Disable RTL
 
-// Tweet text is rendered with CoreText, which resolves the writing direction
-// from the first strong directional character. Forcing LTR on the paragraph
-// style of the render input is the only reliable override.
+// CoreText picks direction from the first strong directional character; forcing
+// LTR on the render input's paragraph style is the only reliable override.
 
 // CTParagraphStyle is immutable with no mutable counterpart, so forcing the
 // writing direction means rebuilding the style with its specifiers copied over.
@@ -147,11 +146,10 @@ static CTParagraphStyleRef BHTCreateLTRParagraphStyle(CTParagraphStyleRef origin
 
 %end
 
-// MARK: Strip tracking params from shared links
+// MARK: - Strip tracking params from shared links
 
-// The ?s= source param is baked into the share URL format strings, and the
-// &t= session token is appended by _t1_transformShareURL: (disabled at the
-// source via the rehire_share_update_url_enabled switch in FeatureSwitches.x).
+// Strips the ?s= baked into the share URL format strings; &t= is already disabled
+// at the source (rehire_share_update_url_enabled in FeatureSwitches.x).
 static NSString *BHTCleanedShareURLString(NSString *urlString) {
     if (urlString == nil) {
         return urlString;
@@ -178,9 +176,8 @@ static NSString *BHTCleanedShareURLString(NSString *urlString) {
     return components.URL.absoluteString ?: urlString;
 }
 
-// Every share surface (copy link, share sheet, DM, email, Snap) funnels into
-// these two builders; the legacy twitterURLFor* selectors wrap the instance
-// one, and the Swift share kit calls it directly with its own s value.
+// Every share surface funnels into these two builders; the legacy twitterURLFor*
+// selectors wrap the instance one and the Swift share kit calls it directly.
 %hook TFNTwitterStatus
 
 - (NSString *)twitterURLForShareWithSParam:(unsigned int)sParam {

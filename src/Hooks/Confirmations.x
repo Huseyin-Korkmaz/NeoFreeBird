@@ -15,11 +15,10 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
     } showFrom:topMostController()];
 }
 
-// MARK: Tweet confirm
+// MARK: - Tweet confirm
 
-// The toolbar post button, the cmd+return key command and the quick promote
-// flow all funnel through this. Some callers send no argument, so the button
-// register can hold garbage and must not be retained.
+// All send paths funnel through this. Some callers send no argument, so the
+// button register can hold garbage and must not be retained.
 %hook T1TweetComposeViewController
 
 - (void)_t1_didTapSendButton:(__unsafe_unretained UIButton *)sendButton {
@@ -34,7 +33,7 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
 
 %end
 
-// MARK: Follow confirm
+// MARK: - Follow confirm
 
 %hook TUIFollowControl
 
@@ -50,7 +49,7 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
 
 %end
 
-// MARK: Like confirm
+// MARK: - Like confirm
 
 // didTap on every inline action button routes through this delegate method,
 // so only intercept the favorite button.
@@ -98,24 +97,17 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
 
 %end
 
-// MARK: Undo tweet
+// MARK: - Undo tweet
 
 // A timeout of 0 disables undo; any positive value is the delay in seconds.
 static BOOL BHTUndoTweetEnabled(void) {
     return [BHTSettings integerForKey:@"undo_tweet_timeout"] > 0;
 }
 
-// Twitter has two undo paths. The premium one holds the tweet in an outbox
-// coordinator whose timer fires after the composition's undoTimeInterval - no
-// cap. The free one just forces a "tweet sent" nudge toast and sends when it
-// dismisses, but TFNToaster caps any toast on-screen at 10s, so that path can
-// never delay longer than 10 seconds.
-//
-// To honour an arbitrary timeout we steer every composition onto the premium
-// path: the composer marks a composition undoable when the undo-send config
-// reports access and the matching per-type toggle is on, so forcing those makes
-// the composition undoable and its undoTimeInterval (also forced here) becomes
-// the real send delay.
+// Force every composition onto the premium undo path (outbox timer, no cap) —
+// the free path is just a toast, capped at 10s. Forcing config access and the
+// per-type toggles marks it undoable; the forced undoTimeInterval becomes the
+// real send delay.
 %hook T1UndoSendConfig
 
 - (BOOL)hasAccessToUndoSend {
@@ -149,8 +141,7 @@ static BOOL BHTUndoTweetEnabled(void) {
 %end
 
 // The composer bakes the config's interval onto the composition; override the
-// read too so the coordinator's send timer (which reads it back off the
-// composition) uses the chosen value.
+// read too so the coordinator's send timer uses the chosen value.
 %hook TFNTwitterComposition
 
 - (double)undoTimeInterval {

@@ -384,9 +384,8 @@ static void BHT_refreshXTID(void) {
 
 // MARK: - Native bootstrap webview (per-account web session)
 
-// Some accounts (freshly added / legacy) have no web cookies yet. Only the native
-// authenticated webview can perform the OAuth->cookie exchange, so we load one offscreen
-// to establish and harvest that account's session.
+// Only the native authenticated webview can perform the OAuth->cookie exchange, so
+// accounts with no web cookies yet get one loaded offscreen and harvested.
 static void BHT_bootstrapAccount(id account, NSString *userID) {
     if (!account || userID.length == 0 || BHTWebBootstrapInFlight) {
         return;

@@ -14,7 +14,6 @@
 #import <UIKit/UIKit.h>
 #import "Core/TwitterChirpFont.h"
 
-// Import external function to get theme color
 extern UIColor *BHTCurrentAccentColor(void);
 
 @interface BHAppIconViewController () <
@@ -27,6 +26,8 @@ extern UIColor *BHTCurrentAccentColor(void);
 @end
 
 @implementation BHAppIconViewController
+
+#pragma mark - Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -68,9 +69,10 @@ extern UIColor *BHTCurrentAccentColor(void);
     [self loadAppIcons];
 }
 
-// Icons are derived from the app's own Info.plist, so the picker always matches
-// whatever the current build actually ships (the primary icon plus every
-// declared alternate). The default icon is listed first so it can be restored.
+#pragma mark - Icon data
+
+// Icons come from Info.plist so the picker matches whatever the build ships;
+// the primary icon is listed first so it can be restored.
 - (void)loadAppIcons {
     NSDictionary *iconsDict =
       [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIcons"];
@@ -103,9 +105,8 @@ extern UIColor *BHTCurrentAccentColor(void);
     [self.appIconCollectionView reloadData];
 }
 
-// The picker thumbnails live in the asset catalog as "<name>-settings"; the
-// primary icon uses the "Icon-<Name>-settings" convention instead. Both fall
-// back to the icon art itself if a dedicated thumbnail is missing.
+// Thumbnails are "<name>-settings" in the asset catalog ("Icon-<Name>-settings"
+// for the primary icon), falling back to the icon art itself.
 - (UIImage *)thumbnailForItem:(BHAppIconItem *)item {
     UITraitCollection *tc = self.traitCollection;
     NSBundle *bundle = [NSBundle mainBundle];
@@ -140,7 +141,7 @@ extern UIColor *BHTCurrentAccentColor(void);
                               : [current isEqualToString:item.bundleIconName];
 }
 
-#pragma mark – UICollectionViewDataSource
+#pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv {
     return 1;
@@ -161,7 +162,7 @@ extern UIColor *BHTCurrentAccentColor(void);
     return cell;
 }
 
-#pragma mark – UICollectionViewDelegate
+#pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)cv didSelectItemAtIndexPath:(NSIndexPath *)ip {
     if (![UIApplication sharedApplication].supportsAlternateIcons) return;
@@ -179,7 +180,7 @@ extern UIColor *BHTCurrentAccentColor(void);
     }];
 }
 
-#pragma mark – Section Header
+#pragma mark - Section header
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)cv viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)ip {
     UICollectionReusableView *header = [cv dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:@"HeaderView" forIndexPath:ip];
@@ -208,7 +209,7 @@ extern UIColor *BHTCurrentAccentColor(void);
     return CGSizeMake(cv.bounds.size.width, 60);
 }
 
-#pragma mark – FlowLayout sizing
+#pragma mark - Flow layout sizing
 
 - (CGSize)collectionView:(UICollectionView *)cv layout:(UICollectionViewLayout *)layout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     // Native layout: 3 columns, icon width capped at 96pt, height = width + 38

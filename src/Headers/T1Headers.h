@@ -17,6 +17,7 @@
 @property(retain, nonatomic) UIWindow *window;
 @end
 
+// The "new posts" pill shown at the top of the timeline
 @interface TUIUpdateIndicator : UIViewController
 @property (nonatomic, strong) TFNPillControl *pillControl;
 @end
@@ -43,6 +44,8 @@
 @interface T1StandardStatusAttachmentViewAdapter : NSObject
 @property (nonatomic, assign, readonly) NSUInteger attachmentType;
 @end
+
+#pragma mark - Tab bar
 
 @interface T1PanelIdentity : NSObject
 + (NSString *)iconImageNameForPanelID:(long long)panelID;
@@ -76,9 +79,10 @@
 - (void)recalculateVisiblePanels;
 @end
 
-// The settings root is a collection/diffable TFNItemsDataViewController subclass in 12.3.
-// T1GenericSettingsViewController backs the "settings revamp" root (and, driven by a page
-// model, the sub-pages); T1SettingsViewController is the legacy fallback root.
+#pragma mark - Settings
+
+// T1GenericSettingsViewController backs the 12.3 "settings revamp" root and its
+// sub-pages; T1SettingsViewController is the legacy fallback root.
 @interface T1GenericSettingsViewController: TFNItemsDataViewController
 @property (nonatomic, strong) TFNTwitterAccount *account;
 @end
@@ -86,6 +90,8 @@
 @interface T1SettingsViewController: TFNItemsDataViewController
 @property (nonatomic, strong) TFNTwitterAccount *account;
 @end
+
+#pragma mark - Profile
 
 @interface T1ProfileActionButtonSpec : NSObject
 @property(readonly, copy, nonatomic) UIView *(^buttonCreationBlock)(void);
@@ -103,6 +109,8 @@
 @interface T1ProfileHeaderViewController: UIViewController
 @property(retain, nonatomic) T1ProfileUserViewModel *viewModel;
 @end
+
+#pragma mark - Status views
 
 @protocol T1StatusInlineActionButtonDelegate <NSObject>
 @end
@@ -156,6 +164,8 @@
 @interface T1TweetComposeViewController : UIViewController
 @end
 
+#pragma mark - Media views
+
 @class BHDownloadInlineButton;
 
 // DM media message container (DMConversation.MessageAttachmentView)
@@ -172,6 +182,8 @@
 @interface _TtC21TweetMediaAttachments14MultiMediaView : UIView
 @property (nonatomic, readonly) NSArray *inlineMediaInfos;
 @end
+
+#pragma mark - Host & web views
 
 @interface T1HostViewController : UIViewController
 + (instancetype)sharedHostViewController;
@@ -203,8 +215,10 @@
 @property(nonatomic, readonly) NSURL *rootURL;
 @end
 
+#pragma mark - Status & timeline text
+
 @interface T1StatusBodyTextView : UIView
-@property(readonly, nonatomic) id viewModel; // @synthesize viewModel=_viewModel;
+@property(readonly, nonatomic) id viewModel;
 @end
 
 @interface _TtC10TwitterURT25URTTimelineTrendViewModel : NSObject
@@ -216,16 +230,7 @@
 - (void)updateFooterTextView;
 @end
 
-// T1ProfileFriendsFollowingViewModel interface for unrounded follower/following counts
+// Hooked for unrounded follower/following counts
 @interface T1ProfileFriendsFollowingViewModel : NSObject
 - (id)_t1_followCountTextWithLabel:(id)arg1 singularLabel:(id)arg2 count:(id)arg3 highlighted:(_Bool)arg4;
-@end
-
-// Forward declare TTAStatusBodySelectableContentTextView
-@interface TTAStatusBodySelectableContentTextView : UITextView
-@property(retain, nonatomic) NSAttributedString *originalAttributedText;
-- (void)setAttributedText:(NSAttributedString *)attributedText;
-- (void)BHT_setTranslatedText:(NSAttributedString *)translatedText;
-- (void)BHT_restoreOriginalText;
-- (BOOL)BHT_isShowingTranslatedText;
 @end

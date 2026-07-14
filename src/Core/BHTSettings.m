@@ -171,6 +171,8 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
 
 @implementation BHTSettings
 
+#pragma mark - Migration
+
 // One-time migration of preferences saved under the old (inconsistent) key
 // names to the normalised keys, so existing installs keep their settings.
 + (void)load {
@@ -241,6 +243,8 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
     [defaults removeObjectForKey:@"undo_tweet"];
     [defaults setBool:YES forKey:@"nfb_undo_timeout_migration_done"];
 }
+
+#pragma mark - Accessors
 
 + (NSArray<NSDictionary *> *)settingsForPage:(NSString *)pageKey {
     return pageKey ? BHTSettingsPages()[pageKey][@"settings"] : nil;

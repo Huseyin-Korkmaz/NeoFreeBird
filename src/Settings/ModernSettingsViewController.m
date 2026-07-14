@@ -36,7 +36,6 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (section == 0) {
-        // Top subtitle header
         UIView *headerView = [[UIView alloc] init];
         headerView.backgroundColor = [BHTPalette currentBackgroundColor];
 
@@ -68,21 +67,17 @@
         return headerView;
     }
     else if (section == 1) {
-        // Developers section header
         return [self headerViewWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DEVELOPER_SECTION_HEADER_TITLE"]];
     }
     else if (section == 2) {
-    // Cool Kids section header
     return [self headerViewWithTitle:
         [[BHTBundle sharedBundle] localizedStringForKey:@"COOL_KIDS_SECTION_HEADER_TITLE"]];
     }
     else if (section == 3) {
-    // Special Thanks section header
     return [self headerViewWithTitle:
         [[BHTBundle sharedBundle] localizedStringForKey:@"SPECIAL_THANKS_SECTION_HEADER_TITLE"]];
     }
     else if (section == 4) {
-    // Official Page section header
     return [self headerViewWithTitle:
         [[BHTBundle sharedBundle] localizedStringForKey:@"FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE"]];
     }
@@ -143,6 +138,8 @@
     }
     return CGFLOAT_MIN;
 }
+
+#pragma mark - Lifecycle & Setup
 
 - (instancetype)initWithAccount:(TFNTwitterAccount *)account {
     self = [super init];
@@ -281,12 +278,10 @@
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     footerLabel.text = @"NeoFreeBird v2.2 (release)\nNeoFreeBird-BHTwitter v5.3 (beta)";
     footerLabel.numberOfLines = 0;
-    footerLabel.textAlignment = NSTextAlignmentLeft; // <-- Left aligned now
+    footerLabel.textAlignment = NSTextAlignmentLeft;
 
-    // Use Chirp Regular font
     footerLabel.font = TwitterChirpFont(TwitterFontStyleRegular);
 
-    // Match subtitle color
     Class TAEColorSettingsCls = objc_getClass("TAEColorSettings");
     id settings = [TAEColorSettingsCls sharedSettings];
     id currentPalette = [settings currentColorPalette];

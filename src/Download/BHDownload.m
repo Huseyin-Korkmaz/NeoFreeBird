@@ -53,7 +53,7 @@ static NSString *BHTSanitizedDownloadFileName(NSURL *url) {
     [task resume];
 }
 
-#pragma mark ••• Delegate marshalling
+#pragma mark - Delegate marshalling
 
 - (void)notifyFailure:(NSError *)error {
     __weak typeof(self) weakSelf = self;
@@ -65,7 +65,7 @@ static NSString *BHTSanitizedDownloadFileName(NSURL *url) {
     });
 }
 
-#pragma mark ••• NSURLSessionDownloadDelegate
+#pragma mark - NSURLSessionDownloadDelegate
 
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     if (totalBytesExpectedToWrite <= 0) {
