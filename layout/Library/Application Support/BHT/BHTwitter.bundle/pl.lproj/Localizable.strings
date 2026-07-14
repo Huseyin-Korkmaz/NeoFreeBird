@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Etykiety kart";
 "RESTORE_TAB_LABELS_DETAIL" = "Pokazuj etykiety pod ikonami na pasku kart.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Opublikowano";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Koloruj ikonę Twittera";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Nadaje kolor akcentu ikonie Twittera na górnym pasku.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Dodaj \"Opublikowano\" na pasek odświeżania";
-"REFRESH_PILL_LABEL_DETAIL" = "Przywraca etykietę \"Opublikowano\" na pasku odświeżania, gdy ktoś opublikuje Tweeta. Może (błędnie) pojawiać się także w innych miejscach.";
+"REFRESH_PILL_LABEL_TITLE" = "Dodaj etykietę na pasek odświeżania";
+"REFRESH_PILL_LABEL_DETAIL" = "Przywraca etykietę na pasku odświeżania, gdy ktoś opublikuje Tweeta.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Przywróć terminologię Twittera";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Zastępuje \"X\" słowem \"Twitter\", \"Post\" słowem \"Tweet\", \"Podaj dalej\" słowem \"Retweet\" i tak dalej w całym interfejsie aplikacji.";

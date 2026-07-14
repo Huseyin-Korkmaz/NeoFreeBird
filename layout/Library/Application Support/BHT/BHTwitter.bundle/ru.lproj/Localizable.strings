@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Подписи под иконками";
 "RESTORE_TAB_LABELS_DETAIL" = "Отображать подписи под значками как в старом Twitter.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Твит отправлен";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Покрасить иконку Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Применяет акцентный цвет к иконке Twitter на верхней панели.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Добавить «Твит отправлен» на плашку обновления";
-"REFRESH_PILL_LABEL_DETAIL" = "Возвращает надпись «Твит отправлен» на плашку обновления, когда кто-то публикует твит. Может (ошибочно) появляться и в других местах.";
+"REFRESH_PILL_LABEL_TITLE" = "Добавить надпись на плашку обновления";
+"REFRESH_PILL_LABEL_DETAIL" = "Возвращает надпись на плашку обновления, когда кто-то твитит.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Вернуть терминологию Twitter";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Заменяет «X» на «Twitter», «Пост» на «Твит», «Репост» на «Ретвит» и так далее по всему интерфейсу приложения.";

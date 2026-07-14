@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Gezinme etiketleri";
 "RESTORE_TAB_LABELS_DETAIL" = "Gezinme çubuğundaki simgelerin altında etiketleri göster (eski Twitter gibi).";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Tweetlendi";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Twitter simgesini renklendir";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Üst çubuktaki Twitter simgesine vurgu rengini uygular.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Yenileme hapına 'Tweetlendi' ekle";
-"REFRESH_PILL_LABEL_DETAIL" = "Birisi Tweet attığında yenileme hapına 'Tweetlendi' etiketini geri ekler. Bu (yanlışlıkla) bazı başka alanlarda da görünebilir.";
+"REFRESH_PILL_LABEL_TITLE" = "Yenileme hapına etiket ekle";
+"REFRESH_PILL_LABEL_DETAIL" = "Birisi Tweet attığında yenileme hapına etiketi geri ekler.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Twitter terminolojisini geri yükle";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Uygulama arayüzünde 'X' yerine 'Twitter', 'Post' yerine 'Tweet', 'Repost' yerine 'Retweet' gibi değişiklikleri geri getirir.";

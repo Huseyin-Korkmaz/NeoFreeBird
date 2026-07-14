@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Etiquetas de navegación";
 "RESTORE_TAB_LABELS_DETAIL" = "Muestra las etiquetas debajo de los íconos como en el Twitter clásico.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Tweet enviado";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Colorear ícono de Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Aplica el color de acento al ícono de Twitter en la barra superior.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Añadir 'Tweet enviado' a la píldora de actualización";
-"REFRESH_PILL_LABEL_DETAIL" = "Vuelve a añadir la etiqueta 'Tweet enviado' a la píldora de actualización cuando alguien publica un Tweet. Puede aparecer (incorrectamente) en otras áreas también.";
+"REFRESH_PILL_LABEL_TITLE" = "Añadir etiqueta a la píldora de actualización";
+"REFRESH_PILL_LABEL_DETAIL" = "Vuelve a añadir la etiqueta a la píldora de actualización cuando alguien publica un Tweet.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Restaurar terminología de Twitter";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Reemplaza 'X' por 'Twitter', 'Post' por 'Tweet', 'Repost' por 'Retweet' y demás en toda la interfaz de la app.";

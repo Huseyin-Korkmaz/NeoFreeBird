@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Tab labels";
 "RESTORE_TAB_LABELS_DETAIL" = "Show labels under icons in the tab bar.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Tweeted";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Color Twitter icon";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Applies the accent color to the Twitter icon in the top bar.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Add 'Tweeted' to refresh pill";
-"REFRESH_PILL_LABEL_DETAIL" = "Adds back the 'Tweeted' label to the refresh pill when someone Tweets. This may (incorrectly) appear in some other areas too.";
+"REFRESH_PILL_LABEL_TITLE" = "Add label to refresh pill";
+"REFRESH_PILL_LABEL_DETAIL" = "Adds the label back to the refresh pill when someone Tweets.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Restore Twitter terminology";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Replaces 'X' with 'Twitter', 'Post' with 'Tweet', 'Repost' with 'Retweet' and so on throughout the app's interface.";

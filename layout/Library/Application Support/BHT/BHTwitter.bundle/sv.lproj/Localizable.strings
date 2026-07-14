@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Navigeringsetiketter";
 "RESTORE_TAB_LABELS_DETAIL" = "Visa etiketter under ikoner i navigeringsfältet, som i äldre versioner av Twitter.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Tweetade";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Färga Twitter-ikonen";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Tillämpa accentfärgen på Twitter-ikonen i den övre menyn.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Lägg till 'Tweetade' i uppdateringspillen";
-"REFRESH_PILL_LABEL_DETAIL" = "Lägger tillbaka etiketten 'Tweetade' i uppdateringspillen när någon Tweetar. Detta kan (felaktigt) visas i vissa andra områden också.";
+"REFRESH_PILL_LABEL_TITLE" = "Lägg till etikett i uppdateringspillen";
+"REFRESH_PILL_LABEL_DETAIL" = "Lägger tillbaka etiketten i uppdateringspillen när någon Tweetar.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Återställ Twitter-terminologi";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Ersätter 'X' med 'Twitter', 'Post' med 'Tweet', 'Repost' med 'Retweet' och så vidare i hela appens gränssnitt.";

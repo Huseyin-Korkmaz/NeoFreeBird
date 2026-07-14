@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "تسميات التنقل";
 "RESTORE_TAB_LABELS_DETAIL" = "عرض التسميات أسفل الأيقونات في شريط التنقل كما في تويتر القديم.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "تم التغريد";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "تلوين أيقونة تويتر";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "تطبيق لون التمييز على أيقونة تويتر في الشريط العلوي.";
 
-"REFRESH_PILL_LABEL_TITLE" = "إضافة 'تم التغريد' إلى شريط التحديث";
-"REFRESH_PILL_LABEL_DETAIL" = "يعيد تسمية 'تم التغريد' إلى شريط التحديث عندما يغرّد أحدهم. قد يظهر هذا (بشكل خاطئ) في بعض المناطق الأخرى أيضًا.";
+"REFRESH_PILL_LABEL_TITLE" = "إضافة تسمية إلى شريط التحديث";
+"REFRESH_PILL_LABEL_DETAIL" = "يعيد التسمية إلى شريط التحديث عندما يغرّد أحدهم.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "استعادة مصطلحات تويتر";
 "RESTORE_TWITTER_NAMES_DETAIL" = "يستبدل 'X' بـ 'تويتر'، و'Post' بـ 'تغريدة'، و'Repost' بـ 'إعادة تغريد' وهكذا في جميع أنحاء واجهة التطبيق.";

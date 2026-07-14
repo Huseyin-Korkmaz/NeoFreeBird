@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Étiquettes de navigation";
 "RESTORE_TAB_LABELS_DETAIL" = "Affichez les étiquettes sous les icônes comme dans les anciennes versions de Twitter.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Tweeté";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Colorer l'icône Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Applique la couleur d'accent à l'icône Twitter dans la barre supérieure.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Ajouter 'Tweeté' à la pastille d'actualisation";
-"REFRESH_PILL_LABEL_DETAIL" = "Rajoute l'étiquette 'Tweeté' à la pastille d'actualisation lorsque quelqu'un tweete. Cela peut (à tort) apparaître à d'autres endroits également.";
+"REFRESH_PILL_LABEL_TITLE" = "Ajouter une étiquette à la pastille d'actualisation";
+"REFRESH_PILL_LABEL_DETAIL" = "Rajoute l'étiquette à la pastille d'actualisation lorsque quelqu'un tweete.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Restaurer la terminologie Twitter";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Remplace 'X' par 'Twitter', 'Post' par 'Tweet', 'Repost' par 'Retweet', etc. dans toute l'interface de l'application.";

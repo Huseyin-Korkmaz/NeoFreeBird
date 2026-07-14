@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Oznake navigacije";
 "RESTORE_TAB_LABELS_DETAIL" = "Prikaži oznake ispod ikona u navigaciji kao u starom Twitteru.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Tweetano";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Oboji Twitter ikonu";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Primjenjuje naglašenu boju na Twitter ikonu u gornjoj traci.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Dodaj 'Tweetano' na traku za osvježavanje";
-"REFRESH_PILL_LABEL_DETAIL" = "Vraća oznaku 'Tweetano' na traku za osvježavanje kad netko tweeta. To se može (pogrešno) pojaviti i na nekim drugim mjestima.";
+"REFRESH_PILL_LABEL_TITLE" = "Dodaj oznaku na traku za osvježavanje";
+"REFRESH_PILL_LABEL_DETAIL" = "Vraća oznaku na traku za osvježavanje kad netko tweeta.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Vrati Twitter terminologiju";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Zamjenjuje 'X' s 'Twitter', 'Post' s 'Tweet', 'Repost' s 'Retweet' i tako dalje u cijelom sučelju aplikacije.";

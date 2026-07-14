@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "タブのラベル";
 "RESTORE_TAB_LABELS_DETAIL" = "タブバーのアイコンの下にラベルを表示します。";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "新しいツイート";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Twitterアイコンの色";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "上部バーのTwitterアイコンにアクセントカラーを適用できます。";
 
-"REFRESH_PILL_LABEL_TITLE" = "「𓏸𓏸さんがツイートしました」を追加";
-"REFRESH_PILL_LABEL_DETAIL" = "誰かがツイートすると、リフレッシュピルに「○○さんがツイートしました」ラベルが再び表示されるようにします。このラベルは他の場所でも(誤って)表示される可能性があります。";
+"REFRESH_PILL_LABEL_TITLE" = "更新ピルにラベルを追加";
+"REFRESH_PILL_LABEL_DETAIL" = "誰かがツイートしたときに、更新ピルにラベルを再び表示します。";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Twitter用語を復元";
 "RESTORE_TWITTER_NAMES_DETAIL" = "アプリのインターフェース全体で「X」を「Twitter」に、「ポスト」を「ツイート」に、「リポスト」を「リツイート」などに置き換えます。";

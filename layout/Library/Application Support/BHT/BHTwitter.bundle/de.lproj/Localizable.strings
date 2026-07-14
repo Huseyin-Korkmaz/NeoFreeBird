@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Navigationsbeschriftungen";
 "RESTORE_TAB_LABELS_DETAIL" = "Zeigt Beschriftungen unter Symbolen wie im alten Twitter an.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Tweet gesendet";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Twitter-Symbol einfärben";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Wendet die Akzentfarbe auf das Twitter-Symbol in der oberen Leiste an.";
 
-"REFRESH_PILL_LABEL_TITLE" = "„Tweet gesendet“ zur Aktualisierungspille hinzufügen";
-"REFRESH_PILL_LABEL_DETAIL" = "Fügt der Aktualisierungspille wieder die Beschriftung „Tweet gesendet“ hinzu, wenn jemand tweetet. Dies kann (fälschlicherweise) auch in einigen anderen Bereichen erscheinen.";
+"REFRESH_PILL_LABEL_TITLE" = "Beschriftung zur Aktualisierungspille hinzufügen";
+"REFRESH_PILL_LABEL_DETAIL" = "Fügt der Aktualisierungspille wieder die Beschriftung hinzu, wenn jemand tweetet.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Twitter-Terminologie wiederherstellen";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Ersetzt „X“ durch „Twitter“, „Post“ durch „Tweet“, „Repost“ durch „Retweet“ und so weiter in der gesamten App-Oberfläche.";

@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "還原分頁標籤";
 "RESTORE_TAB_LABELS_DETAIL" = "像舊版 Twitter 一樣在標籤列圖示下方顯示標籤。";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "已推文";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "將 X 圖示上色";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "將主題強調色套用至頂部導覽列的 X 圖示。";
 
-"REFRESH_PILL_LABEL_TITLE" = "在重新整理提示中加入「已推文」";
-"REFRESH_PILL_LABEL_DETAIL" = "當有人發佈推文時，將「已推文」標籤加回重新整理提示中。這可能也會（錯誤地）顯示在其他區域。";
+"REFRESH_PILL_LABEL_TITLE" = "在重新整理提示中加入標籤";
+"REFRESH_PILL_LABEL_DETAIL" = "當有人發佈推文時，將標籤加回重新整理提示中。";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "還原 Twitter 用語";
 "RESTORE_TWITTER_NAMES_DETAIL" = "在整個應用程式介面中，將「X」替換為「Twitter」、「Post」替換為「Tweet」、「Repost」替換為「Retweet」等等。";

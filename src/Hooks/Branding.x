@@ -271,41 +271,53 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 }
 %end
 
-// MARK: Relabel the "new posts" refresh pill, controlled by "refresh_pill_label"
+// MARK: Label the "new posts" refresh pill, controlled by "refresh_pill_label"
+// TUIUpdateIndicator hardcodes empty text on the pill's facepile variant (no feature
+// flag gates it), while the avatarless variant gets the app's NEW_TWEETS_INDICATOR_LABEL.
+// Give the facepile variant that same label: fetching it through NSBundle covers every
+// app language and lets "restore_twitter_names" rename it like any other app string.
 // TFNPillControl backs several unrelated pills (voice tab, onboarding, broadcast). Only
-// TUIUpdateIndicator's home "new posts" pill sets a navigateToEntryID, so gate on that:
-// it's exact and language-independent, where sniffing the text for "post"/"tweet" would
-// only match English. Skip the empty-text (facepile) variant, which has nothing to label.
-static BOOL BHPillIsNewContentPill(__unsafe_unretained id pill, id text) {
+// TUIUpdateIndicator's home "new posts" pill sets a navigateToEntryID, so gate on that.
+static BOOL BHPillWantsLabel(__unsafe_unretained id pill, id text) {
     if (![BHTSettings boolForKey:@"refresh_pill_label"]) {
         return NO;
     }
-    if (![text isKindOfClass:[NSString class]] || [(NSString *)text length] == 0) {
+    if (![text isKindOfClass:[NSString class]] || [(NSString *)text length] > 0) {
         return NO;
     }
     return [pill valueForKey:@"navigateToEntryID"] != nil;
+}
+
+static NSString *BHPillLabelText(void) {
+    static NSBundle *localizationBundle = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Localization_Localization" ofType:@"bundle"];
+        localizationBundle = path ? [NSBundle bundleWithPath:path] : nil;
+    });
+
+    NSString *label = [localizationBundle localizedStringForKey:@"NEW_TWEETS_INDICATOR_LABEL" value:@"" table:nil];
+    return label.length > 0 ? label : nil;
 }
 
 %hook TFNPillControl
 
 - (id)text {
     id origText = %orig;
-    if (!BHPillIsNewContentPill(self, origText)) {
+    if (!BHPillWantsLabel(self, origText)) {
         return origText;
     }
 
-    NSString *localizedText = [[BHTBundle sharedBundle] localizedStringForKey:@"REFRESH_PILL_TEXT"];
-    return localizedText ?: origText;
+    return BHPillLabelText() ?: origText;
 }
 
 - (void)setText:(id)arg1 {
-    if (!BHPillIsNewContentPill(self, arg1)) {
+    if (!BHPillWantsLabel(self, arg1)) {
         %orig(arg1);
         return;
     }
 
-    NSString *localizedText = [[BHTBundle sharedBundle] localizedStringForKey:@"REFRESH_PILL_TEXT"];
-    %orig(localizedText ?: arg1);
+    %orig(BHPillLabelText() ?: arg1);
 }
 
 %end

@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Підписи навігації";
 "RESTORE_TAB_LABELS_DETAIL" = "Показати підписи під іконками як у старому Twitter.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Твітнуто";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Кольорова іконка Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Застосовує акцентний колір до іконки Twitter у верхній панелі.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Додати «Твітнуто» до плашки оновлення";
-"REFRESH_PILL_LABEL_DETAIL" = "Повертає напис «Твітнуто» на плашку оновлення, коли хтось твітить. Це може (помилково) з'являтися і в деяких інших місцях.";
+"REFRESH_PILL_LABEL_TITLE" = "Додати напис до плашки оновлення";
+"REFRESH_PILL_LABEL_DETAIL" = "Повертає напис на плашку оновлення, коли хтось твітить.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Відновити термінологію Twitter";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Замінює «X» на «Twitter», «допис» на «твіт», «репост» на «ретвіт» тощо в усьому інтерфейсі додатка.";

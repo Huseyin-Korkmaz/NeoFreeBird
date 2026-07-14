@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "导航标签";
 "RESTORE_TAB_LABELS_DETAIL" = "在导航图标下方显示文字标签，如旧版 Twitter。";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "已推文";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "为 Twitter 图标着色";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "将强调色应用于顶栏的 Twitter 图标。";
 
-"REFRESH_PILL_LABEL_TITLE" = "在刷新提示条上添加“已推文”";
-"REFRESH_PILL_LABEL_DETAIL" = "当有人发推时，将“已推文”标签重新添加到刷新提示条。这也可能（错误地）出现在其他一些区域。";
+"REFRESH_PILL_LABEL_TITLE" = "在刷新提示条上添加标签";
+"REFRESH_PILL_LABEL_DETAIL" = "当有人发推时，将标签重新添加到刷新提示条。";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "还原 Twitter 术语";
 "RESTORE_TWITTER_NAMES_DETAIL" = "在应用界面中将“X”替换为“Twitter”，“Post”替换为“Tweet”，“Repost”替换为“Retweet”等等。";

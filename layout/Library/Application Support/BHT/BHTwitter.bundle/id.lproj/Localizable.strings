@@ -264,14 +264,11 @@
 "RESTORE_TAB_LABELS_TITLE" = "Label Navigasi";
 "RESTORE_TAB_LABELS_DETAIL" = "Tampilkan label di bawah ikon di bilah navigasi seperti versi lama Twitter.";
 
-/*Refresh pill text*/
-"REFRESH_PILL_TEXT" = "Telah Di-tweet";
-
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Warnai ikon Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Terapkan warna aksen ke ikon Twitter di bilah atas.";
 
-"REFRESH_PILL_LABEL_TITLE" = "Tambahkan 'Telah Di-tweet' ke pill segarkan";
-"REFRESH_PILL_LABEL_DETAIL" = "Kembalikan label 'Telah Di-tweet' pada pill segarkan saat seseorang nge-Tweet. Ini mungkin (secara keliru) juga muncul di beberapa area lain.";
+"REFRESH_PILL_LABEL_TITLE" = "Tambahkan label ke pill segarkan";
+"REFRESH_PILL_LABEL_DETAIL" = "Kembalikan label pada pill segarkan saat seseorang nge-Tweet.";
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Pulihkan terminologi Twitter";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Ganti 'X' dengan 'Twitter', 'Post' dengan 'Tweet', 'Repost' dengan 'Retweet', dan seterusnya di seluruh antarmuka aplikasi.";
