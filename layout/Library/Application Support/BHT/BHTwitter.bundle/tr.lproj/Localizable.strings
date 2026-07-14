@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Twitter simgesini renklendir";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Üst çubuktaki Twitter simgesine vurgu rengini uygular.";
 
+"REFRESH_PILL_TEXT" = "Gönderildi";
 "REFRESH_PILL_LABEL_TITLE" = "Yenileme hapına etiket ekle";
 "REFRESH_PILL_LABEL_DETAIL" = "Birisi Tweet attığında yenileme hapına etiketi geri ekler.";
 

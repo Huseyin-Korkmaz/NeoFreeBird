@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Färga Twitter-ikonen";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Tillämpa accentfärgen på Twitter-ikonen i den övre menyn.";
 
+"REFRESH_PILL_TEXT" = "Postade";
 "REFRESH_PILL_LABEL_TITLE" = "Lägg till etikett i uppdateringspillen";
 "REFRESH_PILL_LABEL_DETAIL" = "Lägger tillbaka etiketten i uppdateringspillen när någon Tweetar.";
 

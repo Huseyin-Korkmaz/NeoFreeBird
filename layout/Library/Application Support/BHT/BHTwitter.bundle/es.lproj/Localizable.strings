@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Colorear ícono de Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Aplica el color de acento al ícono de Twitter en la barra superior.";
 
+"REFRESH_PILL_TEXT" = "Post enviado";
 "REFRESH_PILL_LABEL_TITLE" = "Añadir etiqueta a la píldora de actualización";
 "REFRESH_PILL_LABEL_DETAIL" = "Vuelve a añadir la etiqueta a la píldora de actualización cuando alguien publica un Tweet.";
 

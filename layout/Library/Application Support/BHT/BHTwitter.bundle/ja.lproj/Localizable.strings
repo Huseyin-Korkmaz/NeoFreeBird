@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Twitterアイコンの色";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "上部バーのTwitterアイコンにアクセントカラーを適用できます。";
 
+"REFRESH_PILL_TEXT" = "新しいポスト";
 "REFRESH_PILL_LABEL_TITLE" = "更新ピルにラベルを追加";
 "REFRESH_PILL_LABEL_DETAIL" = "誰かがツイートしたときに、更新ピルにラベルを再び表示します。";
 

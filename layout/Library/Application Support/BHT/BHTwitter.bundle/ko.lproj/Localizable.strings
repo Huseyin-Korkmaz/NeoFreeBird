@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "트위터 아이콘 색 입히기";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "홈 상단의 트위터 아이콘에 현재 테마 색을 입힙니다.";
 
+"REFRESH_PILL_TEXT" = "새 게시물";
 "REFRESH_PILL_LABEL_TITLE" = "새로고침 알림에 라벨 추가";
 "REFRESH_PILL_LABEL_DETAIL" = "누군가 트윗하면 새로고침 알림에 라벨을 다시 표시합니다.";
 

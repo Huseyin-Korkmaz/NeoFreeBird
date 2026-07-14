@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Colorer l'icône Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Applique la couleur d'accent à l'icône Twitter dans la barre supérieure.";
 
+"REFRESH_PILL_TEXT" = "Posté";
 "REFRESH_PILL_LABEL_TITLE" = "Ajouter une étiquette à la pastille d'actualisation";
 "REFRESH_PILL_LABEL_DETAIL" = "Rajoute l'étiquette à la pastille d'actualisation lorsque quelqu'un tweete.";
 

@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "將 X 圖示上色";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "將主題強調色套用至頂部導覽列的 X 圖示。";
 
+"REFRESH_PILL_TEXT" = "已發文";
 "REFRESH_PILL_LABEL_TITLE" = "在重新整理提示中加入標籤";
 "REFRESH_PILL_LABEL_DETAIL" = "當有人發佈推文時，將標籤加回重新整理提示中。";
 

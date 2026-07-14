@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Кольорова іконка Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Застосовує акцентний колір до іконки Twitter у верхній панелі.";
 
+"REFRESH_PILL_TEXT" = "Опубліковано";
 "REFRESH_PILL_LABEL_TITLE" = "Додати напис до плашки оновлення";
 "REFRESH_PILL_LABEL_DETAIL" = "Повертає напис на плашку оновлення, коли хтось твітить.";
 

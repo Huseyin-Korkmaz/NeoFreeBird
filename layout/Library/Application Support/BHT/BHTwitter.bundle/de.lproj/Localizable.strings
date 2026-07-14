@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Twitter-Symbol einfärben";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Wendet die Akzentfarbe auf das Twitter-Symbol in der oberen Leiste an.";
 
+"REFRESH_PILL_TEXT" = "Post gesendet";
 "REFRESH_PILL_LABEL_TITLE" = "Beschriftung zur Aktualisierungspille hinzufügen";
 "REFRESH_PILL_LABEL_DETAIL" = "Fügt der Aktualisierungspille wieder die Beschriftung hinzu, wenn jemand tweetet.";
 

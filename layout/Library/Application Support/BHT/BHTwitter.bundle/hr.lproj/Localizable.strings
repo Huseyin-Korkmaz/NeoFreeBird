@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Oboji Twitter ikonu";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Primjenjuje naglašenu boju na Twitter ikonu u gornjoj traci.";
 
+"REFRESH_PILL_TEXT" = "Objavljeno";
 "REFRESH_PILL_LABEL_TITLE" = "Dodaj oznaku na traku za osvježavanje";
 "REFRESH_PILL_LABEL_DETAIL" = "Vraća oznaku na traku za osvježavanje kad netko tweeta.";
 

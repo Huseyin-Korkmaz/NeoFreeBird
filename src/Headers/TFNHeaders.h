@@ -19,6 +19,10 @@
 @interface TFNTableView : UITableView
 @end
 
+@interface TFNPillControl : UIControl
+@property (nonatomic, copy) NSString *text;
+@end
+
 @interface TFNDataViewController : UIViewController
 @property(readonly, nonatomic) TFNTableView *tableView;
 @property(readonly, nonatomic) NSString *adDisplayLocation;

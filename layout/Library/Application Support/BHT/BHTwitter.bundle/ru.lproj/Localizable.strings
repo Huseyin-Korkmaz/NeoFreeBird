@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Покрасить иконку Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Применяет акцентный цвет к иконке Twitter на верхней панели.";
 
+"REFRESH_PILL_TEXT" = "Пост отправлен";
 "REFRESH_PILL_LABEL_TITLE" = "Добавить надпись на плашку обновления";
 "REFRESH_PILL_LABEL_DETAIL" = "Возвращает надпись на плашку обновления, когда кто-то твитит.";
 

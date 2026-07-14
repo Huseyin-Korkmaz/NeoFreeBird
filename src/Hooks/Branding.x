@@ -272,52 +272,37 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 %end
 
 // MARK: Label the "new posts" refresh pill, controlled by "refresh_pill_label"
-// TUIUpdateIndicator hardcodes empty text on the pill's facepile variant (no feature
-// flag gates it), while the avatarless variant gets the app's NEW_TWEETS_INDICATOR_LABEL.
-// Give the facepile variant that same label: fetching it through NSBundle covers every
-// app language and lets "restore_twitter_names" rename it like any other app string.
-// TFNPillControl backs several unrelated pills (voice tab, onboarding, broadcast). Only
-// TUIUpdateIndicator's home "new posts" pill sets a navigateToEntryID, so gate on that.
-static BOOL BHPillWantsLabel(__unsafe_unretained id pill, id text) {
-    if (![BHTSettings boolForKey:@"refresh_pill_label"]) {
-        return NO;
-    }
-    if (![text isKindOfClass:[NSString class]] || [(NSString *)text length] > 0) {
-        return NO;
-    }
-    return [pill valueForKey:@"navigateToEntryID"] != nil;
-}
-
+// TUIUpdateIndicator rebuilds its pill on every presentation and hardcodes blank text
+// on the facepile variant (no feature flag gates it); it used to say "posted". The
+// tweak ships that label in the app's terminology and routes it through the rename
+// pipeline, so "restore_twitter_names" converts it per-language like any app string.
 static NSString *BHPillLabelText(void) {
-    static NSBundle *localizationBundle = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"Localization_Localization" ofType:@"bundle"];
-        localizationBundle = path ? [NSBundle bundleWithPath:path] : nil;
-    });
-
-    NSString *label = [localizationBundle localizedStringForKey:@"NEW_TWEETS_INDICATOR_LABEL" value:@"" table:nil];
-    return label.length > 0 ? label : nil;
-}
-
-%hook TFNPillControl
-
-- (id)text {
-    id origText = %orig;
-    if (!BHPillWantsLabel(self, origText)) {
-        return origText;
+    NSString *label = [[BHTBundle sharedBundle] localizedStringForKey:@"REFRESH_PILL_TEXT"];
+    if ([BHTSettings boolForKey:@"restore_twitter_names"]) {
+        label = BHRestoreTwitterTerminology(label);
     }
-
-    return BHPillLabelText() ?: origText;
+    return label;
 }
 
-- (void)setText:(id)arg1 {
-    if (!BHPillWantsLabel(self, arg1)) {
-        %orig(arg1);
+%hook TUIUpdateIndicator
+
+- (void)_recreatePillControlForContentNotification:(id)notification hideOnScroll:(BOOL)hideOnScroll {
+    %orig;
+
+    if (![BHTSettings boolForKey:@"refresh_pill_label"]) {
         return;
     }
 
-    %orig(BHPillLabelText() ?: arg1);
+    TFNPillControl *pill = self.pillControl;
+    NSString *current = [pill.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    if (current.length > 0) {
+        return;
+    }
+
+    NSString *label = BHPillLabelText();
+    if (label) {
+        pill.text = label;
+    }
 }
 
 %end

@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Warnai ikon Twitter";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Terapkan warna aksen ke ikon Twitter di bilah atas.";
 
+"REFRESH_PILL_TEXT" = "Telah diposting";
 "REFRESH_PILL_LABEL_TITLE" = "Tambahkan label ke pill segarkan";
 "REFRESH_PILL_LABEL_DETAIL" = "Kembalikan label pada pill segarkan saat seseorang nge-Tweet.";
 

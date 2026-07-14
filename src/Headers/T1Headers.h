@@ -17,6 +17,10 @@
 @property(retain, nonatomic) UIWindow *window;
 @end
 
+@interface TUIUpdateIndicator : UIViewController
+@property (nonatomic, strong) TFNPillControl *pillControl;
+@end
+
 
 @interface TTMAssetVideoFile: NSObject
 @property (nonatomic, copy, readonly) NSString *filePath;

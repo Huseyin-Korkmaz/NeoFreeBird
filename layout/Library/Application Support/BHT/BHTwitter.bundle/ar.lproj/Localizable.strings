@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "تلوين أيقونة تويتر";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "تطبيق لون التمييز على أيقونة تويتر في الشريط العلوي.";
 
+"REFRESH_PILL_TEXT" = "تم النشر";
 "REFRESH_PILL_LABEL_TITLE" = "إضافة تسمية إلى شريط التحديث";
 "REFRESH_PILL_LABEL_DETAIL" = "يعيد التسمية إلى شريط التحديث عندما يغرّد أحدهم.";
 

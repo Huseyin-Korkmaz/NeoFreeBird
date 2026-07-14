@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Color Twitter icon";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Applies the accent color to the Twitter icon in the top bar.";
 
+"REFRESH_PILL_TEXT" = "posted";
 "REFRESH_PILL_LABEL_TITLE" = "Add label to refresh pill";
 "REFRESH_PILL_LABEL_DETAIL" = "Adds the label back to the refresh pill when someone Tweets.";
 

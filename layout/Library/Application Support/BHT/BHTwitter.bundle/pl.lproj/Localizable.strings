@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "Koloruj ikonę Twittera";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "Nadaje kolor akcentu ikonie Twittera na górnym pasku.";
 
+"REFRESH_PILL_TEXT" = "Opublikowano";
 "REFRESH_PILL_LABEL_TITLE" = "Dodaj etykietę na pasek odświeżania";
 "REFRESH_PILL_LABEL_DETAIL" = "Przywraca etykietę na pasku odświeżania, gdy ktoś opublikuje Tweeta.";
 

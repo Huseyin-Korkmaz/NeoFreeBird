@@ -267,6 +267,7 @@
 "COLOR_TWITTER_ICON_IN_TOP_BAR_TITLE" = "为 Twitter 图标着色";
 "COLOR_TWITTER_ICON_IN_TOP_BAR_DETAIL" = "将强调色应用于顶栏的 Twitter 图标。";
 
+"REFRESH_PILL_TEXT" = "已发帖";
 "REFRESH_PILL_LABEL_TITLE" = "在刷新提示条上添加标签";
 "REFRESH_PILL_LABEL_DETAIL" = "当有人发推时，将标签重新添加到刷新提示条。";
 
