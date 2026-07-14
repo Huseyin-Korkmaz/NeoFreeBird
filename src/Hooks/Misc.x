@@ -3,14 +3,14 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 #import <CoreText/CoreText.h>
 
 // MARK: - Always open in Safari
 
 // In-app browser is used for two-factor authentication with security key,
 // login will not complete successfully if it's redirected to Safari
-static BOOL BHTShouldKeepBrowserURLInApp(NSURL *url) {
+static BOOL ShouldKeepBrowserURLInApp(NSURL *url) {
     NSString *urlStr = [url absoluteString];
 
     return [urlStr containsString:@"twitter.com/account/"] || [urlStr containsString:@"twitter.com/i/flow/"] ||
@@ -27,7 +27,7 @@ static BOOL BHTShouldKeepBrowserURLInApp(NSURL *url) {
     }
 
     NSURL *url = [self rootURL] ?: [self initialURL];
-    if (url == nil || BHTShouldKeepBrowserURLInApp(url)) {
+    if (url == nil || ShouldKeepBrowserURLInApp(url)) {
         return %orig;
     }
 
@@ -50,7 +50,7 @@ static BOOL BHTShouldKeepBrowserURLInApp(NSURL *url) {
     }
 
     NSURL *url = [self initialURL];
-    if (url == nil || BHTShouldKeepBrowserURLInApp(url)) {
+    if (url == nil || ShouldKeepBrowserURLInApp(url)) {
         return %orig;
     }
 
@@ -80,7 +80,7 @@ static BOOL BHTShouldKeepBrowserURLInApp(NSURL *url) {
 
 // CTParagraphStyle is immutable with no mutable counterpart, so forcing the
 // writing direction means rebuilding the style with its specifiers copied over.
-static CTParagraphStyleRef BHTCreateLTRParagraphStyle(CTParagraphStyleRef original) {
+static CTParagraphStyleRef CreateLTRParagraphStyle(CTParagraphStyleRef original) {
     static const struct { CTParagraphStyleSpecifier specifier; size_t valueSize; } copiedSpecifiers[] = {
         { kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment) },
         { kCTParagraphStyleSpecifierFirstLineHeadIndent, sizeof(CGFloat) },
@@ -130,7 +130,7 @@ static CTParagraphStyleRef BHTCreateLTRParagraphStyle(CTParagraphStyleRef origin
         // Some models carry a raw CTParagraphStyleRef under the same key.
         if (value != nil && ![value isKindOfClass:[NSParagraphStyle class]]) {
             if (CFGetTypeID((__bridge CFTypeRef)value) == CTParagraphStyleGetTypeID()) {
-                CTParagraphStyleRef ltrStyle = BHTCreateLTRParagraphStyle((__bridge CTParagraphStyleRef)value);
+                CTParagraphStyleRef ltrStyle = CreateLTRParagraphStyle((__bridge CTParagraphStyleRef)value);
                 [text addAttribute:NSParagraphStyleAttributeName value:(__bridge_transfer id)ltrStyle range:range];
             }
             return;
@@ -150,7 +150,7 @@ static CTParagraphStyleRef BHTCreateLTRParagraphStyle(CTParagraphStyleRef origin
 
 // Strips the ?s= baked into the share URL format strings; &t= is already disabled
 // at the source (rehire_share_update_url_enabled in FeatureSwitches.x).
-static NSString *BHTCleanedShareURLString(NSString *urlString) {
+static NSString *CleanedShareURLString(NSString *urlString) {
     if (urlString == nil) {
         return urlString;
     }
@@ -182,12 +182,12 @@ static NSString *BHTCleanedShareURLString(NSString *urlString) {
 
 - (NSString *)twitterURLForShareWithSParam:(unsigned int)sParam {
     NSString *url = %orig;
-    return BHTCleanedShareURLString(url);
+    return CleanedShareURLString(url);
 }
 
 + (NSString *)twitterURLForShareWithSParam:(unsigned int)sParam username:(NSString *)username statusID:(long long)statusID {
     NSString *url = %orig;
-    return BHTCleanedShareURLString(url);
+    return CleanedShareURLString(url);
 }
 
 %end
@@ -197,12 +197,12 @@ static NSString *BHTCleanedShareURLString(NSString *urlString) {
 
 - (NSString *)twitterURLForShare {
     NSString *url = %orig;
-    return BHTCleanedShareURLString(url);
+    return CleanedShareURLString(url);
 }
 
 - (NSString *)twitterURLForCopy {
     NSString *url = %orig;
-    return BHTCleanedShareURLString(url);
+    return CleanedShareURLString(url);
 }
 
 %end

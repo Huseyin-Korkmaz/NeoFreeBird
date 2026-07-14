@@ -3,7 +3,7 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Restore Tweet Source Labels
 //
@@ -20,24 +20,24 @@ NSMutableDictionary *tweetSources = nil;
 static NSMutableDictionary *fetchPending = nil;
 static NSMutableDictionary *fetchRetries = nil;
 
-static char kBHTSourceAppendedKey;      // marks a footer item whose timeAgo already carries the source
-static char kBHTFooterTweetIDKey;       // the tweet ID a footer text view is currently showing
-static char kBHTFooterObservingKey;     // whether a footer text view registered for update notifications
+static char kSourceAppendedKey;      // marks a footer item whose timeAgo already carries the source
+static char kFooterTweetIDKey;       // the tweet ID a footer text view is currently showing
+static char kFooterObservingKey;     // whether a footer text view registered for update notifications
 
-#define BHT_SOURCE_NOTE          @"BHTTweetSourceUpdated"
+#define SOURCE_NOTE          @"TweetSourceUpdated"
 #define MAX_SOURCE_CACHE_SIZE    200
 #define MAX_FETCH_RETRIES        3
 
 // Public web bearer token (not a secret; ships in the web client).
-static NSString * const kBHTSourceBearer =
+static NSString * const kSourceBearer =
     @"Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
 
 // TweetDetail persisted-query id. Web-client specific and can rotate; a stale value
 // just yields an unavailable label rather than a wrong one.
-static NSString * const kBHTTweetDetailQueryID = @"rZA6K31W4E90vZKBmxXV3g";
+static NSString * const kTweetDetailQueryID = @"rZA6K31W4E90vZKBmxXV3g";
 
 // JSON-serialize `object` and percent-encode it for a GraphQL query parameter.
-static NSString *BHT_encodedQueryParameter(id object) {
+static NSString *encodedQueryParameter(id object) {
     NSData *data = [NSJSONSerialization dataWithJSONObject:object options:0 error:nil];
     if (!data) return nil;
 
@@ -51,13 +51,13 @@ static NSString *BHT_encodedQueryParameter(id object) {
 @property (nonatomic, copy) NSString *timeAgo;
 @end
 
-@interface T1ConversationFooterTextView (BHTSourceLabels)
+@interface T1ConversationFooterTextView (SourceLabels)
 @property (nonatomic, readonly) T1ConversationFooterItem *footerItem;
 @end
 
 // TweetSourceHelper itself is declared in Headers/BHTHelpers.h; declare only the
 // internals this rewrite adds.
-@interface TweetSourceHelper (BHTSourceLabels)
+@interface TweetSourceHelper (SourceLabels)
 + (NSString *)unavailableString;
 + (void)pruneCacheIfNeeded;
 + (NSString *)labelFromSourceHTML:(NSString *)html;
@@ -87,14 +87,14 @@ static NSString *BHT_encodedQueryParameter(id object) {
         @"withVoice": @YES,
     };
 
-    NSString *encodedVariables = BHT_encodedQueryParameter(variables);
+    NSString *encodedVariables = encodedQueryParameter(variables);
     if (encodedVariables.length == 0) {
         return nil;
     }
 
     NSString *urlString = [NSString stringWithFormat:
         @"https://x.com/i/api/graphql/%@/TweetDetail?variables=%@",
-        kBHTTweetDetailQueryID, encodedVariables];
+        kTweetDetailQueryID, encodedVariables];
     return [NSURL URLWithString:urlString];
 }
 
@@ -172,7 +172,7 @@ static NSString *BHT_encodedQueryParameter(id object) {
             [fetchRetries removeObjectForKey:tweetID];
         }
 
-        [[NSNotificationCenter defaultCenter] postNotificationName:BHT_SOURCE_NOTE
+        [[NSNotificationCenter defaultCenter] postNotificationName:SOURCE_NOTE
                                                             object:nil
                                                           userInfo:@{@"tweetID": tweetID}];
     });
@@ -206,7 +206,7 @@ static NSString *BHT_encodedQueryParameter(id object) {
     NSString *existing = tweetSources[tweetID];
     if (existing.length > 0 && ![existing isEqualToString:[self unavailableString]]) return;
 
-    NSDictionary *credentials = BHT_currentWebCredentials();
+    NSDictionary *credentials = currentWebCredentials();
     NSString *authToken = credentials[@"auth_token"];
     NSString *ct0 = credentials[@"ct0"];
     if (authToken.length == 0 || ct0.length == 0) {
@@ -228,7 +228,7 @@ static NSString *BHT_encodedQueryParameter(id object) {
     request.HTTPMethod = @"GET";
     request.timeoutInterval = 10.0;
     request.HTTPShouldHandleCookies = NO;
-    [request setValue:kBHTSourceBearer forHTTPHeaderField:@"authorization"];
+    [request setValue:kSourceBearer forHTTPHeaderField:@"authorization"];
     [request setValue:@"OAuth2Session" forHTTPHeaderField:@"x-twitter-auth-type"];
     [request setValue:@"yes" forHTTPHeaderField:@"x-twitter-active-user"];
     [request setValue:@"en" forHTTPHeaderField:@"x-twitter-client-language"];
@@ -295,14 +295,14 @@ static NSString *BHT_encodedQueryParameter(id object) {
         }
 
         if (tweetID.length > 0) {
-            objc_setAssociatedObject(self, &kBHTFooterTweetIDKey, tweetID, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            objc_setAssociatedObject(self, &kFooterTweetIDKey, tweetID, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
-            if (![objc_getAssociatedObject(self, &kBHTFooterObservingKey) boolValue]) {
+            if (![objc_getAssociatedObject(self, &kFooterObservingKey) boolValue]) {
                 [[NSNotificationCenter defaultCenter] addObserver:self
-                                                         selector:@selector(BHT_tweetSourceUpdated:)
-                                                             name:BHT_SOURCE_NOTE
+                                                         selector:@selector(tweetSourceUpdated:)
+                                                             name:SOURCE_NOTE
                                                            object:nil];
-                objc_setAssociatedObject(self, &kBHTFooterObservingKey, @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                objc_setAssociatedObject(self, &kFooterObservingKey, @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             }
 
             NSString *source = tweetSources[tweetID];
@@ -315,11 +315,11 @@ static NSString *BHT_encodedQueryParameter(id object) {
                 NSString *timeAgo = footerItem.timeAgo;
 
                 if (footerItem && timeAgo.length > 0 &&
-                    ![objc_getAssociatedObject(footerItem, &kBHTSourceAppendedKey) boolValue] &&
+                    ![objc_getAssociatedObject(footerItem, &kSourceAppendedKey) boolValue] &&
                     ![timeAgo containsString:source]) {
 
                     footerItem.timeAgo = [NSString stringWithFormat:@"%@ · %@", timeAgo, source];
-                    objc_setAssociatedObject(footerItem, &kBHTSourceAppendedKey, @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+                    objc_setAssociatedObject(footerItem, &kSourceAppendedKey, @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
                 }
             }
         }
@@ -329,9 +329,9 @@ static NSString *BHT_encodedQueryParameter(id object) {
 }
 
 %new
-- (void)BHT_tweetSourceUpdated:(NSNotification *)notification {
+- (void)tweetSourceUpdated:(NSNotification *)notification {
     NSString *tweetID = notification.userInfo[@"tweetID"];
-    NSString *mine = objc_getAssociatedObject(self, &kBHTFooterTweetIDKey);
+    NSString *mine = objc_getAssociatedObject(self, &kFooterTweetIDKey);
     if (tweetID.length > 0 && [tweetID isEqualToString:mine]) {
         // Posted from the main queue, so we are already on the main thread here.
         [self updateFooterTextView];
@@ -339,8 +339,8 @@ static NSString *BHT_encodedQueryParameter(id object) {
 }
 
 - (void)dealloc {
-    if ([objc_getAssociatedObject(self, &kBHTFooterObservingKey) boolValue]) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:BHT_SOURCE_NOTE object:nil];
+    if ([objc_getAssociatedObject(self, &kFooterObservingKey) boolValue]) {
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:SOURCE_NOTE object:nil];
     }
     %orig;
 }

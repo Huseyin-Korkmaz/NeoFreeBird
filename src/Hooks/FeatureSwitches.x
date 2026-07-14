@@ -3,20 +3,20 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // While set, -isSubscribedTo: (below) reports the account's genuine subscription
 // state instead of the forced premium tiers, so paths that need the real status
 // can read through the unlock.
-static __thread BOOL BHTReportGenuineSubscription = NO;
+static __thread BOOL ReportGenuineSubscription = NO;
 
 // While set, the custom-navigation tab gates (below) report their real values, so
 // callers can tell genuinely-held panels from ones only unlocked for the tab pool.
-static __thread BOOL BHTReportGenuineTabGates = NO;
+static __thread BOOL ReportGenuineTabGates = NO;
 
 // Whether the account is really a premium subscriber, ignoring the forced unlock —
 // for switch-gated surfaces that have no premium-aware seam of their own.
-static BOOL BHTAccountIsGenuinelyPremium(void) {
+static BOOL AccountIsGenuinelyPremium(void) {
     Class hostClass = objc_getClass("T1HostViewController");
     id host = ((id (*)(id, SEL))objc_msgSend)((id)hostClass, @selector(sharedHostViewController));
     id account = ((id (*)(id, SEL))objc_msgSend)(host, @selector(currentAccount));
@@ -24,16 +24,16 @@ static BOOL BHTAccountIsGenuinelyPremium(void) {
         return NO;
     }
 
-    BOOL saved = BHTReportGenuineSubscription;
-    BHTReportGenuineSubscription = YES;
+    BOOL saved = ReportGenuineSubscription;
+    ReportGenuineSubscription = YES;
     BOOL premium = ((BOOL (*)(id, SEL))objc_msgSend)(account, @selector(isPremiumTierUser));
-    BHTReportGenuineSubscription = saved;
+    ReportGenuineSubscription = saved;
     return premium;
 }
 
 // MARK: - Feature switch overrides
 
-static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
+static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
     if (![key isKindOfClass:[NSString class]]) {
         return nil;
     }
@@ -213,7 +213,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @2;
     }
 
-    if (!BHTReportGenuineTabGates) {
+    if (!ReportGenuineTabGates) {
         if ([key isEqualToString:@"subscriptions_premium_hub_enabled"] ||
             [key isEqualToString:@"recruiting_global_jobs_hub_enabled"]) {
             return @YES;
@@ -298,7 +298,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     // while the spoof hides them.
     if ([key isEqualToString:@"creator_studio_nav_enabled"] ||
         [key isEqualToString:@"creator_monetization_dashboard_enabled"]) {
-        if (!BHTAccountIsGenuinelyPremium()) {
+        if (!AccountIsGenuinelyPremium()) {
             return @NO;
         }
     }
@@ -313,39 +313,39 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 %hook TFSFeatureSwitches
 
 - (BOOL)boolForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.boolValue : %orig;
 }
 
 - (NSInteger)integerForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.integerValue : %orig;
 }
 
 - (NSNumber *)numberForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ?: %orig;
 }
 
 - (id)rawValueForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ?: %orig;
 }
 
 - (BOOL)unsafePeekBoolForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.boolValue : %orig;
 }
 
 - (NSInteger)unsafePeekIntegerForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.integerValue : %orig;
 }
 
 // Some reads, like the default captions setup, only consult the value when the
 // switch reports a non-default one.
 - (BOOL)hasNonDefaultValueForKey:(NSString *)key {
-    return BHTFeatureSwitchOverrideValueForKey(key) ? YES : %orig;
+    return FeatureSwitchOverrideValueForKey(key) ? YES : %orig;
 }
 
 %end
@@ -353,37 +353,37 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 %hook TFSInstrumentedFeatureSwitches
 
 - (BOOL)boolForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.boolValue : %orig;
 }
 
 - (NSInteger)integerForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.integerValue : %orig;
 }
 
 - (NSNumber *)numberForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ?: %orig;
 }
 
 - (id)rawValueForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ?: %orig;
 }
 
 - (BOOL)unsafePeekBoolForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.boolValue : %orig;
 }
 
 - (NSInteger)unsafePeekIntegerForKey:(NSString *)key {
-    NSNumber *override = BHTFeatureSwitchOverrideValueForKey(key);
+    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.integerValue : %orig;
 }
 
 - (BOOL)hasNonDefaultValueForKey:(NSString *)key {
-    return BHTFeatureSwitchOverrideValueForKey(key) ? YES : %orig;
+    return FeatureSwitchOverrideValueForKey(key) ? YES : %orig;
 }
 
 %end
@@ -406,10 +406,10 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return %orig;
     }
 
-    BOOL saved = BHTReportGenuineSubscription;
-    BHTReportGenuineSubscription = YES;
+    BOOL saved = ReportGenuineSubscription;
+    ReportGenuineSubscription = YES;
     BOOL genuinePremium = ((BOOL (*)(id, SEL))objc_msgSend)(provider, @selector(isPremiumTierUser));
-    BHTReportGenuineSubscription = saved;
+    ReportGenuineSubscription = saved;
 
     if (!genuinePremium) {
         return NO;
@@ -420,14 +420,14 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 // Custom navigation: tab gates read as typed accessors instead of through the
 // keyed funnels, forced on like the keyed gates so their panels' entries build.
 - (BOOL)birdwatchHomePageIsEnabled {
-    if (BHTReportGenuineTabGates) {
+    if (ReportGenuineTabGates) {
         return %orig;
     }
     return YES;
 }
 
 - (BOOL)birdwatchHistoryIsEnabled {
-    if (BHTReportGenuineTabGates) {
+    if (ReportGenuineTabGates) {
         return %orig;
     }
     return YES;
@@ -445,7 +445,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 %hook T1AccountsViewController
 
 - (void)private_startLoginFlowWithSender:(id)sender {
-    [BHTLegacyLoginViewController presentLoginFrom:(UIViewController *)self];
+    [LegacyLoginViewController presentLoginFrom:(UIViewController *)self];
 }
 
 %end
@@ -457,7 +457,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         %orig;
         return;
     }
-    completion([BHTLegacyLoginViewController loginRootNavigationController]);
+    completion([LegacyLoginViewController loginRootNavigationController]);
 }
 
 %end
@@ -495,7 +495,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 // (isPremiumTierUser checks tiers 0/7/8, isVerifiedPremiumTierUser 0/8), so
 // forcing those tiers here unlocks premium from one stable seam.
 - (BOOL)isSubscribedTo:(NSUInteger)tier {
-    if (!BHTReportGenuineSubscription && (tier == 0 || tier == 7 || tier == 8)) {
+    if (!ReportGenuineSubscription && (tier == 0 || tier == 7 || tier == 8)) {
         return YES;
     }
     return %orig;
@@ -528,7 +528,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 // Custom navigation: the Money tab's gate, granted per account/region by the
 // server, forced on like the switch-keyed tab gates so the panel's entry builds.
 - (BOOL)canAccessXPayments {
-    if (BHTReportGenuineTabGates) {
+    if (ReportGenuineTabGates) {
         return %orig;
     }
     return YES;
@@ -546,10 +546,10 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 // Sets the account's tier as a Braze attribute on every activation.
 - (id)_brazeTierStringForAccount:(id)account {
-    BOOL saved = BHTReportGenuineSubscription;
-    BHTReportGenuineSubscription = YES;
+    BOOL saved = ReportGenuineSubscription;
+    ReportGenuineSubscription = YES;
     id result = %orig;
-    BHTReportGenuineSubscription = saved;
+    ReportGenuineSubscription = saved;
     return result;
 }
 
@@ -560,10 +560,10 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 // Opens the real subscription management flow; its premium check should see the
 // genuine status so a forced unlock stops here.
 - (void)showPremiumHubManageSubscriptionWithSource:(NSInteger)source withCompletion:(id)completion {
-    BOOL saved = BHTReportGenuineSubscription;
-    BHTReportGenuineSubscription = YES;
+    BOOL saved = ReportGenuineSubscription;
+    ReportGenuineSubscription = YES;
     %orig;
-    BHTReportGenuineSubscription = saved;
+    ReportGenuineSubscription = saved;
 }
 
 %end
@@ -574,10 +574,10 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 // — a state the forced tier fabricates for a non-subscriber, so read it against the
 // genuine status.
 - (BOOL)shouldShowUnderReviewButton {
-    BOOL saved = BHTReportGenuineSubscription;
-    BHTReportGenuineSubscription = YES;
+    BOOL saved = ReportGenuineSubscription;
+    ReportGenuineSubscription = YES;
     BOOL result = %orig;
-    BHTReportGenuineSubscription = saved;
+    ReportGenuineSubscription = saved;
     return result;
 }
 
@@ -588,7 +588,7 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 // Whether a panel would be tab-eligible without the forced gates: the tab bar editor
 // only offers genuine panels, and the dash spoof keeps the rest out of the drawer.
 
-static id BHT_accountFeatureSwitches(void) {
+static id accountFeatureSwitches(void) {
     Class switchesClass = objc_getClass("TFSAccountFeatureSwitches");
     if (![(id)switchesClass respondsToSelector:@selector(lastUsedAccountFeatureSwitches)]) {
         return nil;
@@ -596,55 +596,55 @@ static id BHT_accountFeatureSwitches(void) {
     return ((id (*)(id, SEL))objc_msgSend)((id)switchesClass, @selector(lastUsedAccountFeatureSwitches));
 }
 
-static BOOL BHT_genuineTabGateFlag(id receiver, SEL selector) {
+static BOOL genuineTabGateFlag(id receiver, SEL selector) {
     if (![receiver respondsToSelector:selector]) {
         return NO;
     }
 
-    BOOL saved = BHTReportGenuineTabGates;
-    BHTReportGenuineTabGates = YES;
+    BOOL saved = ReportGenuineTabGates;
+    ReportGenuineTabGates = YES;
     BOOL value = ((BOOL (*)(id, SEL))objc_msgSend)(receiver, selector);
-    BHTReportGenuineTabGates = saved;
+    ReportGenuineTabGates = saved;
     return value;
 }
 
-static id BHT_featureSwitchesProvider(void) {
-    id accountSwitches = BHT_accountFeatureSwitches();
+static id featureSwitchesProvider(void) {
+    id accountSwitches = accountFeatureSwitches();
     if (![accountSwitches respondsToSelector:@selector(provider)]) {
         return nil;
     }
     return ((id (*)(id, SEL))objc_msgSend)(accountSwitches, @selector(provider));
 }
 
-static BOOL BHT_genuineSwitchBool(NSString *key) {
-    id provider = BHT_featureSwitchesProvider();
+static BOOL genuineSwitchBool(NSString *key) {
+    id provider = featureSwitchesProvider();
     if (![provider respondsToSelector:@selector(boolForKey:)]) {
         return NO;
     }
 
-    BOOL saved = BHTReportGenuineTabGates;
-    BHTReportGenuineTabGates = YES;
+    BOOL saved = ReportGenuineTabGates;
+    ReportGenuineTabGates = YES;
     BOOL value = ((BOOL (*)(id, SEL, NSString *))objc_msgSend)(provider, @selector(boolForKey:), key);
-    BHTReportGenuineTabGates = saved;
+    ReportGenuineTabGates = saved;
     return value;
 }
 
-BOOL BHT_panelIsGenuinelyAvailable(long long panelID) {
+BOOL panelIsGenuinelyAvailable(long long panelID) {
     switch (panelID) {
         case 13: { // Community Notes
-            id switches = BHT_accountFeatureSwitches();
-            return BHT_genuineTabGateFlag(switches, @selector(birdwatchHomePageIsEnabled)) &&
-                   BHT_genuineTabGateFlag(switches, @selector(birdwatchHistoryIsEnabled));
+            id switches = accountFeatureSwitches();
+            return genuineTabGateFlag(switches, @selector(birdwatchHomePageIsEnabled)) &&
+                   genuineTabGateFlag(switches, @selector(birdwatchHistoryIsEnabled));
         }
         case 16: // Premium hub
-            return BHT_genuineSwitchBool(@"subscriptions_premium_hub_enabled");
+            return genuineSwitchBool(@"subscriptions_premium_hub_enabled");
         case 17: // Jobs
-            return BHT_genuineSwitchBool(@"recruiting_global_jobs_hub_enabled") ||
-                   BHT_genuineSwitchBool(@"recruiting_jetfuel_jobs_hub_enabled");
+            return genuineSwitchBool(@"recruiting_global_jobs_hub_enabled") ||
+                   genuineSwitchBool(@"recruiting_jetfuel_jobs_hub_enabled");
         case 18: { // Money
             id host = ((id (*)(id, SEL))objc_msgSend)(objc_getClass("T1HostViewController"), @selector(sharedHostViewController));
             id account = ((id (*)(id, SEL))objc_msgSend)(host, @selector(currentAccount));
-            return BHT_genuineTabGateFlag(account, @selector(canAccessXPayments));
+            return genuineTabGateFlag(account, @selector(canAccessXPayments));
         }
         default: // Panels the app builds, or the unlock enables, for everyone
             return YES;
@@ -658,14 +658,14 @@ BOOL BHT_panelIsGenuinelyAvailable(long long panelID) {
 // scoped by a flag — other visiblePanelIDs readers must see the real tab state.
 // Premium is claimed for a non-premium account, for whom it's just an upsell.
 
-static __thread BOOL BHTDashPanelIDQuery = NO;
+static __thread BOOL DashPanelIDQuery = NO;
 
 %hook T1DashContentController
 
 - (void)updateVisiblePanelIDs {
-    BHTDashPanelIDQuery = YES;
+    DashPanelIDQuery = YES;
     %orig;
-    BHTDashPanelIDQuery = NO;
+    DashPanelIDQuery = NO;
 }
 
 %end
@@ -674,7 +674,7 @@ static __thread BOOL BHTDashPanelIDQuery = NO;
 
 - (NSArray *)visiblePanelIDsForAppNavigation:(id)appNavigation {
     NSArray *panelIDs = %orig;
-    if (!BHTDashPanelIDQuery) {
+    if (!DashPanelIDQuery) {
         return panelIDs;
     }
 
@@ -686,7 +686,7 @@ static __thread BOOL BHTDashPanelIDQuery = NO;
     };
 
     for (NSNumber *panelID in @[@13, @16, @17, @18]) {
-        if (!BHT_panelIsGenuinelyAvailable(panelID.longLongValue)) {
+        if (!panelIsGenuinelyAvailable(panelID.longLongValue)) {
             claim(panelID);
         }
     }
@@ -695,7 +695,7 @@ static __thread BOOL BHTDashPanelIDQuery = NO;
         claim(@14);
     }
 
-    if (!BHTAccountIsGenuinelyPremium()) {
+    if (!AccountIsGenuinelyPremium()) {
         claim(@16);
     }
 

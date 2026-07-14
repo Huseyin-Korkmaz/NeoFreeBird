@@ -3,19 +3,19 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Copy profile info
 
-static char kBHTCopyProviderKey;
+static char kCopyProviderKey;
 
-@interface BHTProfileCopyButtonProvider : NSObject
+@interface ProfileCopyButtonProvider : NSObject
 @property (nonatomic, weak) T1ProfileHeaderViewController *headerViewController;
 @property (nonatomic, weak) id delegate;
 @property (nonatomic, strong) TFNButton *infoButton;
 @end
 
-@implementation BHTProfileCopyButtonProvider
+@implementation ProfileCopyButtonProvider
 
 - (NSArray<UIMenuElement *> *)copyActions {
     T1ProfileUserViewModel *viewModel = self.headerViewController.viewModel;
@@ -54,7 +54,7 @@ static char kBHTCopyProviderKey;
 
         // Deferred so each open rebuilds the actions with the loaded profile
         // data and the current theme's icon color.
-        __weak BHTProfileCopyButtonProvider *weakSelf = self;
+        __weak ProfileCopyButtonProvider *weakSelf = self;
         void (^actionsProvider)(void (^)(NSArray<UIMenuElement *> *)) = ^(void (^completion)(NSArray<UIMenuElement *> *)) {
             completion([weakSelf copyActions] ?: @[]);
         };
@@ -74,7 +74,7 @@ static char kBHTCopyProviderKey;
 - (NSArray *)buttonSpecs {
     // Native positions run from 2 (follow) to 10 (mute), so 100 lands at the
     // far end; priority 1 lets every native button win the width fight.
-    __weak BHTProfileCopyButtonProvider *weakSelf = self;
+    __weak ProfileCopyButtonProvider *weakSelf = self;
     T1ProfileActionButtonSpec *spec = [[%c(T1ProfileActionButtonSpec) alloc] initWithPosition:100
                                                                                      priority:1
                                                                               visibilityBlock:^BOOL(double availableWidth) {
@@ -97,11 +97,11 @@ static char kBHTCopyProviderKey;
         return providers;
     }
 
-    BHTProfileCopyButtonProvider *copyProvider = objc_getAssociatedObject(self, &kBHTCopyProviderKey);
+    ProfileCopyButtonProvider *copyProvider = objc_getAssociatedObject(self, &kCopyProviderKey);
     if (!copyProvider) {
-        copyProvider = [BHTProfileCopyButtonProvider new];
+        copyProvider = [ProfileCopyButtonProvider new];
         copyProvider.headerViewController = self;
-        objc_setAssociatedObject(self, &kBHTCopyProviderKey, copyProvider, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, &kCopyProviderKey, copyProvider, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return [providers arrayByAddingObject:copyProvider];
 }

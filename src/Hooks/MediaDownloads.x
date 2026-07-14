@@ -3,17 +3,17 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - DM video download
 
 // The DM UI is Swift now: media messages live in DMConversation.MessageAttachmentView,
 // which hosts a shared TweetMediaAttachments media view exposing its models through
 // -inlineMediaInfos. Collect the entities from whichever descendant carries them.
-static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
+static NSArray *DMVideoEntities(UIView *attachmentView) {
     NSMutableArray *entities = [NSMutableArray new];
 
-    BH_EnumerateSubviewsRecursively(attachmentView, ^(UIView *view) {
+    EnumerateSubviewsRecursively(attachmentView, ^(UIView *view) {
         if (![view respondsToSelector:@selector(inlineMediaInfos)]) {
             return;
         }
@@ -31,7 +31,7 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
 
 %hook _TtC14DMConversation21MessageAttachmentView
 %property (nonatomic, strong) UIContextMenuInteraction *downloadMenuInteraction;
-%property (nonatomic, strong) BHDownloadInlineButton *downloadHandler;
+%property (nonatomic, strong) DownloadInlineButton *downloadHandler;
 - (void)layoutSubviews {
     %orig;
 
@@ -41,7 +41,7 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
     }
 }
 %new - (UIContextMenuConfiguration *)contextMenuInteraction:(UIContextMenuInteraction *)interaction configurationForMenuAtLocation:(CGPoint)location {
-    NSArray *videoEntities = BHT_DMVideoEntities(self);
+    NSArray *videoEntities = DMVideoEntities(self);
     if (videoEntities.count == 0) {
         return nil;
     }
@@ -49,7 +49,7 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
     return [UIContextMenuConfiguration configurationWithIdentifier:nil previewProvider:nil actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
         UIAction *saveAction = [UIAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"DOWNLOAD_ACTIVITY_VIEW_LABEL"] image:[UIImage systemImageNamed:@"square.and.arrow.down"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
             if (self.downloadHandler == nil) {
-                self.downloadHandler = [%c(BHDownloadInlineButton) new];
+                self.downloadHandler = [%c(DownloadInlineButton) new];
             }
             [self.downloadHandler presentDownloadOptionsForMediaEntities:videoEntities];
         }];
@@ -161,7 +161,7 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
                 return %orig;
             }
 
-            UIImage *tweetImage = BH_imageFromView(tweetView);
+            UIImage *tweetImage = imageFromView(tweetView);
             NSData *pngData = UIImagePNGRepresentation(tweetImage);
             NSURL *pngURL = [[NSURL fileURLWithPath:NSTemporaryDirectory()] URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", [[NSUUID UUID] UUIDString]]];
             [pngData writeToURL:pngURL atomically:YES];
@@ -204,9 +204,9 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
     }
 
     static char downloaderKey;
-    BHDownloadInlineButton *downloader = objc_getAssociatedObject(self, &downloaderKey);
+    DownloadInlineButton *downloader = objc_getAssociatedObject(self, &downloaderKey);
     if (!downloader) {
-        downloader = [%c(BHDownloadInlineButton) new];
+        downloader = [%c(DownloadInlineButton) new];
         objc_setAssociatedObject(self, &downloaderKey, downloader, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
 

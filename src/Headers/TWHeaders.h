@@ -12,8 +12,8 @@
 #import <AVKit/AVKit.h>
 #import <Photos/Photos.h>
 #import <SafariServices/SafariServices.h>
-#import "Download/BHDownload.h"
-#import "CustomTabBar/BHCustomTabBarUtility.h"
+#import "Download/Download.h"
+#import "CustomTabBar/CustomTabBarUtility.h"
 #import "JGProgressHUD/JGProgressHUD.h"
 #import "SAMKeychain/keychain.h"
 #import <Preferences/PSListController.h>
@@ -31,4 +31,4 @@
 #import "TAEHeaders.h"
 #import "T1Headers.h"
 #import "FLEXHeaders.h"
-#import "BHTHelpers.h"
+#import "Helpers.h"

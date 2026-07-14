@@ -9,7 +9,7 @@
 #import "Headers/TWHeaders.h"
 #import "Core/BHTBundle.h"
 
-extern void BHT_applySquareAvatarsSetting(void);
+extern void applySquareAvatarsSetting(void);
 
 @implementation ProfilesSettingsViewController
 
@@ -21,7 +21,7 @@ extern void BHT_applySquareAvatarsSetting(void);
     [super switchChanged:sender];
     NSString *key = objc_getAssociatedObject(sender, @"prefKey");
     if ([key isEqualToString:@"square_avatars"]) {
-        BHT_applySquareAvatarsSetting();
+        applySquareAvatarsSetting();
     }
 }
 

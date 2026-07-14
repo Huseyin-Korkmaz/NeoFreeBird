@@ -8,7 +8,7 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 #import <SafariServices/SafariServices.h>
-#import "Download/BHDownload.h"
+#import "Download/Download.h"
 #import "JGProgressHUD/JGProgressHUD.h"
 #import "TFNHeaders.h"
 #import "TFSHeaders.h"
@@ -165,12 +165,12 @@
 
 #pragma mark - Media views
 
-@class BHDownloadInlineButton;
+@class DownloadInlineButton;
 
 // DM media message container (DMConversation.MessageAttachmentView)
 @interface _TtC14DMConversation21MessageAttachmentView : UIView
 @property (nonatomic, strong) UIContextMenuInteraction *downloadMenuInteraction;
-@property (nonatomic, strong) BHDownloadInlineButton *downloadHandler;
+@property (nonatomic, strong) DownloadInlineButton *downloadHandler;
 @end
 
 @interface _TtC14DMConversation21MessageAttachmentView () <UIContextMenuInteractionDelegate>

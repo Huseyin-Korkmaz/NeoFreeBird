@@ -3,11 +3,11 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Custom accent color
 
-static NSNumber *BHT_selectedThemeColor(void) {
+static NSNumber *selectedThemeColor(void) {
     return [NSUserDefaults.standardUserDefaults objectForKey:@"bh_color_theme_selectedColor"];
 }
 
@@ -16,19 +16,19 @@ static NSNumber *BHT_selectedThemeColor(void) {
 %hook TAEColorSettings
 
 - (void)setPrimaryColorOption:(NSInteger)colorOption {
-    NSNumber *selectedColor = BHT_selectedThemeColor();
+    NSNumber *selectedColor = selectedThemeColor();
     %orig(selectedColor ? selectedColor.integerValue : colorOption);
 }
 
 - (NSInteger)primaryColorOption {
-    NSNumber *selectedColor = BHT_selectedThemeColor();
+    NSNumber *selectedColor = selectedThemeColor();
     return selectedColor ? selectedColor.integerValue : %orig;
 }
 
 %end
 
-void BHT_applySelectedThemeColor(void) {
-    NSNumber *selectedColor = BHT_selectedThemeColor();
+void applySelectedThemeColor(void) {
+    NSNumber *selectedColor = selectedThemeColor();
     if (selectedColor) {
         [[objc_getClass("TAEColorSettings") sharedSettings] setPrimaryColorOption:selectedColor.integerValue];
     }
@@ -36,7 +36,7 @@ void BHT_applySelectedThemeColor(void) {
 
 // MARK: - Custom tab bar order and visibility
 
-static NSString *BHT_scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
+static NSString *scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
     if (![entry respondsToSelector:@selector(tabView)]) {
         return nil;
     }
@@ -45,7 +45,7 @@ static NSString *BHT_scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
 
 // Operates on the tab ENTRIES, not the button views: the app derives both the
 // buttons and their content view controllers from this one array.
-static NSArray *BHT_orderedTabEntries(NSArray *entries) {
+static NSArray *orderedTabEntries(NSArray *entries) {
     // Record the underlying tab views so the editor can show real titles and icons.
     NSMutableArray *tabViews = [NSMutableArray new];
     for (id<T1AppNavigationTabEntry> entry in entries) {
@@ -54,13 +54,13 @@ static NSArray *BHT_orderedTabEntries(NSArray *entries) {
             [tabViews addObject:tabView];
         }
     }
-    [BHCustomTabBarUtility recordTabViews:tabViews];
+    [CustomTabBarUtility recordTabViews:tabViews];
 
-    NSArray <NSString *> *visibleOrder = [BHCustomTabBarUtility visiblePageIDsInOrder];
+    NSArray <NSString *> *visibleOrder = [CustomTabBarUtility visiblePageIDsInOrder];
 
     NSMutableDictionary <NSString *, id> *entriesByPage = [NSMutableDictionary new];
     for (id<T1AppNavigationTabEntry> entry in entries) {
-        NSString *page = BHT_scribePageForEntry(entry);
+        NSString *page = scribePageForEntry(entry);
         if (page && !entriesByPage[page]) {
             entriesByPage[page] = entry;
         }
@@ -70,7 +70,7 @@ static NSArray *BHT_orderedTabEntries(NSArray *entries) {
     // in that order, hiding everything else the app builds.
     if (!visibleOrder) {
         NSMutableArray *defaultEntries = [NSMutableArray new];
-        for (NSString *pageID in [BHCustomTabBarUtility defaultVisiblePageIDs]) {
+        for (NSString *pageID in [CustomTabBarUtility defaultVisiblePageIDs]) {
             id entry = entriesByPage[pageID];
             if (entry) {
                 [defaultEntries addObject:entry];
@@ -99,7 +99,7 @@ static NSArray *BHT_orderedTabEntries(NSArray *entries) {
 %hook T1TabbedAppNavigationViewController
 
 - (void)setVisibleTabEntries:(NSArray *)entries {
-    %orig(BHT_orderedTabEntries(entries));
+    %orig(orderedTabEntries(entries));
 }
 
 %end
@@ -122,10 +122,10 @@ static NSArray *BHT_orderedTabEntries(NSArray *entries) {
 
 // MARK: - Tab bar icon and label theming
 
-static BOOL BHT_updatingTabIconColor = NO;
+static BOOL updatingTabIconColor = NO;
 
-static UIColor *BHT_tabItemColor(BOOL selected) {
-    return selected ? BHTCurrentAccentColor() : [UIColor secondaryLabelColor];
+static UIColor *tabItemColor(BOOL selected) {
+    return selected ? CurrentAccentColor() : [UIColor secondaryLabelColor];
 }
 
 %hook T1TabView
@@ -133,17 +133,17 @@ static UIColor *BHT_tabItemColor(BOOL selected) {
 - (void)_t1_updateImageViewAnimated:(BOOL)animated {
     // setIconColor: re-enters this method, so swallow the inner call and let
     // %orig below render once with the new color
-    if (BHT_updatingTabIconColor) {
+    if (updatingTabIconColor) {
         return;
     }
 
-    BHT_updatingTabIconColor = YES;
+    updatingTabIconColor = YES;
     if ([BHTSettings boolForKey:@"tab_bar_theming"]) {
-        self.iconColor = BHT_tabItemColor(self.selected);
+        self.iconColor = tabItemColor(self.selected);
     } else if (self.iconColor) {
         self.iconColor = nil;
     }
-    BHT_updatingTabIconColor = NO;
+    updatingTabIconColor = NO;
 
     %orig(animated);
 }
@@ -152,7 +152,7 @@ static UIColor *BHT_tabItemColor(BOOL selected) {
     %orig;
 
     if ([BHTSettings boolForKey:@"tab_bar_theming"]) {
-        self.titleLabel.textColor = BHT_tabItemColor(self.selected);
+        self.titleLabel.textColor = tabItemColor(self.selected);
     }
 }
 
@@ -164,7 +164,7 @@ static UIColor *BHT_tabItemColor(BOOL selected) {
 }
 
 %new
-- (void)bh_applyCurrentThemeToIcon {
+- (void)applyCurrentThemeToIcon {
     [self _t1_updateImageViewAnimated:NO];
     [self _t1_updateTitleLabel];
 }
@@ -182,7 +182,7 @@ static UIColor *BHT_tabItemColor(BOOL selected) {
         UIImageView *logoView = (UIImageView *)titleView;
         if (logoView.image) {
             logoView.image = [logoView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            logoView.tintColor = BHTCurrentAccentColor();
+            logoView.tintColor = CurrentAccentColor();
         }
     }
 

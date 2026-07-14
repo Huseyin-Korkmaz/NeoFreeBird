@@ -3,13 +3,13 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Padlock helpers
 
-static const NSInteger BHTPadlockOverlayTag = 909;
+static const NSInteger PadlockOverlayTag = 909;
 
-static NSArray<UIWindow *> *BHT_allActiveWindows(void) {
+static NSArray<UIWindow *> *allActiveWindows(void) {
     NSMutableArray<UIWindow *> *result = [NSMutableArray array];
     if (@available(iOS 13.0, *)) {
         for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
@@ -30,7 +30,7 @@ static NSArray<UIWindow *> *BHT_allActiveWindows(void) {
     return result;
 }
 
-static UIWindow *BHT_activeKeyWindow(void) {
+static UIWindow *activeKeyWindow(void) {
     if (@available(iOS 13.0, *)) {
         for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
             if (scene.activationState == UISceneActivationStateForegroundActive &&
@@ -54,7 +54,7 @@ static UIWindow *BHT_activeKeyWindow(void) {
     return nil;
 }
 
-static UIViewController *BHT_topViewController(UIViewController *root) {
+static UIViewController *topViewController(UIViewController *root) {
     if (!root) return nil;
     UIViewController *vc = root;
     while (vc.presentedViewController) {
@@ -70,13 +70,13 @@ static UIViewController *BHT_topViewController(UIViewController *root) {
     return vc;
 }
 
-static void BHT_showPadlockOverlay(void) {
-    UIWindow *window = BHT_activeKeyWindow();
+static void showPadlockOverlay(void) {
+    UIWindow *window = activeKeyWindow();
     if (!window) return;
 
-    for (UIWindow *w in BHT_allActiveWindows()) {
+    for (UIWindow *w in allActiveWindows()) {
         for (UIView *v in w.subviews) {
-            if (v.tag == BHTPadlockOverlayTag) [v removeFromSuperview];
+            if (v.tag == PadlockOverlayTag) [v removeFromSuperview];
         }
     }
 
@@ -84,7 +84,7 @@ static void BHT_showPadlockOverlay(void) {
     overlay.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     overlay.backgroundColor = UIColor.systemBackgroundColor;
     overlay.userInteractionEnabled = YES;
-    overlay.tag = BHTPadlockOverlayTag;
+    overlay.tag = PadlockOverlayTag;
 
     UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed:@"lock.fill"]];
     icon.translatesAutoresizingMaskIntoConstraints = NO;
@@ -110,36 +110,36 @@ static void BHT_showPadlockOverlay(void) {
     [window addSubview:overlay];
 }
 
-static void BHT_removePadlockOverlay(void) {
-    for (UIWindow *w in BHT_allActiveWindows()) {
+static void removePadlockOverlay(void) {
+    for (UIWindow *w in allActiveWindows()) {
         NSMutableArray<UIView *> *toRemove = [NSMutableArray array];
         for (UIView *v in w.subviews) {
-            if (v.tag == BHTPadlockOverlayTag) [toRemove addObject:v];
+            if (v.tag == PadlockOverlayTag) [toRemove addObject:v];
         }
         for (UIView *v in toRemove) [v removeFromSuperview];
     }
 }
 
-static BOOL BHT_isAuthenticated(void) {
+static BOOL isAuthenticated(void) {
     NSDictionary *keychainData = [[keychain shared] getData];
     if (!keychainData) return NO;
     id val = keychainData[@"isAuthenticated"];
     return [val respondsToSelector:@selector(boolValue)] ? [val boolValue] : NO;
 }
 
-static void BHT_setAuthenticated(BOOL yes) {
+static void setAuthenticated(BOOL yes) {
     [[keychain shared] saveDictionary:@{@"isAuthenticated": @(yes)}];
 }
 
-static void BHT_presentAuthIfNeeded(void) {
-    if (BHT_isAuthenticated()) {
-        BHT_removePadlockOverlay();
+static void presentAuthIfNeeded(void) {
+    if (isAuthenticated()) {
+        removePadlockOverlay();
         return;
     }
 
-    UIWindow *window = BHT_activeKeyWindow();
+    UIWindow *window = activeKeyWindow();
     if (!window) {
-        BHT_showPadlockOverlay();
+        showPadlockOverlay();
         return;
     }
 
@@ -148,7 +148,7 @@ static void BHT_presentAuthIfNeeded(void) {
         window.rootViewController = [UIViewController new];
         root = window.rootViewController;
     }
-    UIViewController *host = BHT_topViewController(root);
+    UIViewController *host = topViewController(root);
 
     AuthViewController *auth = [[AuthViewController alloc] init];
     auth.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -160,7 +160,7 @@ static void BHT_presentAuthIfNeeded(void) {
         [host presentViewController:auth animated:NO completion:nil];
     } else {
         [host dismissViewControllerAnimated:NO completion:^{
-            UIViewController *newTop = BHT_topViewController(root);
+            UIViewController *newTop = topViewController(root);
             [newTop presentViewController:auth animated:NO completion:nil];
         }];
     }
@@ -179,7 +179,7 @@ static void BHT_presentAuthIfNeeded(void) {
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        BHT_applySelectedThemeColor();
+        applySelectedThemeColor();
     });
 
     return orig;
@@ -188,20 +188,20 @@ static void BHT_presentAuthIfNeeded(void) {
 - (void)applicationDidBecomeActive:(__unsafe_unretained id)arg1 {
     %orig;
 
-    BHT_applySelectedThemeColor();
-    BHT_prewarmWebCookiesIfNeeded();
+    applySelectedThemeColor();
+    prewarmWebCookiesIfNeeded();
 
     if ([BHTSettings boolForKey:@"padlock"]) {
-        if (BHT_isAuthenticated()) {
-            BHT_removePadlockOverlay();
+        if (isAuthenticated()) {
+            removePadlockOverlay();
         } else {
-            BHT_showPadlockOverlay();
+            showPadlockOverlay();
             dispatch_async(dispatch_get_main_queue(), ^{
-                BHT_presentAuthIfNeeded();
+                presentAuthIfNeeded();
             });
         }
     } else {
-        BHT_removePadlockOverlay();
+        removePadlockOverlay();
     }
 }
 
@@ -211,8 +211,8 @@ static void BHT_presentAuthIfNeeded(void) {
     if ([BHTSettings boolForKey:@"padlock"]) {
         // Cover the UI (and the app-switcher snapshot) and mark unauthenticated so
         // the next activation prompts again; the overlay persists into background.
-        BHT_showPadlockOverlay();
-        BHT_setAuthenticated(NO);
+        showPadlockOverlay();
+        setAuthenticated(NO);
     }
 
     if ([BHTSettings boolForKey:@"flex_twitter"]) {
@@ -226,8 +226,8 @@ static void BHT_presentAuthIfNeeded(void) {
 
 - (void)viewDidDisappear:(BOOL)animated {
     %orig;
-    if (BHT_isAuthenticated()) {
-        BHT_removePadlockOverlay();
+    if (isAuthenticated()) {
+        removePadlockOverlay();
     }
 }
 
@@ -239,7 +239,7 @@ static void BHT_presentAuthIfNeeded(void) {
 // (revealMaskLayer / holePathInView); detach it so the logo zoom is kept but the
 // splash simply fades out.
 
-static void BHT_stripLaunchRevealMask(UIView *view) {
+static void stripLaunchRevealMask(UIView *view) {
     // The X-shaped hole lives on the container subview's layer.mask; the top
     // view itself is unmasked, but clear it too for safety.
     view.layer.mask = nil;
@@ -253,11 +253,11 @@ static void BHT_stripLaunchRevealMask(UIView *view) {
 - (void)layoutSubviews {
     %orig;
     // layoutSubviews re-installs the mask each pass, so re-strip after %orig.
-    BHT_stripLaunchRevealMask((UIView *)self);
+    stripLaunchRevealMask((UIView *)self);
 }
 
 - (void)animateRevealWithCompletion:(id)completion {
-    BHT_stripLaunchRevealMask((UIView *)self);
+    stripLaunchRevealMask((UIView *)self);
 
     [UIView animateWithDuration:0.5 animations:^{
         for (UIView *sub in ((UIView *)self).subviews) {

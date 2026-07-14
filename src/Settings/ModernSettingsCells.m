@@ -8,7 +8,7 @@
 #import "Settings/ModernSettingsCells.h"
 #import "Headers/TWHeaders.h"
 #import "Core/BHTManager.h"
-#import "ThemeColor/BHTPalette.h"
+#import "ThemeColor/Palette.h"
 
 @implementation ModernSettingsTableViewCell
 
@@ -47,7 +47,7 @@
     self.chevronImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.contentView addSubview:self.chevronImageView];
 
-    self.backgroundColor = [BHTPalette currentBackgroundColor];
+    self.backgroundColor = [Palette currentBackgroundColor];
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
 }
 
@@ -111,7 +111,7 @@
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
-    self.backgroundColor = [BHTPalette currentBackgroundColor];
+    self.backgroundColor = [Palette currentBackgroundColor];
     [self updateIconColors];
     [self updateSubtitleColor];
     if (previousTraitCollection.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory) {
@@ -147,7 +147,7 @@
     self.chevronImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.contentView addSubview:self.chevronImageView];
 
-    self.backgroundColor = [BHTPalette currentBackgroundColor];
+    self.backgroundColor = [Palette currentBackgroundColor];
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
     [self updateChevronColor];
 }
@@ -182,7 +182,7 @@
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
-    self.backgroundColor = [BHTPalette currentBackgroundColor];
+    self.backgroundColor = [Palette currentBackgroundColor];
     [self updateChevronColor];
     if (previousTraitCollection.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory) {
         id fontGroup = [BHTManager sharedFontGroup];
@@ -223,7 +223,7 @@
     self.chevronImageView.contentMode = UIViewContentModeScaleAspectFit;
     [self.contentView addSubview:self.chevronImageView];
 
-    self.backgroundColor = [BHTPalette currentBackgroundColor];
+    self.backgroundColor = [Palette currentBackgroundColor];
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
     [self updateChevronColor];
 }
@@ -274,7 +274,7 @@
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
-    self.backgroundColor = [BHTPalette currentBackgroundColor];
+    self.backgroundColor = [Palette currentBackgroundColor];
     [self updateChevronColor];
     [self updateSubtitleColor];
     if (previousTraitCollection.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory) {
@@ -292,7 +292,7 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        self.backgroundColor = [BHTPalette currentBackgroundColor];
+        self.backgroundColor = [Palette currentBackgroundColor];
         self.titleLabel = [UILabel new];
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:self.titleLabel];

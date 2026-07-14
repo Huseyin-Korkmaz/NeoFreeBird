@@ -31,7 +31,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"subtitleKey": @"MODERN_SETTINGS_APPEARANCE_SUBTITLE",
                 @"settings": @[
                     @{ @"titleKey": @"THEME_OPTION_TITLE", @"action": @"showThemeViewController:", @"type": @"button" },
-                    @{ @"titleKey": @"APP_ICON_TITLE", @"action": @"showBHAppIconViewController:", @"type": @"button" },
+                    @{ @"titleKey": @"APP_ICON_TITLE", @"action": @"showAppIconViewController:", @"type": @"button" },
                     @{ @"titleKey": @"CUSTOM_TAB_BAR_OPTION_TITLE", @"action": @"showCustomTabBarVC:", @"type": @"button" },
                     @{ @"key": @"tab_bar_theming", @"default": @NO },
                     @{ @"key": @"restore_tab_labels", @"default": @NO },

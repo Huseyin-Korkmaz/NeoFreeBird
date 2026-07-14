@@ -3,17 +3,17 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Immersive Player Timestamp
 
 // Field indexes in ImmersiveCardState's declaration order.
 enum {
-    BHTCardStateFieldIsPanningBetweenCards = 19,
-    BHTCardStateFieldIsChromeFadedOutWhilePanning = 20,
+    CardStateFieldIsPanningBetweenCards = 19,
+    CardStateFieldIsChromeFadedOutWhilePanning = 20,
 };
 
-static const uint8_t *BHT_immersiveCardStateMetadata(void) {
+static const uint8_t *immersiveCardStateMetadata(void) {
     static const uint8_t *metadata;
     static dispatch_once_t once;
     dispatch_once(&once, ^{
@@ -29,8 +29,8 @@ static const uint8_t *BHT_immersiveCardStateMetadata(void) {
 
 // Reads a Bool field through the struct's field offset vector, the same way the
 // app's own compiled accesses do, so byte offsets never have to be hardcoded.
-static BOOL BHT_cardStateBoolField(const uint8_t *state, uint32_t fieldIndex, BOOL *outValue) {
-    const uint8_t *metadata = BHT_immersiveCardStateMetadata();
+static BOOL cardStateBoolField(const uint8_t *state, uint32_t fieldIndex, BOOL *outValue) {
+    const uint8_t *metadata = immersiveCardStateMetadata();
     if (!metadata) {
         return NO;
     }
@@ -51,7 +51,7 @@ static BOOL BHT_cardStateBoolField(const uint8_t *state, uint32_t fieldIndex, BO
 // discriminator tag (0 = the repliesPanning payload case, 1 = an empty case).
 // Empty cases: regular = 0, repliesOpen = 1, repliesCompletelyOpen = 2,
 // controlsHidden = 3, scrubbing = 4, statusExpanded = 5.
-static BOOL BHT_progressLabelAlphaFromState(id pluginView, CGFloat *outAlpha) {
+static BOOL progressLabelAlphaFromState(id pluginView, CGFloat *outAlpha) {
     Ivar stateIvar = class_getInstanceVariable([pluginView class], "state");
     if (!stateIvar) {
         return NO;
@@ -65,9 +65,9 @@ static BOOL BHT_progressLabelAlphaFromState(id pluginView, CGFloat *outAlpha) {
 
     if (visible) {
         BOOL panning = NO, chromeFaded = NO;
-        if (BHT_cardStateBoolField(state, BHTCardStateFieldIsPanningBetweenCards, &panning) && panning) {
+        if (cardStateBoolField(state, CardStateFieldIsPanningBetweenCards, &panning) && panning) {
             visible = NO;
-        } else if (BHT_cardStateBoolField(state, BHTCardStateFieldIsChromeFadedOutWhilePanning, &chromeFaded) && chromeFaded) {
+        } else if (cardStateBoolField(state, CardStateFieldIsChromeFadedOutWhilePanning, &chromeFaded) && chromeFaded) {
             visible = NO;
         }
     }
@@ -81,7 +81,7 @@ static BOOL BHT_progressLabelAlphaFromState(id pluginView, CGFloat *outAlpha) {
 - (void)setAlpha:(CGFloat)alpha {
     if ([BHTSettings boolForKey:@"restore_video_timestamp"]) {
         CGFloat stateAlpha;
-        if (BHT_progressLabelAlphaFromState(self, &stateAlpha)) {
+        if (progressLabelAlphaFromState(self, &stateAlpha)) {
             alpha = stateAlpha;
         }
     }
@@ -95,7 +95,7 @@ static BOOL BHT_progressLabelAlphaFromState(id pluginView, CGFloat *outAlpha) {
 
 // The card pan drives vertical paging between videos; blocking it lets the
 // swipe-down dismiss gesture take over.
-static BOOL BHT_isImmersiveCardPan(id viewController, UIGestureRecognizer *gesture) {
+static BOOL isImmersiveCardPan(id viewController, UIGestureRecognizer *gesture) {
     Ivar panIvar = class_getInstanceVariable([viewController class], "panRecognizer");
     return panIvar && object_getIvar(viewController, panIvar) == gesture;
 }
@@ -103,7 +103,7 @@ static BOOL BHT_isImmersiveCardPan(id viewController, UIGestureRecognizer *gestu
 %hook T1ImmersiveViewController
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture {
-    if ([BHTSettings boolForKey:@"disable_immersive_scroll"] && BHT_isImmersiveCardPan(self, gesture)) {
+    if ([BHTSettings boolForKey:@"disable_immersive_scroll"] && isImmersiveCardPan(self, gesture)) {
         return NO;
     }
 
@@ -115,7 +115,7 @@ static BOOL BHT_isImmersiveCardPan(id viewController, UIGestureRecognizer *gestu
 %hook T1ImmersiveViewControllerV2
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture {
-    if ([BHTSettings boolForKey:@"disable_immersive_scroll"] && BHT_isImmersiveCardPan(self, gesture)) {
+    if ([BHTSettings boolForKey:@"disable_immersive_scroll"] && isImmersiveCardPan(self, gesture)) {
         return NO;
     }
 

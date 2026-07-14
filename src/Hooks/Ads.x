@@ -3,7 +3,7 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // Timeline items are removed from the section data before it reaches the data
 // view controller, so no empty cells or gaps are left behind. This covers every
@@ -12,7 +12,7 @@
 
 // The promoted state of a status item is only reachable through its Swift-side
 // `status` stored property, which is still registered as an ObjC ivar.
-static BOOL BHTStatusItemIsPromoted(id item) {
+static BOOL StatusItemIsPromoted(id item) {
     Ivar statusIvar = class_getInstanceVariable([item class], "status");
     if (!statusIvar) {
         return NO;
@@ -22,7 +22,7 @@ static BOOL BHTStatusItemIsPromoted(id item) {
     return [status respondsToSelector:@selector(isPromoted)] && status.isPromoted;
 }
 
-static BOOL BHTScribeItemIsPromoted(id item) {
+static BOOL ScribeItemIsPromoted(id item) {
     if (![item respondsToSelector:@selector(scribeItem)]) {
         return NO;
     }
@@ -31,20 +31,20 @@ static BOOL BHTScribeItemIsPromoted(id item) {
     return [scribeItem isKindOfClass:[NSDictionary class]] && scribeItem[@"promoted_id"] != nil;
 }
 
-static BOOL BHTIsModuleHeader(id item) {
-    return [NSStringFromClass([BHT_unwrapDataViewItem(item) classForCoder]) isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"];
+static BOOL IsModuleHeader(id item) {
+    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder]) isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"];
 }
 
-static BOOL BHTIsModuleFooter(id item) {
-    return [NSStringFromClass([BHT_unwrapDataViewItem(item) classForCoder]) isEqualToString:@"TwitterURT.URTModuleFooterViewModel"];
+static BOOL IsModuleFooter(id item) {
+    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder]) isEqualToString:@"TwitterURT.URTModuleFooterViewModel"];
 }
 
-static BOOL BHTShouldHideItem(id item, NSString *location) {
-    item = BHT_unwrapDataViewItem(item);
+static BOOL ShouldHideItem(id item, NSString *location) {
+    item = unwrapDataViewItem(item);
     NSString *className = NSStringFromClass([item classForCoder]);
 
     if ([BHTSettings boolForKey:@"hide_promoted"]) {
-        if ([item isKindOfClass:objc_getClass("T1URTTimelineStatusItemViewModel")] && BHTStatusItemIsPromoted(item)) {
+        if ([item isKindOfClass:objc_getClass("T1URTTimelineStatusItemViewModel")] && StatusItemIsPromoted(item)) {
             return YES;
         }
 
@@ -52,7 +52,7 @@ static BOOL BHTShouldHideItem(id item, NSString *location) {
             return YES;
         }
 
-        if (([className isEqualToString:@"TwitterURT.URTTimelineTrendViewModel"] || [className isEqualToString:@"TwitterURT.URTTimelineEventSummaryViewModel"]) && BHTScribeItemIsPromoted(item)) {
+        if (([className isEqualToString:@"TwitterURT.URTTimelineTrendViewModel"] || [className isEqualToString:@"TwitterURT.URTTimelineEventSummaryViewModel"]) && ScribeItemIsPromoted(item)) {
             return YES;
         }
     }
@@ -72,7 +72,7 @@ static BOOL BHTShouldHideItem(id item, NSString *location) {
     return NO;
 }
 
-static NSArray *BHTFilteredSections(TFNItemsDataViewController *dataViewController, NSArray *sections) {
+static NSArray *FilteredSections(TFNItemsDataViewController *dataViewController, NSArray *sections) {
     if (!([BHTSettings boolForKey:@"hide_promoted"] || [BHTSettings boolForKey:@"hide_premium_offer"] || [BHTSettings boolForKey:@"hide_trend_videos"])) {
         return sections;
     }
@@ -93,7 +93,7 @@ static NSArray *BHTFilteredSections(TFNItemsDataViewController *dataViewControll
         NSMutableIndexSet *removed = [NSMutableIndexSet indexSet];
 
         for (NSUInteger i = 0; i < count; i++) {
-            if (BHTShouldHideItem(items[i], location)) {
+            if (ShouldHideItem(items[i], location)) {
                 [removed addIndex:i];
             }
         }
@@ -106,14 +106,14 @@ static NSArray *BHTFilteredSections(TFNItemsDataViewController *dataViewControll
         // A module renders as a consecutive run of header, content, footer. When
         // a module's content is removed entirely, drop its header and footer too.
         for (NSUInteger i = 0; i < count; i++) {
-            if ([removed containsIndex:i] || !BHTIsModuleHeader(items[i])) {
+            if ([removed containsIndex:i] || !IsModuleHeader(items[i])) {
                 continue;
             }
 
             NSUInteger contentCount = 0;
             BOOL contentRemoved = YES;
             NSUInteger j = i + 1;
-            while (j < count && !BHTIsModuleHeader(items[j]) && !BHTIsModuleFooter(items[j])) {
+            while (j < count && !IsModuleHeader(items[j]) && !IsModuleFooter(items[j])) {
                 contentCount++;
                 if (![removed containsIndex:j]) {
                     contentRemoved = NO;
@@ -123,7 +123,7 @@ static NSArray *BHTFilteredSections(TFNItemsDataViewController *dataViewControll
 
             if (contentCount > 0 && contentRemoved) {
                 [removed addIndex:i];
-                if (j < count && BHTIsModuleFooter(items[j])) {
+                if (j < count && IsModuleFooter(items[j])) {
                     [removed addIndex:j];
                 }
             }
@@ -144,11 +144,11 @@ static NSArray *BHTFilteredSections(TFNItemsDataViewController *dataViewControll
 %hook TFNItemsDataViewController
 
 - (void)setSections:(NSArray *)sections restoreScrollPosition:(BOOL)restoreScrollPosition {
-    %orig(BHTFilteredSections(self, sections), restoreScrollPosition);
+    %orig(FilteredSections(self, sections), restoreScrollPosition);
 }
 
 - (void)updateSections:(NSArray *)sections reconfigureItemIdentifiers:(NSArray *)identifiers withRowAnimation:(long long)animation completion:(id)completion {
-    %orig(BHTFilteredSections(self, sections), identifiers, animation, completion);
+    %orig(FilteredSections(self, sections), identifiers, animation, completion);
 }
 
 %end

@@ -3,7 +3,7 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Restore Twitter terminology
 // Two layers, both driven by locale files in the tweak bundle:
@@ -14,7 +14,7 @@
 // Both are strictly per-language: a language without its own copy of a file gets no
 // renaming from that layer, rather than English rules applied to non-English text.
 
-static NSDictionary<NSString *, NSString *> *BHTRenameTable(NSString *name) {
+static NSDictionary<NSString *, NSString *> *RenameTable(NSString *name) {
     NSBundle *bundle = [BHTBundle sharedBundle].mainBundle;
     NSString *appLanguage = [[NSBundle mainBundle] preferredLocalizations].firstObject ?: @"en";
     NSString *localization = [NSBundle preferredLocalizationsFromArray:bundle.localizations
@@ -35,26 +35,26 @@ static NSDictionary<NSString *, NSString *> *BHTRenameTable(NSString *name) {
     return [table isKindOfClass:[NSDictionary class]] ? table : @{};
 }
 
-static NSDictionary<NSString *, NSString *> *BHTRenameKeyOverrides(void) {
+static NSDictionary<NSString *, NSString *> *RenameKeyOverrides(void) {
     static NSDictionary *overrides = nil;
     static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{ overrides = BHTRenameTable(@"RenameOverrides"); });
+    dispatch_once(&onceToken, ^{ overrides = RenameTable(@"RenameOverrides"); });
     return overrides;
 }
 
-static NSDictionary<NSString *, NSString *> *BHTwitterWordMap(void) {
+static NSDictionary<NSString *, NSString *> *TwitterWordMap(void) {
     static NSDictionary *map = nil;
     static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{ map = BHTRenameTable(@"RenameWords"); });
+    dispatch_once(&onceToken, ^{ map = RenameTable(@"RenameWords"); });
     return map;
 }
 
 // Builds a case-insensitive \b(word|word…)\b from the map keys, longest first so
 // inflections win over their stems. Exact case for uppercase-bearing keys is
-// enforced per match in BHRenameEdits, so lowercase "x" never becomes "Twitter".
-static NSRegularExpression *BHTRenameRegex(void) {
+// enforced per match in RenameEdits, so lowercase "x" never becomes "Twitter".
+static NSRegularExpression *RenameRegex(void) {
     NSMutableArray<NSString *> *words = [NSMutableArray array];
-    for (NSString *word in BHTwitterWordMap()) {
+    for (NSString *word in TwitterWordMap()) {
         [words addObject:[NSRegularExpression escapedPatternForString:word]];
     }
     if (words.count == 0) {
@@ -73,7 +73,7 @@ static NSRegularExpression *BHTRenameRegex(void) {
 }
 
 // Applies the capitalisation style of `token` (all-caps or leading-capital) to `base`.
-static NSString *BHMatchCapitalisation(NSString *token, NSString *base) {
+static NSString *MatchCapitalisation(NSString *token, NSString *base) {
     if (token.length == 0 || base.length == 0) {
         return base;
     }
@@ -93,19 +93,19 @@ static NSString *BHMatchCapitalisation(NSString *token, NSString *base) {
 
 // Returns the edits (@"range" -> NSValue, @"repl" -> NSString) in ascending,
 // non-overlapping order — apply them back-to-front. Nil when nothing changes.
-static NSArray<NSDictionary *> *BHRenameEdits(NSString *input) {
+static NSArray<NSDictionary *> *RenameEdits(NSString *input) {
     if (input.length == 0) {
         return nil;
     }
 
     static NSRegularExpression *regex = nil;
     static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{ regex = BHTRenameRegex(); });
+    dispatch_once(&onceToken, ^{ regex = RenameRegex(); });
     if (!regex) {
         return nil;
     }
 
-    NSDictionary *wordMap = BHTwitterWordMap();
+    NSDictionary *wordMap = TwitterWordMap();
     NSRange full = NSMakeRange(0, input.length);
     NSMutableArray<NSDictionary *> *edits = [NSMutableArray array];
 
@@ -116,7 +116,7 @@ static NSArray<NSDictionary *> *BHRenameEdits(NSString *input) {
         NSString *repl = wordMap[token];
         if (!repl) {
             NSString *base = wordMap[token.lowercaseString];
-            repl = base ? BHMatchCapitalisation(token, base) : nil;
+            repl = base ? MatchCapitalisation(token, base) : nil;
         }
         if (repl) {
             [edits addObject:@{@"range": [NSValue valueWithRange:match.range], @"repl": repl}];
@@ -126,7 +126,7 @@ static NSArray<NSDictionary *> *BHRenameEdits(NSString *input) {
     return edits.count > 0 ? edits : nil;
 }
 
-static NSString *BHRestoreTwitterTerminology(NSString *input) {
+static NSString *RestoreTwitterTerminology(NSString *input) {
     // Memoise: labels re-set the same handful of strings over and over.
     static NSCache<NSString *, NSString *> *cache = nil;
     static dispatch_once_t onceToken;
@@ -137,7 +137,7 @@ static NSString *BHRestoreTwitterTerminology(NSString *input) {
         return cached;
     }
 
-    NSArray<NSDictionary *> *edits = BHRenameEdits(input);
+    NSArray<NSDictionary *> *edits = RenameEdits(input);
     NSString *output = input;
     if (edits) {
         NSMutableString *result = [input mutableCopy];
@@ -151,8 +151,8 @@ static NSString *BHRestoreTwitterTerminology(NSString *input) {
     return output;
 }
 
-static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input) {
-    NSArray<NSDictionary *> *edits = BHRenameEdits(input.string);
+static NSAttributedString *RestoreTwitterAttributed(NSAttributedString *input) {
+    NSArray<NSDictionary *> *edits = RenameEdits(input.string);
     if (!edits) {
         return input;
     }
@@ -177,11 +177,11 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
         return result;
     }
 
-    NSString *override = key ? BHTRenameKeyOverrides()[key] : nil;
+    NSString *override = key ? RenameKeyOverrides()[key] : nil;
     if (override) {
         return override;
     }
-    return result.length > 0 ? BHRestoreTwitterTerminology(result) : result;
+    return result.length > 0 ? RestoreTwitterTerminology(result) : result;
 }
 %end
 
@@ -202,7 +202,7 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
     if ([BHTSettings boolForKey:@"restore_twitter_names"] &&
         ![self isKindOfClass:%c(TTAStatusBodyAttributedTextView)]) {
         NSAttributedString *source = newString ?: model.attributedString;
-        NSAttributedString *renamed = BHRestoreTwitterAttributed(source);
+        NSAttributedString *renamed = RestoreTwitterAttributed(source);
         if (renamed != source) {
             newString = [renamed mutableCopy];
             textChanged = YES;
@@ -235,10 +235,10 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
 // The facepile pill variant hardcodes blank text (no feature flag gates it). The
 // tweak ships the label in the app's terminology and routes it through the rename
 // pipeline, so "restore_twitter_names" converts it per-language.
-static NSString *BHPillLabelText(void) {
+static NSString *PillLabelText(void) {
     NSString *label = [[BHTBundle sharedBundle] localizedStringForKey:@"REFRESH_PILL_TEXT"];
     if ([BHTSettings boolForKey:@"restore_twitter_names"]) {
-        label = BHRestoreTwitterTerminology(label);
+        label = RestoreTwitterTerminology(label);
     }
     return label;
 }
@@ -258,7 +258,7 @@ static NSString *BHPillLabelText(void) {
         return;
     }
 
-    NSString *label = BHPillLabelText();
+    NSString *label = PillLabelText();
     if (label) {
         pill.text = label;
     }

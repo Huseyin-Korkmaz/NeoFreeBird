@@ -6,11 +6,11 @@
 //  captures the posted reply's ID from the webview. Gated on `reply_in_webview`.
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Reply webview helpers
 
-static TFNTwitterStatus *BHT_statusFromObject(id object) {
+static TFNTwitterStatus *statusFromObject(id object) {
     if (!object) {
         return nil;
     }
@@ -36,12 +36,12 @@ static TFNTwitterStatus *BHT_statusFromObject(id object) {
     return nil;
 }
 
-static const void *BHTKeepReplyInWebViewKey = &BHTKeepReplyInWebViewKey;
-static const void *BHTReplyWebViewDismissingKey = &BHTReplyWebViewDismissingKey;
+static const void *KeepReplyInWebViewKey = &KeepReplyInWebViewKey;
+static const void *ReplyWebViewDismissingKey = &ReplyWebViewDismissingKey;
 
 // Injected into the reply webview: hooks fetch/XHR to capture the new post's ID from
 // the web CreateTweet response, since there's no native completion callback to read.
-static NSString *const BHTReplyCaptureScript =
+static NSString *const ReplyCaptureScript =
     @"(function(){"
     "if(window.__bhtReplyHook)return;window.__bhtReplyHook=true;"
     "var save=function(j){try{if(j&&j.data){"
@@ -59,10 +59,10 @@ static NSString *const BHTReplyCaptureScript =
     "})();";
 
 // Reads and clears the reply ID stashed by the capture script.
-static NSString *const BHTReplyReadScript =
+static NSString *const ReplyReadScript =
     @"(function(){var v=sessionStorage.getItem('__bhtNewReply')||'';sessionStorage.removeItem('__bhtNewReply');return v;})();";
 
-static void BHT_openStatusNatively(NSString *statusID) {
+static void openStatusNatively(NSString *statusID) {
     if (statusID.length == 0) {
         return;
     }
@@ -78,7 +78,7 @@ static void BHT_openStatusNatively(NSString *statusID) {
     }
 }
 
-static void BHT_showPostSentAlert(NSString *statusID) {
+static void showPostSentAlert(NSString *statusID) {
     dispatch_async(dispatch_get_main_queue(), ^{
         UIViewController *top = topMostController();
         if (!top) {
@@ -88,14 +88,14 @@ static void BHT_showPostSentAlert(NSString *statusID) {
                                                                       message:nil
                                                                preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"DM_MESSAGE_ACTION_OPEN_GENERIC_TITLE"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            BHT_openStatusNatively(statusID);
+            openStatusNatively(statusID);
         }]];
         [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"DISMISS_LABEL"] style:UIAlertActionStyleCancel handler:nil]];
         [top presentViewController:alert animated:YES completion:nil];
     });
 }
 
-static BOOL BHT_openAuthenticatedTweetWebView(NSString *statusID) {
+static BOOL openAuthenticatedTweetWebView(NSString *statusID) {
     if (statusID.length == 0) {
         return NO;
     }
@@ -112,7 +112,7 @@ static BOOL BHT_openAuthenticatedTweetWebView(NSString *statusID) {
         return NO;
     }
 
-    id account = BHT_accountForAuthenticatedWebView();
+    id account = accountForAuthenticatedWebView();
     if (!account) {
         return NO;
     }
@@ -136,7 +136,7 @@ static BOOL BHT_openAuthenticatedTweetWebView(NSString *statusID) {
 
     // Mark this instance so our -doesURLResultTypeOpenInWebview: and -setCurrentURL:
     // hooks know to keep the reply in-webview and auto-close it on /home.
-    objc_setAssociatedObject(webViewController, BHTKeepReplyInWebViewKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(webViewController, KeepReplyInWebViewKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
     Class navigationControllerClass = NSClassFromString(@"T1WebNavigationController")
         ?: %c(TFNNavigationController)
@@ -174,7 +174,7 @@ static BOOL BHT_openAuthenticatedTweetWebView(NSString *statusID) {
     }
 
     NSString *statusIDString = @(statusID).stringValue;
-    if (!BHT_openAuthenticatedTweetWebView(statusIDString)) {
+    if (!openAuthenticatedTweetWebView(statusIDString)) {
         return %orig;
     }
 }
@@ -186,14 +186,14 @@ static BOOL BHT_openAuthenticatedTweetWebView(NSString *statusID) {
         return %orig;
     }
 
-    TFNTwitterStatus *status = BHT_statusFromObject(self.statusViewModel);
+    TFNTwitterStatus *status = statusFromObject(self.statusViewModel);
     NSInteger statusID = status.statusID;
     if (statusID <= 0) {
         return %orig;
     }
 
     NSString *statusIDString = @(statusID).stringValue;
-    if (!BHT_openAuthenticatedTweetWebView(statusIDString)) {
+    if (!openAuthenticatedTweetWebView(statusIDString)) {
         return %orig;
     }
 }
@@ -203,20 +203,20 @@ static BOOL BHT_openAuthenticatedTweetWebView(NSString *statusID) {
 - (void)didFinishLoadingWithError:(id)error {
     %orig;
 
-    BHT_maybeHandleHarvestWebView(self);
+    maybeHandleHarvestWebView(self);
 
-    if (!objc_getAssociatedObject(self, BHTKeepReplyInWebViewKey)) {
+    if (!objc_getAssociatedObject(self, KeepReplyInWebViewKey)) {
         return;
     }
 
     WKWebView *webView = [self webView];
     if ([webView isKindOfClass:%c(WKWebView)]) {
-        [webView evaluateJavaScript:BHTReplyCaptureScript completionHandler:nil];
+        [webView evaluateJavaScript:ReplyCaptureScript completionHandler:nil];
     }
 }
 
 - (BOOL)doesURLResultTypeOpenInWebview:(long long)resultType {
-    if (objc_getAssociatedObject(self, BHTKeepReplyInWebViewKey)) {
+    if (objc_getAssociatedObject(self, KeepReplyInWebViewKey)) {
         return YES;
     }
     return %orig;
@@ -225,29 +225,29 @@ static BOOL BHT_openAuthenticatedTweetWebView(NSString *statusID) {
 - (void)setCurrentURL:(NSURL *)url {
     %orig;
 
-    if (!objc_getAssociatedObject(self, BHTKeepReplyInWebViewKey) || ![url.path isEqualToString:@"/home"]) {
+    if (!objc_getAssociatedObject(self, KeepReplyInWebViewKey) || ![url.path isEqualToString:@"/home"]) {
         return;
     }
 
     // setCurrentURL: can fire more than once for the same navigation; only act once.
-    if (objc_getAssociatedObject(self, BHTReplyWebViewDismissingKey)) {
+    if (objc_getAssociatedObject(self, ReplyWebViewDismissingKey)) {
         return;
     }
-    objc_setAssociatedObject(self, BHTReplyWebViewDismissingKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, ReplyWebViewDismissingKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
     __weak T1WebViewController *weakSelf = self;
 
     void (^finish)(NSString *) = ^(NSString *newReplyID) {
         [weakSelf dismissViewControllerAnimated:YES completion:^{
             if (newReplyID.length > 0) {
-                BHT_showPostSentAlert(newReplyID);
+                showPostSentAlert(newReplyID);
             }
         }];
     };
 
     WKWebView *webView = [self webView];
     if ([webView isKindOfClass:%c(WKWebView)]) {
-        [webView evaluateJavaScript:BHTReplyReadScript completionHandler:^(id result, NSError *jsError) {
+        [webView evaluateJavaScript:ReplyReadScript completionHandler:^(id result, NSError *jsError) {
             NSString *newReplyID = [result isKindOfClass:[NSString class]] ? (NSString *)result : nil;
             finish(newReplyID);
         }];

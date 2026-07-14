@@ -3,7 +3,7 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // Avatar style 2 is the circular default; style 3 is the rounded-square style
 // the app itself uses for organization accounts (corner radius = width / 8).
@@ -19,31 +19,31 @@
 
 // Coerced views are marked so disabling the setting can restore just those,
 // leaving avatars that are natively rounded squares alone.
-static char kBHTCoercedAvatarStyle;
+static char kCoercedAvatarStyle;
 
-static NSInteger BHTCoercedStyle(UIView *view, NSInteger style) {
+static NSInteger CoercedStyle(UIView *view, NSInteger style) {
     if (style == 2) {
         if ([BHTSettings boolForKey:@"square_avatars"]) {
-            objc_setAssociatedObject(view, &kBHTCoercedAvatarStyle, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            objc_setAssociatedObject(view, &kCoercedAvatarStyle, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             return 3;
         }
-        objc_setAssociatedObject(view, &kBHTCoercedAvatarStyle, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(view, &kCoercedAvatarStyle, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return style;
 }
 
-void BHT_applySquareAvatarsSetting(void) {
+void applySquareAvatarsSetting(void) {
     BOOL enabled = [BHTSettings boolForKey:@"square_avatars"];
     Class avatarClass = objc_getClass("TFNAvatarImageView");
 
     for (UIWindow *window in UIApplication.sharedApplication.windows) {
-        BH_EnumerateSubviewsRecursively(window, ^(UIView *view) {
+        EnumerateSubviewsRecursively(window, ^(UIView *view) {
             if (![view isKindOfClass:avatarClass]) {
                 return;
             }
 
             TFNAvatarImageView *avatar = (TFNAvatarImageView *)view;
-            if (enabled ? avatar.style == 2 : objc_getAssociatedObject(avatar, &kBHTCoercedAvatarStyle) != nil) {
+            if (enabled ? avatar.style == 2 : objc_getAssociatedObject(avatar, &kCoercedAvatarStyle) != nil) {
                 // Re-sent as circular; the hook coerces it when the setting is on.
                 [avatar setStyle:2];
             }
@@ -54,7 +54,7 @@ void BHT_applySquareAvatarsSetting(void) {
 %hook TFNAvatarImageView
 
 - (void)setStyle:(NSInteger)style {
-    %orig(BHTCoercedStyle(self, style));
+    %orig(CoercedStyle(self, style));
 }
 
 %end
@@ -65,7 +65,7 @@ void BHT_applySquareAvatarsSetting(void) {
 %hook TUIAvatarImageView
 
 - (void)setStyle:(NSInteger)style {
-    %orig(BHTCoercedStyle(self, style));
+    %orig(CoercedStyle(self, style));
 }
 
 + (NSInteger)avatarImageViewStyleWithProfileImageShape:(NSInteger)shape identityType:(NSInteger)identityType {

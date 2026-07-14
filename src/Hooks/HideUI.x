@@ -3,7 +3,7 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Hide Blue verified checkmark
 

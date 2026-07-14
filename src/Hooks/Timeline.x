@@ -3,30 +3,30 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Hide custom timelines
 
-static __weak NSObject *BHTPinnedTimelinesRepository;
-static NSArray *BHTLastPinnedTimelineModels;
-static BOOL BHTPinnedTimelinesWriteBypass = NO;
+static __weak NSObject *PinnedTimelinesRepository;
+static NSArray *LastPinnedTimelineModels;
+static BOOL PinnedTimelinesWriteBypass = NO;
 
 // Applies a toggle without relaunching. Hiding rewrites the UNCHANGED pinned
 // list purely to republish — updatePinnedTimelines: persists server-side, so
 // anything else would unpin for real; the delegate hook below swaps in the
 // empty list on the way through.
-void BHT_applyHideCustomTimelinesSetting(void) {
-    NSObject *repository = BHTPinnedTimelinesRepository;
+void applyHideCustomTimelinesSetting(void) {
+    NSObject *repository = PinnedTimelinesRepository;
     if (!repository) {
         return;
     }
 
     if ([BHTSettings boolForKey:@"hide_custom_timelines"]) {
-        NSArray *models = BHTLastPinnedTimelineModels;
+        NSArray *models = LastPinnedTimelineModels;
         if (models.count > 0) {
-            BHTPinnedTimelinesWriteBypass = YES;
+            PinnedTimelinesWriteBypass = YES;
             ((void (*)(id, SEL, id))objc_msgSend)(repository, @selector(updatePinnedTimelines:), models);
-            BHTPinnedTimelinesWriteBypass = NO;
+            PinnedTimelinesWriteBypass = NO;
         }
     } else if ([repository respondsToSelector:@selector(fetchPinnedTimelinesWithThrottleEnabled:)]) {
         ((void (*)(id, SEL, BOOL))objc_msgSend)(repository, @selector(fetchPinnedTimelinesWithThrottleEnabled:), NO);
@@ -36,7 +36,7 @@ void BHT_applyHideCustomTimelinesSetting(void) {
 // The trailing accessory is only reconfigured while the strip is showing, so a
 // button built before hiding mid-session survives; sync its visibility here. The
 // property is a Swift lazy var whose storage ivar KVC can't see, hence the fallback.
-static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
+static void SyncHomeAddTabButton(id container, BOOL hidden) {
     UIView *button = nil;
 
     @try {
@@ -64,25 +64,25 @@ static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
 %hook _TtC32TwitterHomeFeatureImplementation35HomeTimelineContainerViewController
 
 - (void)pinnedTimelinesRepository:(id)repository didChangeWithPinnedTimelineModels:(NSArray *)models {
-    BHTPinnedTimelinesRepository = repository;
+    PinnedTimelinesRepository = repository;
     if (models.count > 0) {
-        BHTLastPinnedTimelineModels = [models copy];
+        LastPinnedTimelineModels = [models copy];
     }
     BOOL hide = [BHTSettings boolForKey:@"hide_custom_timelines"];
 
     %orig(repository, hide ? @[] : models);
-    BHTSyncHomeAddTabButton(self, hide);
+    SyncHomeAddTabButton(self, hide);
 }
 
 - (id)tfn_navigationBarAccessoryView {
     id accessoryView = %orig;
-    BHTSyncHomeAddTabButton(self, [BHTSettings boolForKey:@"hide_custom_timelines"]);
+    SyncHomeAddTabButton(self, [BHTSettings boolForKey:@"hide_custom_timelines"]);
     return accessoryView;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     %orig;
-    BHTSyncHomeAddTabButton(self, [BHTSettings boolForKey:@"hide_custom_timelines"]);
+    SyncHomeAddTabButton(self, [BHTSettings boolForKey:@"hide_custom_timelines"]);
 }
 
 %end
@@ -92,7 +92,7 @@ static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
 %hook _TtC32TwitterHomeFeatureImplementation31CachedPinnedTimelinesRepository
 
 - (void)updatePinnedTimelines:(id)timelines {
-    if (!BHTPinnedTimelinesWriteBypass && [BHTSettings boolForKey:@"hide_custom_timelines"]) {
+    if (!PinnedTimelinesWriteBypass && [BHTSettings boolForKey:@"hide_custom_timelines"]) {
         return;
     }
 
@@ -134,7 +134,7 @@ static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
 
 // MARK: - Hide "Discover more", who-to-follow and prompts
 
-static BOOL BHTIsInConversationHierarchy(UIViewController *viewController) {
+static BOOL IsInConversationHierarchy(UIViewController *viewController) {
     UIViewController *currentVC = viewController;
 
     while (currentVC) {
@@ -156,7 +156,7 @@ static BOOL BHTIsInConversationHierarchy(UIViewController *viewController) {
     return NO;
 }
 
-static NSString *BHTItemEntryID(id viewModel) {
+static NSString *ItemEntryID(id viewModel) {
     if (![viewModel respondsToSelector:@selector(entryID)]) {
         return nil;
     }
@@ -169,14 +169,14 @@ static NSString *BHTItemEntryID(id viewModel) {
 // Discover More items carry "tweetdetailrelatedtweets-…" and who-to-follow entries
 // "who-to-follow-…". Server-sent prompt banners all render through the one prompt
 // view model, so those are matched by class instead.
-static BOOL BHTShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePrompts, BOOL inConversation) {
-    id viewModel = BHT_unwrapDataViewItem(item);
+static BOOL ShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePrompts, BOOL inConversation) {
+    id viewModel = unwrapDataViewItem(item);
 
     if (hidePrompts && [NSStringFromClass([viewModel classForCoder]) isEqualToString:@"TwitterURT.URTTimelinePromptViewModel"]) {
         return YES;
     }
 
-    NSString *entryID = BHTItemEntryID(viewModel);
+    NSString *entryID = ItemEntryID(viewModel);
 
     if (!entryID) {
         return NO;
@@ -193,10 +193,10 @@ static BOOL BHTShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePr
     return NO;
 }
 
-static NSArray *BHTFilteredTimelineSections(TFNItemsDataViewController *dataViewController, NSArray *sections) {
+static NSArray *FilteredTimelineSections(TFNItemsDataViewController *dataViewController, NSArray *sections) {
     BOOL hideWhoToFollow = [BHTSettings boolForKey:@"hide_who_to_follow"];
     BOOL hidePrompts = [BHTSettings boolForKey:@"hide_timeline_prompts"];
-    BOOL inConversation = BHTIsInConversationHierarchy(dataViewController);
+    BOOL inConversation = IsInConversationHierarchy(dataViewController);
 
     if (!hideWhoToFollow && !hidePrompts && !inConversation) {
         return sections;
@@ -217,7 +217,7 @@ static NSArray *BHTFilteredTimelineSections(TFNItemsDataViewController *dataView
         NSMutableArray *keptItems = [NSMutableArray arrayWithCapacity:items.count];
 
         for (id item in items) {
-            if (!BHTShouldHideTimelineItem(item, hideWhoToFollow, hidePrompts, inConversation)) {
+            if (!ShouldHideTimelineItem(item, hideWhoToFollow, hidePrompts, inConversation)) {
                 [keptItems addObject:item];
             }
         }
@@ -239,11 +239,11 @@ static NSArray *BHTFilteredTimelineSections(TFNItemsDataViewController *dataView
 %hook TFNItemsDataViewController
 
 - (void)setSections:(NSArray *)sections restoreScrollPosition:(BOOL)restoreScrollPosition {
-    %orig(BHTFilteredTimelineSections(self, sections), restoreScrollPosition);
+    %orig(FilteredTimelineSections(self, sections), restoreScrollPosition);
 }
 
 - (void)updateSections:(NSArray *)sections reconfigureItemIdentifiers:(NSArray *)identifiers withRowAnimation:(long long)animation completion:(id)completion {
-    %orig(BHTFilteredTimelineSections(self, sections), identifiers, animation, completion);
+    %orig(FilteredTimelineSections(self, sections), identifiers, animation, completion);
 }
 
 %end

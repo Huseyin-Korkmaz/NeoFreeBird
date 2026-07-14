@@ -40,9 +40,9 @@
 #pragma mark - Sub-page Navigation
 
 - (void)showThemeViewController:(NSDictionary *)sender {
-    Class BHColorThemeViewControllerClass = objc_getClass("BHColorThemeViewController");
-    if (BHColorThemeViewControllerClass) {
-        UIViewController *themeVC = [[BHColorThemeViewControllerClass alloc] init];
+    Class ColorThemeViewControllerClass = objc_getClass("ColorThemeViewController");
+    if (ColorThemeViewControllerClass) {
+        UIViewController *themeVC = [[ColorThemeViewControllerClass alloc] init];
         if (self.account) {
             [themeVC.navigationItem setTitleView:[objc_getClass("TFNTitleView") titleViewWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"THEME_SETTINGS_NAVIGATION_TITLE"] subtitle:self.account.displayUsername]];
         }
@@ -50,10 +50,10 @@
     }
 }
 
-- (void)showBHAppIconViewController:(NSDictionary *)sender {
-    Class BHAppIconViewControllerClass = objc_getClass("BHAppIconViewController");
-    if (BHAppIconViewControllerClass) {
-        UIViewController *appIconVC = [[BHAppIconViewControllerClass alloc] init];
+- (void)showAppIconViewController:(NSDictionary *)sender {
+    Class AppIconViewControllerClass = objc_getClass("AppIconViewController");
+    if (AppIconViewControllerClass) {
+        UIViewController *appIconVC = [[AppIconViewControllerClass alloc] init];
         if (self.account) {
             [appIconVC.navigationItem setTitleView:[objc_getClass("TFNTitleView") titleViewWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"SUBSCRIPTION_APP_ICON_SETTINGS_TITLE"] subtitle:self.account.displayUsername]];
         }
@@ -62,9 +62,9 @@
 }
 
 - (void)showCustomTabBarVC:(NSDictionary *)sender {
-    Class BHCustomTabBarViewControllerClass = objc_getClass("BHCustomTabBarViewController");
-    if (BHCustomTabBarViewControllerClass) {
-        UIViewController *customTabBarVC = [[BHCustomTabBarViewControllerClass alloc] init];
+    Class CustomTabBarViewControllerClass = objc_getClass("CustomTabBarViewController");
+    if (CustomTabBarViewControllerClass) {
+        UIViewController *customTabBarVC = [[CustomTabBarViewControllerClass alloc] init];
         if (self.account) {
             [customTabBarVC.navigationItem setTitleView:[objc_getClass("TFNTitleView") titleViewWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE"] subtitle:self.account.displayUsername]];
         }

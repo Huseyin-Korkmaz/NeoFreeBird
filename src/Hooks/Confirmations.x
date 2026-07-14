@@ -3,9 +3,9 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
-static void BHTShowConfirmation(void (^confirmed)(void)) {
+static void ShowConfirmation(void (^confirmed)(void)) {
     [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
         make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
         make.button([[BHTBundle sharedBundle] localizedTwitterStringForKey:@"YES_ACTION_LABEL"]).handler(^(NSArray<NSString *> *strings) {
@@ -26,7 +26,7 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
         return %orig;
     }
 
-    BHTShowConfirmation(^{
+    ShowConfirmation(^{
         %orig;
     });
 }
@@ -42,7 +42,7 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
         return %orig;
     }
 
-    BHTShowConfirmation(^{
+    ShowConfirmation(^{
         %orig;
     });
 }
@@ -60,7 +60,7 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
         return %orig;
     }
 
-    BHTShowConfirmation(^{
+    ShowConfirmation(^{
         %orig;
     });
 }
@@ -75,7 +75,7 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
         return %orig;
     }
 
-    BHTShowConfirmation(^{
+    ShowConfirmation(^{
         %orig;
     });
 }
@@ -90,7 +90,7 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
         return %orig;
     }
 
-    BHTShowConfirmation(^{
+    ShowConfirmation(^{
         %orig;
     });
 }
@@ -100,7 +100,7 @@ static void BHTShowConfirmation(void (^confirmed)(void)) {
 // MARK: - Undo tweet
 
 // A timeout of 0 disables undo; any positive value is the delay in seconds.
-static BOOL BHTUndoTweetEnabled(void) {
+static BOOL UndoTweetEnabled(void) {
     return [BHTSettings integerForKey:@"undo_tweet_timeout"] > 0;
 }
 
@@ -111,31 +111,31 @@ static BOOL BHTUndoTweetEnabled(void) {
 %hook T1UndoSendConfig
 
 - (BOOL)hasAccessToUndoSend {
-    return BHTUndoTweetEnabled() ? YES : %orig;
+    return UndoTweetEnabled() ? YES : %orig;
 }
 
 - (double)undoTimeInterval {
-    return BHTUndoTweetEnabled() ? (double)[BHTSettings integerForKey:@"undo_tweet_timeout"] : %orig;
+    return UndoTweetEnabled() ? (double)[BHTSettings integerForKey:@"undo_tweet_timeout"] : %orig;
 }
 
 - (BOOL)isUndoSendTurnedOnForOriginalTweets {
-    return BHTUndoTweetEnabled() ? YES : %orig;
+    return UndoTweetEnabled() ? YES : %orig;
 }
 
 - (BOOL)isUndoSendTurnedOnForReplyTweets {
-    return BHTUndoTweetEnabled() ? YES : %orig;
+    return UndoTweetEnabled() ? YES : %orig;
 }
 
 - (BOOL)isUndoSendTurnedOnForQuoteTweets {
-    return BHTUndoTweetEnabled() ? YES : %orig;
+    return UndoTweetEnabled() ? YES : %orig;
 }
 
 - (BOOL)isUndoSendTurnedOnForTweetstormTweets {
-    return BHTUndoTweetEnabled() ? YES : %orig;
+    return UndoTweetEnabled() ? YES : %orig;
 }
 
 - (BOOL)isUndoSendTurnedOnForPollTweets {
-    return BHTUndoTweetEnabled() ? YES : %orig;
+    return UndoTweetEnabled() ? YES : %orig;
 }
 
 %end
@@ -145,12 +145,12 @@ static BOOL BHTUndoTweetEnabled(void) {
 %hook TFNTwitterComposition
 
 - (double)undoTimeInterval {
-    return BHTUndoTweetEnabled() ? (double)[BHTSettings integerForKey:@"undo_tweet_timeout"] : %orig;
+    return UndoTweetEnabled() ? (double)[BHTSettings integerForKey:@"undo_tweet_timeout"] : %orig;
 }
 
 // The original computes this from the interval directly, bypassing the getter.
 - (NSDate *)undoableSendDate {
-    if (!BHTUndoTweetEnabled()) {
+    if (!UndoTweetEnabled()) {
         return %orig;
     }
     NSDate *added = [self undoableAddedDate];

@@ -3,31 +3,31 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
-static UIFont * _Nonnull BH_remapFont(UIFont *origFont) {
-    UIFont *newFont = BH_getDefaultFont(origFont);
+static UIFont * _Nonnull remapFont(UIFont *origFont) {
+    UIFont *newFont = getDefaultFont(origFont);
     return newFont != nil ? newFont : origFont;
 }
 
 // MARK: - NeoFreeBird settings entry
 
-static const void *BHTSettingsEntryKey = &BHTSettingsEntryKey;
-static const void *BHTSettingsRootKey = &BHTSettingsRootKey;
+static const void *SettingsEntryKey = &SettingsEntryKey;
+static const void *SettingsRootKey = &SettingsRootKey;
 
-static BOOL BHT_isSettingsClass(UIViewController *viewController) {
+static BOOL isSettingsClass(UIViewController *viewController) {
     return [viewController isKindOfClass:objc_getClass("T1GenericSettingsViewController")] || [viewController isKindOfClass:objc_getClass("T1SettingsViewController")];
 }
 
 // The generic controller backs the root and every sub-page alike, so the root is
 // the first settings-class controller in the navigation stack.
-static BOOL BHT_settingsVCIsRoot(TFNItemsDataViewController *settingsVC) {
+static BOOL settingsVCIsRoot(TFNItemsDataViewController *settingsVC) {
     for (UIViewController *viewController in settingsVC.navigationController.viewControllers) {
         if (viewController == settingsVC) {
             return YES;
         }
 
-        if (BHT_isSettingsClass(viewController)) {
+        if (isSettingsClass(viewController)) {
             return NO;
         }
     }
@@ -35,14 +35,14 @@ static BOOL BHT_settingsVCIsRoot(TFNItemsDataViewController *settingsVC) {
     return NO;
 }
 
-static BOOL BHT_sectionsContainNeoFreeBirdEntry(NSArray *sections) {
+static BOOL sectionsContainNeoFreeBirdEntry(NSArray *sections) {
     for (id section in sections) {
         if (![section isKindOfClass:[NSArray class]]) {
             continue;
         }
 
         for (id entry in (NSArray *)section) {
-            if (objc_getAssociatedObject(entry, BHTSettingsEntryKey)) {
+            if (objc_getAssociatedObject(entry, SettingsEntryKey)) {
                 return YES;
             }
         }
@@ -51,7 +51,7 @@ static BOOL BHT_sectionsContainNeoFreeBirdEntry(NSArray *sections) {
     return NO;
 }
 
-static TFNSettingsNavigationItem *BHT_makeNeoFreeBirdSettingsItem(TFNItemsDataViewController *settingsVC) {
+static TFNSettingsNavigationItem *makeNeoFreeBirdSettingsItem(TFNItemsDataViewController *settingsVC) {
     UIColor *iconColor;
     if (@available(iOS 12.0, *)) {
         if (settingsVC.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
@@ -74,14 +74,14 @@ static TFNSettingsNavigationItem *BHT_makeNeoFreeBirdSettingsItem(TFNItemsDataVi
         [bhtwitter setValue:twitterIcon forKey:@"icon"];
     }
 
-    objc_setAssociatedObject(bhtwitter, BHTSettingsEntryKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(bhtwitter, SettingsEntryKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
     return bhtwitter;
 }
 
-static NSArray *BHT_sectionsByInsertingEntry(TFNItemsDataViewController *settingsVC, NSArray *sections) {
+static NSArray *sectionsByInsertingEntry(TFNItemsDataViewController *settingsVC, NSArray *sections) {
     NSMutableArray *newSections = [sections mutableCopy] ?: [NSMutableArray array];
-    [newSections insertObject:@[BHT_makeNeoFreeBirdSettingsItem(settingsVC)] atIndex:0];
+    [newSections insertObject:@[makeNeoFreeBirdSettingsItem(settingsVC)] atIndex:0];
     return newSections;
 }
 
@@ -89,47 +89,47 @@ static NSArray *BHT_sectionsByInsertingEntry(TFNItemsDataViewController *setting
 // root-ness is unknowable during the first build (not yet on the nav stack). So
 // tag the root in viewWillAppear, insert once to repair the first build, and let
 // the rebuild transform below re-add the entry on every later snapshot.
-static void BHT_insertNeoFreeBirdSettingsIfRoot(TFNItemsDataViewController *settingsVC) {
-    if (!BHT_settingsVCIsRoot(settingsVC)) {
+static void insertNeoFreeBirdSettingsIfRoot(TFNItemsDataViewController *settingsVC) {
+    if (!settingsVCIsRoot(settingsVC)) {
         return;
     }
 
-    objc_setAssociatedObject(settingsVC, BHTSettingsRootKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(settingsVC, SettingsRootKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
-    if (BHT_sectionsContainNeoFreeBirdEntry(settingsVC.sections)) {
+    if (sectionsContainNeoFreeBirdEntry(settingsVC.sections)) {
         return;
     }
 
-    settingsVC.sections = BHT_sectionsByInsertingEntry(settingsVC, settingsVC.sections);
+    settingsVC.sections = sectionsByInsertingEntry(settingsVC, settingsVC.sections);
 }
 
-static NSArray *BHT_sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController *settingsVC, NSArray *sections) {
-    if (!BHT_isSettingsClass(settingsVC)) {
+static NSArray *sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController *settingsVC, NSArray *sections) {
+    if (!isSettingsClass(settingsVC)) {
         return sections;
     }
 
-    if (![objc_getAssociatedObject(settingsVC, BHTSettingsRootKey) boolValue]) {
+    if (![objc_getAssociatedObject(settingsVC, SettingsRootKey) boolValue]) {
         return sections;
     }
 
-    if (BHT_sectionsContainNeoFreeBirdEntry(sections)) {
+    if (sectionsContainNeoFreeBirdEntry(sections)) {
         return sections;
     }
 
-    return BHT_sectionsByInsertingEntry(settingsVC, sections);
+    return sectionsByInsertingEntry(settingsVC, sections);
 }
 
 %hook T1GenericSettingsViewController
 - (void)viewWillAppear:(BOOL)animated {
     %orig;
-    BHT_insertNeoFreeBirdSettingsIfRoot(self);
+    insertNeoFreeBirdSettingsIfRoot(self);
 }
 %end
 
 %hook T1SettingsViewController
 - (void)viewWillAppear:(BOOL)animated {
     %orig;
-    BHT_insertNeoFreeBirdSettingsIfRoot(self);
+    insertNeoFreeBirdSettingsIfRoot(self);
 }
 %end
 
@@ -138,7 +138,7 @@ static NSArray *BHT_sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController *set
 %hook TFNItemsDataViewController
 - (NSArray *)updatedSections:(NSArray *)sections forStyle:(NSInteger)style {
     NSArray *updatedSections = %orig;
-    return BHT_sectionsWithNeoFreeBirdEntry(self, updatedSections);
+    return sectionsWithNeoFreeBirdEntry(self, updatedSections);
 }
 %end
 
@@ -201,23 +201,23 @@ static NSArray *BHT_sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController *set
 %hook TFNUIDefaultFontGroup
 - (UIFont *)fontOfSize:(CGFloat)size {
     UIFont *origFont = %orig;
-    return BH_remapFont(origFont);
+    return remapFont(origFont);
 }
 - (UIFont *)mediumFontOfSize:(CGFloat)size {
     UIFont *origFont = %orig;
-    return BH_remapFont(origFont);
+    return remapFont(origFont);
 }
 - (UIFont *)boldFontOfSize:(CGFloat)size {
     UIFont *origFont = %orig;
-    return BH_remapFont(origFont);
+    return remapFont(origFont);
 }
 - (UIFont *)heavyFontOfSize:(CGFloat)size {
     UIFont *origFont = %orig;
-    return BH_remapFont(origFont);
+    return remapFont(origFont);
 }
 - (UIFont *)monospacedDigitFontOfSize:(CGFloat)size weight:(CGFloat)weight {
     UIFont *origFont = %orig;
-    return BH_remapFont(origFont);
+    return remapFont(origFont);
 }
 %end
 

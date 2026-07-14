@@ -9,7 +9,7 @@
 #import "Headers/TWHeaders.h"
 #import "Core/BHTManager.h"
 #import "Core/BHTBundle.h"
-#import "ThemeColor/BHTPalette.h"
+#import "ThemeColor/Palette.h"
 
 @implementation ModernSettingsPlaceholderViewController
 
@@ -45,14 +45,14 @@
 }
 
 - (void)setupTable {
-    self.view.backgroundColor = [BHTPalette currentBackgroundColor];
+    self.view.backgroundColor = [Palette currentBackgroundColor];
 
     self.tableView = [[UITableView alloc] initWithFrame:self.view.bounds
                                                   style:UITableViewStyleGrouped];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.backgroundColor = [BHTPalette currentBackgroundColor];
+    self.tableView.backgroundColor = [Palette currentBackgroundColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     self.tableView.showsVerticalScrollIndicator = NO;

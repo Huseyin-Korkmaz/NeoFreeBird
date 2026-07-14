@@ -3,7 +3,7 @@
 //  NeoFreeBird
 //
 
-#import "BHTHookHelpers.h"
+#import "HookHelpers.h"
 
 // MARK: - Restore Pull-To-Refresh Sounds
 
@@ -11,23 +11,23 @@
 // no bundled psst/pop assets), so we play the tweak-bundled sounds ourselves at the
 // control's state transitions.
 
-typedef NS_ENUM(NSInteger, BHTRefreshSound) {
-    BHTRefreshSoundPull = 0, // Dragging down past the threshold to refresh
-    BHTRefreshSoundPop  = 1  // Manual refresh completed
+typedef NS_ENUM(NSInteger, RefreshSound) {
+    RefreshSoundPull = 0, // Dragging down past the threshold to refresh
+    RefreshSoundPop  = 1  // Manual refresh completed
 };
 
 @interface TFNPullToRefreshControl : UIView
 - (BOOL)loading;
 @end
 
-static void BHT_PlayRefreshSound(BHTRefreshSound type) {
+static void PlayRefreshSound(RefreshSound type) {
     // SystemSoundIDs are a global audio resource, so cache one per sound type
     // instead of re-decoding.
     static SystemSoundID sounds[2] = {0, 0};
     static BOOL initialized[2] = {NO, NO};
 
     if (!initialized[type]) {
-        NSString *soundFile = (type == BHTRefreshSoundPull) ? @"psst2.aac" : @"pop.aac";
+        NSString *soundFile = (type == RefreshSoundPull) ? @"psst2.aac" : @"pop.aac";
         NSURL *soundURL = [[BHTBundle sharedBundle] pathForFile:soundFile];
 
         if (soundURL && AudioServicesCreateSystemSoundID((__bridge CFURLRef)soundURL, &sounds[type]) == kAudioServicesNoError) {
@@ -54,11 +54,11 @@ static char kManualRefreshKey;
     %orig;
 
     if (status == 1 && !wasActive && fromScrolling) {
-        BHT_PlayRefreshSound(BHTRefreshSoundPull);
+        PlayRefreshSound(RefreshSoundPull);
         objc_setAssociatedObject(self, &kManualRefreshKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     } else if (status == 0 && wasActive) {
         if ([objc_getAssociatedObject(self, &kManualRefreshKey) boolValue]) {
-            BHT_PlayRefreshSound(BHTRefreshSoundPop);
+            PlayRefreshSound(RefreshSoundPop);
         }
         objc_setAssociatedObject(self, &kManualRefreshKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }

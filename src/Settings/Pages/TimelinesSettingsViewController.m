@@ -8,7 +8,7 @@
 #import "Settings/Pages/TimelinesSettingsViewController.h"
 #import "Headers/TWHeaders.h"
 
-extern void BHT_applyHideCustomTimelinesSetting(void);
+extern void applyHideCustomTimelinesSetting(void);
 
 @implementation TimelinesSettingsViewController
 
@@ -20,7 +20,7 @@ extern void BHT_applyHideCustomTimelinesSetting(void);
     [super switchChanged:sender];
     NSString *key = objc_getAssociatedObject(sender, @"prefKey");
     if ([key isEqualToString:@"hide_custom_timelines"]) {
-        BHT_applyHideCustomTimelinesSetting();
+        applyHideCustomTimelinesSetting();
     }
 }
 
