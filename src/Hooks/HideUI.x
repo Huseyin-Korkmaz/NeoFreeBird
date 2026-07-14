@@ -7,16 +7,22 @@
 
 // MARK: Hide Blue verified checkmark
 
-// The badge builder (TwitterUISwift.UserBadger) reads isBlueVerified off the user
-// model through ObjC dispatch and treats nil as unset, so answering nil at the
-// model level removes the blue checkmark on every surface while leaving the
-// separate legacy/brand/government badge fields (verified, identityType) intact.
-// TFNTwitterUser and TFNTwitterCanonicalUser forward here and need no hooks.
+// The badge builders read the user model through ObjC dispatch, but the blue
+// checkmark no longer keys off isBlueVerified alone: the tweet author row
+// (SimpleBadgeable.init(statusViewModel:)) builds its badge from the merged
+// verified flag plus identityType and ignores isBlueVerified entirely, so both
+// getters have to be silenced. The brand/government badges come from the
+// separate identityType field and survive. TFNTwitterUser and
+// TFNTwitterCanonicalUser forward here and need no hooks.
 
 %hook TFSTwitterUser
 
 - (id)isBlueVerified {
     return [BHTSettings boolForKey:@"hide_blue_verified"] ? nil : %orig;
+}
+
+- (BOOL)verified {
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 
 %end
@@ -28,12 +34,20 @@
     return [BHTSettings boolForKey:@"hide_blue_verified"] ? nil : %orig;
 }
 
+- (BOOL)verified {
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
+}
+
 %end
 
 %hook TFSTwitterTypeaheadUser
 
 - (id)isBlueVerified {
     return [BHTSettings boolForKey:@"hide_blue_verified"] ? nil : %orig;
+}
+
+- (BOOL)verified {
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 
 %end
@@ -44,13 +58,22 @@
     return [BHTSettings boolForKey:@"hide_blue_verified"] ? nil : %orig;
 }
 
+- (BOOL)verified {
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
+}
+
 %end
 
-// Status view models cache the flag as a Swift stored property at init, so the
-// user model hooks don't reach consumers of this adapter.
+// Status view models cache the flags as Swift stored properties at init, so the
+// user model hooks don't reach consumers of this adapter. The author row badge
+// reads isFromUserVerified; composition and translated view models forward here.
 %hook T1TwitterCoreStatusViewModelAdapter
 
 - (BOOL)isFromUserBlueVerified {
+    return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
+}
+
+- (BOOL)isFromUserVerified {
     return [BHTSettings boolForKey:@"hide_blue_verified"] ? NO : %orig;
 }
 
