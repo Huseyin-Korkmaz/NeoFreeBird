@@ -26,6 +26,9 @@
 "MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "تويتر الأزرق";
 "MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "تجربة خالية من الإعلانات والوصول لميزات Blue مثل التراجع عن التغريدة، السمات، وأيقونات مخصصة.";
 
+"MODERN_SETTINGS_GROK_TITLE" = "Grok";
+"MODERN_SETTINGS_GROK_SUBTITLE" = "إخفاء أزرار Grok والتحكم في الترجمة التلقائية.";
+
 "MODERN_SETTINGS_PROFILES_TITLE" = "الملف الشخصي";
 "MODERN_SETTINGS_PROFILES_SUBTITLE" = "غيّر ما تراه في ملفات المستخدمين.";
 

@@ -44,6 +44,14 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                     @{ @"titleKey": @"CUSTOM_TAB_BAR_OPTION_TITLE", @"action": @"showCustomTabBarVC:", @"type": @"button" }
                 ]
             },
+            @"grok": @{
+                @"titleKey": @"MODERN_SETTINGS_GROK_TITLE",
+                @"subtitleKey": @"MODERN_SETTINGS_GROK_SUBTITLE",
+                @"settings": @[
+                    @{ @"key": @"hide_grok_analyze", @"default": @YES, @"type": @"toggle" },
+                    @{ @"key": @"disable_auto_translate", @"default": @NO, @"type": @"toggle" }
+                ]
+            },
             @"media_downloads": @{
                 @"titleKey": @"MODERN_SETTINGS_MEDIA_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_MEDIA_SUBTITLE",
@@ -83,8 +91,6 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                     @{ @"key": @"hide_downvote_button", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"disable_sensitive_tweet_warnings", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"bypass_age_verification", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"hide_grok_analyze", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"disable_auto_translate", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"reply_sorting", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"restore_reply_context", @"default": @YES, @"type": @"toggle" }
                 ]

@@ -26,6 +26,9 @@
 "MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
 "MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Bez oglasa i otključajte Blue značajke poput Poništi tweet, teme i prilagođene ikone.";
 
+"MODERN_SETTINGS_GROK_TITLE" = "Grok";
+"MODERN_SETTINGS_GROK_SUBTITLE" = "Sakrijte Grok gumbe i upravljajte automatskim prijevodima.";
+
 "MODERN_SETTINGS_PROFILES_TITLE" = "Profil";
 "MODERN_SETTINGS_PROFILES_SUBTITLE" = "Promijenite što vidite na profilima.";
 

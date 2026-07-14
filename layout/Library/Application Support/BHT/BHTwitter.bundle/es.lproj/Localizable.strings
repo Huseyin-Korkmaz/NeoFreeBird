@@ -26,6 +26,9 @@
 "MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
 "MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Disfruta Twitter sin anuncios y desbloquea funciones como Deshacer Tweet, temas e íconos personalizados.";
 
+"MODERN_SETTINGS_GROK_TITLE" = "Grok";
+"MODERN_SETTINGS_GROK_SUBTITLE" = "Oculta los botones de Grok y controla las traducciones automáticas.";
+
 "MODERN_SETTINGS_PROFILES_TITLE" = "Perfil";
 "MODERN_SETTINGS_PROFILES_SUBTITLE" = "Cambia lo que ves en los perfiles.";
 

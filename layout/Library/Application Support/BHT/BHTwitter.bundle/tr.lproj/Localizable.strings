@@ -26,6 +26,9 @@
 "MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
 "MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Reklamsız deneyim ve Tweeti Geri Al, temalar ve simgeler gibi Blue özelliklerini açın.";
 
+"MODERN_SETTINGS_GROK_TITLE" = "Grok";
+"MODERN_SETTINGS_GROK_SUBTITLE" = "Grok düğmelerini gizleyin ve otomatik çeviriyi yönetin.";
+
 "MODERN_SETTINGS_PROFILES_TITLE" = "Profil";
 "MODERN_SETTINGS_PROFILES_SUBTITLE" = "Profillerde ne gördüğünüzü değiştirin.";
 

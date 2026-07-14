@@ -26,6 +26,9 @@
 "MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
 "MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Get an ad-free experience and unlock Blue features like Undo Tweet, themes, and custom app icons.";
 
+"MODERN_SETTINGS_GROK_TITLE" = "Grok";
+"MODERN_SETTINGS_GROK_SUBTITLE" = "Hide Grok buttons and control automatic translations.";
+
 "MODERN_SETTINGS_PROFILES_TITLE" = "Profiles";
 "MODERN_SETTINGS_PROFILES_SUBTITLE" = "Choose what you see on user profiles.";
 

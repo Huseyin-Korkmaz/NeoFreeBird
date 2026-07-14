@@ -161,6 +161,9 @@
         @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TWITTER_BLUE_TITLE"],
            @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE"],
            @"icon": @"verified_stroke", @"action": @"showTwitterBlueSettings" },
+        @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_GROK_TITLE"],
+           @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_GROK_SUBTITLE"],
+           @"icon": @"grok_stroke", @"action": @"showGrokSettings" },
         @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TWEETS_TITLE"],
            @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TWEETS_SUBTITLE"],
            @"icon": @"quill", @"action": @"showTweetsSettings" },
@@ -497,6 +500,11 @@
 
 - (void)showTwitterBlueSettings {
     TwitterBlueSettingsViewController *vc = [[TwitterBlueSettingsViewController alloc] initWithAccount:self.account];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)showGrokSettings {
+    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"grok"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

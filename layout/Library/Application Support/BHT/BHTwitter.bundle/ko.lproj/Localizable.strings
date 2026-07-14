@@ -26,6 +26,9 @@
 "MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
 "MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "광고 숨기기, 트윗 취소, 테마, 커스텀 앱 아이콘과 같은 Twitter Blue 기능을 활성화합니다.";
 
+"MODERN_SETTINGS_GROK_TITLE" = "Grok";
+"MODERN_SETTINGS_GROK_SUBTITLE" = "Grok 버튼을 숨기고 자동 번역을 관리합니다.";
+
 "MODERN_SETTINGS_PROFILES_TITLE" = "프로필";
 "MODERN_SETTINGS_PROFILES_SUBTITLE" = "사용자 프로필에 표시할 항목을 제어합니다.";
 

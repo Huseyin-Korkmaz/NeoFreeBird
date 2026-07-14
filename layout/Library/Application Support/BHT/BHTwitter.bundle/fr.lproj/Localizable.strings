@@ -26,6 +26,9 @@
 "MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
 "MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Profitez d'une expérience sans pub et de fonctions Blue comme Annuler le tweet, les thèmes et les icônes personnalisées.";
 
+"MODERN_SETTINGS_GROK_TITLE" = "Grok";
+"MODERN_SETTINGS_GROK_SUBTITLE" = "Masquez les boutons Grok et contrôlez les traductions automatiques.";
+
 "MODERN_SETTINGS_PROFILES_TITLE" = "Profil";
 "MODERN_SETTINGS_PROFILES_SUBTITLE" = "Modifiez ce que vous voyez dans les profils.";
 

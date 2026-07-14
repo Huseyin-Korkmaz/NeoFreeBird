@@ -26,6 +26,9 @@
 "MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
 "MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "享受無廣告體驗並解鎖 Blue 功能，例如撤銷推文、主題和自訂應用程式圖標。";
 
+"MODERN_SETTINGS_GROK_TITLE" = "Grok";
+"MODERN_SETTINGS_GROK_SUBTITLE" = "隱藏 Grok 按鈕並管理自動翻譯。";
+
 "MODERN_SETTINGS_PROFILES_TITLE" = "個人檔案";
 "MODERN_SETTINGS_PROFILES_SUBTITLE" = "控制您在個人檔案頁面上看到的內容以及互動的方式。";
 

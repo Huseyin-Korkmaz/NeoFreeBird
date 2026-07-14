@@ -26,6 +26,9 @@
 "MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
 "MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "広告の非表示、ツイートの取り消し、テーマ、カスタムアプリアイコンなどのTwitter Blue機能のロックを解除しましょう。";
 
+"MODERN_SETTINGS_GROK_TITLE" = "Grok";
+"MODERN_SETTINGS_GROK_SUBTITLE" = "Grokボタンの非表示や自動翻訳の管理ができます。";
+
 "MODERN_SETTINGS_PROFILES_TITLE" = "プロフィール";
 "MODERN_SETTINGS_PROFILES_SUBTITLE" = "ユーザープロフィールに表示されるものを選択できます。";
 
