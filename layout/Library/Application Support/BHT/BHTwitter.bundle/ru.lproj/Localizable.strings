@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Скрыть кнопки анализа Grok";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "Отключить автоперевод";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "Не переводить посты и описания профилей автоматически.";
+
 "SQUARE_AVATARS_TITLE" = "Квадратные аватары";
 "SQUARE_AVATARS_DETAIL" = "Все пользователи будут с квадратными аватарами, как у брендов в старом Twitter.";
 

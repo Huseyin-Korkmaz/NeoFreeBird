@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grok 분석 버튼 제거";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "자동 번역 비활성화";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "게시물이나 프로필을 자동으로 번역하지 않습니다.";
+
 "SQUARE_AVATARS_TITLE" = "정사각형 프로필 사진 활성화";
 "SQUARE_AVATARS_DETAIL" = "트위터 초창기 시절이나 조직/정부 계정처럼 모두에게 정사각형 프로필 사진을 적용합니다.";
 

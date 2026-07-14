@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grok analiz düğmelerini gizle";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "Otomatik çeviriyi devre dışı bırak";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "Gönderileri ve biyografileri asla otomatik çevirme.";
+
 "SQUARE_AVATARS_TITLE" = "Kare profil resimleri";
 "SQUARE_AVATARS_DETAIL" = "Herkese eski Twitter'daki gibi marka hesapları gibi kare profil resimleri verir.";
 

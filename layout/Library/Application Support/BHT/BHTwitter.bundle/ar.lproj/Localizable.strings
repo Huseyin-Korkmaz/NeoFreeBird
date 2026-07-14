@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "إخفاء أزرار تحليل Grok";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "تعطيل الترجمة التلقائية";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "عدم ترجمة المنشورات أو النبذات التعريفية تلقائيًا.";
+
 "SQUARE_AVATARS_TITLE" = "صور ملف شخصي مربعة";
 "SQUARE_AVATARS_DETAIL" = "يعرض صور ملف شخصي مربعة للجميع، مثل الحسابات التجارية في تويتر القديم.";
 

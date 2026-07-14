@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Sakrij Grok gumb za analizu";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "Isključi automatsko prevođenje";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "Nikad automatski ne prevodi objave ni biografije.";
+
 "SQUARE_AVATARS_TITLE" = "Kvadratne profilne slike";
 "SQUARE_AVATARS_DETAIL" = "Svi imaju kvadratne profilne slike kao brendovi, baš kao stari Twitter.";
 

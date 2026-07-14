@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Ocultar botón de análisis Grok";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "Desactivar la traducción automática";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "No traducir publicaciones ni biografías automáticamente.";
+
 "SQUARE_AVATARS_TITLE" = "Fotos de perfil cuadradas";
 "SQUARE_AVATARS_DETAIL" = "Muestra fotos de perfil cuadradas para todos, como en las cuentas de marca del Twitter antiguo.";
 

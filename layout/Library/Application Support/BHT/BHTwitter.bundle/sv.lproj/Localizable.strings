@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Dölj Grok-analysknappar";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "Inaktivera automatisk översättning";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "Översätt aldrig inlägg eller biografier automatiskt.";
+
 "SQUARE_AVATARS_TITLE" = "Fyrkantiga profilbilder";
 "SQUARE_AVATARS_DETAIL" = "Ge alla fyrkantiga profilbilder, precis som förr.";
 

@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "隐藏 Grok 分析按钮";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "禁用自动翻译";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "不再自动翻译帖子或简介。";
+
 "SQUARE_AVATARS_TITLE" = "方形头像";
 "SQUARE_AVATARS_DETAIL" = "为所有人显示方形头像，就像以前的品牌账号一样。";
 

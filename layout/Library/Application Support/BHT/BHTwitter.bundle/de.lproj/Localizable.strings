@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grok-Analyse-Schaltfläche ausblenden";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "Automatische Übersetzung deaktivieren";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "Beiträge und Bios nie automatisch übersetzen.";
+
 "SQUARE_AVATARS_TITLE" = "Quadratische Profilbilder";
 "SQUARE_AVATARS_DETAIL" = "Zeigt für alle Nutzer quadratische Profilbilder wie bei Marken im alten Twitter.";
 

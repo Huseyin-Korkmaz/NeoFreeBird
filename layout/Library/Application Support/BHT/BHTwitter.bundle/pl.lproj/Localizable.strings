@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Ukryj przyciski analizy Grok";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "Wyłącz automatyczne tłumaczenie";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "Nigdy nie tłumacz automatycznie wpisów ani opisów profili.";
+
 "SQUARE_AVATARS_TITLE" = "Kwadratowe zdjęcia profilowe";
 "SQUARE_AVATARS_DETAIL" = "Daje wszystkim kwadratowe zdjęcia profilowe jak konta marek, jak w starym Twitterze.";
 

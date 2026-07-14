@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grokボタンを非表示";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "自動翻訳を無効化";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "ポストやプロフィールを自動的に翻訳しません。";
+
 "SQUARE_AVATARS_TITLE" = "正方形のプロフィール写真";
 "SQUARE_AVATARS_DETAIL" = "昔のTwitterのように、ブランドアカウントのような正方形のプロフィール写真を全員に適用します。";
 

@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Sembunyikan Tombol Analisis Grok";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "Nonaktifkan terjemahan otomatis";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "Jangan pernah menerjemahkan postingan atau bio secara otomatis.";
+
 "SQUARE_AVATARS_TITLE" = "Foto Profil Kotak";
 "SQUARE_AVATARS_DETAIL" = "Semua pengguna memiliki foto profil kotak seperti akun merek di Twitter lama.";
 

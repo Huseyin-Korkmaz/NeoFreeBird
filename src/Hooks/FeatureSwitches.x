@@ -68,8 +68,21 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     if ([key isEqualToString:@"grok_translations_bio_inline_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_bio_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_post_inline_translation_is_enabled"] ||
-        [key isEqualToString:@"grok_translations_post_translation_is_enabled"]) {
+        [key isEqualToString:@"grok_translations_post_translation_is_enabled"] ||
+        [key isEqualToString:@"grok_translations_community_note_translation_is_enabled"] ||
+        [key isEqualToString:@"grok_translations_poll_translation_is_enabled"]) {
         return @YES;
+    }
+
+    // Auto translation decisions (GrokPostTranslationDisplayHelper and friends)
+    // check these before the per-language preference, so turning them off stops
+    // every surface from translating automatically while manual translate stays.
+    if ([key isEqualToString:@"grok_translations_post_auto_translation_is_enabled"] ||
+        [key isEqualToString:@"grok_translations_bio_auto_translation_is_enabled"] ||
+        [key isEqualToString:@"grok_translations_community_note_auto_translation_is_enabled"] ||
+        [key isEqualToString:@"grok_translations_notification_auto_translation_is_enabled"] ||
+        [key isEqualToString:@"grok_translations_immersive_auto_translate_is_enabled"]) {
+        return [BHTSettings boolForKey:@"disable_auto_translate"] ? @NO : nil;
     }
 
     // Grok buttons

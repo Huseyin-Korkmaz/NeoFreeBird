@@ -98,6 +98,9 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Masquer le bouton Grok Analyze";
 
+"DISABLE_AUTO_TRANSLATE_TITLE" = "Désactiver la traduction automatique";
+"DISABLE_AUTO_TRANSLATE_DETAIL" = "Ne jamais traduire automatiquement les posts et les bios.";
+
 "SQUARE_AVATARS_TITLE" = "Photos de profil carrées";
 "SQUARE_AVATARS_DETAIL" = "Affiche des photos de profil carrées pour tout le monde, comme les comptes de marque sur l'ancien Twitter.";
 
