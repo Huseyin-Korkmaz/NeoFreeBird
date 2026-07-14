@@ -9,12 +9,6 @@
 /*Alerts and popups*/
 
 "CONFIRM_ALERT_MESSAGE" = "진행 하시겠습니까?";
-"YES_BUTTON_TITLE" = "네";
-"NO_BUTTON_TITLE" = "아니요";
-"OK_BUTTON_TITLE" = "확인";
-"CANCEL_BUTTON_TITLE" = "취소";
-"SAVE_BUTTON_TITLE" = "저장";
-"CONTINUE_BUTTON_TITLE" = "계속하기";
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "일반";
@@ -125,7 +119,6 @@
 "COPY_PROFILE_INFO_TITLE" = "프로필 정보 복사 버튼 표시";
 "COPY_PROFILE_INFO_DETAIL" = "닉네임, 사용자 이름, 자기소개 등을 복사할 수 있는 버튼을 표시합니다.";
 
-
 "DISABLE_ARTICLES_TITLE" = "아티클 탭 제거";
 "DISABLE_ARTICLES_DETAIL" = "프로필의 아티클 탭을 제거합니다.";
 
@@ -163,8 +156,6 @@
 "HIDE_PROMOTED_DETAIL" = "모든 광고를 제거합니다.";
 
 "UNDO_TWEET_TITLE" = "트윗 취소하기";
-"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld초";
-"UNDO_TWEET_TIMEOUT_OFF" = "끄기";
 
 "DOWNLOAD_VIDEOS_TITLE" = "미디어 다운로드";
 "DOWNLOAD_VIDEOS_DETAIL" = "공유 버튼 오른쪽에 비디오나 GIF 사진을 다운로드할 수 있는 버튼을 추가합니다.";
@@ -229,12 +220,10 @@
 
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\n비디오 품질 선택";
-"PROGRESS_DOWNLOADING_STATUS_TITLE" = "다운로드 중...";
 "FETCHING_PROGRESS_TITLE" = "잠시 기다려주세요...";
 "FFMPEG_DOWNLOAD_OPTION_TITLE" = "FFmpeg로 다운로드";
 
 /*App icon*/
-"APP_ICON_NAV_TITLE" = "앱 아이콘";
 "APP_ICON_HEADER_TITLE" = "기기의 홈 화면에 사용할 커스텀 앱 아이콘을 선택합니다. 언제든지 변경할 수 있습니다.";
 
 /*Copy profile info*/
@@ -247,17 +236,10 @@
 /*Theme*/
 "THEME_SETTINGS_NAVIGATION_TITLE" = "테마";
 "THEME_SETTINGS_NAVIGATION_DETAIL" = "트위터에서 사용할 테마 색상을 선택합니다. 이 앱에서만 적용됩니다.";
-"THEME_OPTION_1" = "파랑";
-"THEME_OPTION_2" = "노랑";
-"THEME_OPTION_3" = "빨강";
-"THEME_OPTION_4" = "보라";
-"THEME_OPTION_5" = "주황";
-"THEME_OPTION_6" = "초록";
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "내비게이션 바 편집";
 "CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
-"CUSTOM_TAB_BAR_RESET_BUTTON" = "기본값으로 복원";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "정말 내비게이션 바를 기본값으로 복원하겠습니까?";
 
 /* Restore tab labels */
@@ -280,12 +262,6 @@
 
 "SOURCE_UNAVAILABLE" = "소스 확인 불가";
 
-
-/*Web reply*/
-"WEB_REPLY_POST_SENT_TITLE" = "Post sent";
-"OPEN_BUTTON_TITLE" = "Open";
-"DISMISS_BUTTON_TITLE" = "Dismiss";
-
 /*App lock*/
 "PADLOCK_LOCKED_LABEL" = "Locked";
 
@@ -293,9 +269,7 @@
 "UNKNOWN_SOURCE" = "Unknown Source";
 
 /*Media downloads*/
-"DOWNLOAD_BUTTON_TITLE" = "Download";
 "DOWNLOAD_VIDEO_NUMBER_TITLE" = "Video %lu";
-"ERROR_TITLE" = "Error";
 "UNKNOWN_ERROR" = "An unknown error occurred.";
 
 /*Custom fonts*/
@@ -303,10 +277,7 @@
 "FONT_SYSTEM_DEFAULT_SUBTITLE" = "System Default";
 
 /*Legacy login*/
-"LEGACY_LOGIN_TITLE" = "Log in";
 "LEGACY_LOGIN_INFO_LABEL" = "Log in with your username and password.\n\nGoogle and Apple sign-in aren't supported. If your account uses one of those, add a password to it first.";
-"LEGACY_LOGIN_USERNAME_PLACEHOLDER" = "Username, email or phone";
-"LEGACY_LOGIN_PASSWORD_PLACEHOLDER" = "Password";
 "LEGACY_LOGIN_MISSING_INPUT_TITLE" = "Missing input";
 "LEGACY_LOGIN_MISSING_INPUT_MESSAGE" = "Enter username and password.";
 "LEGACY_LOGIN_VERIFYING_STATUS" = "Verifying…";

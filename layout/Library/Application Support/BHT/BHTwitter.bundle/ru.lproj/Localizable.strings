@@ -9,12 +9,6 @@
 /*Alerts and popups*/
 
 "CONFIRM_ALERT_MESSAGE" = "Ты точно этого хотел?";
-"YES_BUTTON_TITLE" = "Да";
-"NO_BUTTON_TITLE" = "Нет";
-"OK_BUTTON_TITLE" = "ОК";
-"CANCEL_BUTTON_TITLE" = "Отмена";
-"SAVE_BUTTON_TITLE" = "Сохранить";
-"CONTINUE_BUTTON_TITLE" = "Продолжить";
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Общие";
@@ -125,7 +119,6 @@
 "COPY_PROFILE_INFO_TITLE" = "Копировать информацию профиля";
 "COPY_PROFILE_INFO_DETAIL" = "Копировать имя, био и другое одним нажатием.";
 
-
 "DISABLE_ARTICLES_TITLE" = "Скрыть вкладку Статьи";
 "DISABLE_ARTICLES_DETAIL" = "Спрятать вкладку «Статьи» в профилях.";
 
@@ -163,8 +156,6 @@
 "HIDE_PROMOTED_DETAIL" = "Удалить всю рекламу из ленты.";
 
 "UNDO_TWEET_TITLE" = "Отменить твит";
-"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld секунд";
-"UNDO_TWEET_TIMEOUT_OFF" = "Выкл.";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Скачать медиа";
 "DOWNLOAD_VIDEOS_DETAIL" = "Сохранять видео и GIF прямо из твита.";
@@ -229,12 +220,10 @@
 
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\nВыбери качество видео";
-"PROGRESS_DOWNLOADING_STATUS_TITLE" = "Скачивание...";
 "FETCHING_PROGRESS_TITLE" = "Секундочку...";
 "FFMPEG_DOWNLOAD_OPTION_TITLE" = "Скачать через FFmpeg";
 
 /*App icon*/
-"APP_ICON_NAV_TITLE" = "Сменить иконку";
 "APP_ICON_HEADER_TITLE" = "Выбери новую иконку или тему для Twitter.";
 
 /*Copy profile info*/
@@ -247,17 +236,10 @@
 /*Theme*/
 "THEME_SETTINGS_NAVIGATION_TITLE" = "Сменить тему";
 "THEME_SETTINGS_NAVIGATION_DETAIL" = "Выберите цвет темы, видимый только вам.";
-"THEME_OPTION_1" = "Синий";
-"THEME_OPTION_2" = "Жёлтый";
-"THEME_OPTION_3" = "Красный";
-"THEME_OPTION_4" = "Фиолетовый";
-"THEME_OPTION_5" = "Оранжевый";
-"THEME_OPTION_6" = "Зелёный";
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "Настройка вкладок";
 "CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
-"CUSTOM_TAB_BAR_RESET_BUTTON" = "Сбросить";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "Вы уверены, что хотите сбросить навигацию к настройкам по умолчанию?";
 
 /* Restore tab labels */
@@ -280,12 +262,6 @@
 
 "SOURCE_UNAVAILABLE" = "Источник недоступен";
 
-
-/*Web reply*/
-"WEB_REPLY_POST_SENT_TITLE" = "Post sent";
-"OPEN_BUTTON_TITLE" = "Open";
-"DISMISS_BUTTON_TITLE" = "Dismiss";
-
 /*App lock*/
 "PADLOCK_LOCKED_LABEL" = "Locked";
 
@@ -293,9 +269,7 @@
 "UNKNOWN_SOURCE" = "Unknown Source";
 
 /*Media downloads*/
-"DOWNLOAD_BUTTON_TITLE" = "Download";
 "DOWNLOAD_VIDEO_NUMBER_TITLE" = "Video %lu";
-"ERROR_TITLE" = "Error";
 "UNKNOWN_ERROR" = "An unknown error occurred.";
 
 /*Custom fonts*/
@@ -303,10 +277,7 @@
 "FONT_SYSTEM_DEFAULT_SUBTITLE" = "System Default";
 
 /*Legacy login*/
-"LEGACY_LOGIN_TITLE" = "Log in";
 "LEGACY_LOGIN_INFO_LABEL" = "Log in with your username and password.\n\nGoogle and Apple sign-in aren't supported. If your account uses one of those, add a password to it first.";
-"LEGACY_LOGIN_USERNAME_PLACEHOLDER" = "Username, email or phone";
-"LEGACY_LOGIN_PASSWORD_PLACEHOLDER" = "Password";
 "LEGACY_LOGIN_MISSING_INPUT_TITLE" = "Missing input";
 "LEGACY_LOGIN_MISSING_INPUT_MESSAGE" = "Enter username and password.";
 "LEGACY_LOGIN_VERIFYING_STATUS" = "Verifying…";

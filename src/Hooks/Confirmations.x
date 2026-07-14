@@ -8,10 +8,10 @@
 static void BHTShowConfirmation(void (^confirmed)(void)) {
     [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
         make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
-        make.button([[BHTBundle sharedBundle] localizedStringForKey:@"YES_BUTTON_TITLE"]).handler(^(NSArray<NSString *> *strings) {
+        make.button([[BHTBundle sharedBundle] localizedTwitterStringForKey:@"YES_ACTION_LABEL"]).handler(^(NSArray<NSString *> *strings) {
             confirmed();
         });
-        make.button([[BHTBundle sharedBundle] localizedStringForKey:@"NO_BUTTON_TITLE"]).cancelStyle();
+        make.button([[BHTBundle sharedBundle] localizedTwitterStringForKey:@"NO_ACTION_LABEL"]).cancelStyle();
     } showFrom:topMostController()];
 }
 

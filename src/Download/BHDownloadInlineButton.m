@@ -44,10 +44,10 @@ static UIViewController *BHTopMostController(void) {
         TFNActiveTextItem *title = [[objc_getClass("TFNActiveTextItem") alloc] initWithTextModel:[[objc_getClass("TFNAttributedTextModel") alloc] initWithAttributedString:titleString] activeRanges:nil];
 
         // HUD helpers
-        void (^startHUD)(NSString *) = ^(NSString *key) {
+        void (^startHUD)(NSString *) = ^(NSString *text) {
             if ([BHTSettings boolForKey:@"direct_save"]) return;
             self.hud = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
-            self.hud.textLabel.text = [[BHTBundle sharedBundle] localizedStringForKey:key];
+            self.hud.textLabel.text = text;
             [self.hud showInView:BHTopMostController().view];
         };
         void (^dismissHUD)(void) = ^{ [self.hud dismiss]; };
@@ -59,14 +59,14 @@ static UIViewController *BHTopMostController(void) {
                 BHDownload *dwManager = [[BHDownload alloc] init];
                 [dwManager setDelegate:self];
                 [dwManager downloadFileWithURL:url];
-                startHUD(@"PROGRESS_DOWNLOADING_STATUS_TITLE");
+                startHUD([[BHTBundle sharedBundle] localizedTwitterStringForKey:@"DOWNLOAD_LIVE_ACTIVITY_DOWNLOADING"]);
             }];
         };
 
         TFNActionItem* (^makeM3U8Item)(NSURL *) = ^TFNActionItem*(NSURL *url) {
             return [objc_getClass("TFNActionItem") actionItemWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"FFMPEG_DOWNLOAD_OPTION_TITLE"]
                                                                imageName:@"arrow_down_circle_stroke" action:^{
-                startHUD(@"FETCHING_PROGRESS_TITLE");
+                startHUD([[BHTBundle sharedBundle] localizedStringForKey:@"FETCHING_PROGRESS_TITLE"]);
                 dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
                     MediaInformation *info = [BHTManager getM3U8Information:url];
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -122,10 +122,10 @@ static UIViewController *BHTopMostController(void) {
         TFNMenuSheetViewController *sheet = [[objc_getClass("TFNMenuSheetViewController") alloc] initWithActionItems:actions.copy];
         [sheet tfnPresentedCustomPresentFromViewController:BHTopMostController() animated:YES completion:nil];
     } @catch (__unused NSException *ex) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"ERROR_TITLE"]
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"ERROR_ALERT_TITLE"]
                                                                        message:[[BHTBundle sharedBundle] localizedStringForKey:@"UNKNOWN_ERROR"]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:nil]];
+        [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"OK_ACTION_LABEL"] style:UIAlertActionStyleDefault handler:nil]];
         [BHTopMostController() presentViewController:alert animated:YES completion:nil];
     }
 }
@@ -163,10 +163,10 @@ static UIViewController *BHTopMostController(void) {
     [self.hud dismiss];
     if (!error) return;
 
-    UIAlertController *a = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"ERROR_TITLE"]
+    UIAlertController *a = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"ERROR_ALERT_TITLE"]
                                                                message:error.localizedDescription
                                                         preferredStyle:UIAlertControllerStyleAlert];
-    [a addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON_TITLE"]
+    [a addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"OK_ACTION_LABEL"]
                                           style:UIAlertActionStyleDefault
                                         handler:nil]];
     [BHTopMostController() presentViewController:a animated:YES completion:nil];

@@ -70,9 +70,9 @@
         textField.autocorrectionType = UITextAutocorrectionTypeNo;
     }];
 
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CANCEL_BUTTON_TITLE"] style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"CANCEL_ACTION_LABEL"] style:UIAlertActionStyleCancel handler:nil]];
 
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"SAVE_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"SAVE_ACTION_LABEL"] style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         NSString *domain = [self sharingDomainFromInput:alert.textFields.firstObject.text];
 
         if (domain.length > 0) {

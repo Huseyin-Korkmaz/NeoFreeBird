@@ -47,7 +47,7 @@ static NSArray *BHT_DMVideoEntities(UIView *attachmentView) {
     }
 
     return [UIContextMenuConfiguration configurationWithIdentifier:nil previewProvider:nil actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
-        UIAction *saveAction = [UIAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_BUTTON_TITLE"] image:[UIImage systemImageNamed:@"square.and.arrow.down"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+        UIAction *saveAction = [UIAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"DOWNLOAD_ACTIVITY_VIEW_LABEL"] image:[UIImage systemImageNamed:@"square.and.arrow.down"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
             if (self.downloadHandler == nil) {
                 self.downloadHandler = [%c(BHDownloadInlineButton) new];
             }

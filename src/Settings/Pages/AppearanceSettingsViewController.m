@@ -53,7 +53,7 @@
     if (BHAppIconViewControllerClass) {
         UIViewController *appIconVC = [[BHAppIconViewControllerClass alloc] init];
         if (self.account) {
-            [appIconVC.navigationItem setTitleView:[objc_getClass("TFNTitleView") titleViewWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"APP_ICON_NAV_TITLE"] subtitle:self.account.displayUsername]];
+            [appIconVC.navigationItem setTitleView:[objc_getClass("TFNTitleView") titleViewWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"SUBSCRIPTION_APP_ICON_SETTINGS_TITLE"] subtitle:self.account.displayUsername]];
         }
         [self.navigationController pushViewController:appIconVC animated:YES];
     }

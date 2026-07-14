@@ -32,7 +32,7 @@ extern UIColor *BHTCurrentAccentColor(void);
     [super viewDidLoad];
 
     self.navigationItem.title =
-      [[BHTBundle sharedBundle] localizedStringForKey:@"APP_ICON_NAV_TITLE"];
+      [[BHTBundle sharedBundle] localizedTwitterStringForKey:@"SUBSCRIPTION_APP_ICON_SETTINGS_TITLE"];
 
     UICollectionViewFlowLayout *flow = [UICollectionViewFlowLayout new];
     flow.sectionInset            = UIEdgeInsetsMake(16, 16, 16, 16);

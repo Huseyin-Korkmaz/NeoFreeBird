@@ -41,6 +41,18 @@
 - (NSString *)localizedStringForKey:(NSString *)key {
     return [self.mainBundle localizedStringForKey:key value:key table:nil];
 }
+
+// Fetches one of Twitter's own strings, reusing the app's translations for every
+// language. These flow through the terminology rename hook like any app string.
+- (NSString *)localizedTwitterStringForKey:(NSString *)key {
+    static NSBundle *twitterBundle = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Localization_Localization" ofType:@"bundle"];
+        twitterBundle = path ? [NSBundle bundleWithPath:path] : [NSBundle mainBundle];
+    });
+    return [twitterBundle localizedStringForKey:key value:key table:nil];
+}
 - (NSURL *)pathForFile:(NSString *)fileName {
     return [self.mainBundle URLForResource:fileName withExtension:nil];
 }

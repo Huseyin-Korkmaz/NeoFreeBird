@@ -32,7 +32,10 @@ static NSInteger BHCurrentSelectedColorOption(void) {
 }
 
 // Twitter's six accent options, and their colours from the app's own palette.
+// The accent picker itself ships no localized colour names, so the swatches
+// borrow the Fleets colour accessibility labels for the same six colours.
 static const NSUInteger kAccentOptionCount = 6;
+static NSString * const kAccentColorNames[kAccentOptionCount] = { @"BLUE", @"YELLOW", @"RED", @"PURPLE", @"ORANGE", @"GREEN" };
 
 static UIColor *BHNativeAccentColor(NSUInteger option) {
     id palette = [[[objc_getClass("TAEColorSettings") sharedSettings] currentColorPalette] colorPalette];
@@ -76,7 +79,7 @@ static UIColor *BHNativeAccentColor(NSUInteger option) {
         swatch.translatesAutoresizingMaskIntoConstraints = NO;
         swatch.colorID = option;
         swatch.isAccessibilityElement = YES;
-        swatch.accessibilityLabel = [[BHTBundle sharedBundle] localizedStringForKey:[NSString stringWithFormat:@"THEME_OPTION_%lu", (unsigned long)option]];
+        swatch.accessibilityLabel = [[BHTBundle sharedBundle] localizedTwitterStringForKey:[NSString stringWithFormat:@"FLEETS_COLOR_%@_ACCESSIBILITY_LABEL", kAccentColorNames[option - 1]]];
         [swatch setSwatchColor:BHNativeAccentColor(option)];
         [swatch addTarget:self action:@selector(swatchTapped:) forControlEvents:UIControlEventTouchUpInside];
         [row addArrangedSubview:swatch];

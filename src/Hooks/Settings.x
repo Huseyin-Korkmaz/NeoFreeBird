@@ -194,7 +194,7 @@ static NSArray *BHT_sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController *set
         [errAlert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"INSTALL_IFONT_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://apps.apple.com/sa/app/ifont-find-install-any-font/id1173222289"] options:@{} completionHandler:nil];
         }]];
-        [errAlert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON_TITLE"] style:UIAlertActionStyleCancel handler:nil]];
+        [errAlert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"OK_ACTION_LABEL"] style:UIAlertActionStyleCancel handler:nil]];
         [self presentViewController:errAlert animated:true completion:nil];
     }
 }

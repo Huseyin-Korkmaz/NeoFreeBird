@@ -223,7 +223,7 @@ static NSString *const kJSInstJS =
     [super viewDidLoad];
 
     self.view.backgroundColor = [UIColor systemBackgroundColor];
-    self.title = [[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_TITLE"];
+    self.title = [[BHTBundle sharedBundle] localizedTwitterStringForKey:@"LOG_IN_TITLE"];
 
     if (!self.asRootScreen) {
         self.navigationItem.leftBarButtonItem =
@@ -234,18 +234,18 @@ static NSString *const kJSInstJS =
 
     self.infoLabel = [self label:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_INFO_LABEL"]];
 
-    self.userField = [self field:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_USERNAME_PLACEHOLDER"] secure:NO];
+    self.userField = [self field:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"PHONE_OR_EMAIL_OR_USERNAME_LABEL"] secure:NO];
     self.userField.keyboardType = UIKeyboardTypeEmailAddress;
     // Tag the fields so iOS Password AutoFill recognises the form and offers
     // saved logins / the Passwords key in the QuickType bar (the native
     // equivalent of autocomplete=username / current-password on a web form).
     self.userField.textContentType = UITextContentTypeUsername;
 
-    self.passField = [self field:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_PASSWORD_PLACEHOLDER"] secure:YES];
+    self.passField = [self field:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"PASSWORD_LABEL"] secure:YES];
     self.passField.textContentType = UITextContentTypePassword;
 
     self.actionButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.actionButton setTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_TITLE"] forState:UIControlStateNormal];
+    [self.actionButton setTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"LOG_IN_ACTION_LABEL"] forState:UIControlStateNormal];
     self.actionButton.titleLabel.font = [UIFont boldSystemFontOfSize:18];
     self.actionButton.translatesAutoresizingMaskIntoConstraints = NO;
     [self.actionButton addTarget:self action:@selector(actionTapped) forControlEvents:UIControlEventTouchUpInside];
@@ -623,7 +623,7 @@ static NSString *const kJSInstJS =
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title
                                                                  message:message
                                                           preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"OK_BUTTON_TITLE"] style:UIAlertActionStyleDefault handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"OK_ACTION_LABEL"] style:UIAlertActionStyleDefault handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 

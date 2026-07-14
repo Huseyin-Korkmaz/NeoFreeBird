@@ -272,15 +272,15 @@ static UIViewController *BHT_findViewControllerOfClass(UIViewController *vc, Cla
 }
 
 - (void)restoreTapped {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_RESET_BUTTON"]
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"SUBSCRIPTION_TAB_CUSTOMIZATION_RESTORE_BUTTON_TITLE"]
                                                                    message:[[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_RESET_MESSAGE"]
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CONTINUE_BUTTON_TITLE"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"CONTINUE_ACTION_LABEL"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [BHCustomTabBarUtility resetSelection];
         [self loadData];
         [self recomputeChanges];
     }]];
-    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"CANCEL_BUTTON_TITLE"] style:UIAlertActionStyleCancel handler:nil]];
+    [alert addAction:[UIAlertAction actionWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"CANCEL_ACTION_LABEL"] style:UIAlertActionStyleCancel handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
 }
 
@@ -354,7 +354,7 @@ static UIViewController *BHT_findViewControllerOfClass(UIViewController *vc, Cla
     UICollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:kGridFooterID forIndexPath:indexPath];
     [footer.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
-    NSString *title = [[BHTBundle sharedBundle] localizedStringForKey:@"CUSTOM_TAB_BAR_RESET_BUTTON"];
+    NSString *title = [[BHTBundle sharedBundle] localizedTwitterStringForKey:@"SUBSCRIPTION_TAB_CUSTOMIZATION_RESTORE_BUTTON_TITLE"];
     UIButton *restore = [objc_getClass("TFNButton") buttonWithTitle:title imageNamed:nil style:2 sizeClass:2];
     restore.translatesAutoresizingMaskIntoConstraints = NO;
     [restore addTarget:self action:@selector(restoreTapped) forControlEvents:UIControlEventTouchUpInside];

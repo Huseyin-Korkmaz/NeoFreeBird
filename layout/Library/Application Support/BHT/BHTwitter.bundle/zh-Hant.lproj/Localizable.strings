@@ -9,12 +9,6 @@
 /*Alerts and popups*/
 
 "CONFIRM_ALERT_MESSAGE" = "你確定要這麼做嗎？";
-"YES_BUTTON_TITLE" = "是";
-"NO_BUTTON_TITLE" = "否";
-"OK_BUTTON_TITLE" = "確定";
-"CANCEL_BUTTON_TITLE" = "取消";
-"SAVE_BUTTON_TITLE" = "儲存";
-"CONTINUE_BUTTON_TITLE" = "繼續";
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "一般";
@@ -125,7 +119,6 @@
 "COPY_PROFILE_INFO_TITLE" = "複製個人資料資訊";
 "COPY_PROFILE_INFO_DETAIL" = "一鍵複製用戶名稱、簡介等資訊。";
 
-
 "DISABLE_ARTICLES_TITLE" = "隱藏「文章」分頁";
 "DISABLE_ARTICLES_DETAIL" = "在個人資料頁面隱藏文章分頁。";
 
@@ -163,8 +156,6 @@
 "HIDE_PROMOTED_DETAIL" = "移除所有廣告。";
 
 "UNDO_TWEET_TITLE" = "撤銷推文";
-"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld 秒";
-"UNDO_TWEET_TIMEOUT_OFF" = "關閉";
 
 "DOWNLOAD_VIDEOS_TITLE" = "下載媒體";
 "DOWNLOAD_VIDEOS_DETAIL" = "直接從推文中儲存影片或 GIF。";
@@ -229,12 +220,10 @@
 
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\n選擇影片畫質";
-"PROGRESS_DOWNLOADING_STATUS_TITLE" = "下載中...";
 "FETCHING_PROGRESS_TITLE" = "請稍候...";
 "FFMPEG_DOWNLOAD_OPTION_TITLE" = "使用 FFmpeg 下載";
 
 /*App icon*/
-"APP_ICON_NAV_TITLE" = "更換 App 圖示";
 "APP_ICON_HEADER_TITLE" = "選擇新的 Twitter 圖示或主題。";
 
 /*Copy profile info*/
@@ -247,17 +236,10 @@
 /*Theme*/
 "THEME_SETTINGS_NAVIGATION_TITLE" = "更換主題";
 "THEME_SETTINGS_NAVIGATION_DETAIL" = "選擇僅自己可見的主題顏色。";
-"THEME_OPTION_1" = "藍色";
-"THEME_OPTION_2" = "黃色";
-"THEME_OPTION_3" = "紅色";
-"THEME_OPTION_4" = "紫色";
-"THEME_OPTION_5" = "橘色";
-"THEME_OPTION_6" = "綠色";
 
 /*Tab bar*/
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "自訂功能標籤列";
 "CUSTOM_TAB_BAR_GRID_DETAIL" = "Tap a destination to add or remove it. Drag the bar below to reorder.";
-"CUSTOM_TAB_BAR_RESET_BUTTON" = "恢復預設";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "您確定要將導覽列恢復為預設狀態嗎？";
 
 /* Restore tab labels */
@@ -280,12 +262,6 @@
 
 "SOURCE_UNAVAILABLE" = "來源無法使用";
 
-
-/*Web reply*/
-"WEB_REPLY_POST_SENT_TITLE" = "Post sent";
-"OPEN_BUTTON_TITLE" = "Open";
-"DISMISS_BUTTON_TITLE" = "Dismiss";
-
 /*App lock*/
 "PADLOCK_LOCKED_LABEL" = "Locked";
 
@@ -293,9 +269,7 @@
 "UNKNOWN_SOURCE" = "Unknown Source";
 
 /*Media downloads*/
-"DOWNLOAD_BUTTON_TITLE" = "Download";
 "DOWNLOAD_VIDEO_NUMBER_TITLE" = "Video %lu";
-"ERROR_TITLE" = "Error";
 "UNKNOWN_ERROR" = "An unknown error occurred.";
 
 /*Custom fonts*/
@@ -303,10 +277,7 @@
 "FONT_SYSTEM_DEFAULT_SUBTITLE" = "System Default";
 
 /*Legacy login*/
-"LEGACY_LOGIN_TITLE" = "Log in";
 "LEGACY_LOGIN_INFO_LABEL" = "Log in with your username and password.\n\nGoogle and Apple sign-in aren't supported. If your account uses one of those, add a password to it first.";
-"LEGACY_LOGIN_USERNAME_PLACEHOLDER" = "Username, email or phone";
-"LEGACY_LOGIN_PASSWORD_PLACEHOLDER" = "Password";
 "LEGACY_LOGIN_MISSING_INPUT_TITLE" = "Missing input";
 "LEGACY_LOGIN_MISSING_INPUT_MESSAGE" = "Enter username and password.";
 "LEGACY_LOGIN_VERIFYING_STATUS" = "Verifying…";
