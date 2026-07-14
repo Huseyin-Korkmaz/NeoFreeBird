@@ -20,6 +20,9 @@
 // Import external function to get theme color
 extern UIColor *BHTCurrentAccentColor(void);
 
+// Whether the account genuinely has a panel's tab, ignoring the forced tab gates
+extern BOOL BHT_panelIsGenuinelyAvailable(long long panelID);
+
 // Interface declaration for TFNFloatingActionButton
 @interface TFNFloatingActionButton : UIView
 - (void)hideAnimated:(_Bool)animated completion:(id)completion;
@@ -167,8 +170,14 @@ static NSString * const kGridFooterID = @"gridFooter";
 #pragma mark - Data
 
 - (void)loadData {
+    // Offer the captured tabs the account genuinely has; panels that only exist
+    // because of the tweak's forced gates stay out of the grid.
     self.allPages = [NSMutableArray array];
     for (NSDictionary *entry in [BHCustomTabBarUtility availableTabs]) {
+        NSNumber *panelID = entry[BHTabPanelIDKey];
+        if (panelID && !BHT_panelIsGenuinelyAvailable(panelID.longLongValue)) {
+            continue;
+        }
         [self.allPages addObject:entry[BHTabPageKey]];
     }
 
@@ -258,13 +267,7 @@ static UIViewController *BHT_findViewControllerOfClass(UIViewController *vc, Cla
 - (void)persistChanges {
     [self pinHomeFirst];
 
-    NSMutableArray<NSString *> *hidden = [NSMutableArray array];
-    for (NSString *page in self.allPages) {
-        if (![self.selectedPages containsObject:page]) {
-            [hidden addObject:page];
-        }
-    }
-    [BHCustomTabBarUtility setVisiblePageIDs:self.selectedPages hiddenPageIDs:hidden];
+    [BHCustomTabBarUtility setVisiblePageIDs:self.selectedPages];
 
     self.originalSelection = [self.selectedPages copy];
     self.hasChanges = NO;

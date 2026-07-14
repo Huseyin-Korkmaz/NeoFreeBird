@@ -13,9 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 extern NSString * const BHCustomTabBarHomePageID;
 
 // Registry keys for a captured tab's metadata.
-extern NSString * const BHTabPageKey;   // scribePage identifier
-extern NSString * const BHTabTitleKey;  // display title (already localised by the app)
-extern NSString * const BHTabImageKey;  // vector image name
+extern NSString * const BHTabPageKey;    // scribePage identifier
+extern NSString * const BHTabTitleKey;   // display title (already localised by the app)
+extern NSString * const BHTabImageKey;   // vector image name
+extern NSString * const BHTabPanelIDKey; // T1 panel ID (NSNumber)
 
 @interface BHCustomTabBarUtility : NSObject
 
@@ -33,11 +34,8 @@ extern NSString * const BHTabImageKey;  // vector image name
 // user has never customised the bar, so callers can fall back to the default.
 + (nullable NSArray<NSString *> *)visiblePageIDsInOrder;
 
-// The pageIDs the user has hidden (never includes Home).
-+ (NSArray<NSString *> *)hiddenPageIDs;
-
-// Persists the editor's selection.
-+ (void)setVisiblePageIDs:(NSArray<NSString *> *)visible hiddenPageIDs:(NSArray<NSString *> *)hidden;
+// Persists the editor's selection; every other tab is hidden.
++ (void)setVisiblePageIDs:(NSArray<NSString *> *)visible;
 
 // Clears the user's selection, reverting to the default layout.
 + (void)resetSelection;

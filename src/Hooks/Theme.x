@@ -82,8 +82,8 @@ static NSArray *BHT_orderedTabEntries(NSArray *entries) {
         return defaultEntries;
     }
 
-    NSSet <NSString *> *hiddenBars = [NSSet setWithArray:[BHCustomTabBarUtility hiddenPageIDs]];
-
+    // Only the chosen tabs show; anything the editor hasn't been told to show
+    // (including tabs unlocked after the user last saved) stays hidden.
     NSMutableArray *orderedEntries = [NSMutableArray new];
     NSMutableSet *placed = [NSMutableSet new];
     for (NSString *pageID in visibleOrder) {
@@ -92,16 +92,6 @@ static NSArray *BHT_orderedTabEntries(NSArray *entries) {
             [orderedEntries addObject:entry];
             [placed addObject:pageID];
         }
-    }
-
-    // Preserve any tab the editor doesn't know about (unless the user hid it),
-    // keeping it in its original position at the end.
-    for (id<T1AppNavigationTabEntry> entry in entries) {
-        NSString *page = BHT_scribePageForEntry(entry);
-        if (!page || [placed containsObject:page] || [hiddenBars containsObject:page]) {
-            continue;
-        }
-        [orderedEntries addObject:entry];
     }
 
     return orderedEntries;

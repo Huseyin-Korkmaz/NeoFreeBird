@@ -44,6 +44,10 @@
 @property (nonatomic, assign, readonly) NSUInteger attachmentType;
 @end
 
+@interface T1PanelIdentity : NSObject
++ (NSString *)iconImageNameForPanelID:(long long)panelID;
+@end
+
 @interface T1TabView : UIView
 @property(readonly, nonatomic) UILabel *titleLabel;
 @property(readonly, nonatomic) long long panelID;

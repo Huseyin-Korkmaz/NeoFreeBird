@@ -41,6 +41,10 @@ void BHT_applySquareAvatarsSetting(void);
 // Custom theme color re-apply (Theme.x)
 void BHT_applySelectedThemeColor(void);
 
+// Whether the account genuinely has a panel's tab, ignoring the forced tab
+// gates (FeatureSwitches.x)
+BOOL BHT_panelIsGenuinelyAvailable(long long panelID);
+
 // Restored tweet source labels, keyed by tweet ID (SourceLabels.x)
 extern NSMutableDictionary *tweetSources;
 

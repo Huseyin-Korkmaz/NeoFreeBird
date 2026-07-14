@@ -10,6 +10,11 @@
 // can read through the unlock.
 static __thread BOOL BHTReportGenuineSubscription = NO;
 
+// While set, the custom-navigation tab gates (below) report their real values,
+// so the tab bar editor and the dash spoof can tell panels the account genuinely
+// has from ones only unlocked for the tab pool.
+static __thread BOOL BHTReportGenuineTabGates = NO;
+
 // Whether the active account is really a premium subscriber, ignoring the forced
 // unlock. Lets switch-gated surfaces that have no premium-aware seam of their own
 // follow the genuine status instead of the spoof.
@@ -183,15 +188,44 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return [BHTSettings boolForKey:@"disable_video_captions"] ? @NO : nil;
     }
 
-    // Always build the Profile and Communities tabs so they can be captured and
-    // toggled in the tab bar editor; the editor's visible/hidden lists decide
-    // whether they actually appear. Grok is likewise force-shown (its read site ORs
-    // with the premium tier we force on), and all three are hidden by default in the
-    // setTabViews: filter until the user opts in.
+    // Custom navigation: the per-panel eligibility gates the app reads when it
+    // decides which tab entries to build. Forced on so every panel that can host
+    // a tab exists for the editor to offer; the tab bar hook keeps them out of
+    // the bar until the user adds them, and the dash spoof (below) keeps the
+    // panels that are only unlocked here out of the side drawer.
     if ([key isEqualToString:@"ios_tab_bar_default_show_profile"] ||
         [key isEqualToString:@"ios_tab_bar_default_show_communities"]) {
         return @YES;
     }
+
+    // Communities, Spaces, News and Grok are enabled outright for every account.
+    if ([key isEqualToString:@"ai_trends_ios_enable_news_tab"] ||
+        [key isEqualToString:@"voice_rooms_consumption_enabled"] ||
+        [key isEqualToString:@"communities_enable_explore_tab"] ||
+        [key isEqualToString:@"subscriptions_inapp_grok"]) {
+        return @YES;
+    }
+
+    // The Media tab reads its switch as an integer and shows on this sentinel.
+    if ([key isEqualToString:@"media_tab_enabled"]) {
+        return @99;
+    }
+
+    // 0 hides the Communities tab, 1 is contextual-only; anything else shows it.
+    if ([key isEqualToString:@"c9s_tab_visibility"]) {
+        return @2;
+    }
+
+    if (!BHTReportGenuineTabGates) {
+        if ([key isEqualToString:@"subscriptions_premium_hub_enabled"] ||
+            [key isEqualToString:@"recruiting_global_jobs_hub_enabled"]) {
+            return @YES;
+        }
+    }
+
+    // The Connect tab is left on its native gate (fresh accounts only): its drawer
+    // row doesn't consult the tab bar, so forcing the tab's gate would grow a
+    // drawer row there's no way to hide again.
 
     // In-app article webview
     if ([key isEqualToString:@"ios_in_app_article_webview_enabled"]) {
@@ -402,6 +436,27 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     return %orig;
 }
 
+// Custom navigation: tab gates read as typed accessors instead of through the
+// keyed funnels, forced on like the keyed gates so their panels' entries build.
+- (BOOL)birdwatchHomePageIsEnabled {
+    if (BHTReportGenuineTabGates) {
+        return %orig;
+    }
+    return YES;
+}
+
+- (BOOL)birdwatchHistoryIsEnabled {
+    if (BHTReportGenuineTabGates) {
+        return %orig;
+    }
+    return YES;
+}
+
+// Video downloads are likewise enabled outright for every account.
+- (BOOL)isVideoCacheEnabled {
+    return YES;
+}
+
 %end
 
 // MARK: Override the login screens
@@ -490,6 +545,15 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     return [BHTSettings boolForKey:@"auto_highest_load"] ? YES : %orig;
 }
 
+// Custom navigation: the Money tab's gate, granted per account/region by the
+// server, forced on like the switch-keyed tab gates so the panel's entry builds.
+- (BOOL)canAccessXPayments {
+    if (BHTReportGenuineTabGates) {
+        return %orig;
+    }
+    return YES;
+}
+
 %end
 
 // MARK: Genuine subscription status for outward-facing paths
@@ -543,101 +607,84 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
 %end
 
-// MARK: Premium side-drawer row
+// MARK: Custom navigation - genuine panel availability
 
-// The account side drawer is a SwiftUI List with no data or model seam - the items
-// are assembled in Swift and handed straight to SwiftUI, and every row is a shared
-// SwiftUI.ListCollectionViewCell. The only reachable layer is the UICollectionView
-// underneath, and SwiftUI does not expose the row text to us, so match the Premium
-// row by its position (always the second entry) within the drawer's collection view.
-// Scoped to the drawer's host controller so it can't affect other SwiftUI lists, and
-// keyed on index rather than text so it stays locale-independent. Re-evaluated each
-// pass so recycled cells are restored.
+// Whether the app would consider a panel tab-eligible without the forced gates
+// above. The tab bar editor only offers genuinely available panels, and the dash
+// spoof below keeps the rest out of the side drawer.
 
-static BOOL BHTIsPremiumDrawerCell(UIView *cell) {
-    if (![cell isKindOfClass:[UICollectionViewCell class]]) {
+static id BHT_accountFeatureSwitches(void) {
+    Class switchesClass = objc_getClass("TFSAccountFeatureSwitches");
+    if (![(id)switchesClass respondsToSelector:@selector(lastUsedAccountFeatureSwitches)]) {
+        return nil;
+    }
+    return ((id (*)(id, SEL))objc_msgSend)((id)switchesClass, @selector(lastUsedAccountFeatureSwitches));
+}
+
+static BOOL BHT_genuineTabGateFlag(id receiver, SEL selector) {
+    if (![receiver respondsToSelector:selector]) {
         return NO;
     }
 
-    Class dashClass = NSClassFromString(@"TwitterDash.DashHostingController");
-    if (!dashClass) {
+    BOOL saved = BHTReportGenuineTabGates;
+    BHTReportGenuineTabGates = YES;
+    BOOL value = ((BOOL (*)(id, SEL))objc_msgSend)(receiver, selector);
+    BHTReportGenuineTabGates = saved;
+    return value;
+}
+
+static id BHT_featureSwitchesProvider(void) {
+    id accountSwitches = BHT_accountFeatureSwitches();
+    if (![accountSwitches respondsToSelector:@selector(provider)]) {
+        return nil;
+    }
+    return ((id (*)(id, SEL))objc_msgSend)(accountSwitches, @selector(provider));
+}
+
+static BOOL BHT_genuineSwitchBool(NSString *key) {
+    id provider = BHT_featureSwitchesProvider();
+    if (![provider respondsToSelector:@selector(boolForKey:)]) {
         return NO;
     }
 
-    BOOL inDrawer = NO;
-    for (UIResponder *responder = cell; responder != nil; responder = responder.nextResponder) {
-        if ([responder isKindOfClass:dashClass]) {
-            inDrawer = YES;
-            break;
+    BOOL saved = BHTReportGenuineTabGates;
+    BHTReportGenuineTabGates = YES;
+    BOOL value = ((BOOL (*)(id, SEL, NSString *))objc_msgSend)(provider, @selector(boolForKey:), key);
+    BHTReportGenuineTabGates = saved;
+    return value;
+}
+
+BOOL BHT_panelIsGenuinelyAvailable(long long panelID) {
+    switch (panelID) {
+        case 13: { // Community Notes
+            id switches = BHT_accountFeatureSwitches();
+            return BHT_genuineTabGateFlag(switches, @selector(birdwatchHomePageIsEnabled)) &&
+                   BHT_genuineTabGateFlag(switches, @selector(birdwatchHistoryIsEnabled));
         }
-    }
-    if (!inDrawer) {
-        return NO;
-    }
-
-    UIView *view = cell.superview;
-    while (view && ![view isKindOfClass:[UICollectionView class]]) {
-        view = view.superview;
-    }
-    UICollectionView *collectionView = (UICollectionView *)view;
-    if (!collectionView) {
-        return NO;
-    }
-
-    NSIndexPath *indexPath = [collectionView indexPathForCell:(UICollectionViewCell *)cell];
-    return indexPath && indexPath.section == 0 && indexPath.item == 1;
-}
-
-static void (*BHTOrigListCellLayoutSubviews)(UIView *, SEL);
-
-static void BHTListCellLayoutSubviews(UIView *self, SEL _cmd) {
-    BHTOrigListCellLayoutSubviews(self, _cmd);
-
-    BOOL shouldHide = BHTIsPremiumDrawerCell(self) && !BHTAccountIsGenuinelyPremium();
-    if (self.hidden != shouldHide) {
-        self.hidden = shouldHide;
-    }
-}
-
-static id (*BHTOrigListCellPreferredAttrs)(UIView *, SEL, id);
-
-static id BHTListCellPreferredAttrs(UIView *self, SEL _cmd, id attributes) {
-    id result = BHTOrigListCellPreferredAttrs(self, _cmd, attributes);
-
-    if ([result isKindOfClass:[UICollectionViewLayoutAttributes class]] &&
-        BHTIsPremiumDrawerCell(self) && !BHTAccountIsGenuinelyPremium()) {
-        UICollectionViewLayoutAttributes *attrs = result;
-        CGRect frame = attrs.frame;
-        frame.size.height = 0;
-        attrs.frame = frame;
-    }
-    return result;
-}
-
-%ctor {
-    Class listCell = NSClassFromString(@"SwiftUI.ListCollectionViewCell");
-    if (listCell) {
-        Method layout = class_getInstanceMethod(listCell, @selector(layoutSubviews));
-        if (layout) {
-            BHTOrigListCellLayoutSubviews = (void (*)(UIView *, SEL))method_getImplementation(layout);
-            method_setImplementation(layout, (IMP)BHTListCellLayoutSubviews);
+        case 16: // Premium hub
+            return BHT_genuineSwitchBool(@"subscriptions_premium_hub_enabled");
+        case 17: // Jobs
+            return BHT_genuineSwitchBool(@"recruiting_global_jobs_hub_enabled") ||
+                   BHT_genuineSwitchBool(@"recruiting_jetfuel_jobs_hub_enabled");
+        case 18: { // Money
+            id host = ((id (*)(id, SEL))objc_msgSend)(objc_getClass("T1HostViewController"), @selector(sharedHostViewController));
+            id account = ((id (*)(id, SEL))objc_msgSend)(host, @selector(currentAccount));
+            return BHT_genuineTabGateFlag(account, @selector(canAccessXPayments));
         }
-
-        Method preferred = class_getInstanceMethod(listCell, @selector(preferredLayoutAttributesFittingAttributes:));
-        if (preferred) {
-            BHTOrigListCellPreferredAttrs = (id (*)(UIView *, SEL, id))method_getImplementation(preferred);
-            method_setImplementation(preferred, (IMP)BHTListCellPreferredAttrs);
-        }
+        default: // Panels the app builds, or the unlock enables, for everyone
+            return YES;
     }
 }
 
-// MARK: Grok side-drawer row
+// MARK: Custom navigation - side drawer rows
 
-// The drawer surfaces an in-app Grok row whenever the Grok tab is absent from the
-// tab bar (where the tab-bar editor hides it by default). Its builder skips the
-// row when the Grok panel (14) is among the visible panel IDs, so inject it into
-// the dash's visibility snapshot only - other readers of visiblePanelIDs (like
-// the open-Grok navigation) must keep seeing the real tab state.
+// The drawer builds a row for most panels whenever that panel is absent from the
+// tab bar. Its builders read a visibility snapshot taken in updateVisiblePanelIDs,
+// so extra panels are injected there, scoped by a flag - other readers of
+// visiblePanelIDs (like the open-Grok navigation) must keep seeing the real tab
+// state. Injected are the panels only unlocked by the forced tab gates (the drawer
+// shouldn't grow rows for them), the Grok row when its setting hides it, and the
+// Premium row for a genuinely non-premium account, for whom it's just an upsell.
 
 static __thread BOOL BHTDashPanelIDQuery = NO;
 
@@ -655,11 +702,32 @@ static __thread BOOL BHTDashPanelIDQuery = NO;
 
 - (NSArray *)visiblePanelIDsForAppNavigation:(id)appNavigation {
     NSArray *panelIDs = %orig;
-    if (BHTDashPanelIDQuery && [BHTSettings boolForKey:@"hide_grok_sidebar"] &&
-        ![panelIDs containsObject:@14]) {
-        return [panelIDs arrayByAddingObject:@14];
+    if (!BHTDashPanelIDQuery) {
+        return panelIDs;
     }
-    return panelIDs;
+
+    NSMutableArray *spoofed = [panelIDs mutableCopy];
+    void (^claim)(NSNumber *) = ^(NSNumber *panelID) {
+        if (![spoofed containsObject:panelID]) {
+            [spoofed addObject:panelID];
+        }
+    };
+
+    for (NSNumber *panelID in @[@13, @16, @17, @18]) {
+        if (!BHT_panelIsGenuinelyAvailable(panelID.longLongValue)) {
+            claim(panelID);
+        }
+    }
+
+    if ([BHTSettings boolForKey:@"hide_grok_sidebar"]) {
+        claim(@14);
+    }
+
+    if (!BHTAccountIsGenuinelyPremium()) {
+        claim(@16);
+    }
+
+    return spoofed;
 }
 
 %end

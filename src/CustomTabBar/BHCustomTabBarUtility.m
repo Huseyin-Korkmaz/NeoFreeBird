@@ -12,13 +12,17 @@
 // first, and can never end up in the hidden list.
 NSString * const BHCustomTabBarHomePageID = @"home";
 
-NSString * const BHTabPageKey  = @"page";
-NSString * const BHTabTitleKey = @"title";
-NSString * const BHTabImageKey = @"image";
+NSString * const BHTabPageKey    = @"page";
+NSString * const BHTabTitleKey   = @"title";
+NSString * const BHTabImageKey   = @"image";
+NSString * const BHTabPanelIDKey = @"panelID";
 
 static NSString * const kVisibleKey  = @"bh_tabs_visible";
-static NSString * const kHiddenKey    = @"bh_tabs_hidden";
 static NSString * const kRegistryKey = @"bh_tab_registry";
+
+// Selection list retired when hiding became implicit (not in the visible list =
+// hidden); removed on sight so old installs don't keep stale data around.
+static NSString * const kLegacyHiddenKey = @"bh_tabs_hidden";
 
 @implementation BHCustomTabBarUtility
 
@@ -51,7 +55,15 @@ static NSString * const kRegistryKey = @"bh_tab_registry";
 
         NSString *title = tabView.title.length ? tabView.title : page;
         NSString *image = tabView.imageName ?: @"";
-        NSDictionary *entry = @{ BHTabPageKey: page, BHTabTitleKey: title, BHTabImageKey: image };
+        if (image.length == 0) {
+            // Avatar-drawn tabs (Profile) have no imageName; use the glyph the
+            // native customization screen resolves for the panel.
+            image = [NSClassFromString(@"T1PanelIdentity") iconImageNameForPanelID:tabView.panelID] ?: @"";
+        }
+        NSDictionary *entry = @{ BHTabPageKey: page,
+                                 BHTabTitleKey: title,
+                                 BHTabImageKey: image,
+                                 BHTabPanelIDKey: @(tabView.panelID) };
 
         NSInteger existing = NSNotFound;
         for (NSInteger i = 0; i < (NSInteger)registry.count; i++) {
@@ -103,26 +115,15 @@ static NSString * const kRegistryKey = @"bh_tab_registry";
     return pageIDs;
 }
 
-+ (NSArray<NSString *> *)hiddenPageIDs {
-    NSArray<NSString *> *hidden = [[NSUserDefaults standardUserDefaults] stringArrayForKey:kHiddenKey];
-    if (!hidden) {
-        return @[];
-    }
-
-    NSMutableArray<NSString *> *pageIDs = [hidden mutableCopy];
-    [pageIDs removeObject:BHCustomTabBarHomePageID];
-    return pageIDs;
-}
-
-+ (void)setVisiblePageIDs:(NSArray<NSString *> *)visible hiddenPageIDs:(NSArray<NSString *> *)hidden {
++ (void)setVisiblePageIDs:(NSArray<NSString *> *)visible {
     [[NSUserDefaults standardUserDefaults] setObject:visible forKey:kVisibleKey];
-    [[NSUserDefaults standardUserDefaults] setObject:hidden forKey:kHiddenKey];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kLegacyHiddenKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 + (void)resetSelection {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kVisibleKey];
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kHiddenKey];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kLegacyHiddenKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
