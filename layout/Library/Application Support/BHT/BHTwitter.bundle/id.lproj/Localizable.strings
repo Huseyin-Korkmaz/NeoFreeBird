@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Umum";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Hapus iklan dan gangguan di linimasa, kunci aplikasi, dan banyak lagi.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Kunci aplikasi, jaga bilah navigasi tetap terlihat, dan banyak lagi.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Media";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Unduh video, aktifkan penanda waktu, dan lainnya.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "Tampilan";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Jadikan Twitter milik Anda dengan tema, ikon aplikasi khusus, font, dan lainnya.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "Linimasa";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "Hapus iklan, saran untuk diikuti, dan gangguan lainnya di linimasa.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Sembunyikan tombol Grok dan atur terjemahan otomatis.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Tanpa 'Siapa yang harus diikuti'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Sembunyikan saran akun dari profil.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "Tanpa ajakan di linimasa";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "Sembunyikan spanduk seperti 'Tambahkan kontak'.";
 
 "PADLOCK_TITLE" = "Kunci Twitter";
 "PADLOCK_DETAIL" = "Butuh Face ID atau kode untuk membuka Twitter.";

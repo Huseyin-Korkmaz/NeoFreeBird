@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "General";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Elimina anuncios y elementos innecesarios de la línea de tiempo, bloquea la app y más.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Bloquea la app, mantén visible la barra de navegación y más.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Multimedia";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Descarga videos, activa marcas de tiempo, y más.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "Apariencia";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Haz tuyo Twitter con temas, íconos de app personalizados, fuentes y más.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "Líneas de tiempo";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "Elimina anuncios, sugerencias de seguimiento y otros elementos innecesarios de la línea de tiempo.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Oculta los botones de Grok y controla las traducciones automáticas.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Sin 'A quién seguir'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Elimina sugerencias de seguimiento.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "Sin avisos en la cronología";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "Elimina banners como 'Agregar contactos'.";
 
 "PADLOCK_TITLE" = "Bloquear Twitter";
 "PADLOCK_DETAIL" = "Requiere Face ID o código para abrir Twitter.";

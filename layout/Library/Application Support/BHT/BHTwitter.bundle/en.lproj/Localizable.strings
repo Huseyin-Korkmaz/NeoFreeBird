@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "General";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Remove ads and timeline clutter, lock the app, and much more.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Lock the app, keep the navigation bar visible, and more.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Photos and videos";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Download videos, enable video timestamps, and more.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "Appearance";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Make Twitter truly yours with themes, custom app icons, fonts, and more.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "Timelines";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "Remove ads, follow suggestions, and other timeline clutter.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Hide Grok buttons and control automatic translations.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "No 'Who to follow'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Remove follow suggestions.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "No timeline prompts";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "Remove banners like 'Add contacts'.";
 
 "PADLOCK_TITLE" = "Lock Twitter";
 "PADLOCK_DETAIL" = "Require Face ID or a passcode to open Twitter.";

@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "一般";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "広告やタイムラインの不要な項目を削除したり、アプリをロックしたりできます。";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "アプリをロックしたり、ナビゲーションバーを常に表示したりできます。";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "画像と動画";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "動画のダウンロード、タイムスタンプの有効化など。";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "外観";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "テーマ、カスタムアプリアイコン、フォントなどでTwitterを自分好みにカスタマイズできます。";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "タイムライン";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "広告、おすすめユーザー、その他タイムラインの不要な項目を削除できます。";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Grokボタンの非表示や自動翻訳の管理ができます。";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "「おすすめアカウント」を非表示";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "フォロー候補を非表示にします。";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "タイムラインのプロンプトを非表示";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "「連絡先を追加」などのバナーを非表示にします。";
 
 "PADLOCK_TITLE" = "Twitterをロック";
 "PADLOCK_DETAIL" = "Twitterを開くためにFace IDまたはパスコード認証を必要とします。";

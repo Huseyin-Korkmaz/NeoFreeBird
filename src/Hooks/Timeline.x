@@ -137,7 +137,7 @@ static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
 
 %end
 
-// MARK: Remove the "Discover more" section below conversations and who-to-follow modules
+// MARK: Remove the "Discover more" section below conversations, who-to-follow modules and timeline prompts
 
 static BOOL BHTIsInConversationHierarchy(UIViewController *viewController) {
     UIViewController *currentVC = viewController;
@@ -161,9 +161,7 @@ static BOOL BHTIsInConversationHierarchy(UIViewController *viewController) {
     return NO;
 }
 
-static NSString *BHTItemEntryID(id item) {
-    id viewModel = BHT_unwrapDataViewItem(item);
-
+static NSString *BHTItemEntryID(id viewModel) {
     if (![viewModel respondsToSelector:@selector(entryID)]) {
         return nil;
     }
@@ -172,12 +170,20 @@ static NSString *BHTItemEntryID(id item) {
     return [entryID isKindOfClass:[NSString class]] ? entryID : nil;
 }
 
-// Both filters discriminate by entry ID (verified on device; the former
+// The entry filters discriminate by entry ID (verified on device; the former
 // conversationTreeContext discriminator is never populated in 12.3). Discover More
 // items carry "tweetdetailrelatedtweets-…", who-to-follow entries "who-to-follow-…",
-// while replies are "conversationthread-…" and the focal tweet "tweet-…".
-static BOOL BHTShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL inConversation) {
-    NSString *entryID = BHTItemEntryID(item);
+// while replies are "conversationthread-…" and the focal tweet "tweet-…". Server-sent
+// prompt banners (add contacts, turn on notifications) all render through the one
+// prompt view model, so those are matched by class instead.
+static BOOL BHTShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePrompts, BOOL inConversation) {
+    id viewModel = BHT_unwrapDataViewItem(item);
+
+    if (hidePrompts && [NSStringFromClass([viewModel classForCoder]) isEqualToString:@"TwitterURT.URTTimelinePromptViewModel"]) {
+        return YES;
+    }
+
+    NSString *entryID = BHTItemEntryID(viewModel);
 
     if (!entryID) {
         return NO;
@@ -196,9 +202,10 @@ static BOOL BHTShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL inConv
 
 static NSArray *BHTFilteredTimelineSections(TFNItemsDataViewController *dataViewController, NSArray *sections) {
     BOOL hideWhoToFollow = [BHTSettings boolForKey:@"hide_who_to_follow"];
+    BOOL hidePrompts = [BHTSettings boolForKey:@"hide_timeline_prompts"];
     BOOL inConversation = BHTIsInConversationHierarchy(dataViewController);
 
-    if (!hideWhoToFollow && !inConversation) {
+    if (!hideWhoToFollow && !hidePrompts && !inConversation) {
         return sections;
     }
 
@@ -217,7 +224,7 @@ static NSArray *BHTFilteredTimelineSections(TFNItemsDataViewController *dataView
         NSMutableArray *keptItems = [NSMutableArray arrayWithCapacity:items.count];
 
         for (id item in items) {
-            if (!BHTShouldHideTimelineItem(item, hideWhoToFollow, inConversation)) {
+            if (!BHTShouldHideTimelineItem(item, hideWhoToFollow, hidePrompts, inConversation)) {
                 [keptItems addObject:item];
             }
         }

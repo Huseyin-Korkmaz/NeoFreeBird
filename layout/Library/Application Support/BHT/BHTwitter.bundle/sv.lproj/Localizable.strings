@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Allmänt";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Ta bort annonser och skräp från flödet, lås appen och mer.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Lås appen, håll navigeringsfältet synligt och mer.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Foton och videor";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Ladda ner videor, aktivera tidsstämplar med mera.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "Utseende";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Gör Twitter till ditt eget med teman, egna appikoner, typsnitt och mer.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "Flöden";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "Ta bort annonser, följförslag och annat skräp från flödet.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Dölj Grok-knappar och hantera automatiska översättningar.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Ingen ’Vem att följa’";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Ta bort förslag om vem du kan följa från profiler.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "Inga uppmaningar i flödet";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "Ta bort banderoller som ’Lägg till kontakter’.";
 
 "PADLOCK_TITLE" = "Lås Twitter";
 "PADLOCK_DETAIL" = "Kräv Face ID eller lösenkod för att öppna Twitter.";

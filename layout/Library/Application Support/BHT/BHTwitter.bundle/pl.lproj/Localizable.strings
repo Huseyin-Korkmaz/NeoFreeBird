@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Ogólne";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Usuń reklamy i zbędne elementy z osi czasu, zablokuj aplikację i wiele więcej.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Zablokuj aplikację, zachowaj widoczny pasek nawigacji i wiele więcej.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Zdjęcia i wideo";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Pobieraj filmy, włącz znaczniki czasu i nie tylko.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "Wygląd";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Uczyń Twittera naprawdę swoim dzięki motywom, własnym ikonom aplikacji, czcionkom i wielu innym opcjom.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "Osie czasu";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "Usuń reklamy, propozycje obserwowania i inne zbędne elementy z osi czasu.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Ukryj przyciski Grok i zarządzaj automatycznym tłumaczeniem.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Bez \"Kogo obserwować\"";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Usuń sugestie obserwowania.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "Bez monitów na osi czasu";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "Usuń banery takie jak \"Dodaj kontakty\".";
 
 "PADLOCK_TITLE" = "Zablokuj Twittera";
 "PADLOCK_DETAIL" = "Wymagaj Face ID lub kodu, aby otworzyć Twittera.";

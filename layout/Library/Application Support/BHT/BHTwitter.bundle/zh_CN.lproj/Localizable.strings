@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "常规";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "移除广告和时间线中的多余内容、锁定应用等。";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "锁定应用、保持导航栏始终可见等。";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "媒体";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "下载视频、启用时间戳等功能。";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "外观";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "通过主题、自定义应用图标、字体等内容，打造属于您的 Twitter。";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "时间线";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "移除广告、关注推荐和时间线中的其他多余内容。";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "隐藏 Grok 按钮并管理自动翻译。";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "不显示“推荐关注”";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "在个人资料中移除关注推荐。";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "不显示时间线提示";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "移除“添加通讯录”等横幅。";
 
 "PADLOCK_TITLE" = "锁定 Twitter";
 "PADLOCK_DETAIL" = "启用 Face ID 或密码解锁 Twitter。";

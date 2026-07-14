@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Genel";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Reklamları ve zaman akışındaki gereksiz öğeleri kaldırın, uygulamayı kilitleyin ve daha fazlası.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Uygulamayı kilitleyin, gezinme çubuğunu görünür tutun ve daha fazlası.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Medya";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Videoları indir, zaman etiketlerini etkinleştir ve daha fazlası.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "Görünüm";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Temalar, özel uygulama simgeleri ve yazı tipleriyle Twitter'ı kişiselleştirin.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "Zaman akışları";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "Reklamları, takip önerilerini ve zaman akışındaki diğer gereksiz öğeleri kaldırın.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Grok düğmelerini gizleyin ve otomatik çeviriyi yönetin.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "‘Kimi takip etmeli’ yok";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Profildeki takip önerilerini kaldır.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "Zaman akışında istem yok";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "'Kişileri ekle' gibi afişleri kaldır.";
 
 "PADLOCK_TITLE" = "Twitter’ı kilitle";
 "PADLOCK_DETAIL" = "Açmak için Face ID veya şifre iste.";

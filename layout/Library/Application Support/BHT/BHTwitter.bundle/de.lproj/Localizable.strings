@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Allgemein";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Entferne Werbung und Überflüssiges aus der Timeline, sperre die App und mehr.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Sperre die App, halte die Navigationsleiste sichtbar und mehr.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Medien";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Videos herunterladen, Zeitstempel aktivieren u. v. m.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "Aussehen";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Mach Twitter zu deinem eigenen mit Designs, eigenen App-Symbolen, Schriftarten und mehr.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "Timelines";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "Entferne Werbung, Folgen-Vorschläge und anderes Überflüssiges aus der Timeline.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Grok-Schaltflächen ausblenden und automatische Übersetzungen steuern.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Keine „Wem folgen?“";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Folge-Empfehlungen entfernen.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "Keine Timeline-Hinweise";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "Banner wie „Kontakte hinzufügen“ entfernen.";
 
 "PADLOCK_TITLE" = "Twitter sperren";
 "PADLOCK_DETAIL" = "Face ID oder einen Code verlangen, um Twitter zu öffnen.";

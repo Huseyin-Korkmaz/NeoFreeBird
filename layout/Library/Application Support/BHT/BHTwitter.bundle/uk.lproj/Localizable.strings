@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Загальні";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Приберіть рекламу та зайве зі стрічки, заблокуйте застосунок тощо.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Заблокуйте застосунок, залиште панель навігації видимою тощо.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Медіа";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Завантаження відео, часові мітки тощо.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "Зовнішній вигляд";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Налаштуйте Twitter під себе: теми, власні іконки застосунку, шрифти тощо.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "Стрічки";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "Приберіть рекламу, рекомендації підписок та інше зайве зі стрічки.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Приховайте кнопки Grok і керуйте автоперекладом.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Приховати «Кого читати»";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Прибрати рекомендації профілів.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "Приховати підказки в стрічці";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "Прибрати банери на кшталт «Додати контакти».";
 
 "PADLOCK_TITLE" = "Заблокувати Twitter";
 "PADLOCK_DETAIL" = "Потрібен Face ID або пароль для входу.";

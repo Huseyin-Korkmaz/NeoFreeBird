@@ -1,19 +1,19 @@
 //
-//  GeneralSettingsViewController.m
+//  TimelinesSettingsViewController.m
 //  NeoFreeBird
 //
 //  Created by nyaathea
 //
 
-#import "Settings/Pages/GeneralSettingsViewController.h"
+#import "Settings/Pages/TimelinesSettingsViewController.h"
 #import "Headers/TWHeaders.h"
 
 extern void BHT_applyHideCustomTimelinesSetting(void);
 
-@implementation GeneralSettingsViewController
+@implementation TimelinesSettingsViewController
 
 - (NSString *)pageKey {
-    return @"general";
+    return @"timelines";
 }
 
 - (void)switchChanged:(UISwitch *)sender {

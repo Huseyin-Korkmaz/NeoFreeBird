@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "عام";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "أزل الإعلانات وفوضى الخط الزمني، واقفل التطبيق، والمزيد.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "اقفل التطبيق، وأبقِ شريط التنقل ظاهرًا، والمزيد.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "الوسائط";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "تنزيل الفيديوهات، تفعيل الطوابع الزمنية، والمزيد.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "المظهر";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "اجعل تويتر ملكك حقًا مع السمات، أيقونات التطبيق المخصصة، الخطوط، والمزيد.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "الخطوط الزمنية";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "أزل الإعلانات واقتراحات المتابعة وغيرها من فوضى الخط الزمني.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "إخفاء أزرار Grok والتحكم في الترجمة التلقائية.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "لا 'من تتابع'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "إخفاء اقتراحات المتابعة.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "بدون مطالبات في الخط الزمني";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "إزالة اللافتات مثل 'إضافة جهات الاتصال'.";
 
 "PADLOCK_TITLE" = "قفل تويتر";
 "PADLOCK_DETAIL" = "يتطلب Face ID أو رمز مرور لفتح تويتر.";

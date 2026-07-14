@@ -19,11 +19,8 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"subtitleKey": @"MODERN_SETTINGS_LAYOUT_SUBTITLE",
                 @"settings": @[
                     @{ @"key": @"padlock", @"default": @NO },
-                    @{ @"key": @"hide_who_to_follow", @"default": @YES },
                     @{ @"key": @"hide_promoted", @"default": @YES },
                     @{ @"key": @"hide_premium_offer", @"default": @YES },
-                    @{ @"key": @"hide_spaces", @"default": @NO },
-                    @{ @"key": @"hide_custom_timelines", @"default": @NO },
                     @{ @"key": @"no_tab_bar_hiding", @"default": @YES },
                     @{ @"key": @"disable_rtl", @"default": @NO },
                     @{ @"key": @"show_scroll_indicator", @"default": @NO }
@@ -41,6 +38,16 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                     @{ @"key": @"custom_fonts", @"default": @NO },
                     @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"regular_font_button", @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE", @"action": @"showRegularFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_1", @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE" },
                     @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"bold_font_button", @"titleKey": @"BOLD_FONTS_PICKER_OPTION_TITLE", @"action": @"showBoldFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_2", @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE" }
+                ]
+            },
+            @"timelines": @{
+                @"titleKey": @"MODERN_SETTINGS_TIMELINES_TITLE",
+                @"subtitleKey": @"MODERN_SETTINGS_TIMELINES_SUBTITLE",
+                @"settings": @[
+                    @{ @"key": @"hide_who_to_follow", @"default": @YES },
+                    @{ @"key": @"hide_timeline_prompts", @"default": @YES },
+                    @{ @"key": @"hide_spaces", @"default": @NO },
+                    @{ @"key": @"hide_custom_timelines", @"default": @NO }
                 ]
             },
             @"grok": @{
@@ -84,9 +91,9 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"subtitleKey": @"MODERN_SETTINGS_TWEETS_SUBTITLE",
                 @"settings": @[
                     @{ @"type": @"compactButton", @"key": @"undo_tweet_timeout", @"default": @10, @"titleKey": @"UNDO_TWEET_TITLE", @"action": @"showUndoTimeoutPicker:" },
-                    @{ @"key": @"tweet_to_image", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"like_confirm", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"tweet_confirm", @"default": @NO, @"type": @"toggle" },
+                    @{ @"key": @"like_confirm", @"default": @NO, @"type": @"toggle" },
+                    @{ @"key": @"tweet_to_image", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"hide_blue_verified", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"hide_view_count", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"hide_bookmark_button", @"default": @NO, @"type": @"toggle" },

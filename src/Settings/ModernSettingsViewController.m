@@ -10,7 +10,7 @@
 #import "Settings/ModernSettingsPlaceholderViewController.h"
 #import "Settings/ModernSettingsPageViewController.h"
 #import "Settings/Pages/AppearanceSettingsViewController.h"
-#import "Settings/Pages/GeneralSettingsViewController.h"
+#import "Settings/Pages/TimelinesSettingsViewController.h"
 #import "Settings/Pages/TweetsSettingsViewController.h"
 #import "Settings/Pages/ProfilesSettingsViewController.h"
 #import "Settings/Pages/WebSettingsViewController.h"
@@ -162,6 +162,9 @@
         @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_APPEARANCE_TITLE"],
            @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_APPEARANCE_SUBTITLE"],
            @"icon": @"paintbrush_stroke", @"action": @"showAppearanceSettings" },
+        @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TIMELINES_TITLE"],
+           @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TIMELINES_SUBTITLE"],
+           @"icon": @"home_stroke", @"action": @"showTimelinesSettings" },
         @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_GROK_TITLE"],
            @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_GROK_SUBTITLE"],
            @"icon": @"grok_icon_stroke", @"action": @"showGrokSettings" },
@@ -495,12 +498,17 @@
 #pragma mark - Navigation to Sub-pages
 
 - (void)showLayoutSettings {
-    GeneralSettingsViewController *vc = [[GeneralSettingsViewController alloc] initWithAccount:self.account];
+    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"general"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)showAppearanceSettings {
     AppearanceSettingsViewController *vc = [[AppearanceSettingsViewController alloc] initWithAccount:self.account];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)showTimelinesSettings {
+    TimelinesSettingsViewController *vc = [[TimelinesSettingsViewController alloc] initWithAccount:self.account];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

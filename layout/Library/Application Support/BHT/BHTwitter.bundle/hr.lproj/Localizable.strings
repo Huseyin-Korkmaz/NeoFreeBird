@@ -12,13 +12,16 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Općenito";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Uklonite oglase i nered iz feeda, zaključajte aplikaciju i još mnogo toga.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Zaključajte aplikaciju, zadržite navigacijsku traku vidljivom i još mnogo toga.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Mediji";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Preuzimajte videozapise, omogućite vremenske oznake i još mnogo toga.";
 
 "MODERN_SETTINGS_APPEARANCE_TITLE" = "Izgled";
 "MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Učinite Twitter svojim uz teme, prilagođene ikone aplikacije, fontove i još mnogo toga.";
+
+"MODERN_SETTINGS_TIMELINES_TITLE" = "Feedovi";
+"MODERN_SETTINGS_TIMELINES_SUBTITLE" = "Uklonite oglase, prijedloge za praćenje i ostali nered iz feeda.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Sakrijte Grok gumbe i upravljajte automatskim prijevodima.";
@@ -55,6 +58,9 @@
 
 "HIDE_WHO_TO_FOLLOW_TITLE" = "Bez 'Koga pratiti'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Ukloni prijedloge za praćenje iz profila.";
+
+"HIDE_TIMELINE_PROMPTS_TITLE" = "Bez upita na vremenskoj crti";
+"HIDE_TIMELINE_PROMPTS_DETAIL" = "Ukloni natpise poput 'Dodaj kontakte'.";
 
 "PADLOCK_TITLE" = "Zaključaj Twitter";
 "PADLOCK_DETAIL" = "Za otvaranje Twittera potreban je Face ID ili šifra.";
