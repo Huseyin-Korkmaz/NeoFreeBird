@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "Don't fade the navigation bar when you scroll.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Hide custom timelines";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "Remove the Add button from the home timeline tabs. Requires relaunching.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Remove the Add button from the home timeline tabs.";
 
 "HIDE_TRENDS_TITLE" = "Hide trending content";
 "HIDE_TRENDS_DETAIL" = "Show only the search bar on the Explore tab, hiding all trends, news and the page tabs.";

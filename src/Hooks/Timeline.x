@@ -7,18 +7,57 @@
 
 // MARK: Hide custom timelines
 
-static void BHTHideHomeAddTabButton(id container) {
-    if (![BHTSettings boolForKey:@"hide_custom_timelines"]) {
+static __weak NSObject *BHTPinnedTimelinesRepository;
+static NSArray *BHTLastPinnedTimelineModels;
+static BOOL BHTPinnedTimelinesWriteBypass = NO;
+
+// Applies a toggle without relaunching. Hiding rewrites the unchanged pinned
+// list through the repository — updatePinnedTimelines: is the same write the
+// tab reorder uses, so anything but the real list would unpin the user's tabs
+// for real. The rewrite only serves to republish: the delegate hook below swaps
+// in the empty list on the way through, collapsing the strip.
+void BHT_applyHideCustomTimelinesSetting(void) {
+    NSObject *repository = BHTPinnedTimelinesRepository;
+    if (!repository) {
         return;
     }
 
-    @try {
-        UIView *button = [container valueForKey:@"addTabButton"];
-        if ([button isKindOfClass:[UIView class]]) {
-            button.hidden = YES;
+    if ([BHTSettings boolForKey:@"hide_custom_timelines"]) {
+        NSArray *models = BHTLastPinnedTimelineModels;
+        if (models.count > 0) {
+            BHTPinnedTimelinesWriteBypass = YES;
+            ((void (*)(id, SEL, id))objc_msgSend)(repository, @selector(updatePinnedTimelines:), models);
+            BHTPinnedTimelinesWriteBypass = NO;
         }
-    } @catch (__unused NSException *exception) {
+    } else if ([repository respondsToSelector:@selector(fetchPinnedTimelinesWithThrottleEnabled:)]) {
+        ((void (*)(id, SEL, BOOL))objc_msgSend)(repository, @selector(fetchPinnedTimelinesWithThrottleEnabled:), NO);
+    }
+}
 
+// The app only reconfigures the tab bar's trailing accessory while the pinned
+// tab strip is showing, so a button built before hiding mid-session survives
+// (with its tap gated off); its visibility is synced here instead. The property
+// is a Swift lazy var, whose storage ivar KVC can't see, hence the fallback.
+static void BHTSyncHomeAddTabButton(id container, BOOL hidden) {
+    UIView *button = nil;
+
+    @try {
+        button = [container valueForKey:@"addTabButton"];
+    } @catch (__unused NSException *exception) {
+        unsigned int ivarCount = 0;
+        Ivar *ivars = class_copyIvarList([container class], &ivarCount);
+        for (unsigned int i = 0; i < ivarCount; i++) {
+            const char *name = ivar_getName(ivars[i]);
+            if (name && strstr(name, "addTabButton")) {
+                button = object_getIvar(container, ivars[i]);
+                break;
+            }
+        }
+        free(ivars);
+    }
+
+    if ([button isKindOfClass:[UIView class]]) {
+        button.hidden = hidden;
     }
 }
 
@@ -28,23 +67,25 @@ static void BHTHideHomeAddTabButton(id container) {
 %hook _TtC32TwitterHomeFeatureImplementation35HomeTimelineContainerViewController
 
 - (void)pinnedTimelinesRepository:(id)repository didChangeWithPinnedTimelineModels:(NSArray *)models {
-    if ([BHTSettings boolForKey:@"hide_custom_timelines"]) {
-        %orig(repository, @[]);
-        return;
+    BHTPinnedTimelinesRepository = repository;
+    if (models.count > 0) {
+        BHTLastPinnedTimelineModels = [models copy];
     }
+    BOOL hide = [BHTSettings boolForKey:@"hide_custom_timelines"];
 
-    %orig;
+    %orig(repository, hide ? @[] : models);
+    BHTSyncHomeAddTabButton(self, hide);
 }
 
 - (id)tfn_navigationBarAccessoryView {
     id accessoryView = %orig;
-    BHTHideHomeAddTabButton(self);
+    BHTSyncHomeAddTabButton(self, [BHTSettings boolForKey:@"hide_custom_timelines"]);
     return accessoryView;
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     %orig;
-    BHTHideHomeAddTabButton(self);
+    BHTSyncHomeAddTabButton(self, [BHTSettings boolForKey:@"hide_custom_timelines"]);
 }
 
 %end
@@ -55,7 +96,7 @@ static void BHTHideHomeAddTabButton(id container) {
 %hook _TtC32TwitterHomeFeatureImplementation31CachedPinnedTimelinesRepository
 
 - (void)updatePinnedTimelines:(id)timelines {
-    if ([BHTSettings boolForKey:@"hide_custom_timelines"]) {
+    if (!BHTPinnedTimelinesWriteBypass && [BHTSettings boolForKey:@"hide_custom_timelines"]) {
         return;
     }
 

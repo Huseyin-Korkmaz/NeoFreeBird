@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "Dölj inte flikfältet vid scrollning.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Dölj anpassade tidslinjer";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "Ta bort Lägg till-knappen från flikarna på hemtidslinjen. Kräver omstart.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Ta bort Lägg till-knappen från flikarna på hemtidslinjen.";
 
 "HIDE_TRENDS_TITLE" = "Dölj trendande innehåll";
 "HIDE_TRENDS_DETAIL" = "Visa endast sökfältet på Utforska-fliken och dölj alla trender, nyheter och sidflikarna.";

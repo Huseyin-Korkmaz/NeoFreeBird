@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "捲動時不隱藏導覽列（可能影響功能）。";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "隱藏自訂時間軸";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "從首頁時間軸分頁中移除新增按鈕。需要重新啟動。";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "從首頁時間軸分頁中移除新增按鈕。";
 
 "HIDE_TRENDS_TITLE" = "隱藏熱門內容";
 "HIDE_TRENDS_DETAIL" = "在「探索」標籤頁中只顯示搜尋列，隱藏所有趨勢、新聞和頁面分頁。";

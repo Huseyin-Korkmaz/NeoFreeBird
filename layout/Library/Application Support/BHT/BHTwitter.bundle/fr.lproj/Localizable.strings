@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "Ne pas cacher la barre au scroll.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Masquer les fils personnalisés";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "Supprime le bouton Ajouter des onglets du fil d'accueil. Nécessite un redémarrage.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Supprime le bouton Ajouter des onglets du fil d'accueil.";
 
 "HIDE_TRENDS_TITLE" = "Masquer les tendances";
 "HIDE_TRENDS_DETAIL" = "Affiche uniquement la barre de recherche dans l'onglet Explorer, en masquant les tendances, l'actualité et les onglets de page.";

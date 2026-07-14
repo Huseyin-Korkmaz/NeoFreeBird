@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "Nie wygaszaj paska nawigacji podczas przewijania.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Ukryj własne osie czasu";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "Usuwa przycisk Dodaj z kart osi czasu na ekranie głównym. Wymaga ponownego uruchomienia.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Usuwa przycisk Dodaj z kart osi czasu na ekranie głównym.";
 
 "HIDE_TRENDS_TITLE" = "Ukryj popularne treści";
 "HIDE_TRENDS_DETAIL" = "Pokazuje tylko pasek wyszukiwania na karcie Eksploruj, ukrywając wszystkie trendy, wiadomości i karty stron.";

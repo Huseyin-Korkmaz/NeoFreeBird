@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "Navigationsleiste beim Scrollen nicht ausblenden.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Benutzerdefinierte Timelines ausblenden";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "Entfernt die Hinzufügen-Schaltfläche aus den Timeline-Tabs der Startseite. Erfordert einen Neustart.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Entfernt die Hinzufügen-Schaltfläche aus den Timeline-Tabs der Startseite.";
 
 "HIDE_TRENDS_TITLE" = "Trending-Inhalte ausblenden";
 "HIDE_TRENDS_DETAIL" = "Zeigt im Entdecken-Tab nur die Suchleiste und blendet alle Trends, Nachrichten und die Seiten-Tabs aus.";

@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "Evita que la barra desaparezca al hacer scroll.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Ocultar líneas de tiempo personalizadas";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "Elimina el botón Añadir de las pestañas de la línea de tiempo de inicio. Requiere reiniciar.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Elimina el botón Añadir de las pestañas de la línea de tiempo de inicio.";
 
 "HIDE_TRENDS_TITLE" = "Ocultar contenido de tendencia";
 "HIDE_TRENDS_DETAIL" = "Muestra solo la barra de búsqueda en la pestaña Explorar, ocultando todas las tendencias, noticias y las pestañas de la página.";

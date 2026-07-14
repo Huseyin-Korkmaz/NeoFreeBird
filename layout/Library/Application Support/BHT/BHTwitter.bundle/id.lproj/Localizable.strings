@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "Jangan sembunyikan tab saat digulir.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Sembunyikan linimasa khusus";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "Hapus tombol Tambah dari tab linimasa beranda. Perlu memulai ulang.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Hapus tombol Tambah dari tab linimasa beranda.";
 
 "HIDE_TRENDS_TITLE" = "Sembunyikan konten trending";
 "HIDE_TRENDS_DETAIL" = "Hanya tampilkan bilah pencarian di tab Jelajahi, sembunyikan semua tren, berita, dan tab halaman.";

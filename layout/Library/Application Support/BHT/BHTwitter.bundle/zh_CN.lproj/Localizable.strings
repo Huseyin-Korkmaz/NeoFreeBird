@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "滚动时不要隐藏标签栏（可能导致问题）。";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "隐藏自定义时间线";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "移除首页时间线标签中的添加按钮。需要重新启动。";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "移除首页时间线标签中的添加按钮。";
 
 "HIDE_TRENDS_TITLE" = "隐藏热门内容";
 "HIDE_TRENDS_DETAIL" = "在“探索”标签中仅显示搜索栏，隐藏所有趋势、新闻和页面标签。";

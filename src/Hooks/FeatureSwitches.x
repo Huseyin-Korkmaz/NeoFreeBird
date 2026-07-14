@@ -58,6 +58,11 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return hideCustomTimelines ? @0 : @100;
     }
 
+    // Gates the add-tab (+) accessory button on the home tab bar.
+    if ([key isEqualToString:@"hometimeline_pinned_tabs_pinned_trailing_accessory_enabled"]) {
+        return hideCustomTimelines ? @NO : nil;
+    }
+
     // Edit tweet
     if ([key isEqualToString:@"edit_tweet_ga_composition_enabled"] ||
         [key isEqualToString:@"edit_tweet_pdp_dialog_enabled"]) {

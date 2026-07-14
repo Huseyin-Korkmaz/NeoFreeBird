@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "スクロールしてもナビゲーションバーが消えないようにします。";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "カスタムタイムラインを非表示";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "ホームタイムラインのタブから [追加] ボタンを削除します。再起動が必要です。";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "ホームタイムラインのタブから [追加] ボタンを削除します。";
 
 "HIDE_TRENDS_TITLE" = "トレンドを非表示";
 "HIDE_TRENDS_DETAIL" = "[話題を検索] タブで検索バーのみを表示し、すべてのトレンド、ニュース、ページタブを非表示にします。";

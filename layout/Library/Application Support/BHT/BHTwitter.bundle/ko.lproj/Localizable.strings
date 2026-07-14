@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "스크롤 해도 내비게이션 바가 사라지지 않습니다.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "커스텀 타임라인 제거";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "홈 타임라인 탭에서 추가 버튼을 제거합니다. 재시작이 필요합니다.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "홈 타임라인 탭에서 추가 버튼을 제거합니다.";
 
 "HIDE_TRENDS_TITLE" = "트렌딩 콘텐츠 제거";
 "HIDE_TRENDS_DETAIL" = "탐색하기 탭에서 검색 바만 표시하고, 모든 트렌드, 뉴스와 페이지 탭을 제거합니다.";

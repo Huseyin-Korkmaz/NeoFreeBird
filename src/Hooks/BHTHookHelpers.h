@@ -41,6 +41,9 @@ void BHT_applySquareAvatarsSetting(void);
 // Custom theme color re-apply (Theme.x)
 void BHT_applySelectedThemeColor(void);
 
+// Live pinned-tabs refresh when the hide setting is toggled (Timeline.x)
+void BHT_applyHideCustomTimelinesSetting(void);
+
 // Whether the account genuinely has a panel's tab, ignoring the forced tab
 // gates (FeatureSwitches.x)
 BOOL BHT_panelIsGenuinelyAvailable(long long panelID);

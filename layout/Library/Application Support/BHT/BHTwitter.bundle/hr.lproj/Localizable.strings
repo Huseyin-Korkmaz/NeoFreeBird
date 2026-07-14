@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "Ne skrivaj traku kartica pri skrolanju.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Sakrij prilagođene vremenske crte";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "Ukloni gumb Dodaj iz kartica početne vremenske crte. Zahtijeva ponovno pokretanje.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Ukloni gumb Dodaj iz kartica početne vremenske crte.";
 
 "HIDE_TRENDS_TITLE" = "Sakrij popularni sadržaj";
 "HIDE_TRENDS_DETAIL" = "Prikaži samo traku za pretragu na kartici Istraži, skrivajući sve trendove, vijesti i kartice stranice.";

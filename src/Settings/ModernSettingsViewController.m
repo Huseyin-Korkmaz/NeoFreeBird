@@ -10,6 +10,7 @@
 #import "Settings/ModernSettingsPlaceholderViewController.h"
 #import "Settings/ModernSettingsPageViewController.h"
 #import "Settings/Pages/AppearanceSettingsViewController.h"
+#import "Settings/Pages/GeneralSettingsViewController.h"
 #import "Settings/Pages/TweetsSettingsViewController.h"
 #import "Settings/Pages/ProfilesSettingsViewController.h"
 #import "Settings/Pages/WebSettingsViewController.h"
@@ -494,7 +495,7 @@
 #pragma mark - Navigation to Sub-pages
 
 - (void)showLayoutSettings {
-    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"general"];
+    GeneralSettingsViewController *vc = [[GeneralSettingsViewController alloc] initWithAccount:self.account];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -182,7 +182,7 @@
 "NO_TAB_BAR_HIDING_DETAIL" = "Kaydırınca çubuğu gizleme.";
 
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Özel zaman akışlarını gizle";
-"HIDE_CUSTOM_TIMELINES_DETAIL" = "Ana zaman akışı sekmelerinden Ekle düğmesini kaldırır. Yeniden başlatma gerektirir.";
+"HIDE_CUSTOM_TIMELINES_DETAIL" = "Ana zaman akışı sekmelerinden Ekle düğmesini kaldırır.";
 
 "HIDE_TRENDS_TITLE" = "Trend içeriği gizle";
 "HIDE_TRENDS_DETAIL" = "Keşfet sekmesinde yalnızca arama çubuğunu gösterir; tüm trendleri, haberleri ve sayfa sekmelerini gizler.";
