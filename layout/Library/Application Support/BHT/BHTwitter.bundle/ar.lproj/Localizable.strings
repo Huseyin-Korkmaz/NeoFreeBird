@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "إزالة جميع الإعلانات.";
 
 "UNDO_TWEET_TITLE" = "تراجع عن التغريدة";
-"UNDO_TWEET_DETAIL" = "أضف تأخيرًا بسيطًا قبل النشر لتتمكن من التراجع.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld ثانية";
+"UNDO_TWEET_TIMEOUT_OFF" = "إيقاف";
 
 "DOWNLOAD_VIDEOS_TITLE" = "تحميل الوسائط";
 "DOWNLOAD_VIDEOS_DETAIL" = "حفظ الفيديوهات أو الصور المتحركة مباشرة.";

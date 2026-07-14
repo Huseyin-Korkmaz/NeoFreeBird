@@ -16,5 +16,6 @@
 + (NSString *)subtitleKeyForPage:(NSString *)pageKey;
 + (NSDictionary *)settingForKey:(NSString *)key;
 + (BOOL)boolForKey:(NSString *)key;
++ (NSInteger)integerForKey:(NSString *)key;
 
 @end

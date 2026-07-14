@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "删除所有广告。";
 
 "UNDO_TWEET_TITLE" = "撤销推文";
-"UNDO_TWEET_DETAIL" = "发布前短暂停留，允许撤销。";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld 秒";
+"UNDO_TWEET_TIMEOUT_OFF" = "关闭";
 
 "DOWNLOAD_VIDEOS_TITLE" = "下载媒体";
 "DOWNLOAD_VIDEOS_DETAIL" = "直接从推文中保存视频或 GIF。";

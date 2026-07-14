@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Alle Werbeanzeigen entfernen.";
 
 "UNDO_TWEET_TITLE" = "Tweet zurücknehmen";
-"UNDO_TWEET_DETAIL" = "Füge eine kurze Verzögerung ein, bevor Tweets gesendet werden, damit du sie zurücknehmen kannst.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld Sekunden";
+"UNDO_TWEET_TIMEOUT_OFF" = "Aus";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Medien herunterladen";
 "DOWNLOAD_VIDEOS_DETAIL" = "Speichere Videos oder GIFs direkt aus Tweets.";

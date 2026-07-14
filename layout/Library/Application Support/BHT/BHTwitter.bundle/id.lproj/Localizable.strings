@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Hapus semua iklan.";
 
 "UNDO_TWEET_TITLE" = "Batalkan Tweet";
-"UNDO_TWEET_DETAIL" = "Tambahkan jeda singkat agar bisa membatalkan Tweet.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld detik";
+"UNDO_TWEET_TIMEOUT_OFF" = "Nonaktif";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Unduh media";
 "DOWNLOAD_VIDEOS_DETAIL" = "Simpan video atau GIF langsung dari Tweet.";

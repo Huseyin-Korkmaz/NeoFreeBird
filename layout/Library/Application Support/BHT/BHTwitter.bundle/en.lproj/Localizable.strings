@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Remove all ads.";
 
 "UNDO_TWEET_TITLE" = "Undo Tweet";
-"UNDO_TWEET_DETAIL" = "Add a short delay before sending Tweets, so you can undo them.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld seconds";
+"UNDO_TWEET_TIMEOUT_OFF" = "Off";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Download media";
 "DOWNLOAD_VIDEOS_DETAIL" = "Save videos or GIFs right from the Tweet overflow menu.";

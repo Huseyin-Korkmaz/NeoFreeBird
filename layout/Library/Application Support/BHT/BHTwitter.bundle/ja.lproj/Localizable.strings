@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "すべての広告を非表示にします。";
 
 "UNDO_TWEET_TITLE" = "ツイートの取り消し";
-"UNDO_TWEET_DETAIL" = "ツイートを送信する前に少し遅延を追加して、ツイートの送信をキャンセルできるようにします。";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld秒";
+"UNDO_TWEET_TIMEOUT_OFF" = "オフ";
 
 "DOWNLOAD_VIDEOS_TITLE" = "メディアをダウンロード";
 "DOWNLOAD_VIDEOS_DETAIL" = "ツイートから動画やGIFを直接保存します。";

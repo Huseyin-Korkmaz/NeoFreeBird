@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "모든 광고를 제거합니다.";
 
 "UNDO_TWEET_TITLE" = "트윗 취소하기";
-"UNDO_TWEET_DETAIL" = "트윗 버튼을 누르면 즉시 게시되지 않고 잠깐 지연시킵니다. 이 기간에 취소하면 트윗 작성 화면으로 되돌아옵니다.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld초";
+"UNDO_TWEET_TIMEOUT_OFF" = "끄기";
 
 "DOWNLOAD_VIDEOS_TITLE" = "미디어 다운로드";
 "DOWNLOAD_VIDEOS_DETAIL" = "공유 버튼 오른쪽에 비디오나 GIF 사진을 다운로드할 수 있는 버튼을 추가합니다.";

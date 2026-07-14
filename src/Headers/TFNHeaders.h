@@ -86,6 +86,11 @@
 @property(readonly, nonatomic) NSArray *accounts;
 @end
 
+@interface TFNTwitterComposition : NSObject
+@property(nonatomic, strong) NSDate *undoableAddedDate;
+@property(nonatomic, assign) double undoTimeInterval;
+@end
+
 @interface UIViewController (TFNPresentation)
 - (void)tfn_dismissAnimated:(id)sender;
 - (void)tfn_presentFromViewController:(UIViewController *)viewController animated:(BOOL)animated;

@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Прибрати всю рекламу в застосунку.";
 
 "UNDO_TWEET_TITLE" = "Скасувати твіт";
-"UNDO_TWEET_DETAIL" = "Додає затримку перед публікацією щоб встигнути її скасувати.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld секунд";
+"UNDO_TWEET_TIMEOUT_OFF" = "Вимк.";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Завантажити медіа";
 "DOWNLOAD_VIDEOS_DETAIL" = "Зберігайте відео чи GIF прямо з твіту.";

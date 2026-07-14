@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Usuń wszystkie reklamy.";
 
 "UNDO_TWEET_TITLE" = "Cofnij Tweet";
-"UNDO_TWEET_DETAIL" = "Dodaj krótkie opóźnienie wysyłki, aby móc cofnąć Tweeta.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld sekund";
+"UNDO_TWEET_TIMEOUT_OFF" = "Wył.";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Pobieraj multimedia";
 "DOWNLOAD_VIDEOS_DETAIL" = "Zapisuj filmy lub GIF-y bezpośrednio z Tweetów.";

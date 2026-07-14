@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Ta bort alla annonser.";
 
 "UNDO_TWEET_TITLE" = "Ångra Tweet";
-"UNDO_TWEET_DETAIL" = "Lägg till en kort fördröjning så att du kan ångra Tweets.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld sekunder";
+"UNDO_TWEET_TIMEOUT_OFF" = "Av";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Ladda ner media";
 "DOWNLOAD_VIDEOS_DETAIL" = "Spara videor eller GIF:ar direkt från Tweets.";

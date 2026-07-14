@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Quita todos los anuncios.";
 
 "UNDO_TWEET_TITLE" = "Deshacer Tweet";
-"UNDO_TWEET_DETAIL" = "Agrega una demora antes de publicar, por si quieres deshacerlo.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld segundos";
+"UNDO_TWEET_TIMEOUT_OFF" = "Desactivado";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Descargar medios";
 "DOWNLOAD_VIDEOS_DETAIL" = "Guarda videos o GIFs directamente desde Tweets.";

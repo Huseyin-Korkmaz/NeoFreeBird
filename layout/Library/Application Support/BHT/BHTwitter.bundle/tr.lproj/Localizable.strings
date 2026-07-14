@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Tüm reklamları kaldır.";
 
 "UNDO_TWEET_TITLE" = "Tweet’i geri al";
-"UNDO_TWEET_DETAIL" = "Göndermeden önce kısa bir geri alma süresi ekle.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld saniye";
+"UNDO_TWEET_TIMEOUT_OFF" = "Kapalı";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Medya indir";
 "DOWNLOAD_VIDEOS_DETAIL" = "Tweet’ten video veya GIF indir.";

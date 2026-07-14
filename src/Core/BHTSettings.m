@@ -36,7 +36,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"titleKey": @"MODERN_SETTINGS_TWITTER_BLUE_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"undo_tweet", @"default": @YES, @"type": @"toggle" },
+                    @{ @"type": @"compactButton", @"key": @"undo_tweet_timeout", @"default": @10, @"titleKey": @"UNDO_TWEET_TITLE", @"action": @"showUndoTimeoutPicker:" },
                     @{ @"key": @"hide_promoted", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"hide_premium_offer", @"default": @YES, @"type": @"toggle" },
                     @{ @"titleKey": @"THEME_OPTION_TITLE", @"action": @"showThemeViewController:", @"type": @"button" },
@@ -158,6 +158,8 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
 // One-time migration of preferences saved under the old (inconsistent) key
 // names to the normalised keys, so existing installs keep their settings.
 + (void)load {
+    [self migrateUndoTweetToggle];
+
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults boolForKey:@"nfb_key_migration_v1_done"]) {
         return;
@@ -208,6 +210,22 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
     [defaults setBool:YES forKey:@"nfb_key_migration_v1_done"];
 }
 
+// The Undo Tweet on/off toggle was merged into the timeout picker, where a
+// timeout of 0 means off. Carry a prior "off" state across as a 0 timeout.
++ (void)migrateUndoTweetToggle {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    if ([defaults boolForKey:@"nfb_undo_timeout_migration_done"]) {
+        return;
+    }
+
+    id oldToggle = [defaults objectForKey:@"undo_tweet"];
+    if (oldToggle != nil && ![oldToggle boolValue] && [defaults objectForKey:@"undo_tweet_timeout"] == nil) {
+        [defaults setInteger:0 forKey:@"undo_tweet_timeout"];
+    }
+    [defaults removeObjectForKey:@"undo_tweet"];
+    [defaults setBool:YES forKey:@"nfb_undo_timeout_migration_done"];
+}
+
 + (NSArray<NSDictionary *> *)settingsForPage:(NSString *)pageKey {
     return pageKey ? BHTSettingsPages()[pageKey][@"settings"] : nil;
 }
@@ -230,6 +248,14 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
         return [value boolValue];
     }
     return [[self settingForKey:key][@"default"] boolValue];
+}
+
++ (NSInteger)integerForKey:(NSString *)key {
+    id value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    if (value != nil) {
+        return [value integerValue];
+    }
+    return [[self settingForKey:key][@"default"] integerValue];
 }
 
 @end

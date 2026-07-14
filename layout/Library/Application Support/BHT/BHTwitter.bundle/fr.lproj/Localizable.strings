@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Supprime toutes les pubs.";
 
 "UNDO_TWEET_TITLE" = "Annuler Tweet";
-"UNDO_TWEET_DETAIL" = "Ajoute un court délai pour annuler la publication.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld secondes";
+"UNDO_TWEET_TIMEOUT_OFF" = "Désactivé";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Télécharger les médias";
 "DOWNLOAD_VIDEOS_DETAIL" = "Sauvegarde vidéos et GIFs directement.";

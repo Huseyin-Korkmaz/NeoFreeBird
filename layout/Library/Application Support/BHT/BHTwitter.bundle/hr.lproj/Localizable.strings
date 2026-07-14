@@ -152,7 +152,8 @@
 "HIDE_PROMOTED_DETAIL" = "Ukloni sve oglase.";
 
 "UNDO_TWEET_TITLE" = "Poništi tweet";
-"UNDO_TWEET_DETAIL" = "Dodaj kratko kašnjenje prije objave kako bi mogao poništiti.";
+"UNDO_TWEET_TIMEOUT_SECONDS" = "%ld sekundi";
+"UNDO_TWEET_TIMEOUT_OFF" = "Isključeno";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Preuzmi medije";
 "DOWNLOAD_VIDEOS_DETAIL" = "Spremi videozapise ili GIF-ove direktno iz tweeta.";
