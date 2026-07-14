@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "隐藏侧边栏中的 Grok";
 
+"HIDE_GROK_CREATE_TITLE" = "隐藏 Grok 创建按钮";
+"HIDE_GROK_CREATE_DETAIL" = "移除使用 Grok 创建或编辑图片和视频的选项。";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "禁用自动翻译";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "不再自动翻译帖子或简介。";
 

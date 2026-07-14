@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "Dölj Grok i sidofältet";
 
+"HIDE_GROK_CREATE_TITLE" = "Dölj Groks skapandeknappar";
+"HIDE_GROK_CREATE_DETAIL" = "Tar bort alternativen för att skapa eller redigera bilder och videor med Grok.";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Inaktivera automatisk översättning";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Översätt aldrig inlägg eller biografier automatiskt.";
 

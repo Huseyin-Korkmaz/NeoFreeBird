@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "Ukryj Grok na pasku bocznym";
 
+"HIDE_GROK_CREATE_TITLE" = "Ukryj przyciski tworzenia Grok";
+"HIDE_GROK_CREATE_DETAIL" = "Usuwa opcje tworzenia i edycji obrazów oraz filmów za pomocą Grok.";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Wyłącz automatyczne tłumaczenie";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Nigdy nie tłumacz automatycznie wpisów ani opisów profili.";
 

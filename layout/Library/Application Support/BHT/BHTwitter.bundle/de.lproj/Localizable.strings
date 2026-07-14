@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "Grok in der Seitenleiste ausblenden";
 
+"HIDE_GROK_CREATE_TITLE" = "Grok-Erstellungsbuttons ausblenden";
+"HIDE_GROK_CREATE_DETAIL" = "Entfernt die Optionen, Bilder und Videos mit Grok zu erstellen oder zu bearbeiten.";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Automatische Übersetzung deaktivieren";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Beiträge und Bios nie automatisch übersetzen.";
 

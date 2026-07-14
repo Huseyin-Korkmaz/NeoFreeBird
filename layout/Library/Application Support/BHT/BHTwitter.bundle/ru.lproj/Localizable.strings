@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "Скрыть Grok в боковой панели";
 
+"HIDE_GROK_CREATE_TITLE" = "Скрыть кнопки создания Grok";
+"HIDE_GROK_CREATE_DETAIL" = "Убирает возможность создавать и редактировать изображения и видео с помощью Grok.";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Отключить автоперевод";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Не переводить посты и описания профилей автоматически.";
 

@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "Hide Grok in sidebar";
 
+"HIDE_GROK_CREATE_TITLE" = "Hide Grok creation buttons";
+"HIDE_GROK_CREATE_DETAIL" = "Removes the options to create or edit images and videos with Grok.";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Disable auto translate";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Never translate posts or bios automatically.";
 

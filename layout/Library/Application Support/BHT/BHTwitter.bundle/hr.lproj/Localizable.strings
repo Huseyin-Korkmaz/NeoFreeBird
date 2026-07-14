@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "Sakrij Grok u bočnoj traci";
 
+"HIDE_GROK_CREATE_TITLE" = "Sakrij Grok gumbe za stvaranje";
+"HIDE_GROK_CREATE_DETAIL" = "Uklanja opcije za stvaranje ili uređivanje slika i videozapisa pomoću Groka.";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Isključi automatsko prevođenje";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Nikad automatski ne prevodi objave ni biografije.";
 

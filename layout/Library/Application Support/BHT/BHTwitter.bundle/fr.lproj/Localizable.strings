@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "Masquer Grok dans la barre latérale";
 
+"HIDE_GROK_CREATE_TITLE" = "Masquer les boutons de création Grok";
+"HIDE_GROK_CREATE_DETAIL" = "Supprime les options de création ou de modification d'images et de vidéos avec Grok.";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Désactiver la traduction automatique";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Ne jamais traduire automatiquement les posts et les bios.";
 

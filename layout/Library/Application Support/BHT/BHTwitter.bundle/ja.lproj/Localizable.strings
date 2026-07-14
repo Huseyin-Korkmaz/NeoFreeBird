@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "サイドバーのGrokを非表示";
 
+"HIDE_GROK_CREATE_TITLE" = "Grokの作成ボタンを非表示";
+"HIDE_GROK_CREATE_DETAIL" = "Grokで画像や動画を作成・編集するオプションを削除します。";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "自動翻訳を無効化";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "ポストやプロフィールを自動的に翻訳しません。";
 

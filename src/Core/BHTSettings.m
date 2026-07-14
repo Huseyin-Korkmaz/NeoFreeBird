@@ -49,6 +49,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"settings": @[
                     @{ @"key": @"hide_grok_analyze", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"hide_grok_sidebar", @"default": @YES, @"type": @"toggle" },
+                    @{ @"key": @"hide_grok_create", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"disable_auto_translate", @"default": @NO, @"type": @"toggle" }
                 ]
             },

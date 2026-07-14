@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "Sembunyikan Grok di bilah samping";
 
+"HIDE_GROK_CREATE_TITLE" = "Sembunyikan tombol pembuatan Grok";
+"HIDE_GROK_CREATE_DETAIL" = "Menghapus opsi untuk membuat atau mengedit gambar dan video dengan Grok.";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Nonaktifkan terjemahan otomatis";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Jangan pernah menerjemahkan postingan atau bio secara otomatis.";
 

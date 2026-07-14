@@ -103,6 +103,9 @@
 
 "HIDE_GROK_SIDEBAR_TITLE" = "إخفاء Grok من الشريط الجانبي";
 
+"HIDE_GROK_CREATE_TITLE" = "إخفاء أزرار الإنشاء في Grok";
+"HIDE_GROK_CREATE_DETAIL" = "يزيل خيارات إنشاء أو تعديل الصور والفيديوهات باستخدام Grok.";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "تعطيل الترجمة التلقائية";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "عدم ترجمة المنشورات أو النبذات التعريفية تلقائيًا.";
 

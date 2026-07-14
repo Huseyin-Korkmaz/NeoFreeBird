@@ -87,10 +87,34 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
 
     // Grok buttons
     if ([key isEqualToString:@"grok_ask_grok_button_under_post_focal_enabled"] ||
-        [key isEqualToString:@"grok_ask_grok_button_under_post_preview_enabled"] ||
-        [key isEqualToString:@"grok_edit_with_grok_button_under_post_focal_enabled"] ||
-        [key isEqualToString:@"grok_edit_with_grok_button_under_post_preview_enabled"]) {
+        [key isEqualToString:@"grok_ask_grok_button_under_post_preview_enabled"]) {
         return @YES;
+    }
+
+    if ([key isEqualToString:@"grok_edit_with_grok_button_under_post_focal_enabled"] ||
+        [key isEqualToString:@"grok_edit_with_grok_button_under_post_preview_enabled"]) {
+        return @(![BHTSettings boolForKey:@"hide_grok_create"]);
+    }
+
+    // Grok creation surfaces: the composer toolbar buttons (the plain Grok button
+    // and its Grok Imagine replacement), the imagine menu on composer image
+    // attachments, the imagine menus in the media viewers, the Edit with Grok
+    // action-sheet item on photo posts, the imagine CTA buttons, and the immersive
+    // player's create-your-own button.
+    if ([key isEqualToString:@"ios_composer_grok_button_enabled"] ||
+        [key isEqualToString:@"grok_imagine_composer_enabled"] ||
+        [key isEqualToString:@"grok_composer_imagine_is_enabled"] ||
+        [key isEqualToString:@"grok_composer_attachment_imagine_menu_is_enabled"] ||
+        [key isEqualToString:@"grok_timeline_preview_imagine_menu_is_enabled"] ||
+        [key isEqualToString:@"grok_timeline_video_imagine_menu_is_enabled"] ||
+        [key isEqualToString:@"grok_timeline_slideshow_imagine_menu_is_enabled"] ||
+        [key isEqualToString:@"grok_ios_edit_photo_post_button_enabled"] ||
+        [key isEqualToString:@"grok_ios_imagine_cta_focal_enabled"] ||
+        [key isEqualToString:@"grok_ios_imagine_cta_reply_enabled"] ||
+        [key isEqualToString:@"grok_ios_imagine_cta_timeline_enabled"] ||
+        [key isEqualToString:@"grok_ios_imagine_cta_profile_enabled"] ||
+        [key isEqualToString:@"grok_immersive_create_own_button_enabled"]) {
+        return [BHTSettings boolForKey:@"hide_grok_create"] ? @NO : nil;
     }
 
     // Grok analyze: the tweet-side show decisions (timeline author view and post
@@ -629,6 +653,27 @@ static __thread BOOL BHTDashPanelIDQuery = NO;
         return [panelIDs arrayByAddingObject:@14];
     }
     return panelIDs;
+}
+
+%end
+
+// MARK: Grok creation - photo editor
+
+// The photo editor's Edit with Grok entry has no feature switch of its own; both
+// delegates hardcode YES.
+
+%hook T1TweetComposeViewController
+
+- (BOOL)photoEditorCanEditWithGrok:(id)photoEditor {
+    return [BHTSettings boolForKey:@"hide_grok_create"] ? NO : %orig;
+}
+
+%end
+
+%hook T1StatusPhotoEditorHandler
+
+- (BOOL)photoEditorCanEditWithGrok:(id)photoEditor {
+    return [BHTSettings boolForKey:@"hide_grok_create"] ? NO : %orig;
 }
 
 %end
