@@ -97,7 +97,6 @@
 "BYPASS_AGE_VERIFICATION_DETAIL" = "Omite la verificación de edad para contenido sensible.";
 
 "HIDE_GROK_ANALYZE_TITLE" = "Ocultar botón de análisis Grok";
-"HIDE_GROK_ANALYZE_DETAIL" = "Oculta el botón Grok Analyze en los Tweets.";
 
 "SQUARE_AVATARS_TITLE" = "Fotos de perfil cuadradas";
 "SQUARE_AVATARS_DETAIL" = "Muestra fotos de perfil cuadradas para todos, como en las cuentas de marca del Twitter antiguo.";

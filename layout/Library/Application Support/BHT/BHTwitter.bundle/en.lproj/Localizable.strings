@@ -97,7 +97,6 @@
 "BYPASS_AGE_VERIFICATION_DETAIL" = "Skips the age verification flow for sensitive content.";
 
 "HIDE_GROK_ANALYZE_TITLE" = "Hide Grok analyze buttons";
-"HIDE_GROK_ANALYZE_DETAIL" = "Hides the Grok Analyze button in Tweets.";
 
 "SQUARE_AVATARS_TITLE" = "Square profile pictures";
 "SQUARE_AVATARS_DETAIL" = "Gives everyone square profile pictures like brand accounts, just like old Twitter.";

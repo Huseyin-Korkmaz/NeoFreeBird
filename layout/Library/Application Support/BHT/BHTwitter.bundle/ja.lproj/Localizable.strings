@@ -97,7 +97,6 @@
 "BYPASS_AGE_VERIFICATION_DETAIL" = "センシティブなコンテンツの年齢確認フローをスキップします。";
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grokボタンを非表示";
-"HIDE_GROK_ANALYZE_DETAIL" = "ツイート内にあるGrokボタンを非表示にします。";
 
 "SQUARE_AVATARS_TITLE" = "正方形のプロフィール写真";
 "SQUARE_AVATARS_DETAIL" = "昔のTwitterのように、ブランドアカウントのような正方形のプロフィール写真を全員に適用します。";

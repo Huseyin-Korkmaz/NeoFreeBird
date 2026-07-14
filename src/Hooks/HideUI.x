@@ -104,31 +104,6 @@
 
 %end
 
-// MARK: Hide Grok Analyze button
-
-// The analyze button (timeline author view and post detail nav bar) is gated by a
-// per-tweet boolean the API returns via the includeGrokAnalysisButton request
-// field. Both shouldShowGrokAnalyzeButtonForAuthorView and
-// shouldShowGrokAnalyzeButtonForPostDetailNavBar ultimately return this flag, so
-// reporting it as absent at the model level suppresses the button on every
-// surface without any view-level hiding or navigation-context guessing.
-
-%hook TFNTwitterCanonicalStatus
-
-- (BOOL)grokAnalysisButton {
-    return [BHTSettings boolForKey:@"hide_grok_analyze"] ? NO : %orig;
-}
-
-%end
-
-%hook TFSTwitterStatus
-
-- (BOOL)grokAnalysisButton {
-    return [BHTSettings boolForKey:@"hide_grok_analyze"] ? NO : %orig;
-}
-
-%end
-
 // MARK: No Subscribe button
 
 // The author view's layout delegate has a dedicated show-decision for the

@@ -97,7 +97,6 @@
 "BYPASS_AGE_VERIFICATION_DETAIL" = "Preskače provjeru dobi za osjetljiv sadržaj.";
 
 "HIDE_GROK_ANALYZE_TITLE" = "Sakrij Grok gumb za analizu";
-"HIDE_GROK_ANALYZE_DETAIL" = "Sakriva Grok Analyze gumb u tweetovima.";
 
 "SQUARE_AVATARS_TITLE" = "Kvadratne profilne slike";
 "SQUARE_AVATARS_DETAIL" = "Svi imaju kvadratne profilne slike kao brendovi, baš kao stari Twitter.";

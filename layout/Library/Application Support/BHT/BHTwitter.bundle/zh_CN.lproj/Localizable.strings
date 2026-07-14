@@ -97,7 +97,6 @@
 "BYPASS_AGE_VERIFICATION_DETAIL" = "跳过敏感内容的年龄验证流程。";
 
 "HIDE_GROK_ANALYZE_TITLE" = "隐藏 Grok 分析按钮";
-"HIDE_GROK_ANALYZE_DETAIL" = "隐藏推文中的 Grok 分析按钮。";
 
 "SQUARE_AVATARS_TITLE" = "方形头像";
 "SQUARE_AVATARS_DETAIL" = "为所有人显示方形头像，就像以前的品牌账号一样。";

@@ -97,7 +97,6 @@
 "BYPASS_AGE_VERIFICATION_DETAIL" = "Hassas içerik için yaş doğrulama akışını atlar.";
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grok analiz düğmelerini gizle";
-"HIDE_GROK_ANALYZE_DETAIL" = "Tweetlerdeki Grok Analyze düğmesini gizler.";
 
 "SQUARE_AVATARS_TITLE" = "Kare profil resimleri";
 "SQUARE_AVATARS_DETAIL" = "Herkese eski Twitter'daki gibi marka hesapları gibi kare profil resimleri verir.";

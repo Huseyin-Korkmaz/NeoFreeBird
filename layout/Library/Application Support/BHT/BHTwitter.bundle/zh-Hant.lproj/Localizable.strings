@@ -97,7 +97,6 @@
 "BYPASS_AGE_VERIFICATION_DETAIL" = "略過敏感內容的年齡驗證流程。";
 
 "HIDE_GROK_ANALYZE_TITLE" = "隱藏 Grok 分析按鈕";
-"HIDE_GROK_ANALYZE_DETAIL" = "在推文中隱藏 Grok 分析按鈕。";
 
 "SQUARE_AVATARS_TITLE" = "方形頭像";
 "SQUARE_AVATARS_DETAIL" = "將所有人的頭像都變成像品牌帳號一樣的方形，就像舊版 Twitter 那樣。";

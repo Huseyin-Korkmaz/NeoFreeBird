@@ -53,9 +53,21 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
     if ([key isEqualToString:@"grok_ask_grok_button_under_post_focal_enabled"] ||
         [key isEqualToString:@"grok_ask_grok_button_under_post_preview_enabled"] ||
         [key isEqualToString:@"grok_edit_with_grok_button_under_post_focal_enabled"] ||
-        [key isEqualToString:@"grok_edit_with_grok_button_under_post_preview_enabled"] ||
-        [key isEqualToString:@"grok_ios_profile_summary_enabled"]) {
+        [key isEqualToString:@"grok_edit_with_grok_button_under_post_preview_enabled"]) {
         return @YES;
+    }
+
+    // Grok analyze: the tweet-side show decisions (timeline author view and post
+    // detail nav bar, including its context-menu variant) all gate on the
+    // backend-controlled switch before consulting the per-tweet flag.
+    if ([key isEqualToString:@"grok_ios_author_view_analyze_button_via_backend_enabled"]) {
+        return [BHTSettings boolForKey:@"hide_grok_analyze"] ? @NO : nil;
+    }
+
+    // The profile header's analyze (summary) button bottoms out in this switch on
+    // both header variants, one of which reads it through a direct Swift call.
+    if ([key isEqualToString:@"grok_ios_profile_summary_enabled"]) {
+        return @(![BHTSettings boolForKey:@"hide_grok_analyze"]);
     }
 
     // Session token appended to shared/copied links (&t=)

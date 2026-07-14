@@ -97,7 +97,6 @@
 "BYPASS_AGE_VERIFICATION_DETAIL" = "Пропускає перевірку віку для чутливого контенту.";
 
 "HIDE_GROK_ANALYZE_TITLE" = "Сховати кнопки аналізу Grok";
-"HIDE_GROK_ANALYZE_DETAIL" = "Приховує кнопку Grok Analyze у твітах.";
 
 "SQUARE_AVATARS_TITLE" = "Квадратні аватари";
 "SQUARE_AVATARS_DETAIL" = "Показує всіх із квадратними аватарами, як у брендів у старому Twitter.";
