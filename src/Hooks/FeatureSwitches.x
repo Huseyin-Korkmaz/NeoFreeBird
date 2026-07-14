@@ -117,6 +117,13 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return [BHTSettings boolForKey:@"hide_grok_create"] ? @NO : nil;
     }
 
+    // The edit-photo and create-own Grok buttons (media viewer share sheet, timeline
+    // and detail view images, profile picture prompts) hide behind this innocuously
+    // named switch family, which only Grok.GrokFeatureAccess reads.
+    if ([key hasPrefix:@"ios_button_layout_fix"] && [key hasSuffix:@"_enabled"]) {
+        return [BHTSettings boolForKey:@"hide_grok_create"] ? @NO : nil;
+    }
+
     // Grok analyze: the tweet-side show decisions (timeline author view and post
     // detail nav bar, including its context-menu variant) all gate on the
     // backend-controlled switch before consulting the per-tweet flag.
