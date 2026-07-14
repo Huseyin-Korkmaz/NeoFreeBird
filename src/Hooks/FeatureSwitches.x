@@ -211,6 +211,26 @@ static NSNumber *BHTFeatureSwitchOverrideValueForKey(NSString *key) {
         return @NO;
     }
 
+    // Boost (quick promote) button and its upsells. Each placement reads its own
+    // switch rather than the root one, so all of them are disabled: the tweet row
+    // and timeline buttons, the composer button, the overflow menu item, the tweet
+    // detail toolbars and analytics placements, the third-party boost author view
+    // button, and the "Boost" action on the toast shown after posting.
+    if ([key isEqualToString:@"ios_tweet_promote_button_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_timeline_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_in_tweet_composer_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_in_overflow_menu_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_in_focal_top_toolbar_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_in_focal_bottom_toolbar_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_in_focal_top_analytics_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_in_post_analytics_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_boost_again_in_top_toolbar_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_sent_tweet_toast_enabled"] ||
+        [key isEqualToString:@"ios_tweet_promote_button_third_party_boost_enabled"] ||
+        [key isEqualToString:@"thirdparty_boost_author_view_button_enabled"]) {
+        return @NO;
+    }
+
     // The Premium settings row is gated at its root instead (see the
     // -isSubscriptionsSettingsItemEnabledWithProvider: hook), so it follows the
     // genuine subscription state. The creator purchases dashboard and the
