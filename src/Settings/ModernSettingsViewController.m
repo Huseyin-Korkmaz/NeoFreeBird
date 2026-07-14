@@ -276,7 +276,7 @@
 
     UILabel *footerLabel = [[UILabel alloc] init];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    footerLabel.text = @"NeoFreeBird v2.2 (release)\nNeoFreeBird-BHTwitter v5.3 (beta)";
+    footerLabel.text = @NFB_VERSION_STRING;
     footerLabel.numberOfLines = 0;
     footerLabel.textAlignment = NSTextAlignmentLeft;
 
