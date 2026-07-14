@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Показувати контекст відповіді";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Показує користувачів, яким відповідають у твітах.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Показувати джерело твіту";
+"RESTORE_TWEET_LABELS_DETAIL" = "Відображає, з якого клієнта був зроблений твіт (від @nyaathea).";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Підтвердження читань";
 "FOLLOW_CONFIRM_DETAIL" = "Запитувати перед тим, як почати читати.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Вибрати жирний шрифт";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Показувати джерело твіту (бета)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Відображає, з якого клієнта був зроблений твіт (від @nyaathea).";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Відповідати у веб-перегляді";
 "REPLY_IN_WEBVIEW_DETAIL" = "Відкривати поле відповіді у веб-перегляді, щоб уникнути атестації.";
 

@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Restaurar contexto de respuesta";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Muestra a quién se está respondiendo debajo del Tweet.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Mostrar origen del Tweet";
+"RESTORE_TWEET_LABELS_DETAIL" = "Muestra desde qué app se hizo el Tweet (por @nyaathea).";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Confirmar seguimiento";
 "FOLLOW_CONFIRM_DETAIL" = "Pide confirmación antes de seguir a alguien.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Elegir fuente en negrita";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Mostrar origen del Tweet (beta)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Muestra desde qué app se hizo el Tweet (por @nyaathea).";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Responder en navegador integrado";
 "REPLY_IN_WEBVIEW_DETAIL" = "Abre el cuadro de respuesta en un navegador integrado para evitar la attestation.";
 

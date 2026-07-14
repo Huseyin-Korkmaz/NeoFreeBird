@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Yanıt bağlamını geri yükle";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Tweetlerin altında yanıt verilen kişileri gösterir.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Tweet kaynağını göster";
+"RESTORE_TWEET_LABELS_DETAIL" = "Tweet’in hangi uygulamayla atıldığını gösterir (@nyaathea tarafından).";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Takip onayı";
 "FOLLOW_CONFIRM_DETAIL" = "Birini takip etmeden önce onay iste.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Kalın yazı tipi seç";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Tweet kaynağını göster (beta)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Tweet’in hangi uygulamayla atıldığını gösterir (@nyaathea tarafından).";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Web görünümünde yanıtla";
 "REPLY_IN_WEBVIEW_DETAIL" = "Attestation'dan kaçınmak için yanıt kutusunu web görünümünde aç.";
 

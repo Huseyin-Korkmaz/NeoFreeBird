@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Restore reply context";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Shows the people that are being replied to under Tweets.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Show Tweet source labels";
+"RESTORE_TWEET_LABELS_DETAIL" = "Shows what client Tweets were made from.";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Confirm follows";
 "FOLLOW_CONFIRM_DETAIL" = "Ask before following someone.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Choose a bold font";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Show Tweet source labels (beta)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Shows what client Tweets were made from.";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Reply in web view";
 "REPLY_IN_WEBVIEW_DETAIL" = "Open the reply box in a web view to avoid attestation.";
 

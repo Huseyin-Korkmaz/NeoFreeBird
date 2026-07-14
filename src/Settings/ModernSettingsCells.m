@@ -10,8 +10,6 @@
 #import "Core/BHTManager.h"
 #import "ThemeColor/BHDimPalette.h"
 
-extern UIColor *BHTCurrentAccentColor(void);
-
 @implementation ModernSettingsTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -338,7 +336,6 @@ extern UIColor *BHTCurrentAccentColor(void);
     id colorPalette = [[settings currentColorPalette] colorPalette];
     self.titleLabel.textColor = [colorPalette performSelector:@selector(textColor)];
     self.subtitleLabel.textColor = [colorPalette performSelector:@selector(tabBarItemColor)];
-    self.toggleSwitch.onTintColor = BHTCurrentAccentColor();
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

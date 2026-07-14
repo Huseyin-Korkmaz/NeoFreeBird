@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Antwortkontext wiederherstellen";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Zeigt unter dem Tweet an, auf wen geantwortet wurde.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Tweet-Quellenbeschriftungen anzeigen";
+"RESTORE_TWEET_LABELS_DETAIL" = "Zeigt, mit welchem Client der Tweet erstellt wurde.";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Folgen bestätigen";
 "FOLLOW_CONFIRM_DETAIL" = "Vor dem Folgen nachfragen.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Eine fette Schriftart wählen";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Tweet-Quellenbeschriftungen anzeigen (Beta)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Zeigt, mit welchem Client der Tweet erstellt wurde.";
-
 "REPLY_IN_WEBVIEW_TITLE" = "In Webansicht antworten";
 "REPLY_IN_WEBVIEW_DETAIL" = "Öffnet das Antwortfeld in einer Webansicht, um Attestation zu umgehen.";
 

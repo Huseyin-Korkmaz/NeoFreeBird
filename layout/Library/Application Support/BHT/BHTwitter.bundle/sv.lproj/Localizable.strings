@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Återställ svarssammanhang";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Visar vilka personer som besvaras under Tweets.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Visa Tweet-källor";
+"RESTORE_TWEET_LABELS_DETAIL" = "Visar vilken klient Tweeten skapades från (av @nyaathea).";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Bekräfta följningar";
 "FOLLOW_CONFIRM_DETAIL" = "Fråga innan du följer någon.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Välj fetstil";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Visa Tweet-källor (beta)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Visar vilken klient Tweeten skapades från (av @nyaathea).";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Svara i webbvy";
 "REPLY_IN_WEBVIEW_DETAIL" = "Öppna svarsrutan i en webbvy för att undvika attestation.";
 

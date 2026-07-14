@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Pulihkan Konteks Balasan";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Menampilkan kepada siapa balasan ditujukan di bawah Tweet.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Tampilkan label sumber Tweet";
+"RESTORE_TWEET_LABELS_DETAIL" = "Tampilkan dari aplikasi mana Tweet dibuat (oleh @nyaathea).";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Konfirmasi follow";
 "FOLLOW_CONFIRM_DETAIL" = "Tanya dulu sebelum mengikuti akun.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Pilih font tebal";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Tampilkan label sumber Tweet (beta)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Tampilkan dari aplikasi mana Tweet dibuat (oleh @nyaathea).";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Balas di web view";
 "REPLY_IN_WEBVIEW_DETAIL" = "Buka kotak balasan di web view untuk menghindari attestation.";
 

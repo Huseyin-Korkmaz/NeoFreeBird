@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "还原回复上下文";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "显示在推文中被回复的人。";
 
+"RESTORE_TWEET_LABELS_TITLE" = "显示推文来源";
+"RESTORE_TWEET_LABELS_DETAIL" = "显示推文是从哪个客户端发布的（来自 @nyaathea）。";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "确认关注";
 "FOLLOW_CONFIRM_DETAIL" = "关注前弹出确认提示。";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "选择粗体字体";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "显示推文来源（测试）";
-"RESTORE_TWEET_LABELS_DETAIL" = "显示推文是从哪个客户端发布的（来自 @nyaathea）。";
-
 "REPLY_IN_WEBVIEW_TITLE" = "在网页视图中回复";
 "REPLY_IN_WEBVIEW_DETAIL" = "在网页视图中打开回复框以避开 attestation。";
 

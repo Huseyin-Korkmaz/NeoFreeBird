@@ -9,10 +9,11 @@
 //
 // Twitter removed the "via Twitter for iPhone" source line from the tweet detail
 // footer. The source is no longer present in the on-device status models, so we
-// fetch it from the legacy conversation API using the signed-in account's own
-// cookies and cache it keyed by tweet ID. The label is then injected into the
-// detail footer by appending it to the footer item's time string, which the
-// native footer builder renders for us. Original idea by @nyaathea.
+// fetch it from x.com's web GraphQL TweetDetail endpoint — reusing the same web
+// session (harvested auth_token + ct0 cookies) that WebCreateTweet.x establishes —
+// and cache it keyed by tweet ID. The label is then injected into the detail footer
+// by appending it to the footer item's time string, which the native footer builder
+// renders for us. Original idea by @nyaathea.
 
 // Shared with Branding.x for source-label coloring (declared in BHTHookHelpers.h).
 NSMutableDictionary *tweetSources = nil;
@@ -34,6 +35,19 @@ static char kBHTFooterObservingKey;     // whether a footer text view registered
 static NSString * const kBHTSourceBearer =
     @"Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
 
+// TweetDetail persisted-query id. Web-client specific and can rotate; a stale value
+// just yields an unavailable label rather than a wrong one.
+static NSString * const kBHTTweetDetailQueryID = @"rZA6K31W4E90vZKBmxXV3g";
+
+// JSON-serialize `object` and percent-encode it for a GraphQL query parameter.
+static NSString *BHT_encodedQueryParameter(id object) {
+    NSData *data = [NSJSONSerialization dataWithJSONObject:object options:0 error:nil];
+    if (!data) return nil;
+
+    NSString *json = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return [json stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
+}
+
 // --- Model / view seams verified against classdump/12.3 (T1Twitter.c) ---
 
 @interface T1ConversationFooterItem : NSObject
@@ -48,9 +62,10 @@ static NSString * const kBHTSourceBearer =
 // internals this rewrite adds.
 @interface TweetSourceHelper (BHTSourceLabels)
 + (NSString *)unavailableString;
-+ (NSDictionary *)currentCookies;
 + (void)pruneCacheIfNeeded;
 + (NSString *)labelFromSourceHTML:(NSString *)html;
++ (NSURL *)tweetDetailURLForTweetID:(NSString *)tweetID;
++ (NSString *)sourceHTMLFromTweetDetail:(NSDictionary *)json forTweetID:(NSString *)tweetID;
 + (void)markTweetID:(NSString *)tweetID unavailable:(BOOL)unavailable withSource:(NSString *)source;
 + (void)retryOrFailTweetID:(NSString *)tweetID;
 @end
@@ -61,21 +76,57 @@ static NSString * const kBHTSourceBearer =
     return [[BHTBundle sharedBundle] localizedStringForKey:@"SOURCE_UNAVAILABLE"];
 }
 
-// Both cookies must belong to the signed-in account for the request to authorize.
-+ (NSDictionary *)currentCookies {
-    NSMutableDictionary *cookies = [NSMutableDictionary dictionary];
-    NSArray *domains = @[@"https://x.com", @"https://twitter.com", @"https://api.twitter.com", @"https://api.x.com"];
+// Builds the web GraphQL TweetDetail URL for a single tweet. `source` isn't gated
+// behind any feature flag, so the client's large `features` block is omitted; only
+// the query's required `variables` are sent (x rejects the request otherwise).
++ (NSURL *)tweetDetailURLForTweetID:(NSString *)tweetID {
+    NSDictionary *variables = @{
+        @"focalTweetId": tweetID,
+        @"with_rux_injections": @NO,
+        @"rankingMode": @"Relevance",
+        @"includePromotedContent": @NO,
+        @"withCommunity": @YES,
+        @"withQuickPromoteEligibilityTweetFields": @YES,
+        @"withBirdwatchNotes": @YES,
+        @"withVoice": @YES,
+    };
 
-    for (NSString *domain in domains) {
-        NSURL *url = [NSURL URLWithString:domain];
-        for (NSHTTPCookie *cookie in [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:url]) {
-            if (([cookie.name isEqualToString:@"ct0"] || [cookie.name isEqualToString:@"auth_token"]) && cookie.value.length) {
-                cookies[cookie.name] = cookie.value;
-            }
+    NSString *encodedVariables = BHT_encodedQueryParameter(variables);
+    if (encodedVariables.length == 0) {
+        return nil;
+    }
+
+    NSString *urlString = [NSString stringWithFormat:
+        @"https://x.com/i/api/graphql/%@/TweetDetail?variables=%@",
+        kBHTTweetDetailQueryID, encodedVariables];
+    return [NSURL URLWithString:urlString];
+}
+
+// Pulls the focal tweet's raw source markup out of a TweetDetail response. The
+// conversation also carries replies, so we match the entry by rest_id.
++ (NSString *)sourceHTMLFromTweetDetail:(NSDictionary *)json forTweetID:(NSString *)tweetID {
+    NSDictionary *conversation = json[@"data"][@"threaded_conversation_with_injections_v2"];
+    NSArray *instructions = conversation[@"instructions"];
+    if (![instructions isKindOfClass:[NSArray class]]) return nil;
+
+    for (NSDictionary *instruction in instructions) {
+        NSArray *entries = instruction[@"entries"];
+        if (![entries isKindOfClass:[NSArray class]]) continue;
+
+        for (NSDictionary *entry in entries) {
+            NSDictionary *result = entry[@"content"][@"itemContent"][@"tweet_results"][@"result"];
+            if (![result isKindOfClass:[NSDictionary class]]) continue;
+
+            // TweetWithVisibilityResults nests the real tweet one level down.
+            NSDictionary *tweet = [result[@"tweet"] isKindOfClass:[NSDictionary class]] ? result[@"tweet"] : result;
+            if (![tweet[@"rest_id"] isEqualToString:tweetID]) continue;
+
+            NSString *source = tweet[@"source"];
+            return [source isKindOfClass:[NSString class]] ? source : nil;
         }
     }
 
-    return cookies;
+    return nil;
 }
 
 // Keeps the cache from growing without bound by dropping resolved/unavailable entries.
@@ -159,15 +210,17 @@ static NSString * const kBHTSourceBearer =
     NSString *existing = tweetSources[tweetID];
     if (existing.length > 0 && ![existing isEqualToString:[self unavailableString]]) return;
 
-    NSDictionary *cookies = [self currentCookies];
-    if (!cookies[@"ct0"] || !cookies[@"auth_token"]) {
-        [self markTweetID:tweetID unavailable:YES withSource:nil];
+    NSDictionary *credentials = BHT_currentWebCredentials();
+    NSString *authToken = credentials[@"auth_token"];
+    NSString *ct0 = credentials[@"ct0"];
+    if (authToken.length == 0 || ct0.length == 0) {
+        // The web session may not be harvested yet on a cold start; retry rather than
+        // giving up, so it recovers once the prewarmed session lands.
+        [self retryOrFailTweetID:tweetID];
         return;
     }
 
-    NSString *urlString = [NSString stringWithFormat:
-        @"https://api.twitter.com/2/timeline/conversation/%@.json?tweet_mode=extended", tweetID];
-    NSURL *url = [NSURL URLWithString:urlString];
+    NSURL *url = [self tweetDetailURLForTweetID:tweetID];
     if (!url) {
         [self markTweetID:tweetID unavailable:YES withSource:nil];
         return;
@@ -175,19 +228,17 @@ static NSString * const kBHTSourceBearer =
 
     fetchPending[tweetID] = @(YES);
 
-    NSMutableArray *cookiePairs = [NSMutableArray array];
-    for (NSString *name in cookies) {
-        [cookiePairs addObject:[NSString stringWithFormat:@"%@=%@", name, cookies[name]]];
-    }
-
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     request.HTTPMethod = @"GET";
     request.timeoutInterval = 10.0;
-    [request setValue:kBHTSourceBearer forHTTPHeaderField:@"Authorization"];
+    request.HTTPShouldHandleCookies = NO;
+    [request setValue:kBHTSourceBearer forHTTPHeaderField:@"authorization"];
     [request setValue:@"OAuth2Session" forHTTPHeaderField:@"x-twitter-auth-type"];
-    [request setValue:@"1" forHTTPHeaderField:@"x-twitter-active-user"];
-    [request setValue:cookies[@"ct0"] forHTTPHeaderField:@"x-csrf-token"];
-    [request setValue:[cookiePairs componentsJoinedByString:@"; "] forHTTPHeaderField:@"Cookie"];
+    [request setValue:@"yes" forHTTPHeaderField:@"x-twitter-active-user"];
+    [request setValue:@"en" forHTTPHeaderField:@"x-twitter-client-language"];
+    [request setValue:ct0 forHTTPHeaderField:@"x-csrf-token"];
+    [request setValue:[NSString stringWithFormat:@"auth_token=%@; ct0=%@", authToken, ct0]
+   forHTTPHeaderField:@"Cookie"];
 
     NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request
                                                                 completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
@@ -205,14 +256,13 @@ static NSString * const kBHTSourceBearer =
             return;
         }
 
-        NSDictionary *tweets = json[@"globalObjects"][@"tweets"];
-        NSDictionary *tweet = tweets[tweetID];
-        if (![tweet isKindOfClass:[NSDictionary class]]) {
+        NSString *sourceHTML = [self sourceHTMLFromTweetDetail:json forTweetID:tweetID];
+        if (sourceHTML.length == 0) {
             [self markTweetID:tweetID unavailable:YES withSource:nil];
             return;
         }
 
-        NSString *label = [self labelFromSourceHTML:tweet[@"source"]];
+        NSString *label = [self labelFromSourceHTML:sourceHTML];
         if (label.length == 0) {
             label = [[BHTBundle sharedBundle] localizedStringForKey:@"UNKNOWN_SOURCE"];
         }

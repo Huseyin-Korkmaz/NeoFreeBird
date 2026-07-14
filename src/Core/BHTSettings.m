@@ -94,7 +94,8 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                     @{ @"key": @"disable_sensitive_tweet_warnings", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"bypass_age_verification", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"reply_sorting", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"restore_reply_context", @"default": @YES, @"type": @"toggle" }
+                    @{ @"key": @"restore_reply_context", @"default": @YES, @"type": @"toggle" },
+                    @{ @"key": @"restore_tweet_labels", @"default": @NO, @"type": @"toggle" }
                 ]
             },
             @"search": @{
@@ -119,7 +120,6 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"titleKey": @"MODERN_SETTINGS_EXPERIMENTAL_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_EXPERIMENTAL_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"restore_tweet_labels", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"reply_in_webview", @"default": @NO, @"type": @"toggle" }
                 ]
             },

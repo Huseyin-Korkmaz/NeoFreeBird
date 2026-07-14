@@ -486,7 +486,9 @@ void BHT_maybeHandleHarvestWebView(__unsafe_unretained id webViewController) {
 // MARK: - Prewarm
 
 void BHT_prewarmWebCookiesIfNeeded(void) {
-    if (!BHT_nativeCreateTweetInterceptEnabled()) {
+    // A web session is needed both for the CreateTweet rewrite and for restoring
+    // tweet source labels, so prewarm whenever either feature is on.
+    if (!BHT_nativeCreateTweetInterceptEnabled() && ![BHTSettings boolForKey:@"restore_tweet_labels"]) {
         return;
     }
 
@@ -842,6 +844,16 @@ id BHT_accountForAuthenticatedWebView(void) {
         }
     }
     return nil;
+}
+
+// The current web session's auth_token + ct0, for read-only web GraphQL GETs (e.g.
+// SourceLabels.x). Harvests the shared cookie jar first; nil until a session exists.
+NSDictionary *BHT_currentWebCredentials(void) {
+    BHT_harvestSharedCookies();
+    if (BHTWebAuthToken.length == 0 || BHTWebCT0.length == 0) {
+        return nil;
+    }
+    return @{ @"auth_token": BHTWebAuthToken, @"ct0": BHTWebCT0 };
 }
 
 // MARK: - Hooks

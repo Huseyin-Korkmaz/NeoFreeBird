@@ -204,39 +204,8 @@ static NSAttributedString *BHRestoreTwitterAttributed(NSAttributedString *input)
         return;
     }
 
-    NSString *currentText = model.attributedString.string;
     NSMutableAttributedString *newString = nil;
     BOOL textChanged = NO;
-
-    // --- Tweet source label colouring ---
-    if ([BHTSettings boolForKey:@"restore_tweet_labels"] && tweetSources.count > 0) {
-        NSString *unavailable = [[BHTBundle sharedBundle] localizedStringForKey:@"SOURCE_UNAVAILABLE"];
-        for (NSString *sourceText in tweetSources.allValues) {
-            if (sourceText.length > 0 &&
-                ![sourceText isEqualToString:unavailable] &&
-                [currentText containsString:sourceText]) {
-
-                NSRange sourceRange = [currentText rangeOfString:sourceText];
-                if (sourceRange.location != NSNotFound) {
-                    UIColor *existingColor = [model.attributedString attribute:NSForegroundColorAttributeName
-                                                                       atIndex:sourceRange.location
-                                                                effectiveRange:NULL];
-                    UIColor *accentColor = BHTCurrentAccentColor();
-
-                    if (!existingColor || ![existingColor isEqual:accentColor]) {
-                        if (!newString) {
-                            newString = [[NSMutableAttributedString alloc] initWithAttributedString:model.attributedString];
-                        }
-                        // Add only the colour attribute, don't overwrite the run.
-                        [newString addAttribute:NSForegroundColorAttributeName
-                                          value:accentColor
-                                          range:sourceRange];
-                    }
-                }
-                break; // Only colour the first matching source.
-            }
-        }
-    }
 
     // --- Restore Twitter terminology (never on tweet bodies) ---
     if ([BHTSettings boolForKey:@"restore_twitter_names"] &&

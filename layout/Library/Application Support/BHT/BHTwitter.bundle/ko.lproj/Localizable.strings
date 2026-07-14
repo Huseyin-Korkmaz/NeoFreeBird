@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "답글 타래 표시 방법 복원";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "트윗 아래에서 답장을 받은 사람들을 표시합니다.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "트윗 소스 라벨 표시";
+"RESTORE_TWEET_LABELS_DETAIL" = "트윗이 어떤 클라이언트로 작성되었는지 표시합니다.";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "팔로우 시 확인 창 표시";
 "FOLLOW_CONFIRM_DETAIL" = "누군가를 팔로우하기 전에 다시 한 번 물어봅니다.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Bold 글꼴 선택";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "트윗 소스 라벨 표시 (베타)";
-"RESTORE_TWEET_LABELS_DETAIL" = "트윗이 어떤 클라이언트로 작성되었는지 표시합니다.";
-
 "REPLY_IN_WEBVIEW_TITLE" = "웹뷰에서 답글 작성";
 "REPLY_IN_WEBVIEW_DETAIL" = "인증(attestation)을 피하기 위해 답글 작성 창을 웹뷰에서 엽니다.";
 

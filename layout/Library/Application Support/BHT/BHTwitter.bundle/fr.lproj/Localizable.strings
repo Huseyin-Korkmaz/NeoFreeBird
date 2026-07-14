@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Restaurer le contexte de réponse";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Affiche les personnes auxquelles la réponse est adressée sous les Tweets.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Afficher la source du Tweet";
+"RESTORE_TWEET_LABELS_DETAIL" = "Affiche l'app utilisée pour tweeter (par @nyaathea).";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Confirmer l’abonnement";
 "FOLLOW_CONFIRM_DETAIL" = "Demande avant de suivre quelqu’un.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Choisir une police en gras";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Afficher la source du Tweet (bêta)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Affiche l'app utilisée pour tweeter (par @nyaathea).";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Répondre dans une vue web";
 "REPLY_IN_WEBVIEW_DETAIL" = "Ouvre la zone de réponse dans une vue web pour éviter l'attestation.";
 

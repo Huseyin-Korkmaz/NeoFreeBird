@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Vrati kontekst odgovora";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Prikazuje osobe na koje se odgovara ispod tweetova.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Prikaži izvor tweeta";
+"RESTORE_TWEET_LABELS_DETAIL" = "Prikazuje s koje je aplikacije tweet objavljen (@nyaathea).";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Potvrda praćenja";
 "FOLLOW_CONFIRM_DETAIL" = "Zatraži potvrdu prije praćenja korisnika.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Odaberi podebljani font";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Prikaži izvor tweeta (beta)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Prikazuje s koje je aplikacije tweet objavljen (@nyaathea).";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Odgovori u pregledniku";
 "REPLY_IN_WEBVIEW_DETAIL" = "Otvori okvir za odgovor u pregledniku kako bi se izbjegla atestacija.";
 

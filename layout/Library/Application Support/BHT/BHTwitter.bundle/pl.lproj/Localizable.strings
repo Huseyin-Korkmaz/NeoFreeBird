@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Przywróć kontekst odpowiedzi";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Pokazuje osoby, którym odpowiadasz, pod Tweetami.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Pokaż etykiety źródła Tweeta";
+"RESTORE_TWEET_LABELS_DETAIL" = "Pokazuje, z jakiej aplikacji wysłano Tweeta.";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Potwierdzaj obserwowanie";
 "FOLLOW_CONFIRM_DETAIL" = "Pytaj przed zaobserwowaniem kogoś.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Wybierz pogrubioną czcionkę";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Pokaż etykiety źródła Tweeta (beta)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Pokazuje, z jakiej aplikacji wysłano Tweeta.";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Odpowiadaj w przeglądarce w aplikacji";
 "REPLY_IN_WEBVIEW_DETAIL" = "Otwiera pole odpowiedzi w przeglądarce w aplikacji, aby uniknąć atestacji.";
 

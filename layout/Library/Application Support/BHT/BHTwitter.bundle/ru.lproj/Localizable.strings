@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "Показать контекст ответа";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "Показывает, кому адресован ответ в твите.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "Показать источник твита";
+"RESTORE_TWEET_LABELS_DETAIL" = "Показывает, через какое приложение сделан твит (от @nyaathea).";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Подтверждение подписки";
 "FOLLOW_CONFIRM_DETAIL" = "Спрашивать перед подпиской.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Выбери жирный шрифт";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "Показать источник твита (бета)";
-"RESTORE_TWEET_LABELS_DETAIL" = "Показывает, через какое приложение сделан твит (от @nyaathea).";
-
 "REPLY_IN_WEBVIEW_TITLE" = "Отвечать в веб-браузере";
 "REPLY_IN_WEBVIEW_DETAIL" = "Открывать окно ответа в веб-браузере, чтобы избежать аттестации.";
 

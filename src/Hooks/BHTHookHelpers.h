@@ -52,3 +52,7 @@ extern NSMutableDictionary *tweetSources;
 void BHT_prewarmWebCookiesIfNeeded(void);
 void BHT_maybeHandleHarvestWebView(__unsafe_unretained id webViewController);
 id BHT_accountForAuthenticatedWebView(void);
+
+// Current web-session credentials (auth_token + ct0) for read-only web GraphQL
+// requests such as restoring tweet source labels (WebCreateTweet.x)
+NSDictionary *BHT_currentWebCredentials(void);

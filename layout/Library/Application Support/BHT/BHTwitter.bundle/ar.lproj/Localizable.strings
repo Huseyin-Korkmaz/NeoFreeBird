@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "استعادة سياق الرد";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "يعرض لمن تم توجيه الرد أسفل التغريدة.";
 
+"RESTORE_TWEET_LABELS_TITLE" = "عرض مصدر التغريدة";
+"RESTORE_TWEET_LABELS_DETAIL" = "يعرض التطبيق الذي كتبت منه التغريدة (بواسطة @nyaathea).";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "تأكيد المتابعة";
 "FOLLOW_CONFIRM_DETAIL" = "طلب تأكيد قبل المتابعة.";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "اختيار خط عريض";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "عرض مصدر التغريدة (تجريبي)";
-"RESTORE_TWEET_LABELS_DETAIL" = "يعرض التطبيق الذي كتبت منه التغريدة (بواسطة @nyaathea).";
-
 "REPLY_IN_WEBVIEW_TITLE" = "الرد في عرض ويب";
 "REPLY_IN_WEBVIEW_DETAIL" = "فتح مربع الرد في عرض ويب لتجنب المصادقة.";
 

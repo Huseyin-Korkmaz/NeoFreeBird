@@ -112,6 +112,9 @@
 "RESTORE_REPLY_CONTEXT_TITLE" = "返信コンテキストを復元";
 "RESTORE_REPLY_CONTEXT_DETAIL" = "ツイートの下に返信されている人を表示します。";
 
+"RESTORE_TWEET_LABELS_TITLE" = "ツイートのソースラベルを表示";
+"RESTORE_TWEET_LABELS_DETAIL" = "どのクライアントからツイートされたかを表示します。";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "フォローの確認";
 "FOLLOW_CONFIRM_DETAIL" = "誰かをフォローする際に確認ダイアログを表示します。";
@@ -200,9 +203,6 @@
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "太字のフォントを選択";
 
 /*Labs*/
-"RESTORE_TWEET_LABELS_TITLE" = "ツイートのソースラベルを表示 (ベータ版)";
-"RESTORE_TWEET_LABELS_DETAIL" = "どのクライアントからツイートされたかを表示します。";
-
 "REPLY_IN_WEBVIEW_TITLE" = "ウェブビューで返信";
 "REPLY_IN_WEBVIEW_DETAIL" = "アテステーションを回避するために、返信ボックスをウェブビューで開きます。";
 
