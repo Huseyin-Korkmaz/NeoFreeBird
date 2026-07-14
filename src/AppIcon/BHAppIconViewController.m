@@ -10,7 +10,7 @@
 #import "BHAppIconItem.h"
 #import "BHAppIconCell.h"
 #import "Core/BHTBundle.h"
-#import "ThemeColor/BHDimPalette.h"
+#import "ThemeColor/BHTPalette.h"
 #import <UIKit/UIKit.h>
 #import "Core/TwitterChirpFont.h"
 
@@ -52,9 +52,9 @@ extern UIColor *BHTCurrentAccentColor(void);
     self.appIconCollectionView.delegate   = self;
     self.appIconCollectionView.dataSource = self;
     self.appIconCollectionView.translatesAutoresizingMaskIntoConstraints = NO;
-    self.appIconCollectionView.backgroundColor = [BHDimPalette currentBackgroundColor];
+    self.appIconCollectionView.backgroundColor = [BHTPalette currentBackgroundColor];
 
-    self.view.backgroundColor = [BHDimPalette currentBackgroundColor];
+    self.view.backgroundColor = [BHTPalette currentBackgroundColor];
 
     [self.view addSubview:self.appIconCollectionView];
 

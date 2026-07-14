@@ -16,7 +16,7 @@
 #import "Settings/Pages/DebugSettingsViewController.h"
 #import "Core/BHTManager.h"
 #import "Core/BHTBundle.h"
-#import "ThemeColor/BHDimPalette.h"
+#import "ThemeColor/BHTPalette.h"
 #import "Colours/Colours.h"
 
 @interface ModernSettingsViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -37,7 +37,7 @@
     if (section == 0) {
         // Top subtitle header
         UIView *headerView = [[UIView alloc] init];
-        headerView.backgroundColor = [BHDimPalette currentBackgroundColor];
+        headerView.backgroundColor = [BHTPalette currentBackgroundColor];
 
         UILabel *subtitleLabel = [[UILabel alloc] init];
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -90,7 +90,7 @@
 
 - (UIView *)headerViewWithTitle:(NSString *)title {
     UIView *headerView = [[UIView alloc] init];
-    headerView.backgroundColor = [BHDimPalette currentBackgroundColor];
+    headerView.backgroundColor = [BHTPalette currentBackgroundColor];
 
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -234,7 +234,7 @@
 }
 
 - (void)setupNavigationBar {
-    self.view.backgroundColor = [BHDimPalette currentBackgroundColor];
+    self.view.backgroundColor = [BHTPalette currentBackgroundColor];
     if (self.account) {
         self.navigationItem.titleView = [objc_getClass("TFNTitleView") titleViewWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"NFB_SETTINGS_TITLE"] subtitle:self.account.displayUsername];
     } else {
@@ -247,7 +247,7 @@
     self.tableView.translatesAutoresizingMaskIntoConstraints = NO;
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    self.tableView.backgroundColor = [BHDimPalette currentBackgroundColor];
+    self.tableView.backgroundColor = [BHTPalette currentBackgroundColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.estimatedRowHeight = 80;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -271,7 +271,7 @@
 
 - (void)setupFooterLabel {
     UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 60)];
-    footerView.backgroundColor = [BHDimPalette currentBackgroundColor];
+    footerView.backgroundColor = [BHTPalette currentBackgroundColor];
 
     UILabel *footerLabel = [[UILabel alloc] init];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -413,7 +413,7 @@
         [devChevron.widthAnchor constraintEqualToConstant:18],
         [devChevron.heightAnchor constraintEqualToConstant:18]
     ]];
-    cell.backgroundColor = [BHDimPalette currentBackgroundColor];
+    cell.backgroundColor = [BHTPalette currentBackgroundColor];
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
 }
 

@@ -13,7 +13,7 @@
 #import "BHColorSwatchControl.h"
 #import "Core/BHTBundle.h"
 #import "Headers/TWHeaders.h"
-#import "ThemeColor/BHDimPalette.h"
+#import "ThemeColor/BHTPalette.h"
 #import <UIKit/UIKit.h>
 #import "Core/TwitterChirpFont.h"
 
@@ -53,7 +53,7 @@ static UIColor *BHNativeAccentColor(NSUInteger option) {
     [super viewDidLoad];
 
     self.navigationController.navigationBar.prefersLargeTitles = NO;
-    self.view.backgroundColor = [BHDimPalette currentBackgroundColor];
+    self.view.backgroundColor = [BHTPalette currentBackgroundColor];
 
     UILabel *detail = [UILabel new];
     detail.translatesAutoresizingMaskIntoConstraints = NO;

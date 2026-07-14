@@ -17,7 +17,7 @@
 #import "Colours/Colours.h"
 #import "Core/BHTManager.h"
 #import "Core/BHTSettings.h"
-#import "ThemeColor/BHDimPalette.h"
+#import "ThemeColor/BHTPalette.h"
 #import <math.h>
 #import "Core/BHTBundle.h"
 #import "LegacyLogin/BHTLegacyLoginViewController.h"
