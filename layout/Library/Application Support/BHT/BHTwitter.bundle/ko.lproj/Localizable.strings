@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grok 분석 버튼 제거";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "사이드바에서 Grok 숨기기";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "자동 번역 비활성화";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "게시물이나 프로필을 자동으로 번역하지 않습니다.";
 

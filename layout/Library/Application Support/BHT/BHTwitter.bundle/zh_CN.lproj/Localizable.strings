@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "隐藏 Grok 分析按钮";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "隐藏侧边栏中的 Grok";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "禁用自动翻译";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "不再自动翻译帖子或简介。";
 

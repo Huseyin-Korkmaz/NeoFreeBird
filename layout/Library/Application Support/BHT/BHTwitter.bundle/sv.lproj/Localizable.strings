@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Dölj Grok-analysknappar";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Dölj Grok i sidofältet";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Inaktivera automatisk översättning";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Översätt aldrig inlägg eller biografier automatiskt.";
 

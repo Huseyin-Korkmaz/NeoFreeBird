@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Sembunyikan Tombol Analisis Grok";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Sembunyikan Grok di bilah samping";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Nonaktifkan terjemahan otomatis";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Jangan pernah menerjemahkan postingan atau bio secara otomatis.";
 

@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Sakrij Grok gumb za analizu";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Sakrij Grok u bočnoj traci";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Isključi automatsko prevođenje";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Nikad automatski ne prevodi objave ni biografije.";
 

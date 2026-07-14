@@ -600,6 +600,39 @@ static id BHTListCellPreferredAttrs(UIView *self, SEL _cmd, id attributes) {
     }
 }
 
+// MARK: Grok side-drawer row
+
+// The drawer surfaces an in-app Grok row whenever the Grok tab is absent from the
+// tab bar (where the tab-bar editor hides it by default). Its builder skips the
+// row when the Grok panel (14) is among the visible panel IDs, so inject it into
+// the dash's visibility snapshot only - other readers of visiblePanelIDs (like
+// the open-Grok navigation) must keep seeing the real tab state.
+
+static __thread BOOL BHTDashPanelIDQuery = NO;
+
+%hook T1DashContentController
+
+- (void)updateVisiblePanelIDs {
+    BHTDashPanelIDQuery = YES;
+    %orig;
+    BHTDashPanelIDQuery = NO;
+}
+
+%end
+
+%hook T1TabbedAppNavigationViewController
+
+- (NSArray *)visiblePanelIDsForAppNavigation:(id)appNavigation {
+    NSArray *panelIDs = %orig;
+    if (BHTDashPanelIDQuery && [BHTSettings boolForKey:@"hide_grok_sidebar"] &&
+        ![panelIDs containsObject:@14]) {
+        return [panelIDs arrayByAddingObject:@14];
+    }
+    return panelIDs;
+}
+
+%end
+
 // MARK: Sensitive media warnings
 
 %hook TFNTwitterStatus

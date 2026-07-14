@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Ocultar botón de análisis Grok";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Ocultar Grok en la barra lateral";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Desactivar la traducción automática";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "No traducir publicaciones ni biografías automáticamente.";
 

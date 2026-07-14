@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Скрыть кнопки анализа Grok";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Скрыть Grok в боковой панели";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Отключить автоперевод";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Не переводить посты и описания профилей автоматически.";
 

@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Ukryj przyciski analizy Grok";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Ukryj Grok na pasku bocznym";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Wyłącz automatyczne tłumaczenie";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Nigdy nie tłumacz automatycznie wpisów ani opisów profili.";
 

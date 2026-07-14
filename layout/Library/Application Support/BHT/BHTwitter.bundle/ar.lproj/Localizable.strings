@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "إخفاء أزرار تحليل Grok";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "إخفاء Grok من الشريط الجانبي";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "تعطيل الترجمة التلقائية";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "عدم ترجمة المنشورات أو النبذات التعريفية تلقائيًا.";
 

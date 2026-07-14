@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grokボタンを非表示";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "サイドバーのGrokを非表示";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "自動翻訳を無効化";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "ポストやプロフィールを自動的に翻訳しません。";
 

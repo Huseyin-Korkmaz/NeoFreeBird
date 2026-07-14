@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grok analiz düğmelerini gizle";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Kenar çubuğunda Grok'u gizle";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Otomatik çeviriyi devre dışı bırak";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Gönderileri ve biyografileri asla otomatik çevirme.";
 

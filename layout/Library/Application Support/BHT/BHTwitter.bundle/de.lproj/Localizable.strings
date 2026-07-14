@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Grok-Analyse-Schaltfläche ausblenden";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Grok in der Seitenleiste ausblenden";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Automatische Übersetzung deaktivieren";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Beiträge und Bios nie automatisch übersetzen.";
 

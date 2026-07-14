@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Hide Grok analyze buttons";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Hide Grok in sidebar";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Disable auto translate";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Never translate posts or bios automatically.";
 

@@ -101,6 +101,8 @@
 
 "HIDE_GROK_ANALYZE_TITLE" = "Сховати кнопки аналізу Grok";
 
+"HIDE_GROK_SIDEBAR_TITLE" = "Сховати Grok у бічній панелі";
+
 "DISABLE_AUTO_TRANSLATE_TITLE" = "Вимкнути автопереклад";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "Не перекладати дописи й біографії автоматично.";
 
