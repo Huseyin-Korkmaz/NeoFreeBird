@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Općenito";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Prilagodite svoj feed fontovima, temama i još mnogo toga.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Uklonite oglase i nered iz feeda, zaključajte aplikaciju i još mnogo toga.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Mediji";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Preuzimajte videozapise, omogućite vremenske oznake i još mnogo toga.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Bez oglasa i otključajte Blue značajke poput Poništi tweet, teme i prilagođene ikone.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Izgled";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Učinite Twitter svojim uz teme, prilagođene ikone aplikacije, fontove i još mnogo toga.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Sakrijte Grok gumbe i upravljajte automatskim prijevodima.";

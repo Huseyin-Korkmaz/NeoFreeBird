@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Allmänt";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Anpassa flödet med egna typsnitt, färger för navigering och mer.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Ta bort annonser och skräp från flödet, lås appen och mer.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Foton och videor";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Ladda ner videor, aktivera tidsstämplar med mera.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Få en reklamfri upplevelse och lås upp Blue-funktioner som Ångra Tweet, teman och appikoner.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Utseende";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Gör Twitter till ditt eget med teman, egna appikoner, typsnitt och mer.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Dölj Grok-knappar och hantera automatiska översättningar.";

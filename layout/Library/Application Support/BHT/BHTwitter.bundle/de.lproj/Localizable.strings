@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Allgemein";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Passe Schriftarten, Farben und mehr in deiner Timeline an.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Entferne Werbung und Überflüssiges aus der Timeline, sperre die App und mehr.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Medien";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Videos herunterladen, Zeitstempel aktivieren u. v. m.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Werbefrei tweeten und Funktionen wie Rückgängig, Designs und Symbole freischalten.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Aussehen";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Mach Twitter zu deinem eigenen mit Designs, eigenen App-Symbolen, Schriftarten und mehr.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Grok-Schaltflächen ausblenden und automatische Übersetzungen steuern.";

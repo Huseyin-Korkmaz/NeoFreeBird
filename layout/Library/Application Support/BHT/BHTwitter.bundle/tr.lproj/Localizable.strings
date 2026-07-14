@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Genel";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Yazı tipi, renk ve daha fazlasını özelleştirerek zaman akışınızı kişiselleştirin.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Reklamları ve zaman akışındaki gereksiz öğeleri kaldırın, uygulamayı kilitleyin ve daha fazlası.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Medya";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Videoları indir, zaman etiketlerini etkinleştir ve daha fazlası.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Reklamsız deneyim ve Tweeti Geri Al, temalar ve simgeler gibi Blue özelliklerini açın.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Görünüm";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Temalar, özel uygulama simgeleri ve yazı tipleriyle Twitter'ı kişiselleştirin.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Grok düğmelerini gizleyin ve otomatik çeviriyi yönetin.";

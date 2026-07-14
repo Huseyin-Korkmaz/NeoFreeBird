@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Ogólne";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Uczyń oś czasu naprawdę swoją dzięki własnym czcionkom, motywowi paska nawigacji i wielu innym opcjom.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Usuń reklamy i zbędne elementy z osi czasu, zablokuj aplikację i wiele więcej.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Zdjęcia i wideo";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Pobieraj filmy, włącz znaczniki czasu i nie tylko.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Korzystaj bez reklam i odblokuj funkcje Blue, takie jak Cofnij Tweet, motywy i własne ikony.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Wygląd";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Uczyń Twittera naprawdę swoim dzięki motywom, własnym ikonom aplikacji, czcionkom i wielu innym opcjom.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Ukryj przyciski Grok i zarządzaj automatycznym tłumaczeniem.";

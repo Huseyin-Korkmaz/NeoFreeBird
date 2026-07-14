@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "General";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Make the timeline truly yours with custom fonts, navigation bar theming, and much more.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Remove ads and timeline clutter, lock the app, and much more.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Photos and videos";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Download videos, enable video timestamps, and more.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Get an ad-free experience and unlock Blue features like Undo Tweet, themes, and custom app icons.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Appearance";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Make Twitter truly yours with themes, custom app icons, fonts, and more.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Hide Grok buttons and control automatic translations.";

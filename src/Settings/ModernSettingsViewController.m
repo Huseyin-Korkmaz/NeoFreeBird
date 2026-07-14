@@ -9,8 +9,8 @@
 #import "Settings/ModernSettingsCells.h"
 #import "Settings/ModernSettingsPlaceholderViewController.h"
 #import "Settings/ModernSettingsPageViewController.h"
-#import "Settings/Pages/GeneralSettingsViewController.h"
-#import "Settings/Pages/TwitterBlueSettingsViewController.h"
+#import "Settings/Pages/AppearanceSettingsViewController.h"
+#import "Settings/Pages/TweetsSettingsViewController.h"
 #import "Settings/Pages/ProfilesSettingsViewController.h"
 #import "Settings/Pages/WebSettingsViewController.h"
 #import "Settings/Pages/DebugSettingsViewController.h"
@@ -158,12 +158,12 @@
         @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_LAYOUT_TITLE"],
            @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_LAYOUT_SUBTITLE"],
            @"icon": @"settings_stroke", @"action": @"showLayoutSettings" },
-        @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TWITTER_BLUE_TITLE"],
-           @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE"],
-           @"icon": @"verified_stroke", @"action": @"showTwitterBlueSettings" },
+        @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_APPEARANCE_TITLE"],
+           @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_APPEARANCE_SUBTITLE"],
+           @"icon": @"paintbrush_stroke", @"action": @"showAppearanceSettings" },
         @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_GROK_TITLE"],
            @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_GROK_SUBTITLE"],
-           @"icon": @"grok_stroke", @"action": @"showGrokSettings" },
+           @"icon": @"grok_icon_stroke", @"action": @"showGrokSettings" },
         @{ @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TWEETS_TITLE"],
            @"subtitle": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_TWEETS_SUBTITLE"],
            @"icon": @"quill", @"action": @"showTweetsSettings" },
@@ -494,12 +494,12 @@
 #pragma mark - Navigation to Sub-pages
 
 - (void)showLayoutSettings {
-    GeneralSettingsViewController *vc = [[GeneralSettingsViewController alloc] initWithAccount:self.account];
+    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"general"];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)showTwitterBlueSettings {
-    TwitterBlueSettingsViewController *vc = [[TwitterBlueSettingsViewController alloc] initWithAccount:self.account];
+- (void)showAppearanceSettings {
+    AppearanceSettingsViewController *vc = [[AppearanceSettingsViewController alloc] initWithAccount:self.account];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -519,7 +519,7 @@
 }
 
 - (void)showTweetsSettings {
-    ModernSettingsPageViewController *vc = [[ModernSettingsPageViewController alloc] initWithAccount:self.account pageKey:@"tweets"];
+    TweetsSettingsViewController *vc = [[TweetsSettingsViewController alloc] initWithAccount:self.account];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

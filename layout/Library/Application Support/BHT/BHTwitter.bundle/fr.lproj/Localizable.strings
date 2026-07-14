@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Général";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Personnalisez votre fil avec des polices, couleurs et plus encore.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Supprimez les pubs et les éléments superflus du fil, verrouillez l'app et plus encore.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Médias";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Téléchargez des vidéos, activez les horodatages, etc.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Profitez d'une expérience sans pub et de fonctions Blue comme Annuler le tweet, les thèmes et les icônes personnalisées.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Apparence";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Personnalisez Twitter avec des thèmes, des icônes d'app personnalisées, des polices et plus encore.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Masquez les boutons Grok et contrôlez les traductions automatiques.";

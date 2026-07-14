@@ -20,28 +20,27 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"settings": @[
                     @{ @"key": @"padlock", @"default": @NO },
                     @{ @"key": @"hide_who_to_follow", @"default": @YES },
+                    @{ @"key": @"hide_promoted", @"default": @YES },
+                    @{ @"key": @"hide_premium_offer", @"default": @YES },
                     @{ @"key": @"hide_spaces", @"default": @NO },
                     @{ @"key": @"hide_custom_timelines", @"default": @NO },
                     @{ @"key": @"no_tab_bar_hiding", @"default": @YES },
+                    @{ @"key": @"disable_rtl", @"default": @NO },
+                    @{ @"key": @"show_scroll_indicator", @"default": @NO }
+                ]
+            },
+            @"appearance": @{
+                @"titleKey": @"MODERN_SETTINGS_APPEARANCE_TITLE",
+                @"subtitleKey": @"MODERN_SETTINGS_APPEARANCE_SUBTITLE",
+                @"settings": @[
+                    @{ @"titleKey": @"THEME_OPTION_TITLE", @"action": @"showThemeViewController:", @"type": @"button" },
+                    @{ @"titleKey": @"APP_ICON_TITLE", @"action": @"showBHAppIconViewController:", @"type": @"button" },
+                    @{ @"titleKey": @"CUSTOM_TAB_BAR_OPTION_TITLE", @"action": @"showCustomTabBarVC:", @"type": @"button" },
                     @{ @"key": @"tab_bar_theming", @"default": @NO },
                     @{ @"key": @"restore_tab_labels", @"default": @NO },
-                    @{ @"key": @"disable_rtl", @"default": @NO },
-                    @{ @"key": @"show_scroll_indicator", @"default": @NO },
                     @{ @"key": @"custom_fonts", @"default": @NO },
                     @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"regular_font_button", @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE", @"action": @"showRegularFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_1", @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE" },
                     @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"bold_font_button", @"titleKey": @"BOLD_FONTS_PICKER_OPTION_TITLE", @"action": @"showBoldFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_2", @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE" }
-                ]
-            },
-            @"twitter_blue": @{
-                @"titleKey": @"MODERN_SETTINGS_TWITTER_BLUE_TITLE",
-                @"subtitleKey": @"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE",
-                @"settings": @[
-                    @{ @"type": @"compactButton", @"key": @"undo_tweet_timeout", @"default": @10, @"titleKey": @"UNDO_TWEET_TITLE", @"action": @"showUndoTimeoutPicker:" },
-                    @{ @"key": @"hide_promoted", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"hide_premium_offer", @"default": @YES, @"type": @"toggle" },
-                    @{ @"titleKey": @"THEME_OPTION_TITLE", @"action": @"showThemeViewController:", @"type": @"button" },
-                    @{ @"titleKey": @"APP_ICON_TITLE", @"action": @"showBHAppIconViewController:", @"type": @"button" },
-                    @{ @"titleKey": @"CUSTOM_TAB_BAR_OPTION_TITLE", @"action": @"showCustomTabBarVC:", @"type": @"button" }
                 ]
             },
             @"grok": @{
@@ -83,6 +82,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"titleKey": @"MODERN_SETTINGS_TWEETS_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_TWEETS_SUBTITLE",
                 @"settings": @[
+                    @{ @"type": @"compactButton", @"key": @"undo_tweet_timeout", @"default": @10, @"titleKey": @"UNDO_TWEET_TITLE", @"action": @"showUndoTimeoutPicker:" },
                     @{ @"key": @"tweet_to_image", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"like_confirm", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"tweet_confirm", @"default": @NO, @"type": @"toggle" },

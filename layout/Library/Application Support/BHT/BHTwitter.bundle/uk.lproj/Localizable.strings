@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Загальні";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Налаштуйте стрічку, шрифти, кольори тощо.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Приберіть рекламу та зайве зі стрічки, заблокуйте застосунок тощо.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Медіа";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Завантаження відео, часові мітки тощо.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Без реклами, функції Blue: «Скасувати твіт», теми, іконки.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Зовнішній вигляд";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Налаштуйте Twitter під себе: теми, власні іконки застосунку, шрифти тощо.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Приховайте кнопки Grok і керуйте автоперекладом.";

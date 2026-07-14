@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "一般";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "カスタムフォント、ナビゲーションバーのテーマなど、その他のオプションを使用してタイムラインを自分好みにカスタマイズできます。";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "広告やタイムラインの不要な項目を削除したり、アプリをロックしたりできます。";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "画像と動画";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "動画のダウンロード、タイムスタンプの有効化など。";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "広告の非表示、ツイートの取り消し、テーマ、カスタムアプリアイコンなどのTwitter Blue機能のロックを解除しましょう。";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "外観";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "テーマ、カスタムアプリアイコン、フォントなどでTwitterを自分好みにカスタマイズできます。";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Grokボタンの非表示や自動翻訳の管理ができます。";

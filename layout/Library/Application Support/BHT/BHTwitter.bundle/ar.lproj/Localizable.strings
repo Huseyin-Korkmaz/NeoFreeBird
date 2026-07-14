@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "عام";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "خصص الخطوط، الألوان، والمزيد من مظهر الخط الزمني الخاص بك.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "أزل الإعلانات وفوضى الخط الزمني، واقفل التطبيق، والمزيد.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "الوسائط";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "تنزيل الفيديوهات، تفعيل الطوابع الزمنية، والمزيد.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "تويتر الأزرق";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "تجربة خالية من الإعلانات والوصول لميزات Blue مثل التراجع عن التغريدة، السمات، وأيقونات مخصصة.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "المظهر";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "اجعل تويتر ملكك حقًا مع السمات، أيقونات التطبيق المخصصة، الخطوط، والمزيد.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "إخفاء أزرار Grok والتحكم في الترجمة التلقائية.";

@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "General";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Personaliza tu línea de tiempo con fuentes, colores y más.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Elimina anuncios y elementos innecesarios de la línea de tiempo, bloquea la app y más.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Multimedia";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Descarga videos, activa marcas de tiempo, y más.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Disfruta Twitter sin anuncios y desbloquea funciones como Deshacer Tweet, temas e íconos personalizados.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Apariencia";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Haz tuyo Twitter con temas, íconos de app personalizados, fuentes y más.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Oculta los botones de Grok y controla las traducciones automáticas.";

@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Umum";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Personalisasi linimasa Anda dengan font, warna navigasi, dan lainnya.";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Hapus iklan dan gangguan di linimasa, kunci aplikasi, dan banyak lagi.";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "Media";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "Unduh video, aktifkan penanda waktu, dan lainnya.";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "Nikmati pengalaman bebas iklan dan fitur Blue seperti Urungkan Tweet, tema, dan ikon aplikasi khusus.";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "Tampilan";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "Jadikan Twitter milik Anda dengan tema, ikon aplikasi khusus, font, dan lainnya.";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "Sembunyikan tombol Grok dan atur terjemahan otomatis.";

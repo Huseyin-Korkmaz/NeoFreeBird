@@ -18,13 +18,13 @@
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "常规";
-"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "通过自定义字体、导航栏主题等内容，打造属于您的时间线。";
+"MODERN_SETTINGS_LAYOUT_SUBTITLE" = "移除广告和时间线中的多余内容、锁定应用等。";
 
 "MODERN_SETTINGS_MEDIA_TITLE" = "媒体";
 "MODERN_SETTINGS_MEDIA_SUBTITLE" = "下载视频、启用时间戳等功能。";
 
-"MODERN_SETTINGS_TWITTER_BLUE_TITLE" = "Twitter Blue";
-"MODERN_SETTINGS_TWITTER_BLUE_SUBTITLE" = "享受无广告体验，解锁如撤回推文、主题、自定义图标等功能。";
+"MODERN_SETTINGS_APPEARANCE_TITLE" = "外观";
+"MODERN_SETTINGS_APPEARANCE_SUBTITLE" = "通过主题、自定义应用图标、字体等内容，打造属于您的 Twitter。";
 
 "MODERN_SETTINGS_GROK_TITLE" = "Grok";
 "MODERN_SETTINGS_GROK_SUBTITLE" = "隐藏 Grok 按钮并管理自动翻译。";
