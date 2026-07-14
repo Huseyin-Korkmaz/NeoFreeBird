@@ -56,7 +56,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"settings": @[
                     @{ @"key": @"hide_grok_analyze", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"hide_grok_sidebar", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"hide_grok_create", @"default": @NO, @"type": @"toggle" },
+                    @{ @"key": @"hide_grok_create", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"disable_auto_translate", @"default": @NO, @"type": @"toggle" }
                 ]
             },
@@ -81,6 +81,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                     @{ @"key": @"copy_profile_info", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"disable_articles", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"disable_highlights", @"default": @YES, @"type": @"toggle" },
+                    @{ @"key": @"hide_blue_verified", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"hide_follow_button", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"restore_follow_button", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"square_avatars", @"default": @NO, @"type": @"toggle" }
@@ -94,7 +95,6 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                     @{ @"key": @"tweet_confirm", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"like_confirm", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"tweet_to_image", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"hide_blue_verified", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"hide_view_count", @"default": @YES, @"type": @"toggle" },
                     @{ @"key": @"hide_bookmark_button", @"default": @NO, @"type": @"toggle" },
                     @{ @"key": @"hide_downvote_button", @"default": @NO, @"type": @"toggle" },
