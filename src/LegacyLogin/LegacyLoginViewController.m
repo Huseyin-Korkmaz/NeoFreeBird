@@ -1,6 +1,6 @@
 #import "LegacyLoginViewController.h"
 #import "Core/BHTBundle.h"
-#import "JGProgressHUD/JGProgressHUD.h"
+#import "Headers/TFNHeaders.h"
 #import <WebKit/WebKit.h>
 #import <dlfcn.h>
 #import <objc/runtime.h>
@@ -156,7 +156,7 @@ static NSString *const kJSInstJS =
 @property (nonatomic, strong) UITextField *passField;
 @property (nonatomic, strong) UIButton *actionButton;
 @property (nonatomic, strong) UILabel *infoLabel;
-@property (nonatomic, strong) JGProgressHUD *hud;
+@property (nonatomic, strong) TFNHUD *hud;
 
 @property (nonatomic, strong) WKWebView *instWebView;
 @property (nonatomic, copy) NSString *uiMetrics;
@@ -297,9 +297,8 @@ static NSString *const kJSInstJS =
 }
 
 - (void)showHUD:(NSString *)text {
-    self.hud = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
-    self.hud.textLabel.text = text;
-    [self.hud showInView:self.view];
+    self.hud = [[objc_getClass("TFNHUD") alloc] initWithText:text];
+    [self.hud show];
 }
 
 #pragma mark - ui_metrics
@@ -393,11 +392,11 @@ static NSString *const kJSInstJS =
     [self showHUD:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_VERIFYING_STATUS"]];
 
     [self generateUIMetrics:^(NSString *metrics) {
-        self.hud.textLabel.text = [[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_SIGNING_IN_STATUS"];
+        [self.hud setText:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_SIGNING_IN_STATUS"]];
 
         Class cmdCls = objc_getClass("TFSTwitterAPIXAuthPasswordCommand");
         if (!cmdCls || !Loader() || !Context()) {
-            [self.hud dismiss];
+            [self.hud hide];
             [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNAVAILABLE_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_CLASSES_MISSING_MESSAGE"]];
             return;
         }
@@ -418,21 +417,21 @@ static NSString *const kJSInstJS =
                          HTTPConfig(), NO, KnownDeviceToken(), metrics, Storage(), nil,
                          Builder("TFSTwitterXAuthPasswordResponseBuilder"), [completion copy]);
             if (!cmd) {
-                [self.hud dismiss];
+                [self.hud hide];
                 [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_UNAVAILABLE_TITLE"] msg:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_BUILD_COMMAND_FAILED_MESSAGE"]];
                 return;
             }
 
             ((void (*)(id, SEL, id))objc_msgSend)(Loader(), @selector(startCommand:), cmd);
         } @catch (NSException *ex) {
-            [self.hud dismiss];
+            [self.hud hide];
             [self alert:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_CRASH_AVOIDED_TITLE"] msg:ex.reason ?: ex.description];
         }
     }];
 }
 
 - (void)handlePassword:(BOOL)ok response:(id)resp error:(id)err {
-    [self.hud dismiss];
+    [self.hud hide];
 
     if (!ok) {
         [self alertError:err title:[[BHTBundle sharedBundle] localizedStringForKey:@"LEGACY_LOGIN_FAILED_TITLE"]];

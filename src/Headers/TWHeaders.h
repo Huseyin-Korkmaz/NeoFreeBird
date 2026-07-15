@@ -14,7 +14,6 @@
 #import <SafariServices/SafariServices.h>
 #import "Download/Download.h"
 #import "CustomTabBar/CustomTabBarUtility.h"
-#import "JGProgressHUD/JGProgressHUD.h"
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
 #import <Preferences/PSEditableTableCell.h>

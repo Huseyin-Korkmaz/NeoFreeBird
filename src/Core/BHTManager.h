@@ -18,7 +18,7 @@
 + (void)showSaveVC:(NSURL *)url;
 + (void)save:(NSURL *)url;
 + (MediaInformation *)getM3U8Information:(NSURL *)mediaURL;
-+ (TFNMenuSheetViewController *)newFFmpegDownloadSheet:(MediaInformation *)mediaInformation downloadingURL:(NSURL *)downloadingURL progressView:(JGProgressHUD *)hud;
++ (TFNMenuSheetViewController *)newFFmpegDownloadSheet:(MediaInformation *)mediaInformation downloadingURL:(NSURL *)downloadingURL;
 
 + (BOOL)isTwitterBranded;
 

@@ -105,7 +105,7 @@
     MediaInformation *mediaInformation = [mediaInformationSession getMediaInformation];
     return mediaInformation;
 }
-+ (TFNMenuSheetViewController *)newFFmpegDownloadSheet:(MediaInformation *)mediaInformation downloadingURL:(NSURL *)downloadingURL progressView:(JGProgressHUD *)hud {
++ (TFNMenuSheetViewController *)newFFmpegDownloadSheet:(MediaInformation *)mediaInformation downloadingURL:(NSURL *)downloadingURL {
     NSAttributedString *AttString = [[NSAttributedString alloc] initWithString:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_MENU_TITLE"] attributes:@{
         NSFontAttributeName: [BHTManager menuTitleFont],
         NSForegroundColorAttributeName: UIColor.labelColor
@@ -121,22 +121,20 @@
         if (width != nil && height != nil) {
             NSString *resolution = [NSString stringWithFormat:@"%@x%@", width, height];
             TFNActionItem *downloadOption = [objc_getClass("TFNActionItem") actionItemWithTitle:resolution imageName:@"arrow_down_circle_stroke" action:^{
-                hud.textLabel.text = [[BHTBundle sharedBundle] localizedTwitterStringForKey:@"DOWNLOAD_LIVE_ACTIVITY_DOWNLOADING"];
-                [hud showInView:topMostController().view];
+                TFNHUD *hud = [[objc_getClass("TFNHUD") alloc] initWithText:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"DOWNLOAD_LIVE_ACTIVITY_DOWNLOADING"]];
+                [hud show];
 
                 NSURL *newFilePath = [[NSURL fileURLWithPath:NSTemporaryDirectory()] URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", NSUUID.UUID.UUIDString]];
                 [FFmpegKit executeAsync:[NSString stringWithFormat:@"-i %@ -vf scale=%@:flags=lanczos -b:v 2M -c:a copy %@", downloadingURL.absoluteString, resolution, newFilePath.path] withCompleteCallback:^(FFmpegSession *session) {
                     ReturnCode *returnCode = [session getReturnCode];
                     dispatch_async(dispatch_get_main_queue(), ^(void) {
+                        [hud hide];
                         if ([ReturnCode isSuccess:returnCode]) {
                             if (!([BHTSettings boolForKey:@"direct_save"])) {
-                                [hud dismiss];
                                 [BHTManager showSaveVC:newFilePath];
                             } else {
                                 [BHTManager save:newFilePath];
                             }
-                        } else {
-                            [hud dismiss];
                         }
                     });
                 }];

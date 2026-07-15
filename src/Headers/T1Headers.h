@@ -9,7 +9,6 @@
 #import <WebKit/WebKit.h>
 #import <SafariServices/SafariServices.h>
 #import "Download/Download.h"
-#import "JGProgressHUD/JGProgressHUD.h"
 #import "TFNHeaders.h"
 #import "TFSHeaders.h"
 

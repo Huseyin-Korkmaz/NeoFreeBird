@@ -9,7 +9,7 @@ NFB_NAME := $(shell sed -n 's/^Name: //p' control)
 NFB_VERSION := $(shell sed -n 's/^Version: //p' control)
 NFB_COMMIT := $(shell git rev-parse --short HEAD)
 
-BHTwitter_FILES = $(shell find src \( -name '*.x' -o -name '*.m' \) | sort) $(wildcard deps/JGProgressHUD/*.m)
+BHTwitter_FILES = $(shell find src \( -name '*.x' -o -name '*.m' \) | sort)
 BHTwitter_FRAMEWORKS = UIKit Foundation AVFoundation AVKit CoreMotion GameController VideoToolbox Accelerate CoreMedia CoreImage CoreGraphics ImageIO Photos CoreServices SystemConfiguration SafariServices Security QuartzCore WebKit SceneKit
 BHTwitter_PRIVATE_FRAMEWORKS = Preferences
 BHTwitter_EXTRA_FRAMEWORKS = Cephei CepheiPrefs CepheiUI

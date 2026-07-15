@@ -30,7 +30,7 @@ static UIViewController *TopMostController(void) {
 
 #pragma mark - DownloadInlineButton
 @interface DownloadInlineButton () <DownloadDelegate>
-@property (nonatomic, strong) JGProgressHUD *hud;
+@property (nonatomic, strong) TFNHUD *hud;
 @end
 
 @implementation DownloadInlineButton
@@ -46,11 +46,10 @@ static UIViewController *TopMostController(void) {
         // HUD helpers
         void (^startHUD)(NSString *) = ^(NSString *text) {
             if ([BHTSettings boolForKey:@"direct_save"]) return;
-            self.hud = [JGProgressHUD progressHUDWithStyle:JGProgressHUDStyleDark];
-            self.hud.textLabel.text = text;
-            [self.hud showInView:TopMostController().view];
+            self.hud = [[objc_getClass("TFNHUD") alloc] initWithText:text];
+            [self.hud show];
         };
-        void (^dismissHUD)(void) = ^{ [self.hud dismiss]; };
+        void (^dismissHUD)(void) = ^{ [self.hud hide]; };
 
         // Variant builders
         TFNActionItem* (^makeMP4Item)(NSURL *) = ^TFNActionItem*(NSURL *url) {
@@ -71,7 +70,7 @@ static UIViewController *TopMostController(void) {
                     MediaInformation *info = [BHTManager getM3U8Information:url];
                     dispatch_async(dispatch_get_main_queue(), ^{
                         dismissHUD();
-                        TFNMenuSheetViewController *sheet = [BHTManager newFFmpegDownloadSheet:info downloadingURL:url progressView:self.hud];
+                        TFNMenuSheetViewController *sheet = [BHTManager newFFmpegDownloadSheet:info downloadingURL:url];
                         [sheet tfnPresentedCustomPresentFromViewController:TopMostController() animated:YES completion:nil];
                     });
                 });
@@ -129,7 +128,7 @@ static UIViewController *TopMostController(void) {
 
 #pragma mark - DownloadDelegate
 - (void)downloadProgress:(float)pct {
-    self.hud.detailTextLabel.text = [BHTManager getDownloadingPersent:pct];
+    [self.hud setText:[NSString stringWithFormat:@"%@ %@", [[BHTBundle sharedBundle] localizedTwitterStringForKey:@"DOWNLOAD_LIVE_ACTIVITY_DOWNLOADING"], [BHTManager getDownloadingPersent:pct]]];
 }
 
 - (void)downloadDidFinish:(NSURL *)tmpURL Filename:(NSString *)name {
@@ -144,7 +143,7 @@ static UIViewController *TopMostController(void) {
     }
 
     if (![BHTSettings boolForKey:@"direct_save"]) {
-        [self.hud dismiss];
+        [self.hud hide];
         [BHTManager showSaveVC:dst];
     } else {
         if (@available(iOS 10.0, *)) {
@@ -157,7 +156,7 @@ static UIViewController *TopMostController(void) {
 }
 
 - (void)downloadDidFailureWithError:(NSError *)error {
-    [self.hud dismiss];
+    [self.hud hide];
     if (!error) return;
 
     UIAlertController *a = [UIAlertController alertControllerWithTitle:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"ERROR_ALERT_TITLE"]

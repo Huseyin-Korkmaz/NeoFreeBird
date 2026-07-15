@@ -66,6 +66,13 @@
 - (void)tfnPresentedCustomPresentFromViewController:(id)arg1 animated:(BOOL)arg2 completion:(void (^) (void))arg3;
 @end
 
+@interface TFNHUD : NSObject
+- (instancetype)initWithText:(NSString *)text;
+- (void)setText:(NSString *)text;
+- (void)show;
+- (void)hide;
+@end
+
 @interface TFNSettingsNavigationItem : NSObject
 - (instancetype)initWithTitle:(NSString *)arg1 detail:(NSString *)arg2 iconName:(NSString *)arg3 controllerFactory:(UIViewController* (^)(void))arg4;
 - (instancetype)initWithTitle:(NSString *)arg1 detail:(NSString *)arg2 controllerFactory:(UIViewController* (^)(void))arg4;
