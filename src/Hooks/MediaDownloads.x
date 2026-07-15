@@ -43,7 +43,7 @@ static NSArray* DMVideoEntities(UIView* attachmentView) {
 }
 %new
 - (UIContextMenuConfiguration*)contextMenuInteraction:(UIContextMenuInteraction*)interaction
-                        configurationForMenuAtLocation:(CGPoint)location {
+                       configurationForMenuAtLocation:(CGPoint)location {
     NSArray* videoEntities = DMVideoEntities(self);
     if (videoEntities.count == 0) {
         return nil;
@@ -114,15 +114,17 @@ static NSArray* DMVideoEntities(UIView* attachmentView) {
 
     self.uploadButton.hidden = !isVoiceRecording;
 }
-%new - (void)handleUploadButton:(UIButton*)sender {
+%new
+- (void)handleUploadButton:(UIButton*)sender {
     UIImagePickerController* videoPicker = [[UIImagePickerController alloc] init];
     videoPicker.mediaTypes = @[(NSString*)kUTTypeMovie];
     videoPicker.delegate = self;
 
     [topMostController() presentViewController:videoPicker animated:YES completion:nil];
 }
-%new - (void)imagePickerController:(UIImagePickerController*)picker
-             didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey, id>*)info {
+%new
+- (void)imagePickerController:(UIImagePickerController*)picker
+    didFinishPickingMediaWithInfo:(NSDictionary<UIImagePickerControllerInfoKey, id>*)info {
     NSURL* videoURL = info[UIImagePickerControllerMediaURL];
     TTMAssetVoiceRecording* attachment = self.attachment;
     NSURL* recorder_url = [NSURL fileURLWithPath:attachment.filePath];
@@ -146,7 +148,8 @@ static NSArray* DMVideoEntities(UIView* attachmentView) {
 
     [picker dismissViewControllerAnimated:true completion:nil];
 }
-%new - (void)imagePickerControllerDidCancel:(UIImagePickerController*)picker {
+%new
+- (void)imagePickerControllerDidCancel:(UIImagePickerController*)picker {
     [picker dismissViewControllerAnimated:true completion:nil];
 }
 %end

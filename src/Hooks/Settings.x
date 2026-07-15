@@ -164,7 +164,8 @@ static NSArray* sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController* setting
                target:self
                action:@selector(customFontsHandler)];
 }
-%new - (void)customFontsHandler {
+%new
+- (void)customFontsHandler {
     if ([[NSFileManager defaultManager]
             fileExistsAtPath:@"/var/mobile/Library/Fonts/AddedFontCache.plist"]) {
         NSAttributedString* AttString = [[NSAttributedString alloc]
