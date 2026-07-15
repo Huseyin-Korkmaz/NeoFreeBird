@@ -4,3 +4,6 @@
 [submodule "zxPluginsInject"]
 	path = deps/zxPluginsInject
 	url = https://github.com/asdfzxcvbn/zxPluginsInject
+[submodule "deps/ffmpeg-kit-next"]
+	path = deps/ffmpeg-kit-next
+	url = https://github.com/arthenica/ffmpeg-kit-next

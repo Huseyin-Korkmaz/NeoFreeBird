@@ -120,15 +120,16 @@ static void removePadlockOverlay(void) {
     }
 }
 
+// Deliberately in-memory only: the padlock must always re-prompt after a
+// relaunch, so persisting this would only risk skipping it.
+static BOOL padlockAuthenticated = NO;
+
 static BOOL isAuthenticated(void) {
-    NSDictionary *keychainData = [[keychain shared] getData];
-    if (!keychainData) return NO;
-    id val = keychainData[@"isAuthenticated"];
-    return [val respondsToSelector:@selector(boolValue)] ? [val boolValue] : NO;
+    return padlockAuthenticated;
 }
 
 static void setAuthenticated(BOOL yes) {
-    [[keychain shared] saveDictionary:@{@"isAuthenticated": @(yes)}];
+    padlockAuthenticated = yes;
 }
 
 static void presentAuthIfNeeded(void) {
@@ -151,6 +152,12 @@ static void presentAuthIfNeeded(void) {
     UIViewController *host = topViewController(root);
 
     AuthViewController *auth = [[AuthViewController alloc] init];
+    auth.completion = ^(BOOL authenticated) {
+        setAuthenticated(authenticated);
+        if (authenticated) {
+            removePadlockOverlay();
+        }
+    };
     auth.modalPresentationStyle = UIModalPresentationFullScreen;
     if ([auth respondsToSelector:@selector(setModalInPresentation:)]) {
         auth.modalInPresentation = YES;
@@ -217,17 +224,6 @@ static void presentAuthIfNeeded(void) {
 
     if ([BHTSettings boolForKey:@"flex_twitter"]) {
         [[%c(FLEXManager) sharedManager] showExplorer];
-    }
-}
-
-%end
-
-%hook AuthViewController
-
-- (void)viewDidDisappear:(BOOL)animated {
-    %orig;
-    if (isAuthenticated()) {
-        removePadlockOverlay();
     }
 }
 

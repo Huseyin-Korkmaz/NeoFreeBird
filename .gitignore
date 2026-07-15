@@ -9,3 +9,5 @@ packages/
 
 *.md
 !README.md
+
+deps/ffmpeg/

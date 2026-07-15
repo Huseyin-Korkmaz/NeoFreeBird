@@ -15,14 +15,14 @@
 #import "Download/Download.h"
 #import "CustomTabBar/CustomTabBarUtility.h"
 #import "JGProgressHUD/JGProgressHUD.h"
-#import "SAMKeychain/keychain.h"
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
 #import <Preferences/PSEditableTableCell.h>
 #import <Preferences/PSSwitchTableCell.h>
 #import "ffmpeg/FFmpegKit.h"
-#import "ffmpeg/FFprobeKit.h"
+// Imported before FFprobeKit.h, which uses the type without importing it.
 #import "ffmpeg/MediaInformationSession.h"
+#import "ffmpeg/FFprobeKit.h"
 #import "ffmpeg/MediaInformation.h"
 #import <WebKit/WebKit.h>
 

@@ -127,6 +127,13 @@ clean_tree() {
   if [[ -f Makefile ]]; then make clean || true; fi
 }
 
+# The ffmpeg stack (deps/ffmpeg) is built from source, not tracked.
+if [[ ! -f "$SCRIPT_DIR/deps/ffmpeg/lib/libffmpegkit.a" ]]; then
+  say "ffmpeg libraries not found; building them from source (this takes a while)."
+  git -C "$SCRIPT_DIR" submodule update --init deps/ffmpeg-kit-next
+  "$SCRIPT_DIR/deps/build-ffmpeg.sh"
+fi
+
 case "$MODE" in
   sideloaded)
     say "Preparing to compile NeoFreeBird. Argument added: --sideloaded."

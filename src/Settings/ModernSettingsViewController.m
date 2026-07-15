@@ -18,7 +18,6 @@
 #import "Core/BHTManager.h"
 #import "Core/BHTBundle.h"
 #import "ThemeColor/Palette.h"
-#import "Colours/Colours.h"
 
 @interface ModernSettingsViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) TFNTwitterAccount *account;

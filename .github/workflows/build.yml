@@ -139,6 +139,12 @@ jobs:
         env:
           IMAGE_URL: ${{ inputs.resource_pack_url }}
 
+      - name: ffmpeg Stack Caching
+        uses: actions/cache@v5
+        with:
+          path: ffmpeg-build
+          key: ffmpeg-stack-${{ hashFiles('main/deps/build-ffmpeg.sh') }}
+
       - name: Build Package
         run: |
           cd ${{ github.workspace }}/main
@@ -148,6 +154,7 @@ jobs:
           ./build.sh --${{ inputs.deploy_format }}${{ inputs.twitter_branding && ' --twitter-branding' || '' }} $IMAGE_FLAG
         env:
           THEOS: ${{ github.workspace }}/theos
+          BUILD_DIR: ${{ github.workspace }}/ffmpeg-build
 
       - name: Rename IPA to include IPA version
         if: inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore'

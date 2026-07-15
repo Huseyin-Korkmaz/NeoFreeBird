@@ -13,8 +13,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <WebKit/WebKit.h>
 #import <dlfcn.h>
-#import "SAMKeychain/AuthViewController.h"
-#import "Colours/Colours.h"
+#import "Padlock/AuthViewController.h"
 #import "Core/BHTManager.h"
 #import "Core/BHTSettings.h"
 #import "ThemeColor/Palette.h"
@@ -22,7 +21,6 @@
 #import "Core/BHTBundle.h"
 #import "LegacyLogin/LegacyLoginViewController.h"
 #import "Headers/TWHeaders.h"
-#import "SAMKeychain/SAMKeychain.h"
 #import "CustomTabBar/CustomTabBarUtility.h"
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
