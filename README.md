@@ -104,6 +104,28 @@ Just run:
 
 Result: `com.bandarhl.bhtwitter_4.2_iphoneos-arm.deb` inside `packages`.
 
+# Rebranding
+
+`rebrand.sh` applies name and icon branding to an IPA. This can be done before or after patching with the tweak.
+
+Resource packs can only be applied on macOS. If you don't have a macOS machine, there is a GitHub Actions workflow to run it.
+
+
+```bash
+./rebrand.sh [-t | --twitter-branding] [--resource-pack ZIP] [-o OUTPUT] IPA
+```
+
+At least one branding option is required:
+```
+-t, --twitter-branding: sets the app's display name to Twitter.
+--resource-pack ZIP: (macOS only) applies a theme pack ZIP.
+```
+
+By default the IPA is rebranded in place. Pass `-o`/`--output` to write a rebranded copy instead:
+
+```bash
+./rebrand.sh -t --resource-pack theme.zip -o packages/Twitter-rebranded.ipa packages/NeoFreeBird-sideloaded.ipa
+```
 
 > [!NOTE]
 > <b>These builds are considered beta</b><br>This repo is meant for NeoFreeBird, which builds this for specific versions of Twitter. You can of course build this for your own app without using the main NeoFreeBird app, but please note your build will not be supported by the NeoFreeBird team if you do.
