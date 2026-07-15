@@ -174,17 +174,17 @@ static NSString* ItemEntryID(id viewModel) {
     return [entryID isKindOfClass:[NSString class]] ? entryID : nil;
 }
 
-// Discriminates by entry ID (conversationTreeContext is never populated in 12.3):
-// Discover More items carry "tweetdetailrelatedtweets-…" and who-to-follow entries
-// "who-to-follow-…". Server-sent prompt banners all render through the one prompt
-// view model, so those are matched by class instead.
-//
-// Profile timelines serve who-to-follow as a Carousel module whose view models
-// (carousel, module header/footer) are Swift-only and expose no entryID to the
-// runtime, and home timeline modules carry only the plain "user-…" entry IDs of
-// their children, so in both places the pieces are matched by class as well.
+static NSString* ItemScribeComponent(id viewModel) {
+    if (![viewModel respondsToSelector:@selector(scribeComponent)]) {
+        return nil;
+    }
+
+    NSString* component = [viewModel performSelector:@selector(scribeComponent)];
+    return [component isKindOfClass:[NSString class]] ? component : nil;
+}
+
 static BOOL ShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePrompts,
-                                   BOOL inConversation, BOOL matchWhoToFollowByClass) {
+                                   BOOL inConversation, BOOL inProfile) {
     id viewModel = unwrapDataViewItem(item);
     NSString* className = NSStringFromClass([viewModel classForCoder]);
 
@@ -192,12 +192,13 @@ static BOOL ShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePromp
         return YES;
     }
 
-    if (hideWhoToFollow && matchWhoToFollowByClass &&
-        ([className isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"] ||
-         [className isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] ||
-         [className isEqualToString:@"TwitterURT.URTModuleFooterViewModel"] ||
-         [className isEqualToString:@"TwitterURT.URTTimelineUserItemViewModel"] ||
-         [className isEqualToString:@"T1URTTimelineUserItemViewModel"])) {
+    if (hideWhoToFollow && [ItemScribeComponent(viewModel)
+                               isEqualToString:@"suggest_who_to_follow"]) {
+        return YES;
+    }
+
+    if (hideWhoToFollow && inProfile &&
+        [className isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"]) {
         return YES;
     }
 
@@ -224,11 +225,7 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
     BOOL hidePrompts = [BHTSettings boolForKey:@"hide_timeline_prompts"];
     BOOL inConversation =
         IsInHierarchyOfClass(dataViewController, @"T1ConversationContainerViewController");
-    BOOL matchWhoToFollowByClass =
-        IsInHierarchyOfClass(dataViewController, @"T1ProfileViewController") ||
-        IsInHierarchyOfClass(dataViewController,
-                             @"_TtC32TwitterHomeFeatureImplementation"
-                             @"35HomeTimelineContainerViewController");
+    BOOL inProfile = IsInHierarchyOfClass(dataViewController, @"T1ProfileViewController");
 
     if (!hideWhoToFollow && !hidePrompts && !inConversation) {
         return sections;
@@ -246,21 +243,25 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
         }
 
         NSArray* items = section;
-        NSMutableArray* keptItems = [NSMutableArray arrayWithCapacity:items.count];
+        NSMutableIndexSet* removed = [NSMutableIndexSet indexSet];
 
-        for (id item in items) {
-            if (!ShouldHideTimelineItem(item, hideWhoToFollow, hidePrompts, inConversation,
-                                        matchWhoToFollowByClass)) {
-                [keptItems addObject:item];
+        for (NSUInteger i = 0; i < items.count; i++) {
+            if (ShouldHideTimelineItem(items[i], hideWhoToFollow, hidePrompts, inConversation,
+                                       inProfile)) {
+                [removed addIndex:i];
             }
         }
 
-        if (keptItems.count == items.count) {
+        if (removed.count == 0) {
             [filteredSections addObject:section];
             continue;
         }
 
+        MarkEmptiedModuleChrome(items, removed);
+
         modified = YES;
+        NSMutableArray* keptItems = [items mutableCopy];
+        [keptItems removeObjectsAtIndexes:removed];
         if (keptItems.count > 0) {
             [filteredSections addObject:keptItems];
         }

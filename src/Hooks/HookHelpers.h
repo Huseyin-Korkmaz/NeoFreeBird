@@ -34,6 +34,11 @@ void EnumerateSubviewsRecursively(UIView* view,
 // TFNDataViewItem unwrapping for timeline section filtering (BHTHookHelpers.m)
 id unwrapDataViewItem(id item);
 
+// Module header/footer cleanup for timeline section filtering (BHTHookHelpers.m)
+BOOL IsModuleHeaderItem(id item);
+BOOL IsModuleFooterItem(id item);
+void MarkEmptiedModuleChrome(NSArray* items, NSMutableIndexSet* removed);
+
 // Live square-avatar restyling (Avatars.x)
 void applySquareAvatarsSetting(void);
 

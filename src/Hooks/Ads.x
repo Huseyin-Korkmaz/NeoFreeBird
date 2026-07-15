@@ -41,16 +41,6 @@ static BOOL ScribeItemIsPromoted(id item) {
            scribeItem[@"promoted_id"] != nil;
 }
 
-static BOOL IsModuleHeader(id item) {
-    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder])
-        isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"];
-}
-
-static BOOL IsModuleFooter(id item) {
-    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder])
-        isEqualToString:@"TwitterURT.URTModuleFooterViewModel"];
-}
-
 static BOOL ShouldHideItem(id item, NSString* location) {
     item = unwrapDataViewItem(item);
     NSString* className = NSStringFromClass([item classForCoder]);
@@ -131,32 +121,7 @@ static NSArray* FilteredSections(TFNItemsDataViewController* dataViewController,
             continue;
         }
 
-        // A module renders as a consecutive run of header, content, footer. When
-        // a module's content is removed entirely, drop its header and footer too.
-        for (NSUInteger i = 0; i < count; i++) {
-            if ([removed containsIndex:i] || !IsModuleHeader(items[i])) {
-                continue;
-            }
-
-            NSUInteger contentCount = 0;
-            BOOL contentRemoved = YES;
-            NSUInteger j = i + 1;
-            while (j < count && !IsModuleHeader(items[j]) &&
-                   !IsModuleFooter(items[j])) {
-                contentCount++;
-                if (![removed containsIndex:j]) {
-                    contentRemoved = NO;
-                }
-                j++;
-            }
-
-            if (contentCount > 0 && contentRemoved) {
-                [removed addIndex:i];
-                if (j < count && IsModuleFooter(items[j])) {
-                    [removed addIndex:j];
-                }
-            }
-        }
+        MarkEmptiedModuleChrome(items, removed);
 
         NSMutableArray* keptItems = [items mutableCopy];
         [keptItems removeObjectsAtIndexes:removed];

@@ -41,6 +41,47 @@ id unwrapDataViewItem(id item) {
     return item;
 }
 
+BOOL IsModuleHeaderItem(id item) {
+    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder])
+        isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"];
+}
+
+BOOL IsModuleFooterItem(id item) {
+    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder])
+        isEqualToString:@"TwitterURT.URTModuleFooterViewModel"];
+}
+
+// A module renders as a consecutive run of header, content, footer. When a
+// module's content is removed entirely, mark its header and footer too.
+void MarkEmptiedModuleChrome(NSArray* items, NSMutableIndexSet* removed) {
+    NSUInteger count = items.count;
+
+    for (NSUInteger i = 0; i < count; i++) {
+        if ([removed containsIndex:i] || !IsModuleHeaderItem(items[i])) {
+            continue;
+        }
+
+        NSUInteger contentCount = 0;
+        BOOL contentRemoved = YES;
+        NSUInteger j = i + 1;
+        while (j < count && !IsModuleHeaderItem(items[j]) &&
+               !IsModuleFooterItem(items[j])) {
+            contentCount++;
+            if (![removed containsIndex:j]) {
+                contentRemoved = NO;
+            }
+            j++;
+        }
+
+        if (contentCount > 0 && contentRemoved) {
+            [removed addIndex:i];
+            if (j < count && IsModuleFooterItem(items[j])) {
+                [removed addIndex:j];
+            }
+        }
+    }
+}
+
 UIColor* CurrentAccentColor(void) {
     Class TAEColorSettingsCls = objc_getClass("TAEColorSettings");
     if (!TAEColorSettingsCls) {
