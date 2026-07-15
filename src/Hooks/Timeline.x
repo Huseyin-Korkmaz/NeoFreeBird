@@ -174,9 +174,10 @@ static NSString* ItemEntryID(id viewModel) {
 //
 // Profile timelines serve who-to-follow as a Carousel module whose view models
 // (carousel, module header/footer) are Swift-only and expose no entryID to the
-// runtime, so there those are matched by class as well.
+// runtime, and home timeline modules carry only the plain "user-…" entry IDs of
+// their children, so in both places the pieces are matched by class as well.
 static BOOL ShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePrompts,
-                                   BOOL inConversation, BOOL inProfile) {
+                                   BOOL inConversation, BOOL matchWhoToFollowByClass) {
     id viewModel = unwrapDataViewItem(item);
     NSString* className = NSStringFromClass([viewModel classForCoder]);
 
@@ -184,10 +185,11 @@ static BOOL ShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePromp
         return YES;
     }
 
-    if (hideWhoToFollow && inProfile &&
+    if (hideWhoToFollow && matchWhoToFollowByClass &&
         ([className isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"] ||
          [className isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] ||
          [className isEqualToString:@"TwitterURT.URTModuleFooterViewModel"] ||
+         [className isEqualToString:@"TwitterURT.URTTimelineUserItemViewModel"] ||
          [className isEqualToString:@"T1URTTimelineUserItemViewModel"])) {
         return YES;
     }
@@ -215,7 +217,11 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
     BOOL hidePrompts = [BHTSettings boolForKey:@"hide_timeline_prompts"];
     BOOL inConversation =
         IsInHierarchyOfClass(dataViewController, @"T1ConversationContainerViewController");
-    BOOL inProfile = IsInHierarchyOfClass(dataViewController, @"T1ProfileViewController");
+    BOOL matchWhoToFollowByClass =
+        IsInHierarchyOfClass(dataViewController, @"T1ProfileViewController") ||
+        IsInHierarchyOfClass(dataViewController,
+                             @"_TtC32TwitterHomeFeatureImplementation"
+                             @"35HomeTimelineContainerViewController");
 
     if (!hideWhoToFollow && !hidePrompts && !inConversation) {
         return sections;
@@ -237,7 +243,7 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
 
         for (id item in items) {
             if (!ShouldHideTimelineItem(item, hideWhoToFollow, hidePrompts, inConversation,
-                                        inProfile)) {
+                                        matchWhoToFollowByClass)) {
                 [keptItems addObject:item];
             }
         }

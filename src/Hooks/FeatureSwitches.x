@@ -272,6 +272,12 @@ static NSNumber* FeatureSwitchOverrideValueForKey(NSString* key) {
         return [BHTSettings boolForKey:@"hide_downvote_button"] ? @NO : nil;
     }
 
+    // Reactive blending: likes and follows make the timeline request fresh
+    // who-to-follow suggestions and splice them in; this switch turns it off.
+    if ([key isEqualToString:@"wtf_device_follow_nudge_turn_off_reactive_blending_enabled"]) {
+        return [BHTSettings boolForKey:@"hide_who_to_follow"] ? @YES : nil;
+    }
+
     // Premium features gate on subscriptions_enabled || (gating bypass && premium
     // tier).
     if ([key isEqualToString:@"subscriptions_gating_bypass"]) {
