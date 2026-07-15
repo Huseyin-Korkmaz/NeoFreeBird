@@ -24,6 +24,7 @@ We reconstruct a source .xcassets from those choices and compile it with actool.
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -209,9 +210,11 @@ def main():
                              "wclass": wclass, "hclass": hclass,
                              "src": src, "replaced": replaced})
 
-    # Drop stock alternate app icons that were not overridden: keep the primary
-    # icon plus any alternate that actually received replacement art. A dropped
-    # icon's -settings picker thumbnail is dropped too (unless overridden).
+    # When a pack is applied we keep only the icons it themes: the primary plus
+    # any alternate that received replacement art. Every other stock alternate is
+    # dropped so the base IPA's custom icons don't linger in the picker alongside
+    # the pack's. A dropped icon's -settings picker thumbnail goes too (unless the
+    # pack themed it).
     def overridden(n):
         return any(e["replaced"] for e in assets[n]["entries"])
 
@@ -227,6 +230,62 @@ def main():
     for n in drop:
         del assets[n]
     dropped_icons = sorted(n for n in drop if n in icon_asset_names)
+
+    # New alternate icons: any pack image whose name has no counterpart in the
+    # base catalog is added as a brand-new alternate icon, resized from its single
+    # master to the same rendition geometry the app's existing alternate icons
+    # use. Only bare icon-name masters qualify — files carrying a rendition token
+    # (60x60, @2x) are skipped so loose per-size art doesn't each spawn an icon.
+    orig_icons = [e for e in rows if e.get("AssetType") == "Icon Image" and e.get("Name")]
+    orig_icon_names = {e["Name"] for e in orig_icons}
+    prod = [n for n in orig_icon_names if "production" in n.lower()]
+    base_primary = prod[0] if prod else (min(orig_icon_names) if orig_icon_names else None)
+    orig_alts = sorted(n for n in orig_icon_names if n != base_primary)
+
+    def geometry_of(pred):
+        return [
+            ((e.get("Idiom") or "universal").lower(), int(round(float(e.get("Scale", 1)))),
+             int(e.get("PixelWidth", 0)), int(e.get("PixelHeight", 0)),
+             e.get("SizeClass Horizontal"), e.get("SizeClass Vertical"))
+            for e in rows
+            if pred(e) and e.get("AssetType") in BITMAP_TYPES
+            and not is_wide_gamut(e) and not has_nondefault_appearance(e)
+        ]
+
+    template_name = orig_alts[0] if orig_alts else base_primary
+    template_rends = geometry_of(lambda e: e.get("Name") == template_name
+                                 and e.get("AssetType") == "Icon Image")
+    # The picker previews an alternate via its "<name>-settings" imageset, so new
+    # icons need one too or their thumbnail comes up blank. Mirror an existing
+    # settings thumbnail's geometry.
+    settings_template_name = template_name and "%s-settings" % template_name
+    settings_rends = geometry_of(lambda e: e.get("Name") == settings_template_name
+                                 and e.get("AssetType") == "Image")
+
+    def make_entries(path, geom):
+        return [
+            {"idiom": idiom, "scale": scale, "w": w, "h": h, "wclass": wc, "hclass": hc,
+             "src": resize_to(path, w, h, resize_dir), "replaced": True}
+            for idiom, scale, w, h, wc, hc in geom
+        ]
+
+    all_asset_names = {e.get("Name") for e in rows if e.get("Name")}
+    added_icons = []
+    if template_rends:
+        for f, path in sorted(overlays.items()):
+            if path in used_files:
+                continue
+            stem = os.path.splitext(f)[0]
+            if stem in all_asset_names:
+                continue
+            if "@" in stem or re.search(r"\d+x\d+", stem):  # a rendition file, not a master
+                continue
+            assets[stem] = {"icon": True, "entries": make_entries(path, template_rends)}
+            if settings_rends:
+                assets["%s-settings" % stem] = {"icon": False,
+                                                "entries": make_entries(path, settings_rends)}
+            used_files.add(path)
+            added_icons.append(stem)
 
     # Build a source .xcassets.
     xcassets = os.path.join(os.path.dirname(out_car) or ".", "_merge.xcassets")
@@ -306,6 +365,9 @@ def main():
     if dropped_icons:
         print("  dropped %d un-overridden stock icon set(s): %s" % (
             len(dropped_icons), ", ".join(dropped_icons)))
+    if added_icons:
+        print("  added %d new alternate icon(s) from pack: %s" % (
+            len(added_icons), ", ".join(added_icons)))
     for name, rname, why in dropped:
         print("  dropped: %s (%s) [%s]" % (name, rname, why))
     for p in unused:

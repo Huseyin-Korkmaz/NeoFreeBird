@@ -103,19 +103,28 @@ def main() -> int:
     present = set(icon_names)
 
     def set_primary(key, primary):
-        # Replace only CFBundlePrimaryIcon; keep other sub-keys. Prune
-        # CFBundleAlternateIcons to icon sets still present in the catalog, so
-        # dropped stock icons are not left dangling in the picker.
+        # Replace only CFBundlePrimaryIcon; keep other sub-keys. Reconcile
+        # CFBundleAlternateIcons with the catalog: prune sets no longer present
+        # (so dropped stock icons don't dangle in the picker) and add an entry
+        # for every present non-primary icon set (so new pack icons show up).
+        # Catalog-based alternates need only CFBundleIconName, matching how the
+        # app's own stock alternates are declared.
         icons = info.get(key)
         if not isinstance(icons, dict):
             icons = {}
         icons["CFBundlePrimaryIcon"] = primary
         alts = icons.get("CFBundleAlternateIcons")
-        if isinstance(alts, dict):
-            for k in [k for k in alts if k not in present]:
-                del alts[k]
-            if not alts:
-                del icons["CFBundleAlternateIcons"]
+        if not isinstance(alts, dict):
+            alts = {}
+        for k in [k for k in alts if k not in present]:
+            del alts[k]
+        for name in sorted(present):
+            if name != primary_name:
+                alts.setdefault(name, {"CFBundleIconName": name})
+        if alts:
+            icons["CFBundleAlternateIcons"] = alts
+        elif "CFBundleAlternateIcons" in icons:
+            del icons["CFBundleAlternateIcons"]
         info[key] = icons
 
     if phone_primary is None and pad_primary is None:
