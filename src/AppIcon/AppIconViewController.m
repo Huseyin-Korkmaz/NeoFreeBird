@@ -16,6 +16,12 @@
 
 extern UIColor* CurrentAccentColor(void);
 
+// UIApplication's alternateIconName getter goes stale on sideloaded installs
+// (setting the icon works, but the getter keeps reporting an old name across
+// reinstalls), so the last choice made here is what the radios trust.
+static NSString* const kLastSelectedIconKey = @"bh_last_selected_app_icon";
+static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
+
 @interface AppIconViewController () <UICollectionViewDelegate,
                                      UICollectionViewDataSource,
                                      UICollectionViewDelegateFlowLayout>
@@ -145,9 +151,15 @@ extern UIColor* CurrentAccentColor(void);
 }
 
 - (BOOL)isItemActive:(AppIconItem*)item {
-    NSString* current = [UIApplication sharedApplication].alternateIconName;
-    return item.isPrimaryIcon ? (current == nil)
-                              : [current isEqualToString:item.bundleIconName];
+    NSString* saved = [[NSUserDefaults standardUserDefaults]
+        stringForKey:kLastSelectedIconKey];
+    NSString* current =
+        saved ?: [UIApplication sharedApplication].alternateIconName;
+
+    if (item.isPrimaryIcon) {
+        return current == nil || [current isEqualToString:kPrimaryIconSentinel];
+    }
+    return [current isEqualToString:item.bundleIconName];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -183,20 +195,16 @@ extern UIColor* CurrentAccentColor(void);
         return;
 
     AppIconItem* item = self.icons[ip.row];
-    if ([self isItemActive:item])
-        return;
-
     NSString* toSet = item.isPrimaryIcon ? nil : item.bundleIconName;
 
-    [[UIApplication sharedApplication]
-        setAlternateIconName:toSet
-           completionHandler:^(NSError* _Nullable error) {
-               if (error)
-                   return;
-               dispatch_async(dispatch_get_main_queue(), ^{
-                   [cv reloadData];
-               });
-           }];
+    [[NSUserDefaults standardUserDefaults]
+        setObject:(toSet ?: kPrimaryIconSentinel)
+           forKey:kLastSelectedIconKey];
+    [cv reloadData];
+
+    // A block is always passed: nil name + nil handler crashes UIKit.
+    [[UIApplication sharedApplication] setAlternateIconName:toSet
+                                          completionHandler:^(NSError* _Nullable error){}];
 }
 
 #pragma mark - Section header
