@@ -143,7 +143,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ffmpeg-build
-          key: ffmpeg-stack-${{ hashFiles('main/deps/build-ffmpeg.sh') }}
+          key: ffmpeg-stack-${{ hashFiles('main/deps/ffmpeg-kit-next/build-ffmpeg.sh') }}
 
       - name: Build Package
         run: |

@@ -18,11 +18,11 @@
 #import <Preferences/PSSpecifier.h>
 #import <Preferences/PSEditableTableCell.h>
 #import <Preferences/PSSwitchTableCell.h>
-#import "ffmpeg/FFmpegKit.h"
+#import "FFmpegKit.h"
 // Imported before FFprobeKit.h, which uses the type without importing it.
-#import "ffmpeg/MediaInformationSession.h"
-#import "ffmpeg/FFprobeKit.h"
-#import "ffmpeg/MediaInformation.h"
+#import "MediaInformationSession.h"
+#import "FFprobeKit.h"
+#import "MediaInformation.h"
 #import <WebKit/WebKit.h>
 
 #import "TFSHeaders.h"
