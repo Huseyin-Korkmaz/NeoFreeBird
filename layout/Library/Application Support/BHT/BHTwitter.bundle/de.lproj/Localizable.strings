@@ -204,7 +204,7 @@
 "CUSTOM_FONTS_TITLE" = "Benutzerdefinierte Schriftarten";
 "CUSTOM_FONTS_DETAIL" = "Wähle eine benutzerdefinierte Schriftart für Twitter.";
 
-"REQULAR_FONTS_PICKER_OPTION_TITLE" = "Eine Schriftart wählen";
+"REGULAR_FONTS_PICKER_OPTION_TITLE" = "Eine Schriftart wählen";
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Eine fette Schriftart wählen";
 

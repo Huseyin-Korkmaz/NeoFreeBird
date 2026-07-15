@@ -204,7 +204,7 @@
 "CUSTOM_FONTS_TITLE" = "사용자 지정 글꼴";
 "CUSTOM_FONTS_DETAIL" = "트위터에서 사용할 글꼴을 선택합니다.";
 
-"REQULAR_FONTS_PICKER_OPTION_TITLE" = "Regular 글꼴 선택";
+"REGULAR_FONTS_PICKER_OPTION_TITLE" = "Regular 글꼴 선택";
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Bold 글꼴 선택";
 

@@ -204,7 +204,7 @@
 "CUSTOM_FONTS_TITLE" = "خطوط مخصصة";
 "CUSTOM_FONTS_DETAIL" = "اختر خطًا مخصصًا لتويتر.";
 
-"REQULAR_FONTS_PICKER_OPTION_TITLE" = "اختيار خط";
+"REGULAR_FONTS_PICKER_OPTION_TITLE" = "اختيار خط";
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "اختيار خط عريض";
 

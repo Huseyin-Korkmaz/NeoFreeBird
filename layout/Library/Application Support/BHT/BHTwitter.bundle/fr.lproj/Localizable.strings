@@ -204,7 +204,7 @@
 "CUSTOM_FONTS_TITLE" = "Polices personnalisées";
 "CUSTOM_FONTS_DETAIL" = "Choisis une police pour Twitter.";
 
-"REQULAR_FONTS_PICKER_OPTION_TITLE" = "Choisir une police";
+"REGULAR_FONTS_PICKER_OPTION_TITLE" = "Choisir une police";
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Choisir une police en gras";
 

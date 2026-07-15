@@ -196,11 +196,11 @@
             setTitleView:
                 [objc_getClass("TFNTitleView")
                     titleViewWithTitle:[[BHTBundle sharedBundle]
-                                           localizedStringForKey:@"REQULAR_FONTS_PICKER_OPTION_TITLE"]
+                                           localizedStringForKey:@"REGULAR_FONTS_PICKER_OPTION_TITLE"]
                               subtitle:self.account.displayUsername]];
     } else {
         fontPicker.title =
-            [[BHTBundle sharedBundle] localizedStringForKey:@"REQULAR_FONTS_PICKER_OPTION_TITLE"];
+            [[BHTBundle sharedBundle] localizedStringForKey:@"REGULAR_FONTS_PICKER_OPTION_TITLE"];
     }
     [self.navigationController pushViewController:fontPicker animated:YES];
 }

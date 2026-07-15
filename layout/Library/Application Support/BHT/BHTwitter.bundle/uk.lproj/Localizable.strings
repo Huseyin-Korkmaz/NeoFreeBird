@@ -204,7 +204,7 @@
 "CUSTOM_FONTS_TITLE" = "Власні шрифти";
 "CUSTOM_FONTS_DETAIL" = "Виберіть шрифт для Twitter.";
 
-"REQULAR_FONTS_PICKER_OPTION_TITLE" = "Вибрати шрифт";
+"REGULAR_FONTS_PICKER_OPTION_TITLE" = "Вибрати шрифт";
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Вибрати жирний шрифт";
 

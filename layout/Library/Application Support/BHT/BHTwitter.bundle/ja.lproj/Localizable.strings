@@ -204,7 +204,7 @@
 "CUSTOM_FONTS_TITLE" = "カスタムフォント";
 "CUSTOM_FONTS_DETAIL" = "Twitterで使用するカスタムフォントを選択してください。";
 
-"REQULAR_FONTS_PICKER_OPTION_TITLE" = "フォントを選択";
+"REGULAR_FONTS_PICKER_OPTION_TITLE" = "フォントを選択";
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "太字のフォントを選択";
 

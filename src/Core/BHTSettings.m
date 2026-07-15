@@ -61,7 +61,7 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"type": @"compactButton",
                         @"parentKey": @"custom_fonts",
                         @"key": @"regular_font_button",
-                        @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE",
+                        @"titleKey": @"REGULAR_FONTS_PICKER_OPTION_TITLE",
                         @"action": @"showRegularFontPicker:",
                         @"prefKeyForSubtitle": @"bhtwitter_font_1",
                         @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE"

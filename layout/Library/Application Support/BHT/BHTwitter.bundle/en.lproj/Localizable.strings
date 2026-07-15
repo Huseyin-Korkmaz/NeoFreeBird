@@ -204,7 +204,7 @@
 "CUSTOM_FONTS_TITLE" = "Custom fonts";
 "CUSTOM_FONTS_DETAIL" = "Select a custom font for Twitter.";
 
-"REQULAR_FONTS_PICKER_OPTION_TITLE" = "Choose a font";
+"REGULAR_FONTS_PICKER_OPTION_TITLE" = "Choose a font";
 
 "BOLD_FONTS_PICKER_OPTION_TITLE" = "Choose a bold font";
 
