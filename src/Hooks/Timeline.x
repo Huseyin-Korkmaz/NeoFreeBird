@@ -136,12 +136,11 @@ static void SyncHomeAddTabButton(id container, BOOL hidden) {
 
 // MARK: - Hide "Discover more", who-to-follow and prompts
 
-static BOOL IsInConversationHierarchy(UIViewController* viewController) {
+static BOOL IsInHierarchyOfClass(UIViewController* viewController, NSString* className) {
     UIViewController* currentVC = viewController;
 
     while (currentVC) {
-        if ([NSStringFromClass([currentVC class])
-                isEqualToString:@"T1ConversationContainerViewController"]) {
+        if ([NSStringFromClass([currentVC class]) isEqualToString:className]) {
             return YES;
         }
 
@@ -172,12 +171,24 @@ static NSString* ItemEntryID(id viewModel) {
 // Discover More items carry "tweetdetailrelatedtweets-…" and who-to-follow entries
 // "who-to-follow-…". Server-sent prompt banners all render through the one prompt
 // view model, so those are matched by class instead.
+//
+// Profile timelines serve who-to-follow as a Carousel module whose view models
+// (carousel, module header/footer) are Swift-only and expose no entryID to the
+// runtime, so there those are matched by class as well.
 static BOOL ShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePrompts,
-                                   BOOL inConversation) {
+                                   BOOL inConversation, BOOL inProfile) {
     id viewModel = unwrapDataViewItem(item);
+    NSString* className = NSStringFromClass([viewModel classForCoder]);
 
-    if (hidePrompts && [NSStringFromClass([viewModel classForCoder])
-                           isEqualToString:@"TwitterURT.URTTimelinePromptViewModel"]) {
+    if (hidePrompts && [className isEqualToString:@"TwitterURT.URTTimelinePromptViewModel"]) {
+        return YES;
+    }
+
+    if (hideWhoToFollow && inProfile &&
+        ([className isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"] ||
+         [className isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"] ||
+         [className isEqualToString:@"TwitterURT.URTModuleFooterViewModel"] ||
+         [className isEqualToString:@"T1URTTimelineUserItemViewModel"])) {
         return YES;
     }
 
@@ -202,7 +213,9 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
                                          NSArray* sections) {
     BOOL hideWhoToFollow = [BHTSettings boolForKey:@"hide_who_to_follow"];
     BOOL hidePrompts = [BHTSettings boolForKey:@"hide_timeline_prompts"];
-    BOOL inConversation = IsInConversationHierarchy(dataViewController);
+    BOOL inConversation =
+        IsInHierarchyOfClass(dataViewController, @"T1ConversationContainerViewController");
+    BOOL inProfile = IsInHierarchyOfClass(dataViewController, @"T1ProfileViewController");
 
     if (!hideWhoToFollow && !hidePrompts && !inConversation) {
         return sections;
@@ -223,7 +236,8 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
         NSMutableArray* keptItems = [NSMutableArray arrayWithCapacity:items.count];
 
         for (id item in items) {
-            if (!ShouldHideTimelineItem(item, hideWhoToFollow, hidePrompts, inConversation)) {
+            if (!ShouldHideTimelineItem(item, hideWhoToFollow, hidePrompts, inConversation,
+                                        inProfile)) {
                 [keptItems addObject:item];
             }
         }
