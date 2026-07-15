@@ -136,11 +136,18 @@ static void SyncHomeAddTabButton(id container, BOOL hidden) {
 
 // MARK: - Hide "Discover more", who-to-follow and prompts
 
+// Resolves the class by name so mangled Swift names work; NSStringFromClass
+// would only ever produce the demangled dotted form.
 static BOOL IsInHierarchyOfClass(UIViewController* viewController, NSString* className) {
+    Class targetClass = NSClassFromString(className);
+    if (!targetClass) {
+        return NO;
+    }
+
     UIViewController* currentVC = viewController;
 
     while (currentVC) {
-        if ([NSStringFromClass([currentVC class]) isEqualToString:className]) {
+        if ([currentVC isKindOfClass:targetClass]) {
             return YES;
         }
 
