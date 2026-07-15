@@ -66,8 +66,9 @@ jobs:
             "packages/X-rebranded.${{ steps.ipa.outputs.ext }}"
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: X-rebranded
           path: ${{ github.workspace }}/main/packages/X-rebranded.${{ steps.ipa.outputs.ext }}
+          archive: false
           if-no-files-found: error
