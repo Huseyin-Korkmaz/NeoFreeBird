@@ -8,34 +8,35 @@
 #import "CustomTabBarUtility.h"
 #import "Headers/T1Headers.h"
 
-// The Home tab is the app's landing surface, so it is always kept visible, pinned
-// first, and can never end up in the hidden list.
-NSString * const CustomTabBarHomePageID = @"home";
+// The Home tab is the app's landing surface, so it is always kept visible,
+// pinned first, and can never end up in the hidden list.
+NSString* const CustomTabBarHomePageID = @"home";
 
-NSString * const TabPageKey    = @"page";
-NSString * const TabTitleKey   = @"title";
-NSString * const TabImageKey   = @"image";
-NSString * const TabPanelIDKey = @"panelID";
+NSString* const TabPageKey = @"page";
+NSString* const TabTitleKey = @"title";
+NSString* const TabImageKey = @"image";
+NSString* const TabPanelIDKey = @"panelID";
 
-static NSString * const kVisibleKey  = @"bh_tabs_visible";
-static NSString * const kRegistryKey = @"bh_tab_registry";
+static NSString* const kVisibleKey = @"bh_tabs_visible";
+static NSString* const kRegistryKey = @"bh_tab_registry";
 
 // Selection list retired when hiding became implicit (not in the visible list =
 // hidden); removed on sight so old installs don't keep stale data around.
-static NSString * const kLegacyHiddenKey = @"bh_tabs_hidden";
+static NSString* const kLegacyHiddenKey = @"bh_tabs_hidden";
 
 @implementation CustomTabBarUtility
 
 #pragma mark - Live capture
 
-// Ordered union of every tab seen this session, so a tab that briefly drops out of
-// a tab bar update isn't forgotten while the editor is open.
-+ (NSMutableArray<NSDictionary *> *)registry {
-    static NSMutableArray<NSDictionary *> *registry;
+// Ordered union of every tab seen this session, so a tab that briefly drops out
+// of a tab bar update isn't forgotten while the editor is open.
++ (NSMutableArray<NSDictionary*>*)registry {
+    static NSMutableArray<NSDictionary*>* registry;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         registry = [NSMutableArray array];
-        NSArray *saved = [[NSUserDefaults standardUserDefaults] arrayForKey:kRegistryKey];
+        NSArray* saved =
+            [[NSUserDefaults standardUserDefaults] arrayForKey:kRegistryKey];
         if (saved) {
             [registry addObjectsFromArray:saved];
         }
@@ -43,27 +44,31 @@ static NSString * const kLegacyHiddenKey = @"bh_tabs_hidden";
     return registry;
 }
 
-+ (void)recordTabViews:(NSArray *)tabViews {
-    NSMutableArray<NSDictionary *> *registry = [self registry];
++ (void)recordTabViews:(NSArray*)tabViews {
+    NSMutableArray<NSDictionary*>* registry = [self registry];
     BOOL changed = NO;
 
-    for (T1TabView *tabView in tabViews) {
-        NSString *page = tabView.scribePage;
+    for (T1TabView* tabView in tabViews) {
+        NSString* page = tabView.scribePage;
         if (page.length == 0) {
             continue;
         }
 
-        NSString *title = tabView.title.length ? tabView.title : page;
-        NSString *image = tabView.imageName ?: @"";
+        NSString* title = tabView.title.length ? tabView.title : page;
+        NSString* image = tabView.imageName ?: @"";
         if (image.length == 0) {
             // Avatar-drawn tabs (Profile) have no imageName; use the glyph the
             // native customization screen resolves for the panel.
-            image = [NSClassFromString(@"T1PanelIdentity") iconImageNameForPanelID:tabView.panelID] ?: @"";
+            image = [NSClassFromString(@"T1PanelIdentity")
+                        iconImageNameForPanelID:tabView.panelID]
+                        ?: @"";
         }
-        NSDictionary *entry = @{ TabPageKey: page,
-                                 TabTitleKey: title,
-                                 TabImageKey: image,
-                                 TabPanelIDKey: @(tabView.panelID) };
+        NSDictionary* entry = @{
+            TabPageKey: page,
+            TabTitleKey: title,
+            TabImageKey: image,
+            TabPanelIDKey: @(tabView.panelID)
+        };
 
         NSInteger existing = NSNotFound;
         for (NSInteger i = 0; i < (NSInteger)registry.count; i++) {
@@ -83,16 +88,17 @@ static NSString * const kLegacyHiddenKey = @"bh_tabs_hidden";
     }
 
     if (changed) {
-        [[NSUserDefaults standardUserDefaults] setObject:[registry copy] forKey:kRegistryKey];
+        [[NSUserDefaults standardUserDefaults] setObject:[registry copy]
+                                                  forKey:kRegistryKey];
     }
 }
 
-+ (NSArray<NSDictionary *> *)availableTabs {
++ (NSArray<NSDictionary*>*)availableTabs {
     return [[self registry] copy];
 }
 
-+ (NSDictionary *)metadataForPage:(NSString *)pageID {
-    for (NSDictionary *entry in [self registry]) {
++ (NSDictionary*)metadataForPage:(NSString*)pageID {
+    for (NSDictionary* entry in [self registry]) {
         if ([entry[TabPageKey] isEqualToString:pageID]) {
             return entry;
         }
@@ -102,20 +108,21 @@ static NSString * const kLegacyHiddenKey = @"bh_tabs_hidden";
 
 #pragma mark - Selection
 
-+ (NSArray<NSString *> *)visiblePageIDsInOrder {
-    NSArray<NSString *> *visible = [[NSUserDefaults standardUserDefaults] stringArrayForKey:kVisibleKey];
++ (NSArray<NSString*>*)visiblePageIDsInOrder {
+    NSArray<NSString*>* visible =
+        [[NSUserDefaults standardUserDefaults] stringArrayForKey:kVisibleKey];
     if (!visible) {
         return nil;
     }
 
-    NSMutableArray<NSString *> *pageIDs = [visible mutableCopy];
+    NSMutableArray<NSString*>* pageIDs = [visible mutableCopy];
     // Home is always visible and always first.
     [pageIDs removeObject:CustomTabBarHomePageID];
     [pageIDs insertObject:CustomTabBarHomePageID atIndex:0];
     return pageIDs;
 }
 
-+ (void)setVisiblePageIDs:(NSArray<NSString *> *)visible {
++ (void)setVisiblePageIDs:(NSArray<NSString*>*)visible {
     [[NSUserDefaults standardUserDefaults] setObject:visible forKey:kVisibleKey];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kLegacyHiddenKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -127,7 +134,7 @@ static NSString * const kLegacyHiddenKey = @"bh_tabs_hidden";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-+ (NSArray<NSString *> *)defaultVisiblePageIDs {
++ (NSArray<NSString*>*)defaultVisiblePageIDs {
     return @[@"home", @"guide", @"ntab", @"messages"];
 }
 

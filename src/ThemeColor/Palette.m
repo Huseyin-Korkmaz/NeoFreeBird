@@ -9,21 +9,21 @@
 #import <objc/runtime.h>
 
 @protocol AEColorPalette <NSObject>
-- (UIColor *)backgroundColor;
+- (UIColor*)backgroundColor;
 @end
 
 @interface TAETwitterColorPaletteSettingInfo : NSObject
-- (id <AEColorPalette>)colorPalette;
+- (id<AEColorPalette>)colorPalette;
 @end
 
 @interface TAEColorSettings : NSObject
 + (instancetype)sharedSettings;
-- (TAETwitterColorPaletteSettingInfo *)currentColorPalette;
+- (TAETwitterColorPaletteSettingInfo*)currentColorPalette;
 @end
 
 @implementation Palette
 
-+ (TAETwitterColorPaletteSettingInfo *)currentPaletteInfo {
++ (TAETwitterColorPaletteSettingInfo*)currentPaletteInfo {
     Class settingsClass = objc_getClass("TAEColorSettings");
     if (![settingsClass respondsToSelector:@selector(sharedSettings)]) {
         return nil;
@@ -37,12 +37,12 @@
     return [settings currentColorPalette];
 }
 
-+ (UIColor *)currentBackgroundColor {
-    TAETwitterColorPaletteSettingInfo *info = [self currentPaletteInfo];
++ (UIColor*)currentBackgroundColor {
+    TAETwitterColorPaletteSettingInfo* info = [self currentPaletteInfo];
     if ([info respondsToSelector:@selector(colorPalette)]) {
-        id <AEColorPalette> palette = [info colorPalette];
+        id<AEColorPalette> palette = [info colorPalette];
         if ([palette respondsToSelector:@selector(backgroundColor)]) {
-            UIColor *background = [palette backgroundColor];
+            UIColor* background = [palette backgroundColor];
             if (background) {
                 return background;
             }

@@ -10,30 +10,34 @@
 static char kCopyProviderKey;
 
 @interface ProfileCopyButtonProvider : NSObject
-@property (nonatomic, weak) T1ProfileHeaderViewController *headerViewController;
+@property (nonatomic, weak) T1ProfileHeaderViewController* headerViewController;
 @property (nonatomic, weak) id delegate;
-@property (nonatomic, strong) TFNButton *infoButton;
+@property (nonatomic, strong) TFNButton* infoButton;
 @end
 
 @implementation ProfileCopyButtonProvider
 
-- (NSArray<UIMenuElement *> *)copyActions {
-    T1ProfileUserViewModel *viewModel = self.headerViewController.viewModel;
+- (NSArray<UIMenuElement*>*)copyActions {
+    T1ProfileUserViewModel* viewModel = self.headerViewController.viewModel;
 
-    UIAction *(^copyAction)(NSString *, NSString *, NSString *) = ^(NSString *titleKey, NSString *iconName, NSString *value) {
-        UIAction *action = [UIAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:titleKey]
-                                               image:[UIImage tfn_vectorImageNamed:iconName fitsSize:CGSizeMake(16.0, 16.0) fillColor:UIColor.labelColor]
-                                          identifier:nil
-                                             handler:^(__kindof UIAction *act) {
-            if (value.length) {
-                UIPasteboard.generalPasteboard.string = value;
+    UIAction* (^copyAction)(NSString*, NSString*, NSString*) =
+        ^(NSString* titleKey, NSString* iconName, NSString* value) {
+            UIAction* action =
+                [UIAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:titleKey]
+                                    image:[UIImage tfn_vectorImageNamed:iconName
+                                                               fitsSize:CGSizeMake(16.0, 16.0)
+                                                              fillColor:UIColor.labelColor]
+                               identifier:nil
+                                  handler:^(__kindof UIAction* act) {
+                                      if (value.length) {
+                                          UIPasteboard.generalPasteboard.string = value;
+                                      }
+                                  }];
+            if (!value.length) {
+                action.attributes = UIMenuElementAttributesDisabled;
             }
-        }];
-        if (!value.length) {
-            action.attributes = UIMenuElementAttributesDisabled;
-        }
-        return action;
-    };
+            return action;
+        };
 
     return @[
         copyAction(@"COPY_PROFILE_INFO_MENU_OPTION_3", @"account", viewModel.fullName),
@@ -44,21 +48,26 @@ static char kCopyProviderKey;
     ];
 }
 
-- (TFNButton *)buttonView {
+- (TFNButton*)buttonView {
     if (!self.infoButton) {
         // Style 2 in size class 2 is the bordered round icon style the other
         // header buttons use.
-        TFNButton *button = [%c(TFNButton) buttonWithTitle:nil imageNamed:@"copy_stroke" style:2 sizeClass:2];
-        button.accessibilityLabel = [[BHTBundle sharedBundle] localizedStringForKey:@"COPY_PROFILE_INFO_TITLE"];
+        TFNButton* button = [%c(TFNButton) buttonWithTitle:nil
+                                                    imageNamed:@"copy_stroke"
+                                                         style:2
+                                                     sizeClass:2];
+        button.accessibilityLabel =
+            [[BHTBundle sharedBundle] localizedStringForKey:@"COPY_PROFILE_INFO_TITLE"];
         button.showsMenuAsPrimaryAction = YES;
 
         // Deferred so each open rebuilds the actions with the loaded profile
         // data and the current theme's icon color.
-        __weak ProfileCopyButtonProvider *weakSelf = self;
-        void (^actionsProvider)(void (^)(NSArray<UIMenuElement *> *)) = ^(void (^completion)(NSArray<UIMenuElement *> *)) {
-            completion([weakSelf copyActions] ?: @[]);
-        };
-        UIDeferredMenuElement *deferredActions;
+        __weak ProfileCopyButtonProvider* weakSelf = self;
+        void (^actionsProvider)(void (^)(NSArray<UIMenuElement*>*)) =
+            ^(void (^completion)(NSArray<UIMenuElement*>*)) {
+                completion([weakSelf copyActions] ?: @[]);
+            };
+        UIDeferredMenuElement* deferredActions;
         if (@available(iOS 15.0, *)) {
             deferredActions = [UIDeferredMenuElement elementWithUncachedProvider:actionsProvider];
         } else {
@@ -71,18 +80,18 @@ static char kCopyProviderKey;
     return self.infoButton;
 }
 
-- (NSArray *)buttonSpecs {
+- (NSArray*)buttonSpecs {
     // Native positions run from 2 (follow) to 10 (mute), so 100 lands at the
     // far end; priority 1 lets every native button win the width fight.
-    __weak ProfileCopyButtonProvider *weakSelf = self;
-    T1ProfileActionButtonSpec *spec = [[%c(T1ProfileActionButtonSpec) alloc] initWithPosition:100
-                                                                                     priority:1
-                                                                              visibilityBlock:^BOOL(double availableWidth) {
-        return YES;
-    }
-                                                                          buttonCreationBlock:^UIView *{
-        return [weakSelf buttonView];
-    }];
+    __weak ProfileCopyButtonProvider* weakSelf = self;
+    T1ProfileActionButtonSpec* spec = [[%c(T1ProfileActionButtonSpec) alloc] initWithPosition:100
+        priority:1
+        visibilityBlock:^BOOL(double availableWidth) {
+            return YES;
+        }
+        buttonCreationBlock:^UIView* {
+            return [weakSelf buttonView];
+        }];
     return spec ? @[spec] : @[];
 }
 
@@ -90,18 +99,19 @@ static char kCopyProviderKey;
 
 %hook T1ProfileHeaderViewController
 
-- (NSArray *)actionButtonProviders {
-    NSArray *providers = %orig;
+- (NSArray*)actionButtonProviders {
+    NSArray* providers = %orig;
 
     if (![BHTSettings boolForKey:@"copy_profile_info"]) {
         return providers;
     }
 
-    ProfileCopyButtonProvider *copyProvider = objc_getAssociatedObject(self, &kCopyProviderKey);
+    ProfileCopyButtonProvider* copyProvider = objc_getAssociatedObject(self, &kCopyProviderKey);
     if (!copyProvider) {
         copyProvider = [ProfileCopyButtonProvider new];
         copyProvider.headerViewController = self;
-        objc_setAssociatedObject(self, &kCopyProviderKey, copyProvider, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, &kCopyProviderKey, copyProvider,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return [providers arrayByAddingObject:copyProvider];
 }
@@ -122,17 +132,21 @@ static char kCopyProviderKey;
 
 %hook T1ProfileFriendsFollowingViewModel
 
-- (id)_t1_followCountTextWithLabel:(__unsafe_unretained id)label singularLabel:(__unsafe_unretained id)singularLabel count:(NSNumber *)count highlighted:(BOOL)highlighted {
+- (id)_t1_followCountTextWithLabel:(__unsafe_unretained id)label
+                     singularLabel:(__unsafe_unretained id)singularLabel
+                             count:(NSNumber*)count
+                       highlighted:(BOOL)highlighted {
     id original = %orig;
 
-    if (![count isKindOfClass:[NSNumber class]] || ![original isKindOfClass:[NSAttributedString class]]) {
+    if (![count isKindOfClass:[NSNumber class]] ||
+        ![original isKindOfClass:[NSAttributedString class]]) {
         return original;
     }
 
-    NSString *abbreviated = [count tfs_twitterAbbreviated];
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    NSString* abbreviated = [count tfs_twitterAbbreviated];
+    NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterDecimalStyle;
-    NSString *fullCount = [formatter stringFromNumber:count];
+    NSString* fullCount = [formatter stringFromNumber:count];
 
     if (!abbreviated.length || !fullCount.length || [abbreviated isEqualToString:fullCount]) {
         return original;
@@ -143,7 +157,7 @@ static char kCopyProviderKey;
         return original;
     }
 
-    NSMutableAttributedString *expanded = [original mutableCopy];
+    NSMutableAttributedString* expanded = [original mutableCopy];
     [expanded replaceCharactersInRange:range withString:fullCount];
     return [expanded copy];
 }

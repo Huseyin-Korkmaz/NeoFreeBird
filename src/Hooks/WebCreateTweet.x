@@ -19,51 +19,52 @@
 
 // MARK: - Constants
 
-static NSString *const WebBearer =
-    @"Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
+static NSString* const WebBearer = @"Bearer "
+                                   @"AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%"
+                                   @"3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA";
 
-static NSString *const WebQueryIDDefaultsKey = @"nfb_createtweet_queryid";
-static NSString *WebCreateTweetQueryID = @"vwzfnq1lLOa1Nfx7htM2mw";
+static NSString* const WebQueryIDDefaultsKey = @"nfb_createtweet_queryid";
+static NSString* WebCreateTweetQueryID = @"vwzfnq1lLOa1Nfx7htM2mw";
 
 // MARK: - Session state
 
 // Latest cookies harvested from the app's web session (the account currently signed in
 // on the web). auth_multi carries the auth_token of every other signed-in account.
-static NSString *WebCT0 = nil;
-static NSString *WebAuthToken = nil;
-static NSString *WebTwid = nil;
-static NSString *WebAuthMulti = nil;
+static NSString* WebCT0 = nil;
+static NSString* WebAuthToken = nil;
+static NSString* WebTwid = nil;
+static NSString* WebAuthMulti = nil;
 
 // Per-account resolved credentials (userID -> @{auth_token, ct0, twid}).
-static NSMutableDictionary<NSString *, NSDictionary *> *WebAccountCookies = nil;
-static NSObject *WebAccountCookiesLock = nil;
+static NSMutableDictionary<NSString*, NSDictionary*>* WebAccountCookies = nil;
+static NSObject* WebAccountCookiesLock = nil;
 
 // The authenticated helper webview is kept alive so we can mint a fresh
 // x-client-transaction-id per send (x rate-limits requests without one).
-static WKWebView *WebHelperWebView = nil;
+static WKWebView* WebHelperWebView = nil;
 static BOOL WebHelperReady = NO;
 static BOOL WebHelperInFlight = NO;
-static NSString *WebXTID = nil;
+static NSString* WebXTID = nil;
 static BOOL WebXTIDInFlight = NO;
 
 // Offscreen native webview used to establish/harvest a specific account's web session.
-static UIWindow *WebHarvestWindow = nil;
+static UIWindow* WebHarvestWindow = nil;
 static BOOL WebBootstrapInFlight = NO;
 
-static const void *WebPostingUIDKey = &WebPostingUIDKey;
-static const void *WebHarvestWebViewKey = &WebHarvestWebViewKey;
-static const void *CreateTweetWatcherKey = &CreateTweetWatcherKey;
+static const void* WebPostingUIDKey = &WebPostingUIDKey;
+static const void* WebHarvestWebViewKey = &WebHarvestWebViewKey;
+static const void* CreateTweetWatcherKey = &CreateTweetWatcherKey;
 
 static void refreshXTID(void);
 static void refreshWebCookiesViaWebView(void);
 static void teardownWebHarvestWindow(void);
 
 @interface WKWebView (AsyncJavaScript)
-- (void)callAsyncJavaScript:(NSString *)functionBody
-                  arguments:(NSDictionary<NSString *, id> *)arguments
-                    inFrame:(WKFrameInfo *)frame
-             inContentWorld:(WKContentWorld *)contentWorld
-          completionHandler:(void (^)(id result, NSError *error))completionHandler;
+- (void)callAsyncJavaScript:(NSString*)functionBody
+                  arguments:(NSDictionary<NSString*, id>*)arguments
+                    inFrame:(WKFrameInfo*)frame
+             inContentWorld:(WKContentWorld*)contentWorld
+          completionHandler:(void (^)(id result, NSError* error))completionHandler;
 @end
 
 static BOOL nativeCreateTweetInterceptEnabled(void) {
@@ -73,17 +74,18 @@ static BOOL nativeCreateTweetInterceptEnabled(void) {
 // MARK: - Small helpers
 
 // twid is stored as "u=<id>" (percent-encoded). Pull the numeric account id out of it.
-static NSString *userIDFromTwid(NSString *twid) {
+static NSString* userIDFromTwid(NSString* twid) {
     if (twid.length == 0) {
         return nil;
     }
-    NSString *decoded = [twid stringByRemovingPercentEncoding] ?: twid;
-    NSCharacterSet *nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
-    NSString *digits = [[decoded componentsSeparatedByCharactersInSet:nonDigits] componentsJoinedByString:@""];
+    NSString* decoded = [twid stringByRemovingPercentEncoding] ?: twid;
+    NSCharacterSet* nonDigits = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    NSString* digits =
+        [[decoded componentsSeparatedByCharactersInSet:nonDigits] componentsJoinedByString:@""];
     return digits.length ? digits : nil;
 }
 
-static NSString *userIDStringForAccount(id account) {
+static NSString* userIDStringForAccount(id account) {
     if (!account || ![account respondsToSelector:@selector(userID)]) {
         return nil;
     }
@@ -91,7 +93,7 @@ static NSString *userIDStringForAccount(id account) {
     return uid ? [@(uid) stringValue] : nil;
 }
 
-static id accountForUserID(NSString *userID) {
+static id accountForUserID(NSString* userID) {
     if (userID.length == 0) {
         return nil;
     }
@@ -104,27 +106,28 @@ static id accountForUserID(NSString *userID) {
         if (![twitter respondsToSelector:@selector(accounts)]) {
             return nil;
         }
-        NSArray *accounts = ((id (*)(id, SEL))objc_msgSend)(twitter, @selector(accounts));
+        NSArray* accounts = ((id (*)(id, SEL))objc_msgSend)(twitter, @selector(accounts));
         for (id account in accounts) {
             if ([userIDStringForAccount(account) isEqualToString:userID]) {
                 return account;
             }
         }
-    } @catch (__unused NSException *exception) {}
+    } @catch (__unused NSException* exception) {
+    }
     return nil;
 }
 
-static UIWindowScene *activeWindowScene(void) {
-    UIWindowScene *fallback = nil;
-    for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+static UIWindowScene* activeWindowScene(void) {
+    UIWindowScene* fallback = nil;
+    for (UIScene* scene in [UIApplication sharedApplication].connectedScenes) {
         if (![scene isKindOfClass:[UIWindowScene class]]) {
             continue;
         }
         if (scene.activationState == UISceneActivationStateForegroundActive) {
-            return (UIWindowScene *)scene;
+            return (UIWindowScene*)scene;
         }
         if (!fallback) {
-            fallback = (UIWindowScene *)scene;
+            fallback = (UIWindowScene*)scene;
         }
     }
     return fallback;
@@ -152,7 +155,7 @@ static BOOL waitUntil(BOOL (^ready)(void), void (^kick)(void), NSTimeInterval ma
 
 // MARK: - Cookie harvesting
 
-static NSObject *accountCacheLock(void) {
+static NSObject* accountCacheLock(void) {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         WebAccountCookiesLock = [NSObject new];
@@ -161,11 +164,11 @@ static NSObject *accountCacheLock(void) {
     return WebAccountCookiesLock;
 }
 
-static void cacheAccountPair(NSString *userID, NSDictionary *pair) {
+static void cacheAccountPair(NSString* userID, NSDictionary* pair) {
     if (userID.length == 0) {
         return;
     }
-    @synchronized (accountCacheLock()) {
+    @synchronized(accountCacheLock()) {
         if (pair) {
             WebAccountCookies[userID] = pair;
         } else {
@@ -174,22 +177,22 @@ static void cacheAccountPair(NSString *userID, NSDictionary *pair) {
     }
 }
 
-static NSDictionary *cachedAccountPair(NSString *userID) {
+static NSDictionary* cachedAccountPair(NSString* userID) {
     if (userID.length == 0) {
         return nil;
     }
-    @synchronized (accountCacheLock()) {
+    @synchronized(accountCacheLock()) {
         return WebAccountCookies[userID];
     }
 }
 
-static void storeWebCookies(NSArray<NSHTTPCookie *> *cookies) {
+static void storeWebCookies(NSArray<NSHTTPCookie*>* cookies) {
     if (![cookies isKindOfClass:[NSArray class]]) {
         return;
     }
 
-    for (NSHTTPCookie *cookie in cookies) {
-        NSString *domain = cookie.domain ?: @"";
+    for (NSHTTPCookie* cookie in cookies) {
+        NSString* domain = cookie.domain ?: @"";
         if (![domain containsString:@"x.com"] && ![domain containsString:@"twitter.com"]) {
             continue;
         }
@@ -208,7 +211,7 @@ static void storeWebCookies(NSArray<NSHTTPCookie *> *cookies) {
         }
     }
 
-    NSString *userID = userIDFromTwid(WebTwid);
+    NSString* userID = userIDFromTwid(WebTwid);
     if (userID.length && WebAuthToken.length && WebCT0.length) {
         cacheAccountPair(userID, @{
             @"auth_token": WebAuthToken,
@@ -219,9 +222,11 @@ static void storeWebCookies(NSArray<NSHTTPCookie *> *cookies) {
 }
 
 static void harvestSharedCookies(void) {
-    NSMutableArray<NSHTTPCookie *> *all = [NSMutableArray array];
-    for (NSString *domain in @[@"https://api.twitter.com", @"https://twitter.com", @"https://x.com"]) {
-        NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:domain]];
+    NSMutableArray<NSHTTPCookie*>* all = [NSMutableArray array];
+    for (NSString* domain in
+         @[@"https://api.twitter.com", @"https://twitter.com", @"https://x.com"]) {
+        NSArray* cookies =
+            [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:domain]];
         if (cookies) {
             [all addObjectsFromArray:cookies];
         }
@@ -231,37 +236,38 @@ static void harvestSharedCookies(void) {
 
 // MARK: - Helper webview (x-client-transaction-id)
 
-static void onHelperWebViewLoaded(WKWebView *webView);
+static void onHelperWebViewLoaded(WKWebView* webView);
 
 @interface WebHelperDelegate : NSObject <WKNavigationDelegate>
 @end
 @implementation WebHelperDelegate
-- (void)webView:(WKWebView *)webView didFinishNavigation:(__unused WKNavigation *)navigation {
+- (void)webView:(WKWebView*)webView didFinishNavigation:(__unused WKNavigation*)navigation {
     onHelperWebViewLoaded(webView);
 }
-- (void)webView:(__unused WKWebView *)webView didFailProvisionalNavigation:(__unused WKNavigation *)navigation withError:(__unused NSError *)error {
+- (void)webView:(__unused WKWebView*)webView
+    didFailProvisionalNavigation:(__unused WKNavigation*)navigation
+                       withError:(__unused NSError*)error {
     WebHelperWebView = nil;
     WebHelperReady = NO;
     WebHelperInFlight = NO;
 }
 @end
 
-static WebHelperDelegate *WebHelperDelegateInstance = nil;
+static WebHelperDelegate* WebHelperDelegateInstance = nil;
 
 // Seed the helper webview's cookie store with the harvested session cookies so it loads
 // authenticated.
-static void seedHelperCookies(WKWebView *webView, void (^done)(void)) {
-    NSDictionary *pairs = @{ @"auth_token": WebAuthToken ?: @"",
-                             @"ct0": WebCT0 ?: @"",
-                             @"twid": WebTwid ?: @"" };
+static void seedHelperCookies(WKWebView* webView, void (^done)(void)) {
+    NSDictionary* pairs =
+        @{@"auth_token": WebAuthToken ?: @"", @"ct0": WebCT0 ?: @"", @"twid": WebTwid ?: @""};
 
-    NSMutableArray<NSHTTPCookie *> *cookies = [NSMutableArray array];
-    for (NSString *name in pairs) {
-        NSString *value = pairs[name];
+    NSMutableArray<NSHTTPCookie*>* cookies = [NSMutableArray array];
+    for (NSString* name in pairs) {
+        NSString* value = pairs[name];
         if (value.length == 0) {
             continue;
         }
-        NSHTTPCookie *cookie = [NSHTTPCookie cookieWithProperties:@{
+        NSHTTPCookie* cookie = [NSHTTPCookie cookieWithProperties:@{
             NSHTTPCookieName: name,
             NSHTTPCookieValue: value,
             NSHTTPCookieDomain: @".x.com",
@@ -277,14 +283,15 @@ static void seedHelperCookies(WKWebView *webView, void (^done)(void)) {
         return;
     }
 
-    WKHTTPCookieStore *store = webView.configuration.websiteDataStore.httpCookieStore;
+    WKHTTPCookieStore* store = webView.configuration.websiteDataStore.httpCookieStore;
     __block NSUInteger remaining = cookies.count;
-    for (NSHTTPCookie *cookie in cookies) {
-        [store setCookie:cookie completionHandler:^{
-            if (--remaining == 0) {
-                done();
-            }
-        }];
+    for (NSHTTPCookie* cookie in cookies) {
+        [store setCookie:cookie
+            completionHandler:^{
+                if (--remaining == 0) {
+                    done();
+                }
+            }];
     }
 }
 
@@ -301,21 +308,23 @@ static void refreshWebCookiesViaWebView(void) {
     dispatch_async(dispatch_get_main_queue(), ^{
         harvestSharedCookies();
 
-        WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+        WKWebViewConfiguration* configuration = [[WKWebViewConfiguration alloc] init];
         configuration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeAll;
 
-        WKWebView *webView = [[WKWebView alloc] initWithFrame:CGRectMake(-3000, -3000, 390, 844)
+        WKWebView* webView = [[WKWebView alloc] initWithFrame:CGRectMake(-3000, -3000, 390, 844)
                                                 configuration:configuration];
         WebHelperDelegateInstance = [[WebHelperDelegate alloc] init];
         webView.navigationDelegate = WebHelperDelegateInstance;
-        webView.customUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
+        webView.customUserAgent =
+            @"Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like "
+            @"Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
         webView.userInteractionEnabled = NO;
         webView.alpha = 0.01;
         WebHelperWebView = webView;
         WebHelperReady = NO;
 
-        UIWindow *keyWindow = nil;
-        for (UIWindow *w in [UIApplication sharedApplication].windows) {
+        UIWindow* keyWindow = nil;
+        for (UIWindow* w in [UIApplication sharedApplication].windows) {
             if (w.isKeyWindow) {
                 keyWindow = w;
                 break;
@@ -325,20 +334,23 @@ static void refreshWebCookiesViaWebView(void) {
         [keyWindow addSubview:webView];
 
         seedHelperCookies(webView, ^{
-            [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://x.com/settings/account"]]];
+            [webView
+                loadRequest:[NSURLRequest
+                                requestWithURL:[NSURL URLWithString:@"https://x.com/settings/account"]]];
         });
     });
 }
 
-static void onHelperWebViewLoaded(WKWebView *webView) {
+static void onHelperWebViewLoaded(WKWebView* webView) {
     WebHelperInFlight = NO;
 
-    [webView.configuration.websiteDataStore.httpCookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
-        storeWebCookies(cookies);
-    }];
+    [webView.configuration.websiteDataStore.httpCookieStore
+        getAllCookies:^(NSArray<NSHTTPCookie*>* cookies) {
+            storeWebCookies(cookies);
+        }];
 
-    NSString *script = nil;
-    NSURL *scriptURL = [[BHTBundle sharedBundle] pathForFile:@"WebXTID.js"];
+    NSString* script = nil;
+    NSURL* scriptURL = [[BHTBundle sharedBundle] pathForFile:@"WebXTID.js"];
     if (scriptURL) {
         script = [NSString stringWithContentsOfURL:scriptURL encoding:NSUTF8StringEncoding error:nil];
     }
@@ -346,38 +358,39 @@ static void onHelperWebViewLoaded(WKWebView *webView) {
         return;
     }
 
-    [webView evaluateJavaScript:script completionHandler:^(__unused id result, __unused NSError *error) {
-        WebHelperReady = YES;
-        refreshXTID();
-    }];
+    [webView evaluateJavaScript:script
+              completionHandler:^(__unused id result, __unused NSError* error) {
+                  WebHelperReady = YES;
+                  refreshXTID();
+              }];
 }
 
 static void refreshXTID(void) {
     if (WebXTIDInFlight) {
         return;
     }
-    WKWebView *webView = WebHelperWebView;
+    WKWebView* webView = WebHelperWebView;
     if (![webView isKindOfClass:[WKWebView class]]) {
         return;
     }
     if (@available(iOS 14.0, *)) {
         WebXTIDInFlight = YES;
-        NSString *path = [NSString stringWithFormat:@"/graphql/%@/CreateTweet", WebCreateTweetQueryID];
+        NSString* path = [NSString stringWithFormat:@"/graphql/%@/CreateTweet", WebCreateTweetQueryID];
 
         dispatch_async(dispatch_get_main_queue(), ^{
             [webView callAsyncJavaScript:@"return await window.__bhtTransactionId(path, method);"
-                               arguments:@{ @"method": @"POST", @"path": path }
+                               arguments:@{@"method": @"POST", @"path": path}
                                  inFrame:nil
                           inContentWorld:WKContentWorld.pageWorld
-                       completionHandler:^(id result, __unused NSError *error) {
-                WebXTIDInFlight = NO;
-                BOOL ok = [result isKindOfClass:[NSString class]] &&
-                          [(NSString *)result length] > 10 &&
-                          ![(NSString *)result hasPrefix:@"ERR:"];
-                if (ok) {
-                    WebXTID = [result copy];
-                }
-            }];
+                       completionHandler:^(id result, __unused NSError* error) {
+                           WebXTIDInFlight = NO;
+                           BOOL ok = [result isKindOfClass:[NSString class]] &&
+                                     [(NSString*)result length] > 10 &&
+                                     ![(NSString*)result hasPrefix:@"ERR:"];
+                           if (ok) {
+                               WebXTID = [result copy];
+                           }
+                       }];
         });
     }
 }
@@ -386,7 +399,7 @@ static void refreshXTID(void) {
 
 // Only the native authenticated webview can perform the OAuth->cookie exchange, so
 // accounts with no web cookies yet get one loaded offscreen and harvested.
-static void bootstrapAccount(id account, NSString *userID) {
+static void bootstrapAccount(id account, NSString* userID) {
     if (!account || userID.length == 0 || WebBootstrapInFlight) {
         return;
     }
@@ -400,31 +413,32 @@ static void bootstrapAccount(id account, NSString *userID) {
         }
 
         Class webViewControllerClass = %c(T1WebViewController);
-        SEL initSel = @selector(initWithRootURL:account:shouldAuthenticate:shouldPresentAsNativePage:sourceStatus:scribeComponent:scribeParameters:);
-        UIWindowScene *scene = activeWindowScene();
+        SEL initSel = @selector(initWithRootURL:account:shouldAuthenticate:shouldPresentAsNativePage:
+                                sourceStatus:scribeComponent:scribeParameters:);
+        UIWindowScene* scene = activeWindowScene();
         if (!webViewControllerClass || !scene ||
             ![webViewControllerClass instancesRespondToSelector:initSel]) {
             WebBootstrapInFlight = NO;
             return;
         }
 
-        NSURL *url = [NSURL URLWithString:@"https://x.com/settings/account"];
-        T1WebViewController *webViewController =
-            [[webViewControllerClass alloc] initWithRootURL:url
-                                                    account:account
-                                         shouldAuthenticate:YES
-                                  shouldPresentAsNativePage:NO
-                                               sourceStatus:nil
-                                            scribeComponent:nil
-                                           scribeParameters:nil];
+        NSURL* url = [NSURL URLWithString:@"https://x.com/settings/account"];
+        T1WebViewController* webViewController = [[webViewControllerClass alloc] initWithRootURL:url
+                                                                                         account:account
+                                                                              shouldAuthenticate:YES
+                                                                       shouldPresentAsNativePage:NO
+                                                                                    sourceStatus:nil
+                                                                                 scribeComponent:nil
+                                                                                scribeParameters:nil];
         if (!webViewController) {
             WebBootstrapInFlight = NO;
             return;
         }
 
-        objc_setAssociatedObject(webViewController, WebHarvestWebViewKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(webViewController, WebHarvestWebViewKey, @YES,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
-        UIWindow *window = [[UIWindow alloc] initWithWindowScene:scene];
+        UIWindow* window = [[UIWindow alloc] initWithWindowScene:scene];
         window.frame = CGRectMake(-3000, -3000, 390, 844);
         window.windowLevel = UIWindowLevelNormal - 1000;
         window.userInteractionEnabled = NO;
@@ -433,9 +447,10 @@ static void bootstrapAccount(id account, NSString *userID) {
         WebHarvestWindow = window;
 
         // Safety teardown in case the load never resolves.
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            teardownWebHarvestWindow();
-        });
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(25 * NSEC_PER_SEC)),
+                       dispatch_get_main_queue(), ^{
+                           teardownWebHarvestWindow();
+                       });
     });
 }
 
@@ -457,26 +472,29 @@ void maybeHandleHarvestWebView(__unsafe_unretained id webViewController) {
         return;
     }
 
-    WKWebView *webView = nil;
+    WKWebView* webView = nil;
     @try {
         if ([webViewController respondsToSelector:@selector(webView)]) {
-            webView = ((WKWebView *(*)(id, SEL))objc_msgSend)(webViewController, @selector(webView));
+            webView = ((WKWebView * (*)(id, SEL)) objc_msgSend)(webViewController, @selector(webView));
         }
-    } @catch (__unused NSException *exception) {}
+    } @catch (__unused NSException* exception) {
+    }
 
     void (^finish)(void) = ^{
         harvestSharedCookies();
         refreshWebCookiesViaWebView();
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            teardownWebHarvestWindow();
-        });
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)),
+                       dispatch_get_main_queue(), ^{
+                           teardownWebHarvestWindow();
+                       });
     };
 
     if ([webView isKindOfClass:%c(WKWebView)]) {
-        [webView.configuration.websiteDataStore.httpCookieStore getAllCookies:^(NSArray<NSHTTPCookie *> *cookies) {
-            storeWebCookies(cookies);
-            finish();
-        }];
+        [webView.configuration.websiteDataStore.httpCookieStore
+            getAllCookies:^(NSArray<NSHTTPCookie*>* cookies) {
+                storeWebCookies(cookies);
+                finish();
+            }];
     } else {
         finish();
     }
@@ -491,7 +509,8 @@ void prewarmWebCookiesIfNeeded(void) {
         return;
     }
 
-    NSString *savedQueryID = [[NSUserDefaults standardUserDefaults] stringForKey:WebQueryIDDefaultsKey];
+    NSString* savedQueryID =
+        [[NSUserDefaults standardUserDefaults] stringForKey:WebQueryIDDefaultsKey];
     if (savedQueryID.length) {
         WebCreateTweetQueryID = [savedQueryID copy];
     }
@@ -500,7 +519,7 @@ void prewarmWebCookiesIfNeeded(void) {
     harvestSharedCookies();
 
     id current = accountForAuthenticatedWebView();
-    NSString *currentUserID = userIDStringForAccount(current);
+    NSString* currentUserID = userIDStringForAccount(current);
     if (current && currentUserID.length && !cachedAccountPair(currentUserID)) {
         bootstrapAccount(current, currentUserID);
     }
@@ -510,12 +529,12 @@ void prewarmWebCookiesIfNeeded(void) {
 
 // Resolve the auth_token for an arbitrary account: the primary (web-session) account
 // uses the harvested token directly; others come out of the auth_multi cookie.
-static NSString *authTokenForUserID(NSString *userID) {
+static NSString* authTokenForUserID(NSString* userID) {
     if (userID.length == 0) {
         return nil;
     }
 
-    NSString *primaryUID = userIDFromTwid(WebTwid);
+    NSString* primaryUID = userIDFromTwid(WebTwid);
     if ([primaryUID isEqualToString:userID] && WebAuthToken.length) {
         return WebAuthToken;
     }
@@ -523,16 +542,17 @@ static NSString *authTokenForUserID(NSString *userID) {
     if (WebAuthMulti.length == 0) {
         return nil;
     }
-    NSString *decoded = [WebAuthMulti stringByRemovingPercentEncoding] ?: WebAuthMulti;
-    decoded = [decoded stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
-    NSCharacterSet *separators = [NSCharacterSet characterSetWithCharactersInString:@"|,"];
-    for (NSString *entry in [decoded componentsSeparatedByCharactersInSet:separators]) {
+    NSString* decoded = [WebAuthMulti stringByRemovingPercentEncoding] ?: WebAuthMulti;
+    decoded = [decoded
+        stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"\""]];
+    NSCharacterSet* separators = [NSCharacterSet characterSetWithCharactersInString:@"|,"];
+    for (NSString* entry in [decoded componentsSeparatedByCharactersInSet:separators]) {
         NSRange colon = [entry rangeOfString:@":"];
         if (colon.location == NSNotFound) {
             continue;
         }
-        NSString *uid = [entry substringToIndex:colon.location];
-        NSString *token = [entry substringFromIndex:NSMaxRange(colon)];
+        NSString* uid = [entry substringToIndex:colon.location];
+        NSString* token = [entry substringFromIndex:NSMaxRange(colon)];
         if ([uid isEqualToString:userID] && token.length) {
             return token;
         }
@@ -541,21 +561,22 @@ static NSString *authTokenForUserID(NSString *userID) {
 }
 
 @interface Ct0Fetcher : NSObject <NSURLSessionTaskDelegate>
-@property (nonatomic, copy) NSString *ct0;
-@property (nonatomic, copy) NSString *twid;
+@property (nonatomic, copy) NSString* ct0;
+@property (nonatomic, copy) NSString* twid;
 @property (nonatomic, assign) BOOL loggedOut;
-- (void)captureFromResponse:(NSURLResponse *)response;
+- (void)captureFromResponse:(NSURLResponse*)response;
 @end
 
 @implementation Ct0Fetcher
-- (void)captureFromResponse:(NSURLResponse *)response {
+- (void)captureFromResponse:(NSURLResponse*)response {
     if (![response isKindOfClass:[NSHTTPURLResponse class]]) {
         return;
     }
-    NSHTTPURLResponse *http = (NSHTTPURLResponse *)response;
-    NSArray<NSHTTPCookie *> *cookies = [NSHTTPCookie cookiesWithResponseHeaderFields:http.allHeaderFields
-                                                                             forURL:http.URL ?: response.URL];
-    for (NSHTTPCookie *cookie in cookies) {
+    NSHTTPURLResponse* http = (NSHTTPURLResponse*)response;
+    NSArray<NSHTTPCookie*>* cookies =
+        [NSHTTPCookie cookiesWithResponseHeaderFields:http.allHeaderFields
+                                               forURL:http.URL ?: response.URL];
+    for (NSHTTPCookie* cookie in cookies) {
         if ([cookie.name isEqualToString:@"ct0"] && cookie.value.length) {
             self.ct0 = [cookie.value copy];
         } else if ([cookie.name isEqualToString:@"twid"] && cookie.value.length) {
@@ -563,14 +584,14 @@ static NSString *authTokenForUserID(NSString *userID) {
         }
     }
 }
-- (void)URLSession:(__unused NSURLSession *)session
-              task:(__unused NSURLSessionTask *)task
-willPerformHTTPRedirection:(NSHTTPURLResponse *)response
-        newRequest:(NSURLRequest *)request
- completionHandler:(void (^)(NSURLRequest *))completionHandler {
+- (void)URLSession:(__unused NSURLSession*)session
+                          task:(__unused NSURLSessionTask*)task
+    willPerformHTTPRedirection:(NSHTTPURLResponse*)response
+                    newRequest:(NSURLRequest*)request
+             completionHandler:(void (^)(NSURLRequest*))completionHandler {
     [self captureFromResponse:response];
 
-    NSString *target = request.URL.absoluteString.lowercaseString ?: @"";
+    NSString* target = request.URL.absoluteString.lowercaseString ?: @"";
     if ([target containsString:@"login"] || [target containsString:@"logout"] ||
         [target containsString:@"/i/flow/"] || [target containsString:@"account/access"]) {
         self.loggedOut = YES;
@@ -580,30 +601,35 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
 @end
 
 // Mint a fresh ct0 for a bare auth_token by hitting x.com once and reading the Set-Cookie.
-static NSString *fetchCt0Sync(NSString *authToken, NSString *expectedUserID) {
+static NSString* fetchCt0Sync(NSString* authToken, NSString* expectedUserID) {
     if (authToken.length == 0 || [NSThread isMainThread]) {
         return nil;
     }
 
-    Ct0Fetcher *fetcher = [Ct0Fetcher new];
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+    Ct0Fetcher* fetcher = [Ct0Fetcher new];
+    NSURLSessionConfiguration* config = [NSURLSessionConfiguration ephemeralSessionConfiguration];
     config.HTTPCookieStorage = nil;
     config.HTTPShouldSetCookies = NO;
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:config delegate:fetcher delegateQueue:nil];
+    NSURLSession* session = [NSURLSession sessionWithConfiguration:config
+                                                          delegate:fetcher
+                                                     delegateQueue:nil];
 
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://x.com/"]];
+    NSMutableURLRequest* request =
+        [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"https://x.com/"]];
     request.HTTPShouldHandleCookies = NO;
-    [request setValue:[NSString stringWithFormat:@"auth_token=%@", authToken] forHTTPHeaderField:@"Cookie"];
-    [request setValue:@"Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
-   forHTTPHeaderField:@"User-Agent"];
+    [request setValue:[NSString stringWithFormat:@"auth_token=%@", authToken]
+        forHTTPHeaderField:@"Cookie"];
+    [request setValue:@"Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
+                      @"(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+        forHTTPHeaderField:@"User-Agent"];
 
     dispatch_semaphore_t done = dispatch_semaphore_create(0);
-    [[session dataTaskWithRequest:request completionHandler:^(__unused NSData *data,
-                                                              NSURLResponse *response,
-                                                              __unused NSError *error) {
-        [fetcher captureFromResponse:response];
-        dispatch_semaphore_signal(done);
-    }] resume];
+    [[session dataTaskWithRequest:request
+                completionHandler:^(__unused NSData* data, NSURLResponse* response,
+                                    __unused NSError* error) {
+                    [fetcher captureFromResponse:response];
+                    dispatch_semaphore_signal(done);
+                }] resume];
     dispatch_semaphore_wait(done, dispatch_time(DISPATCH_TIME_NOW, (int64_t)(15 * NSEC_PER_SEC)));
     [session finishTasksAndInvalidate];
 
@@ -611,8 +637,9 @@ static NSString *fetchCt0Sync(NSString *authToken, NSString *expectedUserID) {
         return nil;
     }
 
-    NSString *responseUserID = userIDFromTwid(fetcher.twid);
-    if (expectedUserID.length && responseUserID.length && ![responseUserID isEqualToString:expectedUserID]) {
+    NSString* responseUserID = userIDFromTwid(fetcher.twid);
+    if (expectedUserID.length && responseUserID.length &&
+        ![responseUserID isEqualToString:expectedUserID]) {
         return nil;
     }
     return fetcher.ct0;
@@ -620,8 +647,8 @@ static NSString *fetchCt0Sync(NSString *authToken, NSString *expectedUserID) {
 
 // Resolve credentials for the posting account, bootstrapping and minting as needed.
 // Returns NO if the account can't be authenticated for web posting.
-static BOOL resolveWebCreds(NSString *userID, NSString **outAuthToken, NSString **outCt0) {
-    NSDictionary *cached = cachedAccountPair(userID);
+static BOOL resolveWebCreds(NSString* userID, NSString** outAuthToken, NSString** outCt0) {
+    NSDictionary* cached = cachedAccountPair(userID);
     if (cached[@"auth_token"] && cached[@"ct0"]) {
         if (outAuthToken) *outAuthToken = cached[@"auth_token"];
         if (outCt0) *outCt0 = cached[@"ct0"];
@@ -629,7 +656,7 @@ static BOOL resolveWebCreds(NSString *userID, NSString **outAuthToken, NSString 
     }
 
     NSString *authToken = nil, *ct0 = nil;
-    NSString *token = authTokenForUserID(userID);
+    NSString* token = authTokenForUserID(userID);
 
     for (int attempt = 0; attempt < 2 && ct0.length == 0; attempt++) {
         if (token.length == 0) {
@@ -638,19 +665,22 @@ static BOOL resolveWebCreds(NSString *userID, NSString **outAuthToken, NSString 
                 break;
             }
             // Bootstrap a web session for this account, then read its token back out.
-            waitUntil(^BOOL{
-                harvestSharedCookies();
-                return authTokenForUserID(userID).length > 0;
-            }, ^{
-                bootstrapAccount(account, userID);
-            }, 30.0);
+            waitUntil(
+                ^BOOL {
+                    harvestSharedCookies();
+                    return authTokenForUserID(userID).length > 0;
+                },
+                ^{
+                    bootstrapAccount(account, userID);
+                },
+                30.0);
             token = authTokenForUserID(userID);
             if (token.length == 0) {
                 break;
             }
         }
 
-        NSString *fresh = fetchCt0Sync(token, userID);
+        NSString* fresh = fetchCt0Sync(token, userID);
         if (fresh.length) {
             authToken = token;
             ct0 = fresh;
@@ -675,13 +705,11 @@ static BOOL resolveWebCreds(NSString *userID, NSString **outAuthToken, NSString 
 
 // MARK: - Request transform
 
-static BOOL isCreateTweetURL(NSURL *url) {
-    return url && [url.path hasSuffix:@"/CreateTweet"];
-}
+static BOOL isCreateTweetURL(NSURL* url) { return url && [url.path hasSuffix:@"/CreateTweet"]; }
 
 // The queryId sits in the request path: .../graphql/<queryId>/CreateTweet
-static NSString *queryIDFromCreateTweetURL(NSURL *url) {
-    NSArray<NSString *> *components = url.path.pathComponents;
+static NSString* queryIDFromCreateTweetURL(NSURL* url) {
+    NSArray<NSString*>* components = url.path.pathComponents;
     if (components.count >= 2 && [components.lastObject isEqualToString:@"CreateTweet"]) {
         return components[components.count - 2];
     }
@@ -689,8 +717,8 @@ static NSString *queryIDFromCreateTweetURL(NSURL *url) {
 }
 
 // The native request signs with OAuth: oauth_token="<userID>-<secret>".
-static NSString *postingUserIDFromRequest(NSURLRequest *request) {
-    NSString *auth = [request valueForHTTPHeaderField:@"Authorization"];
+static NSString* postingUserIDFromRequest(NSURLRequest* request) {
+    NSString* auth = [request valueForHTTPHeaderField:@"Authorization"];
     if (![auth isKindOfClass:[NSString class]]) {
         return nil;
     }
@@ -698,23 +726,26 @@ static NSString *postingUserIDFromRequest(NSURLRequest *request) {
     if (marker.location == NSNotFound) {
         return nil;
     }
-    NSString *rest = [auth substringFromIndex:NSMaxRange(marker)];
+    NSString* rest = [auth substringFromIndex:NSMaxRange(marker)];
     NSRange endQuote = [rest rangeOfString:@"\""];
     if (endQuote.location == NSNotFound) {
         return nil;
     }
-    NSString *token = [rest substringToIndex:endQuote.location];
+    NSString* token = [rest substringToIndex:endQuote.location];
     NSRange dash = [token rangeOfString:@"-"];
     return dash.location != NSNotFound ? [token substringToIndex:dash.location] : nil;
 }
 
 // Strip the native OAuth headers and re-authenticate the request against the web session.
-static void applyWebAuth(NSMutableURLRequest *request, NSString *authToken, NSString *ct0, NSString *userID) {
+static void applyWebAuth(NSMutableURLRequest* request, NSString* authToken, NSString* ct0,
+                         NSString* userID) {
     request.HTTPShouldHandleCookies = NO;
 
-    for (NSString *header in @[@"Authorization", @"X-Twitter-Client-DeviceID", @"X-Twitter-Client-Version",
-                               @"X-Twitter-Client", @"X-Twitter-API-Version", @"X-Twitter-Client-Limit-Ad-Tracking",
-                               @"X-B3-TraceId", @"Timezone", @"kdt", @"X-Client-UUID"]) {
+    for (NSString* header in @[
+             @"Authorization", @"X-Twitter-Client-DeviceID", @"X-Twitter-Client-Version",
+             @"X-Twitter-Client", @"X-Twitter-API-Version", @"X-Twitter-Client-Limit-Ad-Tracking",
+             @"X-B3-TraceId", @"Timezone", @"kdt", @"X-Client-UUID"
+         ]) {
         [request setValue:nil forHTTPHeaderField:header];
     }
 
@@ -725,7 +756,7 @@ static void applyWebAuth(NSMutableURLRequest *request, NSString *authToken, NSSt
         [request setValue:ct0 forHTTPHeaderField:@"x-csrf-token"];
     }
 
-    NSMutableArray<NSString *> *cookiePairs = [NSMutableArray array];
+    NSMutableArray<NSString*>* cookiePairs = [NSMutableArray array];
     if (authToken.length) {
         [cookiePairs addObject:[NSString stringWithFormat:@"auth_token=%@", authToken]];
     }
@@ -739,25 +770,30 @@ static void applyWebAuth(NSMutableURLRequest *request, NSString *authToken, NSSt
 }
 
 // If `request` is a native CreateTweet, return a web-authenticated copy; otherwise nil.
-static NSMutableURLRequest *webRequestFromNativeSend(NSURLRequest *request) {
+static NSMutableURLRequest* webRequestFromNativeSend(NSURLRequest* request) {
     if (!isCreateTweetURL(request.URL) || !nativeCreateTweetInterceptEnabled()) {
         return nil;
     }
 
-    NSString *queryID = queryIDFromCreateTweetURL(request.URL);
+    NSString* queryID = queryIDFromCreateTweetURL(request.URL);
     if (queryID.length && ![queryID isEqualToString:WebCreateTweetQueryID]) {
         WebCreateTweetQueryID = [queryID copy];
         [[NSUserDefaults standardUserDefaults] setObject:queryID forKey:WebQueryIDDefaultsKey];
     }
 
     if (WebXTID.length == 0) {
-        waitUntil(^BOOL{ return WebXTID.length > 0; }, ^{
-            if (!WebHelperWebView) {
-                refreshWebCookiesViaWebView();
-            } else if (WebHelperReady) {
-                refreshXTID();
-            }
-        }, 20.0);
+        waitUntil(
+            ^BOOL {
+                return WebXTID.length > 0;
+            },
+            ^{
+                if (!WebHelperWebView) {
+                    refreshWebCookiesViaWebView();
+                } else if (WebHelperReady) {
+                    refreshXTID();
+                }
+            },
+            20.0);
         if (WebXTID.length == 0) {
             return nil;
         }
@@ -765,7 +801,7 @@ static NSMutableURLRequest *webRequestFromNativeSend(NSURLRequest *request) {
 
     harvestSharedCookies();
 
-    NSString *postingUserID = postingUserIDFromRequest(request);
+    NSString* postingUserID = postingUserIDFromRequest(request);
     if (postingUserID.length == 0) {
         return nil;
     }
@@ -775,13 +811,14 @@ static NSMutableURLRequest *webRequestFromNativeSend(NSURLRequest *request) {
         return nil;
     }
 
-    NSMutableURLRequest *outgoing = [request mutableCopy];
+    NSMutableURLRequest* outgoing = [request mutableCopy];
     applyWebAuth(outgoing, authToken, ct0, postingUserID);
     [outgoing setValue:WebXTID forHTTPHeaderField:@"x-client-transaction-id"];
     refreshXTID();
 
     // Tag the request so the task watcher can drop this account's ct0 on a 4xx.
-    objc_setAssociatedObject(outgoing, WebPostingUIDKey, postingUserID, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(outgoing, WebPostingUIDKey, postingUserID,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     return outgoing;
 }
 
@@ -790,43 +827,49 @@ static NSMutableURLRequest *webRequestFromNativeSend(NSURLRequest *request) {
 // Watches a rewritten CreateTweet task; on a 4xx it invalidates the cached ct0 so the
 // next send re-mints.
 @interface CreateTweetWatcher : NSObject
-@property (nonatomic, copy) NSString *userID;
+@property (nonatomic, copy) NSString* userID;
 @end
 
 @implementation CreateTweetWatcher
-- (void)observeValueForKeyPath:(NSString *)keyPath
+- (void)observeValueForKeyPath:(NSString*)keyPath
                       ofObject:(id)object
-                        change:(__unused NSDictionary *)change
-                       context:(__unused void *)context {
-    NSURLSessionTask *task = object;
+                        change:(__unused NSDictionary*)change
+                       context:(__unused void*)context {
+    NSURLSessionTask* task = object;
     if (![keyPath isEqualToString:@"state"] || task.state != NSURLSessionTaskStateCompleted) {
         return;
     }
 
-    CreateTweetWatcher *keepAlive = self; // survive detaching our own retainer below
+    CreateTweetWatcher* keepAlive = self; // survive detaching our own retainer below
     @try {
         [task removeObserver:self forKeyPath:@"state"];
-    } @catch (__unused NSException *exception) {}
+    } @catch (__unused NSException* exception) {
+    }
     objc_setAssociatedObject(task, CreateTweetWatcherKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
     NSInteger code = [task.response isKindOfClass:[NSHTTPURLResponse class]]
-        ? [(NSHTTPURLResponse *)task.response statusCode] : 0;
+                         ? [(NSHTTPURLResponse*)task.response statusCode]
+                         : 0;
     if (code >= 400 && code < 500 && keepAlive.userID.length) {
         cacheAccountPair(keepAlive.userID, nil);
     }
 }
 @end
 
-static void watchCreateTweetTask(id task, NSString *userID) {
+static void watchCreateTweetTask(id task, NSString* userID) {
     if (![task isKindOfClass:[NSURLSessionTask class]] || userID.length == 0) {
         return;
     }
-    CreateTweetWatcher *watcher = [CreateTweetWatcher new];
+    CreateTweetWatcher* watcher = [CreateTweetWatcher new];
     watcher.userID = userID;
     objc_setAssociatedObject(task, CreateTweetWatcherKey, watcher, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     @try {
-        [task addObserver:watcher forKeyPath:@"state" options:NSKeyValueObservingOptionNew context:NULL];
-    } @catch (__unused NSException *exception) {}
+        [task addObserver:watcher
+               forKeyPath:@"state"
+                  options:NSKeyValueObservingOptionNew
+                  context:NULL];
+    } @catch (__unused NSException* exception) {
+    }
 }
 
 // MARK: - Shared account accessor
@@ -847,53 +890,53 @@ id accountForAuthenticatedWebView(void) {
 
 // The current web session's auth_token + ct0, for read-only web GraphQL GETs (e.g.
 // SourceLabels.x). Harvests the shared cookie jar first; nil until a session exists.
-NSDictionary *currentWebCredentials(void) {
+NSDictionary* currentWebCredentials(void) {
     harvestSharedCookies();
     if (WebAuthToken.length == 0 || WebCT0.length == 0) {
         return nil;
     }
-    return @{ @"auth_token": WebAuthToken, @"ct0": WebCT0 };
+    return @{@"auth_token": WebAuthToken, @"ct0": WebCT0};
 }
 
 // MARK: - Hooks
 
 %hook NSURLSession
 
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request {
-    NSMutableURLRequest *outgoing = webRequestFromNativeSend(request);
+- (NSURLSessionDataTask*)dataTaskWithRequest:(NSURLRequest*)request {
+    NSMutableURLRequest* outgoing = webRequestFromNativeSend(request);
     if (outgoing) {
-        NSURLSessionDataTask *task = %orig(outgoing);
+        NSURLSessionDataTask* task = %orig(outgoing);
         watchCreateTweetTask(task, objc_getAssociatedObject(outgoing, WebPostingUIDKey));
         return task;
     }
     return %orig;
 }
 
-- (NSURLSessionDataTask *)dataTaskWithRequest:(NSURLRequest *)request
-                            completionHandler:(id)completionHandler {
-    NSMutableURLRequest *outgoing = webRequestFromNativeSend(request);
+- (NSURLSessionDataTask*)dataTaskWithRequest:(NSURLRequest*)request
+                           completionHandler:(id)completionHandler {
+    NSMutableURLRequest* outgoing = webRequestFromNativeSend(request);
     if (outgoing) {
-        NSURLSessionDataTask *task = %orig(outgoing, completionHandler);
+        NSURLSessionDataTask* task = %orig(outgoing, completionHandler);
         watchCreateTweetTask(task, objc_getAssociatedObject(outgoing, WebPostingUIDKey));
         return task;
     }
     return %orig;
 }
 
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request fromData:(NSData *)bodyData {
-    NSMutableURLRequest *outgoing = webRequestFromNativeSend(request);
+- (NSURLSessionUploadTask*)uploadTaskWithRequest:(NSURLRequest*)request fromData:(NSData*)bodyData {
+    NSMutableURLRequest* outgoing = webRequestFromNativeSend(request);
     if (outgoing) {
-        NSURLSessionUploadTask *task = %orig(outgoing, bodyData);
+        NSURLSessionUploadTask* task = %orig(outgoing, bodyData);
         watchCreateTweetTask(task, objc_getAssociatedObject(outgoing, WebPostingUIDKey));
         return task;
     }
     return %orig;
 }
 
-- (NSURLSessionUploadTask *)uploadTaskWithRequest:(NSURLRequest *)request fromFile:(NSURL *)fileURL {
-    NSMutableURLRequest *outgoing = webRequestFromNativeSend(request);
+- (NSURLSessionUploadTask*)uploadTaskWithRequest:(NSURLRequest*)request fromFile:(NSURL*)fileURL {
+    NSMutableURLRequest* outgoing = webRequestFromNativeSend(request);
     if (outgoing) {
-        NSURLSessionUploadTask *task = %orig(outgoing, fileURL);
+        NSURLSessionUploadTask* task = %orig(outgoing, fileURL);
         watchCreateTweetTask(task, objc_getAssociatedObject(outgoing, WebPostingUIDKey));
         return task;
     }

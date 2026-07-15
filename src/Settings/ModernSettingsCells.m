@@ -6,13 +6,14 @@
 //
 
 #import "Settings/ModernSettingsCells.h"
-#import "Headers/TWHeaders.h"
 #import "Core/BHTManager.h"
+#import "Headers/TWHeaders.h"
 #import "ThemeColor/Palette.h"
 
 @implementation ModernSettingsTableViewCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString*)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self setupViews];
@@ -53,28 +54,37 @@
 
 - (void)setupConstraints {
     [NSLayoutConstraint activateConstraints:@[
-        [self.iconImageView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:20],
+        [self.iconImageView.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor
+                                                         constant:20],
         [self.iconImageView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
         [self.iconImageView.widthAnchor constraintEqualToConstant:20],
         [self.iconImageView.heightAnchor constraintEqualToConstant:20],
 
-        [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.iconImageView.trailingAnchor constant:16],
-        [self.titleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:16],
-        [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.chevronImageView.leadingAnchor constant:-16],
+        [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.iconImageView.trailingAnchor
+                                                      constant:16],
+        [self.titleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor
+                                                  constant:16],
+        [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.chevronImageView.leadingAnchor
+                                                       constant:-16],
 
         [self.subtitleLabel.leadingAnchor constraintEqualToAnchor:self.titleLabel.leadingAnchor],
-        [self.subtitleLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:2],
+        [self.subtitleLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor
+                                                     constant:2],
         [self.subtitleLabel.trailingAnchor constraintEqualToAnchor:self.titleLabel.trailingAnchor],
-        [self.subtitleLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-16],
+        [self.subtitleLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor
+                                                        constant:-16],
 
-        [self.chevronImageView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-20],
+        [self.chevronImageView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor
+                                                             constant:-20],
         [self.chevronImageView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
         [self.chevronImageView.widthAnchor constraintEqualToConstant:18],
         [self.chevronImageView.heightAnchor constraintEqualToConstant:18]
     ]];
 }
 
-- (void)configureWithTitle:(NSString *)title subtitle:(NSString *)subtitle iconName:(NSString *)iconName {
+- (void)configureWithTitle:(NSString*)title
+                  subtitle:(NSString*)subtitle
+                  iconName:(NSString*)iconName {
     self.titleLabel.text = title;
     self.subtitleLabel.text = subtitle;
     objc_setAssociatedObject(self, @selector(iconName), iconName, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -83,21 +93,25 @@
 
 // Vector images bake in their fill color, so they are re-rendered on every theme change.
 - (void)updateIconColors {
-    NSString *iconName = objc_getAssociatedObject(self, @selector(iconName));
+    NSString* iconName = objc_getAssociatedObject(self, @selector(iconName));
     if (iconName) {
         Class TAEColorSettingsCls = objc_getClass("TAEColorSettings");
         id settings = [TAEColorSettingsCls sharedSettings];
         id currentPalette = [settings currentColorPalette];
         id colorPalette = [currentPalette colorPalette];
-        UIColor *iconColor = [colorPalette performSelector:@selector(tabBarItemColor)];
-        self.iconImageView.image = [UIImage tfn_vectorImageNamed:iconName fitsSize:CGSizeMake(20, 20) fillColor:iconColor];
+        UIColor* iconColor = [colorPalette performSelector:@selector(tabBarItemColor)];
+        self.iconImageView.image = [UIImage tfn_vectorImageNamed:iconName
+                                                        fitsSize:CGSizeMake(20, 20)
+                                                       fillColor:iconColor];
     }
     Class TAEColorSettingsCls = objc_getClass("TAEColorSettings");
     id settings = [TAEColorSettingsCls sharedSettings];
     id currentPalette = [settings currentColorPalette];
     id colorPalette = [currentPalette colorPalette];
-    UIColor *chevronColor = [colorPalette performSelector:@selector(tabBarItemColor)];
-    self.chevronImageView.image = [UIImage tfn_vectorImageNamed:@"chevron_right" fitsSize:CGSizeMake(18, 18) fillColor:chevronColor];
+    UIColor* chevronColor = [colorPalette performSelector:@selector(tabBarItemColor)];
+    self.chevronImageView.image = [UIImage tfn_vectorImageNamed:@"chevron_right"
+                                                       fitsSize:CGSizeMake(18, 18)
+                                                      fillColor:chevronColor];
 }
 
 - (void)updateSubtitleColor {
@@ -105,16 +119,17 @@
     id settings = [TAEColorSettingsCls sharedSettings];
     id currentPalette = [settings currentColorPalette];
     id colorPalette = [currentPalette colorPalette];
-    UIColor *subtitleColor = [colorPalette performSelector:@selector(tabBarItemColor)];
+    UIColor* subtitleColor = [colorPalette performSelector:@selector(tabBarItemColor)];
     self.subtitleLabel.textColor = subtitleColor;
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(UITraitCollection*)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     self.backgroundColor = [Palette currentBackgroundColor];
     [self updateIconColors];
     [self updateSubtitleColor];
-    if (previousTraitCollection.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory) {
+    if (previousTraitCollection.preferredContentSizeCategory !=
+        self.traitCollection.preferredContentSizeCategory) {
         id fontGroup = [BHTManager sharedFontGroup];
         self.titleLabel.font = [fontGroup performSelector:@selector(bodyBoldFont)];
         self.subtitleLabel.font = [fontGroup performSelector:@selector(subtext2Font)];
@@ -125,7 +140,8 @@
 
 @implementation ModernSettingsSimpleButtonCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString*)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self setupViews];
@@ -154,20 +170,25 @@
 
 - (void)setupConstraints {
     [NSLayoutConstraint activateConstraints:@[
-        [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:20],
+        [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor
+                                                      constant:20],
         [self.titleLabel.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
-        [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.chevronImageView.leadingAnchor constant:-16],
-        [self.titleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:16],
-        [self.titleLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-16],
+        [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.chevronImageView.leadingAnchor
+                                                       constant:-16],
+        [self.titleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor
+                                                  constant:16],
+        [self.titleLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor
+                                                     constant:-16],
 
-        [self.chevronImageView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-20],
+        [self.chevronImageView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor
+                                                             constant:-20],
         [self.chevronImageView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
         [self.chevronImageView.widthAnchor constraintEqualToConstant:18],
         [self.chevronImageView.heightAnchor constraintEqualToConstant:18]
     ]];
 }
 
-- (void)configureWithTitle:(NSString *)title {
+- (void)configureWithTitle:(NSString*)title {
     self.titleLabel.text = title;
 }
 
@@ -176,15 +197,18 @@
     id settings = [TAEColorSettingsCls sharedSettings];
     id currentPalette = [settings currentColorPalette];
     id colorPalette = [currentPalette colorPalette];
-    UIColor *chevronColor = [colorPalette performSelector:@selector(tabBarItemColor)];
-    self.chevronImageView.image = [UIImage tfn_vectorImageNamed:@"chevron_right" fitsSize:CGSizeMake(18, 18) fillColor:chevronColor];
+    UIColor* chevronColor = [colorPalette performSelector:@selector(tabBarItemColor)];
+    self.chevronImageView.image = [UIImage tfn_vectorImageNamed:@"chevron_right"
+                                                       fitsSize:CGSizeMake(18, 18)
+                                                      fillColor:chevronColor];
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(UITraitCollection*)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     self.backgroundColor = [Palette currentBackgroundColor];
     [self updateChevronColor];
-    if (previousTraitCollection.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory) {
+    if (previousTraitCollection.preferredContentSizeCategory !=
+        self.traitCollection.preferredContentSizeCategory) {
         id fontGroup = [BHTManager sharedFontGroup];
         self.titleLabel.font = [fontGroup performSelector:@selector(bodyBoldFont)];
     }
@@ -194,7 +218,8 @@
 
 @implementation ModernSettingsCompactButtonCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString*)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         [self setupViews];
@@ -230,26 +255,36 @@
 
 - (void)setupConstraints {
     [NSLayoutConstraint activateConstraints:@[
-        [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:20],
+        [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor
+                                                      constant:20],
         [self.titleLabel.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
-        [self.titleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:16],
-        [self.titleLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-16],
+        [self.titleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor
+                                                  constant:16],
+        [self.titleLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor
+                                                     constant:-16],
 
-        [self.subtitleLabel.leadingAnchor constraintGreaterThanOrEqualToAnchor:self.titleLabel.trailingAnchor constant:16],
-        [self.subtitleLabel.trailingAnchor constraintEqualToAnchor:self.chevronImageView.leadingAnchor constant:-8],
+        [self.subtitleLabel.leadingAnchor
+            constraintGreaterThanOrEqualToAnchor:self.titleLabel.trailingAnchor
+                                        constant:16],
+        [self.subtitleLabel.trailingAnchor constraintEqualToAnchor:self.chevronImageView.leadingAnchor
+                                                          constant:-8],
         [self.subtitleLabel.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
 
-        [self.chevronImageView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-20],
+        [self.chevronImageView.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor
+                                                             constant:-20],
         [self.chevronImageView.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
         [self.chevronImageView.widthAnchor constraintEqualToConstant:18],
         [self.chevronImageView.heightAnchor constraintEqualToConstant:18]
     ]];
-    [self.titleLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh forAxis:UILayoutConstraintAxisHorizontal];
-    [self.subtitleLabel setContentHuggingPriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
-    [self.subtitleLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
+    [self.titleLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh
+                                       forAxis:UILayoutConstraintAxisHorizontal];
+    [self.subtitleLabel setContentHuggingPriority:UILayoutPriorityDefaultLow
+                                          forAxis:UILayoutConstraintAxisHorizontal];
+    [self.subtitleLabel setContentCompressionResistancePriority:UILayoutPriorityDefaultLow
+                                                        forAxis:UILayoutConstraintAxisHorizontal];
 }
 
-- (void)configureWithTitle:(NSString *)title subtitle:(NSString *)subtitle {
+- (void)configureWithTitle:(NSString*)title subtitle:(NSString*)subtitle {
     self.titleLabel.text = title;
     self.subtitleLabel.text = subtitle;
 }
@@ -259,8 +294,10 @@
     id settings = [TAEColorSettingsCls sharedSettings];
     id currentPalette = [settings currentColorPalette];
     id colorPalette = [currentPalette colorPalette];
-    UIColor *chevronColor = [colorPalette performSelector:@selector(tabBarItemColor)];
-    self.chevronImageView.image = [UIImage tfn_vectorImageNamed:@"chevron_right" fitsSize:CGSizeMake(18, 18) fillColor:chevronColor];
+    UIColor* chevronColor = [colorPalette performSelector:@selector(tabBarItemColor)];
+    self.chevronImageView.image = [UIImage tfn_vectorImageNamed:@"chevron_right"
+                                                       fitsSize:CGSizeMake(18, 18)
+                                                      fillColor:chevronColor];
 }
 
 - (void)updateSubtitleColor {
@@ -268,16 +305,17 @@
     id settings = [TAEColorSettingsCls sharedSettings];
     id currentPalette = [settings currentColorPalette];
     id colorPalette = [currentPalette colorPalette];
-    UIColor *subtitleColor = [colorPalette performSelector:@selector(tabBarItemColor)];
+    UIColor* subtitleColor = [colorPalette performSelector:@selector(tabBarItemColor)];
     self.subtitleLabel.textColor = subtitleColor;
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(UITraitCollection*)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     self.backgroundColor = [Palette currentBackgroundColor];
     [self updateChevronColor];
     [self updateSubtitleColor];
-    if (previousTraitCollection.preferredContentSizeCategory != self.traitCollection.preferredContentSizeCategory) {
+    if (previousTraitCollection.preferredContentSizeCategory !=
+        self.traitCollection.preferredContentSizeCategory) {
         id fontGroup = [BHTManager sharedFontGroup];
         self.titleLabel.font = [fontGroup performSelector:@selector(bodyBoldFont)];
         self.subtitleLabel.font = [fontGroup performSelector:@selector(subtext2Font)];
@@ -288,7 +326,8 @@
 
 @implementation ModernSettingsToggleCell
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
+              reuseIdentifier:(NSString*)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -305,21 +344,27 @@
         [self.contentView addSubview:self.toggleSwitch];
         [self applyTheme];
         [NSLayoutConstraint activateConstraints:@[
-            [self.toggleSwitch.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor constant:-20],
-            [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor constant:20],
-            [self.titleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor constant:14],
-            [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.toggleSwitch.leadingAnchor constant:-16],
+            [self.toggleSwitch.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor
+                                                             constant:-20],
+            [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor
+                                                          constant:20],
+            [self.titleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor
+                                                      constant:14],
+            [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.toggleSwitch.leadingAnchor
+                                                           constant:-16],
             [self.toggleSwitch.centerYAnchor constraintEqualToAnchor:self.titleLabel.centerYAnchor],
             [self.subtitleLabel.leadingAnchor constraintEqualToAnchor:self.titleLabel.leadingAnchor],
             [self.subtitleLabel.trailingAnchor constraintEqualToAnchor:self.titleLabel.trailingAnchor],
-            [self.subtitleLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor constant:4],
-            [self.subtitleLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor constant:-14]
+            [self.subtitleLabel.topAnchor constraintEqualToAnchor:self.titleLabel.bottomAnchor
+                                                         constant:4],
+            [self.subtitleLabel.bottomAnchor constraintEqualToAnchor:self.contentView.bottomAnchor
+                                                            constant:-14]
         ]];
     }
     return self;
 }
 
-- (void)configureWithTitle:(NSString *)title subtitle:(NSString *)subtitle {
+- (void)configureWithTitle:(NSString*)title subtitle:(NSString*)subtitle {
     self.titleLabel.text = title;
     self.subtitleLabel.text = subtitle;
 }
@@ -339,7 +384,7 @@
     self.subtitleLabel.textColor = [colorPalette performSelector:@selector(tabBarItemColor)];
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+- (void)traitCollectionDidChange:(UITraitCollection*)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
     [self applyTheme];
 }

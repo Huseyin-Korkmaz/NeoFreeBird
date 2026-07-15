@@ -13,7 +13,7 @@
 
 typedef NS_ENUM(NSInteger, RefreshSound) {
     RefreshSoundPull = 0, // Dragging down past the threshold to refresh
-    RefreshSoundPop  = 1  // Manual refresh completed
+    RefreshSoundPop = 1   // Manual refresh completed
 };
 
 @interface TFNPullToRefreshControl : UIView
@@ -27,10 +27,11 @@ static void PlayRefreshSound(RefreshSound type) {
     static BOOL initialized[2] = {NO, NO};
 
     if (!initialized[type]) {
-        NSString *soundFile = (type == RefreshSoundPull) ? @"psst2.aac" : @"pop.aac";
-        NSURL *soundURL = [[BHTBundle sharedBundle] pathForFile:soundFile];
+        NSString* soundFile = (type == RefreshSoundPull) ? @"psst2.aac" : @"pop.aac";
+        NSURL* soundURL = [[BHTBundle sharedBundle] pathForFile:soundFile];
 
-        if (soundURL && AudioServicesCreateSystemSoundID((__bridge CFURLRef)soundURL, &sounds[type]) == kAudioServicesNoError) {
+        if (soundURL && AudioServicesCreateSystemSoundID((__bridge CFURLRef)soundURL, &sounds[type]) ==
+                            kAudioServicesNoError) {
             initialized[type] = YES;
         }
     }

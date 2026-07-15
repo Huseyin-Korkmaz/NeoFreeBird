@@ -7,7 +7,7 @@
 
 // MARK: - Custom accent color
 
-static NSNumber *selectedThemeColor(void) {
+static NSNumber* selectedThemeColor(void) {
     return [NSUserDefaults.standardUserDefaults objectForKey:@"bh_color_theme_selectedColor"];
 }
 
@@ -16,27 +16,28 @@ static NSNumber *selectedThemeColor(void) {
 %hook TAEColorSettings
 
 - (void)setPrimaryColorOption:(NSInteger)colorOption {
-    NSNumber *selectedColor = selectedThemeColor();
+    NSNumber* selectedColor = selectedThemeColor();
     %orig(selectedColor ? selectedColor.integerValue : colorOption);
 }
 
 - (NSInteger)primaryColorOption {
-    NSNumber *selectedColor = selectedThemeColor();
+    NSNumber* selectedColor = selectedThemeColor();
     return selectedColor ? selectedColor.integerValue : %orig;
 }
 
 %end
 
 void applySelectedThemeColor(void) {
-    NSNumber *selectedColor = selectedThemeColor();
+    NSNumber* selectedColor = selectedThemeColor();
     if (selectedColor) {
-        [[objc_getClass("TAEColorSettings") sharedSettings] setPrimaryColorOption:selectedColor.integerValue];
+        [[objc_getClass("TAEColorSettings") sharedSettings]
+            setPrimaryColorOption:selectedColor.integerValue];
     }
 }
 
 // MARK: - Custom tab bar order and visibility
 
-static NSString *scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
+static NSString* scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
     if (![entry respondsToSelector:@selector(tabView)]) {
         return nil;
     }
@@ -45,22 +46,22 @@ static NSString *scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
 
 // Operates on the tab ENTRIES, not the button views: the app derives both the
 // buttons and their content view controllers from this one array.
-static NSArray *orderedTabEntries(NSArray *entries) {
+static NSArray* orderedTabEntries(NSArray* entries) {
     // Record the underlying tab views so the editor can show real titles and icons.
-    NSMutableArray *tabViews = [NSMutableArray new];
+    NSMutableArray* tabViews = [NSMutableArray new];
     for (id<T1AppNavigationTabEntry> entry in entries) {
-        T1TabView *tabView = [entry respondsToSelector:@selector(tabView)] ? [entry tabView] : nil;
+        T1TabView* tabView = [entry respondsToSelector:@selector(tabView)] ? [entry tabView] : nil;
         if (tabView) {
             [tabViews addObject:tabView];
         }
     }
     [CustomTabBarUtility recordTabViews:tabViews];
 
-    NSArray <NSString *> *visibleOrder = [CustomTabBarUtility visiblePageIDsInOrder];
+    NSArray<NSString*>* visibleOrder = [CustomTabBarUtility visiblePageIDsInOrder];
 
-    NSMutableDictionary <NSString *, id> *entriesByPage = [NSMutableDictionary new];
+    NSMutableDictionary<NSString*, id>* entriesByPage = [NSMutableDictionary new];
     for (id<T1AppNavigationTabEntry> entry in entries) {
-        NSString *page = scribePageForEntry(entry);
+        NSString* page = scribePageForEntry(entry);
         if (page && !entriesByPage[page]) {
             entriesByPage[page] = entry;
         }
@@ -69,8 +70,8 @@ static NSArray *orderedTabEntries(NSArray *entries) {
     // Not customised yet: show the default set (Home, Search, Notifications, Chats)
     // in that order, hiding everything else the app builds.
     if (!visibleOrder) {
-        NSMutableArray *defaultEntries = [NSMutableArray new];
-        for (NSString *pageID in [CustomTabBarUtility defaultVisiblePageIDs]) {
+        NSMutableArray* defaultEntries = [NSMutableArray new];
+        for (NSString* pageID in [CustomTabBarUtility defaultVisiblePageIDs]) {
             id entry = entriesByPage[pageID];
             if (entry) {
                 [defaultEntries addObject:entry];
@@ -81,9 +82,9 @@ static NSArray *orderedTabEntries(NSArray *entries) {
 
     // Only the chosen tabs show; anything the editor hasn't been told to show
     // (including tabs unlocked after the user last saved) stays hidden.
-    NSMutableArray *orderedEntries = [NSMutableArray new];
-    NSMutableSet *placed = [NSMutableSet new];
-    for (NSString *pageID in visibleOrder) {
+    NSMutableArray* orderedEntries = [NSMutableArray new];
+    NSMutableSet* placed = [NSMutableSet new];
+    for (NSString* pageID in visibleOrder) {
         id entry = entriesByPage[pageID];
         if (entry && ![placed containsObject:pageID]) {
             [orderedEntries addObject:entry];
@@ -98,7 +99,7 @@ static NSArray *orderedTabEntries(NSArray *entries) {
 // filtering/reordering here keeps taps mapped to the right panel.
 %hook T1TabbedAppNavigationViewController
 
-- (void)setVisibleTabEntries:(NSArray *)entries {
+- (void)setVisibleTabEntries:(NSArray*)entries {
     %orig(orderedTabEntries(entries));
 }
 
@@ -124,7 +125,7 @@ static NSArray *orderedTabEntries(NSArray *entries) {
 
 static BOOL updatingTabIconColor = NO;
 
-static UIColor *tabItemColor(BOOL selected) {
+static UIColor* tabItemColor(BOOL selected) {
     return selected ? CurrentAccentColor() : [UIColor secondaryLabelColor];
 }
 
@@ -175,11 +176,12 @@ static UIColor *tabItemColor(BOOL selected) {
 
 %hook _TtC11TwitterHome39HomeDefaultNavigationBarTitleViewPlugin
 
-- (UIView *)titleView {
-    UIView *titleView = %orig;
+- (UIView*)titleView {
+    UIView* titleView = %orig;
 
-    if ([BHTSettings boolForKey:@"color_twitter_icon_in_top_bar"] && [titleView isKindOfClass:[UIImageView class]]) {
-        UIImageView *logoView = (UIImageView *)titleView;
+    if ([BHTSettings boolForKey:@"color_twitter_icon_in_top_bar"] &&
+        [titleView isKindOfClass:[UIImageView class]]) {
+        UIImageView* logoView = (UIImageView*)titleView;
         if (logoView.image) {
             logoView.image = [logoView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             logoView.tintColor = CurrentAccentColor();

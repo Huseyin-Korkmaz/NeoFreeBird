@@ -24,7 +24,8 @@
 
 %end
 
-// Reaches into the wrapped user's storage directly instead of through its getter.
+// Reaches into the wrapped user's storage directly instead of through its
+// getter.
 %hook TFSTwitterUserSource
 
 - (id)isBlueVerified {
@@ -61,8 +62,9 @@
 
 %end
 
-// Status view models cache these flags at init, beyond the user model hooks; the
-// author row badge reads isFromUserVerified, and other view models forward here.
+// Status view models cache these flags at init, beyond the user model hooks;
+// the author row badge reads isFromUserVerified, and other view models forward
+// here.
 %hook T1TwitterCoreStatusViewModelAdapter
 
 - (BOOL)isFromUserBlueVerified {
@@ -77,8 +79,9 @@
 
 // MARK: - No search history
 
-// Every recent-search write funnels through _tse_setRecentSearch: and every read
-// through recentSearches; the separate saved-searches feature stays untouched.
+// Every recent-search write funnels through _tse_setRecentSearch: and every
+// read through recentSearches; the separate saved-searches feature stays
+// untouched.
 
 %hook TTSRecentSearchesDatastore
 
@@ -88,7 +91,7 @@
     }
 }
 
-- (NSArray *)recentSearches {
+- (NSArray*)recentSearches {
     return [BHTSettings boolForKey:@"no_history"] ? @[] : %orig;
 }
 
@@ -96,9 +99,9 @@
 
 // MARK: - Hide trending content on the Explore tab
 
-// Trending content lives in the child URT chrome view controller, whose property
-// has no ObjC getter in 12.3, so find it among the children. The page tab strip
-// arrives separately through tfn_navigationBarAccessoryView.
+// Trending content lives in the child URT chrome view controller, whose
+// property has no ObjC getter in 12.3, so find it among the children. The page
+// tab strip arrives separately through tfn_navigationBarAccessoryView.
 
 %hook _TtC14T1TwitterSwift28GuideContainerViewController
 
@@ -106,15 +109,17 @@
     %orig;
 
     if ([BHTSettings boolForKey:@"hide_trends"]) {
-        for (UIViewController *child in [(UIViewController *)self childViewControllers]) {
-            if ([child isKindOfClass:%c(_TtC14T1TwitterSwift23URTChromeViewController)]) {
+        for (UIViewController* child in
+             [(UIViewController*)self childViewControllers]) {
+            if ([child isKindOfClass:
+                           %c(_TtC14T1TwitterSwift23URTChromeViewController)]) {
                 child.view.hidden = YES;
             }
         }
     }
 }
 
-- (UIView *)tfn_navigationBarAccessoryView {
+- (UIView*)tfn_navigationBarAccessoryView {
     return [BHTSettings boolForKey:@"hide_trends"] ? nil : %orig;
 }
 
@@ -132,7 +137,8 @@
 %hook TFSTwitterRelationship
 
 - (NSInteger)superFollowEligibleState {
-    if ([BHTSettings boolForKey:@"restore_follow_button"] && self.superFollowingState != 1) {
+    if ([BHTSettings boolForKey:@"restore_follow_button"] &&
+        self.superFollowingState != 1) {
         return 2;
     }
     return %orig;
@@ -142,8 +148,9 @@
 
 // MARK: - Hide Follow button on Tweets
 
-// The conversation focal tweet and the immersive player both render their author
-// row through TTAStatusAuthorView, so forcing the flag here covers every surface.
+// The conversation focal tweet and the immersive player both render their
+// author row through TTAStatusAuthorView, so forcing the flag here covers every
+// surface.
 
 %hook TTAStatusAuthorView
 
@@ -157,13 +164,16 @@
 
 %hook TTAStatusInlineActionsView
 
-+ (NSArray *)_t1_inlineActionViewClassesForViewModel:(id)arg1 options:(NSUInteger)arg2 displayType:(NSUInteger)arg3 account:(id)arg4 {
-    NSArray *origClasses = %orig;
++ (NSArray*)_t1_inlineActionViewClassesForViewModel:(id)arg1
+                                            options:(NSUInteger)arg2
+                                        displayType:(NSUInteger)arg3
+                                            account:(id)arg4 {
+    NSArray* origClasses = %orig;
     if (![origClasses isKindOfClass:NSArray.class]) {
         return origClasses;
     }
 
-    NSMutableArray *newClasses = [origClasses mutableCopy];
+    NSMutableArray* newClasses = [origClasses mutableCopy];
 
     Class analyticsButtonClass = %c(TTAStatusInlineAnalyticsButton);
     if (analyticsButtonClass && [BHTSettings boolForKey:@"hide_view_count"]) {

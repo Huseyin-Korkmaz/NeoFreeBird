@@ -10,13 +10,13 @@
 
 @implementation DebugSettingsViewController
 
-- (NSString *)pageKey {
+- (NSString*)pageKey {
     return @"debug";
 }
 
-- (void)switchChanged:(UISwitch *)sender {
+- (void)switchChanged:(UISwitch*)sender {
     [super switchChanged:sender];
-    NSString *key = objc_getAssociatedObject(sender, @"prefKey");
+    NSString* key = objc_getAssociatedObject(sender, @"prefKey");
     if ([key isEqualToString:@"flex_twitter"]) {
         if (sender.isOn) {
             [[objc_getClass("FLEXManager") sharedManager] showExplorer];

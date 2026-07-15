@@ -2,7 +2,7 @@
 
 // Reimplementation of 9.67's built-in xAuth login form.
 @interface LegacyLoginViewController : UIViewController
-+ (void)presentLoginFrom:(UIViewController *)presenter;
++ (void)presentLoginFrom:(UIViewController*)presenter;
 
-+ (UINavigationController *)loginRootNavigationController;
++ (UINavigationController*)loginRootNavigationController;
 @end

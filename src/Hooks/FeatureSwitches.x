@@ -5,20 +5,23 @@
 
 #import "HookHelpers.h"
 
-// While set, -isSubscribedTo: (below) reports the account's genuine subscription
-// state instead of the forced premium tiers, so paths that need the real status
-// can read through the unlock.
+// While set, -isSubscribedTo: (below) reports the account's genuine
+// subscription state instead of the forced premium tiers, so paths that need
+// the real status can read through the unlock.
 static __thread BOOL ReportGenuineSubscription = NO;
 
-// While set, the custom-navigation tab gates (below) report their real values, so
-// callers can tell genuinely-held panels from ones only unlocked for the tab pool.
+// While set, the custom-navigation tab gates (below) report their real values,
+// so callers can tell genuinely-held panels from ones only unlocked for the tab
+// pool.
 static __thread BOOL ReportGenuineTabGates = NO;
 
-// Whether the account is really a premium subscriber, ignoring the forced unlock —
-// for switch-gated surfaces that have no premium-aware seam of their own.
+// Whether the account is really a premium subscriber, ignoring the forced
+// unlock — for switch-gated surfaces that have no premium-aware seam of their
+// own.
 static BOOL AccountIsGenuinelyPremium(void) {
     Class hostClass = objc_getClass("T1HostViewController");
-    id host = ((id (*)(id, SEL))objc_msgSend)((id)hostClass, @selector(sharedHostViewController));
+    id host = ((id (*)(id, SEL))objc_msgSend)(
+        (id)hostClass, @selector(sharedHostViewController));
     id account = ((id (*)(id, SEL))objc_msgSend)(host, @selector(currentAccount));
     if (![account respondsToSelector:@selector(isPremiumTierUser)]) {
         return NO;
@@ -26,14 +29,15 @@ static BOOL AccountIsGenuinelyPremium(void) {
 
     BOOL saved = ReportGenuineSubscription;
     ReportGenuineSubscription = YES;
-    BOOL premium = ((BOOL (*)(id, SEL))objc_msgSend)(account, @selector(isPremiumTierUser));
+    BOOL premium =
+        ((BOOL (*)(id, SEL))objc_msgSend)(account, @selector(isPremiumTierUser));
     ReportGenuineSubscription = saved;
     return premium;
 }
 
 // MARK: - Feature switch overrides
 
-static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
+static NSNumber* FeatureSwitchOverrideValueForKey(NSString* key) {
     if (![key isKindOfClass:[NSString class]]) {
         return nil;
     }
@@ -41,25 +45,33 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
     // Custom timelines overrides
     BOOL hideCustomTimelines = [BHTSettings boolForKey:@"hide_custom_timelines"];
     if ([key isEqualToString:@"hometimeline_pinned_tabs_topics_enabled"] ||
-        [key isEqualToString:@"hometimeline_pinned_tabs_generic_timelines_enabled"] ||
-        [key isEqualToString:@"hometimeline_pinned_tabs_sticky_warm_start_enabled"] ||
-        [key isEqualToString:@"super_follow_subscriptions_home_timeline_tab_sticky_enabled"]) {
+        [key isEqualToString:
+                 @"hometimeline_pinned_tabs_generic_timelines_enabled"] ||
+        [key isEqualToString:
+                 @"hometimeline_pinned_tabs_sticky_warm_start_enabled"] ||
+        [key
+            isEqualToString:
+                @"super_follow_subscriptions_home_timeline_tab_sticky_enabled"]) {
         return hideCustomTimelines ? @NO : @YES;
     }
 
     // Keeps the selected timeline tab across sessions.
-    if ([key isEqualToString:@"home_timeline_non_sticky_tab_on_new_session_enabled"]) {
+    if ([key isEqualToString:
+                 @"home_timeline_non_sticky_tab_on_new_session_enabled"]) {
         return @NO;
     }
 
     if ([key isEqualToString:@"hometimeline_pinned_tabs_limit"] ||
-        [key isEqualToString:@"hometimeline_pinned_tabs_management_pinnedsection_inline_limit"] ||
-        [key isEqualToString:@"hometimeline_pinned_tabs_management_topics_inline_limit"]) {
+        [key isEqualToString:@"hometimeline_pinned_tabs_management_pinnedsection_"
+                             @"inline_limit"] ||
+        [key isEqualToString:
+                 @"hometimeline_pinned_tabs_management_topics_inline_limit"]) {
         return hideCustomTimelines ? @0 : @100;
     }
 
     // Gates the add-tab (+) accessory button on the home tab bar.
-    if ([key isEqualToString:@"hometimeline_pinned_tabs_pinned_trailing_accessory_enabled"]) {
+    if ([key isEqualToString:
+                 @"hometimeline_pinned_tabs_pinned_trailing_accessory_enabled"]) {
         return hideCustomTimelines ? @NO : nil;
     }
 
@@ -69,39 +81,51 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
         return @YES;
     }
 
-    // Restore the animated launch screen (AppLifecycle.x strips its X-shaped reveal mask)
+    // Restore the animated launch screen (AppLifecycle.x strips its X-shaped
+    // reveal mask)
     if ([key isEqualToString:@"app_launch_animated_launch_screen_enabled"]) {
         return @YES;
     }
 
     // Grok translations
-    if ([key isEqualToString:@"grok_translations_bio_inline_translation_is_enabled"] ||
+    if ([key isEqualToString:
+                 @"grok_translations_bio_inline_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_bio_translation_is_enabled"] ||
-        [key isEqualToString:@"grok_translations_post_inline_translation_is_enabled"] ||
+        [key isEqualToString:
+                 @"grok_translations_post_inline_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_post_translation_is_enabled"] ||
-        [key isEqualToString:@"grok_translations_community_note_translation_is_enabled"] ||
+        [key isEqualToString:
+                 @"grok_translations_community_note_translation_is_enabled"] ||
         [key isEqualToString:@"grok_translations_poll_translation_is_enabled"]) {
         return @YES;
     }
 
     // Checked before the per-language preference, so turning these off stops all
     // auto translation while manual translate stays.
-    if ([key isEqualToString:@"grok_translations_post_auto_translation_is_enabled"] ||
-        [key isEqualToString:@"grok_translations_bio_auto_translation_is_enabled"] ||
-        [key isEqualToString:@"grok_translations_community_note_auto_translation_is_enabled"] ||
-        [key isEqualToString:@"grok_translations_notification_auto_translation_is_enabled"] ||
-        [key isEqualToString:@"grok_translations_immersive_auto_translate_is_enabled"]) {
+    if ([key isEqualToString:
+                 @"grok_translations_post_auto_translation_is_enabled"] ||
+        [key isEqualToString:
+                 @"grok_translations_bio_auto_translation_is_enabled"] ||
+        [key isEqualToString:@"grok_translations_community_note_auto_translation_"
+                             @"is_enabled"] ||
+        [key isEqualToString:
+                 @"grok_translations_notification_auto_translation_is_enabled"] ||
+        [key isEqualToString:
+                 @"grok_translations_immersive_auto_translate_is_enabled"]) {
         return [BHTSettings boolForKey:@"disable_auto_translate"] ? @NO : nil;
     }
 
     // Grok buttons
     if ([key isEqualToString:@"grok_ask_grok_button_under_post_focal_enabled"] ||
-        [key isEqualToString:@"grok_ask_grok_button_under_post_preview_enabled"]) {
+        [key
+            isEqualToString:@"grok_ask_grok_button_under_post_preview_enabled"]) {
         return @YES;
     }
 
-    if ([key isEqualToString:@"grok_edit_with_grok_button_under_post_focal_enabled"] ||
-        [key isEqualToString:@"grok_edit_with_grok_button_under_post_preview_enabled"]) {
+    if ([key isEqualToString:
+                 @"grok_edit_with_grok_button_under_post_focal_enabled"] ||
+        [key isEqualToString:
+                 @"grok_edit_with_grok_button_under_post_preview_enabled"]) {
         return @(![BHTSettings boolForKey:@"hide_grok_create"]);
     }
 
@@ -110,10 +134,12 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
     if ([key isEqualToString:@"ios_composer_grok_button_enabled"] ||
         [key isEqualToString:@"grok_imagine_composer_enabled"] ||
         [key isEqualToString:@"grok_composer_imagine_is_enabled"] ||
-        [key isEqualToString:@"grok_composer_attachment_imagine_menu_is_enabled"] ||
+        [key isEqualToString:
+                 @"grok_composer_attachment_imagine_menu_is_enabled"] ||
         [key isEqualToString:@"grok_timeline_preview_imagine_menu_is_enabled"] ||
         [key isEqualToString:@"grok_timeline_video_imagine_menu_is_enabled"] ||
-        [key isEqualToString:@"grok_timeline_slideshow_imagine_menu_is_enabled"] ||
+        [key
+            isEqualToString:@"grok_timeline_slideshow_imagine_menu_is_enabled"] ||
         [key isEqualToString:@"grok_ios_edit_photo_post_button_enabled"] ||
         [key isEqualToString:@"grok_ios_imagine_cta_focal_enabled"] ||
         [key isEqualToString:@"grok_ios_imagine_cta_reply_enabled"] ||
@@ -131,7 +157,8 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 
     // Grok analyze: every tweet-side show decision gates on this backend switch
     // before consulting the per-tweet flag.
-    if ([key isEqualToString:@"grok_ios_author_view_analyze_button_via_backend_enabled"]) {
+    if ([key isEqualToString:
+                 @"grok_ios_author_view_analyze_button_via_backend_enabled"]) {
         return [BHTSettings boolForKey:@"hide_grok_analyze"] ? @NO : nil;
     }
 
@@ -162,7 +189,8 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
     }
 
     // Age verification bypass
-    if ([key hasPrefix:@"ios_age_assurance"] || [key isEqualToString:@"grok_settings_age_restriction_enabled"]) {
+    if ([key hasPrefix:@"ios_age_assurance"] ||
+        [key isEqualToString:@"grok_settings_age_restriction_enabled"]) {
         if ([BHTSettings boolForKey:@"bypass_age_verification"]) {
             return @NO;
         }
@@ -173,11 +201,13 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
         return @(![BHTSettings boolForKey:@"reply_sorting"]);
     }
 
-    if ([key isEqualToString:@"ios_tweet_detail_overflow_in_navigation_enabled"]) {
+    if ([key
+            isEqualToString:@"ios_tweet_detail_overflow_in_navigation_enabled"]) {
         return @NO;
     }
 
-    if ([key isEqualToString:@"ios_tweet_detail_conversation_context_removal_enabled"]) {
+    if ([key isEqualToString:
+                 @"ios_tweet_detail_conversation_context_removal_enabled"]) {
         return @(![BHTSettings boolForKey:@"restore_reply_context"]);
     }
 
@@ -188,8 +218,9 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
     }
 
     // Custom navigation: per-panel tab gates, forced on so every panel exists for
-    // the editor to offer. The tab bar hook keeps them out of the bar and the dash
-    // spoof (below) keeps the panels only unlocked here out of the side drawer.
+    // the editor to offer. The tab bar hook keeps them out of the bar and the
+    // dash spoof (below) keeps the panels only unlocked here out of the side
+    // drawer.
     if ([key isEqualToString:@"ios_tab_bar_default_show_profile"] ||
         [key isEqualToString:@"ios_tab_bar_default_show_communities"]) {
         return @YES;
@@ -220,8 +251,9 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
         }
     }
 
-    // The Connect tab stays on its native gate (fresh accounts only): its drawer row
-    // doesn't consult the tab bar, so forcing it would grow a row that can't be hidden.
+    // The Connect tab stays on its native gate (fresh accounts only): its drawer
+    // row doesn't consult the tab bar, so forcing it would grow a row that can't
+    // be hidden.
 
     // In-app article webview
     if ([key isEqualToString:@"ios_in_app_article_webview_enabled"]) {
@@ -230,7 +262,8 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 
     // A negative threshold disables immersive auto-advance and removes its row
     // from the player's settings sheet.
-    if ([key isEqualToString:@"immersive_video_auto_advance_duration_threshold"]) {
+    if ([key
+            isEqualToString:@"immersive_video_auto_advance_duration_threshold"]) {
         return [BHTSettings boolForKey:@"disable_immersive_scroll"] ? @(-1) : nil;
     }
 
@@ -239,13 +272,14 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
         return [BHTSettings boolForKey:@"hide_downvote_button"] ? @NO : nil;
     }
 
-    // Premium features gate on subscriptions_enabled || (gating bypass && premium tier).
+    // Premium features gate on subscriptions_enabled || (gating bypass && premium
+    // tier).
     if ([key isEqualToString:@"subscriptions_gating_bypass"]) {
         return @YES;
     }
 
-    // Premium / verification upsells. Not all gate on !isPremiumTierUser, so every
-    // upsell surface present in 12.3 is disabled here.
+    // Premium / verification upsells. Not all gate on !isPremiumTierUser, so
+    // every upsell surface present in 12.3 is disabled here.
     if ([key isEqualToString:@"ios_profile_analytics_upsell_enabled"] ||
         [key isEqualToString:@"ios_profile_analytics_upsell_possible_enabled"] ||
         [key isEqualToString:@"ios_profile_upgrade_upsell_enabled"] ||
@@ -253,20 +287,27 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
         [key isEqualToString:@"ios_profile_visitor_upsell_enabled"] ||
         [key isEqualToString:@"subscriptions_upsells_get_verified_profile"] ||
         [key isEqualToString:@"subscriptions_upsells_reply_boost_enabled"] ||
-        [key isEqualToString:@"subscriptions_upsells_reply_boost_popup_enabled"] ||
+        [key
+            isEqualToString:@"subscriptions_upsells_reply_boost_popup_enabled"] ||
         [key isEqualToString:@"subscriptions_upsells_post_analytics_enabled"] ||
-        [key isEqualToString:@"subscriptions_upsells_creator_support_post_conversation_enabled"] ||
+        [key isEqualToString:@"subscriptions_upsells_creator_support_post_"
+                             @"conversation_enabled"] ||
         [key isEqualToString:@"longform_notetweets_composer_upsell_enabled"] ||
-        [key isEqualToString:@"longform_notetweets_composer_auto_upsell_enabled"] ||
+        [key isEqualToString:
+                 @"longform_notetweets_composer_auto_upsell_enabled"] ||
         [key isEqualToString:@"subscriptions_cta_on_replies_enabled"] ||
         [key isEqualToString:@"super_follow_upsell_sticky_button_enabled"] ||
         [key isEqualToString:@"subscriptions_new_paywall_enabled"] ||
         [key isEqualToString:@"subscriptions_offers_promotional_enabled"] ||
         [key isEqualToString:@"subscriptions_gifting_premium_enabled"] ||
-        [key isEqualToString:@"subscriptions_gifting_premium_intro_copy_enabled"] ||
-        [key isEqualToString:@"subscriptions_ios_download_to_offline_upsell_enabled"] ||
-        [key isEqualToString:@"ios_notifications_blue_verified_introductory_offer_visible"] ||
-        [key isEqualToString:@"ios_notifications_blue_verified_introductory_offer_prefix_visible"] ||
+        [key isEqualToString:
+                 @"subscriptions_gifting_premium_intro_copy_enabled"] ||
+        [key isEqualToString:
+                 @"subscriptions_ios_download_to_offline_upsell_enabled"] ||
+        [key isEqualToString:
+                 @"ios_notifications_blue_verified_introductory_offer_visible"] ||
+        [key isEqualToString:@"ios_notifications_blue_verified_introductory_"
+                             @"offer_prefix_visible"] ||
         [key isEqualToString:@"dash_items_download_grok_enabled"]) {
         return @NO;
     }
@@ -275,23 +316,33 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
     // switch rather than the root one, so all of them are disabled.
     if ([key isEqualToString:@"ios_tweet_promote_button_enabled"] ||
         [key isEqualToString:@"ios_tweet_promote_button_timeline_enabled"] ||
-        [key isEqualToString:@"ios_tweet_promote_button_in_tweet_composer_enabled"] ||
-        [key isEqualToString:@"ios_tweet_promote_button_in_overflow_menu_enabled"] ||
-        [key isEqualToString:@"ios_tweet_promote_button_in_focal_top_toolbar_enabled"] ||
-        [key isEqualToString:@"ios_tweet_promote_button_in_focal_bottom_toolbar_enabled"] ||
-        [key isEqualToString:@"ios_tweet_promote_button_in_focal_top_analytics_enabled"] ||
-        [key isEqualToString:@"ios_tweet_promote_button_in_post_analytics_enabled"] ||
-        [key isEqualToString:@"ios_tweet_promote_button_boost_again_in_top_toolbar_enabled"] ||
-        [key isEqualToString:@"ios_tweet_promote_button_sent_tweet_toast_enabled"] ||
-        [key isEqualToString:@"ios_tweet_promote_button_third_party_boost_enabled"] ||
+        [key isEqualToString:
+                 @"ios_tweet_promote_button_in_tweet_composer_enabled"] ||
+        [key isEqualToString:
+                 @"ios_tweet_promote_button_in_overflow_menu_enabled"] ||
+        [key isEqualToString:
+                 @"ios_tweet_promote_button_in_focal_top_toolbar_enabled"] ||
+        [key isEqualToString:
+                 @"ios_tweet_promote_button_in_focal_bottom_toolbar_enabled"] ||
+        [key isEqualToString:
+                 @"ios_tweet_promote_button_in_focal_top_analytics_enabled"] ||
+        [key isEqualToString:
+                 @"ios_tweet_promote_button_in_post_analytics_enabled"] ||
+        [key
+            isEqualToString:
+                @"ios_tweet_promote_button_boost_again_in_top_toolbar_enabled"] ||
+        [key isEqualToString:
+                 @"ios_tweet_promote_button_sent_tweet_toast_enabled"] ||
+        [key isEqualToString:
+                 @"ios_tweet_promote_button_third_party_boost_enabled"] ||
         [key isEqualToString:@"thirdparty_boost_author_view_button_enabled"]) {
         return @NO;
     }
 
     // The Premium settings row is handled in the
-    // -isSubscriptionsSettingsItemEnabledWithProvider: hook. Creator purchases and
-    // the subscriber-only profile tab already gate on real creator eligibility,
-    // which the forced tier never affects.
+    // -isSubscriptionsSettingsItemEnabledWithProvider: hook. Creator purchases
+    // and the subscriber-only profile tab already gate on real creator
+    // eligibility, which the forced tier never affects.
 
     // Creator Studio / Monetization entries gate purely on these switches with no
     // premium check, so follow the genuine status: a real subscriber keeps them
@@ -306,45 +357,45 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
     return nil;
 }
 
-// Every feature switch facade bottoms out in TFSFeatureSwitches, but instances can
-// be wrapped in TFSInstrumentedFeatureSwitches, which implements its own typed
-// getters, so both classes need the same hooks.
+// Every feature switch facade bottoms out in TFSFeatureSwitches, but instances
+// can be wrapped in TFSInstrumentedFeatureSwitches, which implements its own
+// typed getters, so both classes need the same hooks.
 
 %hook TFSFeatureSwitches
 
-- (BOOL)boolForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (BOOL)boolForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.boolValue : %orig;
 }
 
-- (NSInteger)integerForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (NSInteger)integerForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.integerValue : %orig;
 }
 
-- (NSNumber *)numberForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (NSNumber*)numberForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ?: %orig;
 }
 
-- (id)rawValueForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (id)rawValueForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ?: %orig;
 }
 
-- (BOOL)unsafePeekBoolForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (BOOL)unsafePeekBoolForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.boolValue : %orig;
 }
 
-- (NSInteger)unsafePeekIntegerForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (NSInteger)unsafePeekIntegerForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.integerValue : %orig;
 }
 
 // Some reads, like the default captions setup, only consult the value when the
 // switch reports a non-default one.
-- (BOOL)hasNonDefaultValueForKey:(NSString *)key {
+- (BOOL)hasNonDefaultValueForKey:(NSString*)key {
     return FeatureSwitchOverrideValueForKey(key) ? YES : %orig;
 }
 
@@ -352,37 +403,37 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 
 %hook TFSInstrumentedFeatureSwitches
 
-- (BOOL)boolForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (BOOL)boolForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.boolValue : %orig;
 }
 
-- (NSInteger)integerForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (NSInteger)integerForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.integerValue : %orig;
 }
 
-- (NSNumber *)numberForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (NSNumber*)numberForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ?: %orig;
 }
 
-- (id)rawValueForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (id)rawValueForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ?: %orig;
 }
 
-- (BOOL)unsafePeekBoolForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (BOOL)unsafePeekBoolForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.boolValue : %orig;
 }
 
-- (NSInteger)unsafePeekIntegerForKey:(NSString *)key {
-    NSNumber *override = FeatureSwitchOverrideValueForKey(key);
+- (NSInteger)unsafePeekIntegerForKey:(NSString*)key {
+    NSNumber* override = FeatureSwitchOverrideValueForKey(key);
     return override ? override.integerValue : %orig;
 }
 
-- (BOOL)hasNonDefaultValueForKey:(NSString *)key {
+- (BOOL)hasNonDefaultValueForKey:(NSString*)key {
     return FeatureSwitchOverrideValueForKey(key) ? YES : %orig;
 }
 
@@ -399,8 +450,9 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 }
 
 // Premium row in Settings. Its gate (subscriptions_enabled || gating_bypass &&
-// isPremiumTierUser) is on for everyone as an upsell, so %orig can't hide it —
-// short-circuit to NO unless the account (the provider) is genuinely premium.
+// isPremiumTierUser) is on for everyone as an upsell, so %orig can't hide
+// it — short-circuit to NO unless the account (the provider) is genuinely
+// premium.
 - (BOOL)isSubscriptionsSettingsItemEnabledWithProvider:(id)provider {
     if (![provider respondsToSelector:@selector(isPremiumTierUser)]) {
         return %orig;
@@ -408,7 +460,8 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 
     BOOL saved = ReportGenuineSubscription;
     ReportGenuineSubscription = YES;
-    BOOL genuinePremium = ((BOOL (*)(id, SEL))objc_msgSend)(provider, @selector(isPremiumTierUser));
+    BOOL genuinePremium =
+        ((BOOL (*)(id, SEL))objc_msgSend)(provider, @selector(isPremiumTierUser));
     ReportGenuineSubscription = saved;
 
     if (!genuinePremium) {
@@ -445,7 +498,7 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 %hook T1AccountsViewController
 
 - (void)private_startLoginFlowWithSender:(id)sender {
-    [LegacyLoginViewController presentLoginFrom:(UIViewController *)self];
+    [LegacyLoginViewController presentLoginFrom:(UIViewController*)self];
 }
 
 %end
@@ -506,11 +559,15 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 }
 
 - (BOOL)isSensitiveTweetWarningsComposeEnabled {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? NO : %orig;
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"]
+               ? NO
+               : %orig;
 }
 
 - (BOOL)isSensitiveTweetWarningsConsumeEnabled {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? NO : %orig;
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"]
+               ? NO
+               : %orig;
 }
 
 - (BOOL)isAgeAssuranceAgeVerificationFlowEnabled {
@@ -526,7 +583,8 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 }
 
 // Custom navigation: the Money tab's gate, granted per account/region by the
-// server, forced on like the switch-keyed tab gates so the panel's entry builds.
+// server, forced on like the switch-keyed tab gates so the panel's entry
+// builds.
 - (BOOL)canAccessXPayments {
     if (ReportGenuineTabGates) {
         return %orig;
@@ -559,7 +617,8 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 
 // Opens the real subscription management flow; its premium check should see the
 // genuine status so a forced unlock stops here.
-- (void)showPremiumHubManageSubscriptionWithSource:(NSInteger)source withCompletion:(id)completion {
+- (void)showPremiumHubManageSubscriptionWithSource:(NSInteger)source
+                                    withCompletion:(id)completion {
     BOOL saved = ReportGenuineSubscription;
     ReportGenuineSubscription = YES;
     %orig;
@@ -570,9 +629,9 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 
 %hook T1ProfileSummaryView
 
-// The "under review" prompt shows for a verified-premium user not yet blue-verified
-// — a state the forced tier fabricates for a non-subscriber, so read it against the
-// genuine status.
+// The "under review" prompt shows for a verified-premium user not yet
+// blue-verified — a state the forced tier fabricates for a non-subscriber, so
+// read it against the genuine status.
 - (BOOL)shouldShowUnderReviewButton {
     BOOL saved = ReportGenuineSubscription;
     ReportGenuineSubscription = YES;
@@ -585,15 +644,18 @@ static NSNumber *FeatureSwitchOverrideValueForKey(NSString *key) {
 
 // MARK: - Custom navigation - genuine panel availability
 
-// Whether a panel would be tab-eligible without the forced gates: the tab bar editor
-// only offers genuine panels, and the dash spoof keeps the rest out of the drawer.
+// Whether a panel would be tab-eligible without the forced gates: the tab bar
+// editor only offers genuine panels, and the dash spoof keeps the rest out of
+// the drawer.
 
 static id accountFeatureSwitches(void) {
     Class switchesClass = objc_getClass("TFSAccountFeatureSwitches");
-    if (![(id)switchesClass respondsToSelector:@selector(lastUsedAccountFeatureSwitches)]) {
+    if (![(id)switchesClass
+            respondsToSelector:@selector(lastUsedAccountFeatureSwitches)]) {
         return nil;
     }
-    return ((id (*)(id, SEL))objc_msgSend)((id)switchesClass, @selector(lastUsedAccountFeatureSwitches));
+    return ((id (*)(id, SEL))objc_msgSend)(
+        (id)switchesClass, @selector(lastUsedAccountFeatureSwitches));
 }
 
 static BOOL genuineTabGateFlag(id receiver, SEL selector) {
@@ -616,7 +678,7 @@ static id featureSwitchesProvider(void) {
     return ((id (*)(id, SEL))objc_msgSend)(accountSwitches, @selector(provider));
 }
 
-static BOOL genuineSwitchBool(NSString *key) {
+static BOOL genuineSwitchBool(NSString* key) {
     id provider = featureSwitchesProvider();
     if (![provider respondsToSelector:@selector(boolForKey:)]) {
         return NO;
@@ -624,7 +686,8 @@ static BOOL genuineSwitchBool(NSString *key) {
 
     BOOL saved = ReportGenuineTabGates;
     ReportGenuineTabGates = YES;
-    BOOL value = ((BOOL (*)(id, SEL, NSString *))objc_msgSend)(provider, @selector(boolForKey:), key);
+    BOOL value = ((BOOL (*)(id, SEL, NSString*))objc_msgSend)(
+        provider, @selector(boolForKey:), key);
     ReportGenuineTabGates = saved;
     return value;
 }
@@ -633,7 +696,8 @@ BOOL panelIsGenuinelyAvailable(long long panelID) {
     switch (panelID) {
         case 13: { // Community Notes
             id switches = accountFeatureSwitches();
-            return genuineTabGateFlag(switches, @selector(birdwatchHomePageIsEnabled)) &&
+            return genuineTabGateFlag(switches,
+                                      @selector(birdwatchHomePageIsEnabled)) &&
                    genuineTabGateFlag(switches, @selector(birdwatchHistoryIsEnabled));
         }
         case 16: // Premium hub
@@ -642,8 +706,11 @@ BOOL panelIsGenuinelyAvailable(long long panelID) {
             return genuineSwitchBool(@"recruiting_global_jobs_hub_enabled") ||
                    genuineSwitchBool(@"recruiting_jetfuel_jobs_hub_enabled");
         case 18: { // Money
-            id host = ((id (*)(id, SEL))objc_msgSend)(objc_getClass("T1HostViewController"), @selector(sharedHostViewController));
-            id account = ((id (*)(id, SEL))objc_msgSend)(host, @selector(currentAccount));
+            id host =
+                ((id (*)(id, SEL))objc_msgSend)(objc_getClass("T1HostViewController"),
+                                                @selector(sharedHostViewController));
+            id account =
+                ((id (*)(id, SEL))objc_msgSend)(host, @selector(currentAccount));
             return genuineTabGateFlag(account, @selector(canAccessXPayments));
         }
         default: // Panels the app builds, or the unlock enables, for everyone
@@ -654,9 +721,10 @@ BOOL panelIsGenuinelyAvailable(long long panelID) {
 // MARK: - Custom navigation - side drawer rows
 
 // The drawer builds a row for each panel absent from the tab bar, reading a
-// snapshot taken in updateVisiblePanelIDs. Extra panels are injected only there,
-// scoped by a flag — other visiblePanelIDs readers must see the real tab state.
-// Premium is claimed for a non-premium account, for whom it's just an upsell.
+// snapshot taken in updateVisiblePanelIDs. Extra panels are injected only
+// there, scoped by a flag — other visiblePanelIDs readers must see the real tab
+// state. Premium is claimed for a non-premium account, for whom it's just an
+// upsell.
 
 static __thread BOOL DashPanelIDQuery = NO;
 
@@ -672,20 +740,20 @@ static __thread BOOL DashPanelIDQuery = NO;
 
 %hook T1TabbedAppNavigationViewController
 
-- (NSArray *)visiblePanelIDsForAppNavigation:(id)appNavigation {
-    NSArray *panelIDs = %orig;
+- (NSArray*)visiblePanelIDsForAppNavigation:(id)appNavigation {
+    NSArray* panelIDs = %orig;
     if (!DashPanelIDQuery) {
         return panelIDs;
     }
 
-    NSMutableArray *spoofed = [panelIDs mutableCopy];
-    void (^claim)(NSNumber *) = ^(NSNumber *panelID) {
+    NSMutableArray* spoofed = [panelIDs mutableCopy];
+    void (^claim)(NSNumber*) = ^(NSNumber* panelID) {
         if (![spoofed containsObject:panelID]) {
             [spoofed addObject:panelID];
         }
     };
 
-    for (NSNumber *panelID in @[@13, @16, @17, @18]) {
+    for (NSNumber* panelID in @[@13, @16, @17, @18]) {
         if (!panelIsGenuinelyAvailable(panelID.longLongValue)) {
             claim(panelID);
         }
@@ -706,8 +774,8 @@ static __thread BOOL DashPanelIDQuery = NO;
 
 // MARK: - Grok creation - photo editor
 
-// The photo editor's Edit with Grok entry has no feature switch of its own; both
-// delegates hardcode YES.
+// The photo editor's Edit with Grok entry has no feature switch of its own;
+// both delegates hardcode YES.
 
 %hook T1TweetComposeViewController
 
@@ -730,15 +798,21 @@ static __thread BOOL DashPanelIDQuery = NO;
 %hook TFNTwitterStatus
 
 - (BOOL)hasImageInterstitial {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? NO : %orig;
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"]
+               ? NO
+               : %orig;
 }
 
 - (id)imageInterstitial {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? nil : %orig;
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"]
+               ? nil
+               : %orig;
 }
 
 - (id)innerImageInterstitial {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? nil : %orig;
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"]
+               ? nil
+               : %orig;
 }
 
 %end
@@ -746,7 +820,9 @@ static __thread BOOL DashPanelIDQuery = NO;
 %hook HFHealthSafetyFeature
 
 + (BOOL)isTweetMedialInterstitialEnabled:(id)featureSwitches {
-    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"] ? NO : %orig;
+    return [BHTSettings boolForKey:@"disable_sensitive_tweet_warnings"]
+               ? NO
+               : %orig;
 }
 
 %end

@@ -6,13 +6,20 @@
 #import "HookHelpers.h"
 
 static void ShowConfirmation(void (^confirmed)(void)) {
-    [%c(FLEXAlert) makeAlert:^(FLEXAlert *make) {
-        make.message([[BHTBundle sharedBundle] localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
-        make.button([[BHTBundle sharedBundle] localizedTwitterStringForKey:@"YES_ACTION_LABEL"]).handler(^(NSArray<NSString *> *strings) {
-            confirmed();
-        });
-        make.button([[BHTBundle sharedBundle] localizedTwitterStringForKey:@"NO_ACTION_LABEL"]).cancelStyle();
-    } showFrom:topMostController()];
+    [%c(FLEXAlert)
+        makeAlert:^(FLEXAlert* make) {
+            make.message([[BHTBundle sharedBundle]
+                localizedStringForKey:@"CONFIRM_ALERT_MESSAGE"]);
+            make.button([[BHTBundle sharedBundle]
+                            localizedTwitterStringForKey:@"YES_ACTION_LABEL"])
+                .handler(^(NSArray<NSString*>* strings) {
+                    confirmed();
+                });
+            make.button([[BHTBundle sharedBundle]
+                            localizedTwitterStringForKey:@"NO_ACTION_LABEL"])
+                .cancelStyle();
+        }
+         showFrom:topMostController()];
 }
 
 // MARK: - Tweet confirm
@@ -21,7 +28,7 @@ static void ShowConfirmation(void (^confirmed)(void)) {
 // button register can hold garbage and must not be retained.
 %hook T1TweetComposeViewController
 
-- (void)_t1_didTapSendButton:(__unsafe_unretained UIButton *)sendButton {
+- (void)_t1_didTapSendButton:(__unsafe_unretained UIButton*)sendButton {
     if (![BHTSettings boolForKey:@"tweet_confirm"]) {
         return %orig;
     }
@@ -55,8 +62,9 @@ static void ShowConfirmation(void (^confirmed)(void)) {
 // so only intercept the favorite button.
 %hook TTAStatusInlineActionsView
 
-- (void)didTapInlineActionButton:(UIView *)button {
-    if (![BHTSettings boolForKey:@"like_confirm"] || ![button isKindOfClass:%c(TTAStatusInlineFavoriteButton)]) {
+- (void)didTapInlineActionButton:(UIView*)button {
+    if (![BHTSettings boolForKey:@"like_confirm"] ||
+        ![button isKindOfClass:%c(TTAStatusInlineFavoriteButton)]) {
         return %orig;
     }
 
@@ -115,7 +123,9 @@ static BOOL UndoTweetEnabled(void) {
 }
 
 - (double)undoTimeInterval {
-    return UndoTweetEnabled() ? (double)[BHTSettings integerForKey:@"undo_tweet_timeout"] : %orig;
+    return UndoTweetEnabled()
+               ? (double)[BHTSettings integerForKey:@"undo_tweet_timeout"]
+               : %orig;
 }
 
 - (BOOL)isUndoSendTurnedOnForOriginalTweets {
@@ -145,15 +155,17 @@ static BOOL UndoTweetEnabled(void) {
 %hook TFNTwitterComposition
 
 - (double)undoTimeInterval {
-    return UndoTweetEnabled() ? (double)[BHTSettings integerForKey:@"undo_tweet_timeout"] : %orig;
+    return UndoTweetEnabled()
+               ? (double)[BHTSettings integerForKey:@"undo_tweet_timeout"]
+               : %orig;
 }
 
 // The original computes this from the interval directly, bypassing the getter.
-- (NSDate *)undoableSendDate {
+- (NSDate*)undoableSendDate {
     if (!UndoTweetEnabled()) {
         return %orig;
     }
-    NSDate *added = [self undoableAddedDate];
+    NSDate* added = [self undoableAddedDate];
     return added ? [added dateByAddingTimeInterval:[self undoTimeInterval]] : nil;
 }
 

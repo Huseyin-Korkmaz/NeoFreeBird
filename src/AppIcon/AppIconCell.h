@@ -13,11 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AppIconCell : UICollectionViewCell
 
-- (void)configureWithImage:(nullable UIImage *)image
+- (void)configureWithImage:(nullable UIImage*)image
                     active:(BOOL)active
-               accentColor:(UIColor *)accentColor;
+               accentColor:(UIColor*)accentColor;
 
-+ (NSString *)reuseIdentifier;
++ (NSString*)reuseIdentifier;
 
 @end
 

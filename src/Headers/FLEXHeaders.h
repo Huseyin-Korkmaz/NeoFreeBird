@@ -10,35 +10,41 @@
 @class FLEXAlert, FLEXAlertAction;
 
 typedef void (^FLEXAlertReveal)(void);
-typedef void (^FLEXAlertBuilder)(FLEXAlert *make);
-typedef FLEXAlert * _Nonnull (^FLEXAlertStringProperty)(NSString * _Nullable);
-typedef FLEXAlert * _Nonnull (^FLEXAlertStringArg)(NSString * _Nullable);
-typedef FLEXAlert * _Nonnull (^FLEXAlertTextField)(void(^configurationHandler)(UITextField *textField));
-typedef FLEXAlertAction * _Nonnull (^FLEXAlertAddAction)(NSString *title);
-typedef FLEXAlertAction * _Nonnull (^FLEXAlertActionStringProperty)(NSString * _Nullable);
-typedef FLEXAlertAction * _Nonnull (^FLEXAlertActionProperty)(void);
-typedef FLEXAlertAction * _Nonnull (^FLEXAlertActionBOOLProperty)(BOOL);
-typedef FLEXAlertAction * _Nonnull (^FLEXAlertActionHandler)(void(^handler)(NSArray<NSString *> *strings));
+typedef void (^FLEXAlertBuilder)(FLEXAlert* make);
+typedef FLEXAlert* _Nonnull (^FLEXAlertStringProperty)(NSString* _Nullable);
+typedef FLEXAlert* _Nonnull (^FLEXAlertStringArg)(NSString* _Nullable);
+typedef FLEXAlert* _Nonnull (^FLEXAlertTextField)(
+    void (^configurationHandler)(UITextField* textField));
+typedef FLEXAlertAction* _Nonnull (^FLEXAlertAddAction)(NSString* title);
+typedef FLEXAlertAction* _Nonnull (^FLEXAlertActionStringProperty)(
+    NSString* _Nullable);
+typedef FLEXAlertAction* _Nonnull (^FLEXAlertActionProperty)(void);
+typedef FLEXAlertAction* _Nonnull (^FLEXAlertActionBOOLProperty)(BOOL);
+typedef FLEXAlertAction* _Nonnull (^FLEXAlertActionHandler)(
+    void (^handler)(NSArray<NSString*>* strings));
 
 @interface FLEXAlert : NSObject
 
 /// Shows a simple alert with one button which says "Dismiss"
-+ (void)showAlert:(NSString * _Nullable)title message:(NSString * _Nullable)message from:(UIViewController *)viewController;
++ (void)showAlert:(NSString* _Nullable)title
+          message:(NSString* _Nullable)message
+             from:(UIViewController*)viewController;
 
 /// Shows a simple alert with no buttons and only a title, for half a second
-+ (void)showQuickAlert:(NSString *)title from:(UIViewController *)viewController;
++ (void)showQuickAlert:(NSString*)title from:(UIViewController*)viewController;
 
 /// Construct and display an alert
-+ (void)makeAlert:(FLEXAlertBuilder)block showFrom:(UIViewController *)viewController;
++ (void)makeAlert:(FLEXAlertBuilder)block
+         showFrom:(UIViewController*)viewController;
 /// Construct and display an action sheet-style alert
 + (void)makeSheet:(FLEXAlertBuilder)block
-         showFrom:(UIViewController *)viewController
+         showFrom:(UIViewController*)viewController
            source:(id)viewOrBarItem;
 
 /// Construct an alert
-+ (UIAlertController *)makeAlert:(FLEXAlertBuilder)block;
++ (UIAlertController*)makeAlert:(FLEXAlertBuilder)block;
 /// Construct an action sheet-style alert
-+ (UIAlertController *)makeSheet:(FLEXAlertBuilder)block;
++ (UIAlertController*)makeSheet:(FLEXAlertBuilder)block;
 
 /// Set the alert's title.
 ///
@@ -76,9 +82,9 @@ typedef FLEXAlertAction * _Nonnull (^FLEXAlertActionHandler)(void(^handler)(NSAr
 @property (nonatomic, readonly) FLEXAlertActionHandler handler;
 /// Access the underlying UIAlertAction, should you need to change it while
 /// the encompassing alert is being displayed. For example, you may want to
-/// enable or disable a button based on the input of some text fields in the alert.
-/// Do not call this more than once per instance.
-@property (nonatomic, readonly) UIAlertAction *action;
+/// enable or disable a button based on the input of some text fields in the
+/// alert. Do not call this more than once per instance.
+@property (nonatomic, readonly) UIAlertAction* action;
 
 @end
 @interface FLEXManager : NSObject

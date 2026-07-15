@@ -5,30 +5,31 @@
 //  Shared imports and helpers for the hook files in src/Hooks.
 //
 
-#import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
-#import <objc/runtime.h>
-#import <objc/message.h>
-#import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
-#import <WebKit/WebKit.h>
-#import <dlfcn.h>
-#import "Padlock/AuthViewController.h"
-#import "Core/BHTManager.h"
-#import "Core/BHTSettings.h"
-#import "ThemeColor/Palette.h"
-#import <math.h>
-#import "Core/BHTBundle.h"
-#import "LegacyLogin/LegacyLoginViewController.h"
-#import "Headers/TWHeaders.h"
-#import "CustomTabBar/CustomTabBarUtility.h"
+#import <AudioToolbox/AudioToolbox.h>
+#import <Foundation/Foundation.h>
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>
-#import "Settings/ModernSettingsViewController.h"
+#import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
+#import <dlfcn.h>
+#import <math.h>
+#import <objc/message.h>
+#import <objc/runtime.h>
+#import "Core/BHTBundle.h"
+#import "Core/BHTManager.h"
+#import "Core/BHTSettings.h"
+#import "CustomTabBar/CustomTabBarUtility.h"
 #import "Download/DownloadInlineButton.h"
+#import "Headers/TWHeaders.h"
+#import "LegacyLogin/LegacyLoginViewController.h"
+#import "Padlock/AuthViewController.h"
+#import "Settings/ModernSettingsViewController.h"
+#import "ThemeColor/Palette.h"
 
 // Recursive view traversal (BHTHookHelpers.m)
-void EnumerateSubviewsRecursively(UIView *view, void (^block)(UIView *currentView));
+void EnumerateSubviewsRecursively(UIView* view,
+                                  void (^block)(UIView* currentView));
 
 // TFNDataViewItem unwrapping for timeline section filtering (BHTHookHelpers.m)
 id unwrapDataViewItem(id item);
@@ -47,7 +48,7 @@ void applyHideCustomTimelinesSetting(void);
 BOOL panelIsGenuinelyAvailable(long long panelID);
 
 // Restored tweet source labels, keyed by tweet ID (SourceLabels.x)
-extern NSMutableDictionary *tweetSources;
+extern NSMutableDictionary* tweetSources;
 
 // Web session cookie harvesting (WebCreateTweet.x)
 void prewarmWebCookiesIfNeeded(void);
@@ -56,4 +57,4 @@ id accountForAuthenticatedWebView(void);
 
 // Current web-session credentials (auth_token + ct0) for read-only web GraphQL
 // requests such as restoring tweet source labels (WebCreateTweet.x)
-NSDictionary *currentWebCredentials(void);
+NSDictionary* currentWebCredentials(void);

@@ -9,13 +9,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CustomTabBarCell : UICollectionViewCell
 
-- (void)configureWithTitle:(nullable NSString *)title
-                 imageName:(nullable NSString *)imageName
+- (void)configureWithTitle:(nullable NSString*)title
+                 imageName:(nullable NSString*)imageName
                   selected:(BOOL)selected
                      fixed:(BOOL)fixed
-               accentColor:(UIColor *)accentColor;
+               accentColor:(UIColor*)accentColor;
 
-+ (NSString *)reuseIdentifier;
++ (NSString*)reuseIdentifier;
 
 @end
 

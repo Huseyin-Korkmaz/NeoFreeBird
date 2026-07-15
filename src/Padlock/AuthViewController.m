@@ -13,31 +13,36 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    LAContext *context = [[LAContext alloc] init];
+    LAContext* context = [[LAContext alloc] init];
 
     if ([self canEvaluateBiometrics]) {
-        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"Touch ID or Face ID is required to use Twitter" reply:^(BOOL success, NSError * _Nullable error) {
-            [self finishWithResult:success error:error];
-        }];
+        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics
+                localizedReason:@"Touch ID or Face ID is required to use Twitter"
+                          reply:^(BOOL success, NSError* _Nullable error) {
+                              [self finishWithResult:success error:error];
+                          }];
     } else if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthentication error:nil]) {
-        [context evaluatePolicy:LAPolicyDeviceOwnerAuthentication localizedReason:@"Passcode is required to use Twitter" reply:^(BOOL success, NSError * _Nullable error) {
-            [self finishWithResult:success error:error];
-        }];
+        [context evaluatePolicy:LAPolicyDeviceOwnerAuthentication
+                localizedReason:@"Passcode is required to use Twitter"
+                          reply:^(BOOL success, NSError* _Nullable error) {
+                              [self finishWithResult:success error:error];
+                          }];
     } else {
         [self finishWithResult:NO error:nil];
     }
 }
 
-- (void)finishWithResult:(BOOL)success error:(NSError *)error {
+- (void)finishWithResult:(BOOL)success error:(NSError*)error {
     if (error) {
         NSLog(@"%@", error);
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (success) {
-            [self dismissViewControllerAnimated:true completion:^{
-                if (self.completion) self.completion(YES);
-            }];
+            [self dismissViewControllerAnimated:true
+                                     completion:^{
+                                         if (self.completion) self.completion(YES);
+                                     }];
         } else {
             if (self.completion) self.completion(NO);
         }

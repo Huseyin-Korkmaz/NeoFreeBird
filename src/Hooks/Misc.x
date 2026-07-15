@@ -3,17 +3,18 @@
 //  NeoFreeBird
 //
 
-#import "HookHelpers.h"
 #import <CoreText/CoreText.h>
+#import "HookHelpers.h"
 
 // MARK: - Always open in Safari
 
 // In-app browser is used for two-factor authentication with security key,
 // login will not complete successfully if it's redirected to Safari
-static BOOL ShouldKeepBrowserURLInApp(NSURL *url) {
-    NSString *urlStr = [url absoluteString];
+static BOOL ShouldKeepBrowserURLInApp(NSURL* url) {
+    NSString* urlStr = [url absoluteString];
 
-    return [urlStr containsString:@"twitter.com/account/"] || [urlStr containsString:@"twitter.com/i/flow/"] ||
+    return [urlStr containsString:@"twitter.com/account/"] ||
+           [urlStr containsString:@"twitter.com/i/flow/"] ||
            [urlStr containsString:@"x.com/account/"] || [urlStr containsString:@"x.com/i/flow/"];
 }
 
@@ -21,12 +22,14 @@ static BOOL ShouldKeepBrowserURLInApp(NSURL *url) {
 // present funnel, so diverting here avoids presenting anything at all.
 %hook T1SafariViewController
 
-- (void)tfnPresentedCustomPresentFromViewController:(UIViewController *)fromViewController animated:(BOOL)animated completion:(void (^)(void))completion {
+- (void)tfnPresentedCustomPresentFromViewController:(UIViewController*)fromViewController
+                                           animated:(BOOL)animated
+                                         completion:(void (^)(void))completion {
     if (![BHTSettings boolForKey:@"always_open_safari"]) {
         return %orig;
     }
 
-    NSURL *url = [self rootURL] ?: [self initialURL];
+    NSURL* url = [self rootURL] ?: [self initialURL];
     if (url == nil || ShouldKeepBrowserURLInApp(url)) {
         return %orig;
     }
@@ -49,7 +52,7 @@ static BOOL ShouldKeepBrowserURLInApp(NSURL *url) {
         return %orig;
     }
 
-    NSURL *url = [self initialURL];
+    NSURL* url = [self initialURL];
     if (url == nil || ShouldKeepBrowserURLInApp(url)) {
         return %orig;
     }
@@ -64,10 +67,10 @@ static BOOL ShouldKeepBrowserURLInApp(NSURL *url) {
 
 %hook TFSTwitterEntityURL
 
-- (NSString *)url {
+- (NSString*)url {
     // The entity is also used for URLs that never had a t.co wrapper (e.g.
     // share links), where expandedURL is nil.
-    NSString *expandedURL = self.expandedURL;
+    NSString* expandedURL = self.expandedURL;
     return expandedURL ?: %orig;
 }
 
@@ -81,23 +84,26 @@ static BOOL ShouldKeepBrowserURLInApp(NSURL *url) {
 // CTParagraphStyle is immutable with no mutable counterpart, so forcing the
 // writing direction means rebuilding the style with its specifiers copied over.
 static CTParagraphStyleRef CreateLTRParagraphStyle(CTParagraphStyleRef original) {
-    static const struct { CTParagraphStyleSpecifier specifier; size_t valueSize; } copiedSpecifiers[] = {
-        { kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment) },
-        { kCTParagraphStyleSpecifierFirstLineHeadIndent, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierHeadIndent, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierTailIndent, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierTabStops, sizeof(CFArrayRef) },
-        { kCTParagraphStyleSpecifierDefaultTabInterval, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierLineBreakMode, sizeof(CTLineBreakMode) },
-        { kCTParagraphStyleSpecifierLineHeightMultiple, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierMaximumLineHeight, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierLineSpacingAdjustment, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierMaximumLineSpacing, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierMinimumLineSpacing, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierParagraphSpacing, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierParagraphSpacingBefore, sizeof(CGFloat) },
-        { kCTParagraphStyleSpecifierLineBoundsOptions, sizeof(CTLineBoundsOptions) },
+    static const struct {
+        CTParagraphStyleSpecifier specifier;
+        size_t valueSize;
+    } copiedSpecifiers[] = {
+        {kCTParagraphStyleSpecifierAlignment, sizeof(CTTextAlignment)},
+        {kCTParagraphStyleSpecifierFirstLineHeadIndent, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierHeadIndent, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierTailIndent, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierTabStops, sizeof(CFArrayRef)},
+        {kCTParagraphStyleSpecifierDefaultTabInterval, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierLineBreakMode, sizeof(CTLineBreakMode)},
+        {kCTParagraphStyleSpecifierLineHeightMultiple, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierMaximumLineHeight, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierMinimumLineHeight, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierLineSpacingAdjustment, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierMaximumLineSpacing, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierMinimumLineSpacing, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierParagraphSpacing, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierParagraphSpacingBefore, sizeof(CGFloat)},
+        {kCTParagraphStyleSpecifierLineBoundsOptions, sizeof(CTLineBoundsOptions)},
     };
     enum { copiedCount = sizeof(copiedSpecifiers) / sizeof(copiedSpecifiers[0]) };
 
@@ -106,40 +112,51 @@ static CTParagraphStyleRef CreateLTRParagraphStyle(CTParagraphStyleRef original)
     size_t count = 0;
 
     for (size_t i = 0; i < copiedCount; i++) {
-        if (CTParagraphStyleGetValueForSpecifier(original, copiedSpecifiers[i].specifier, copiedSpecifiers[i].valueSize, values[count])) {
-            settings[count] = (CTParagraphStyleSetting){ copiedSpecifiers[i].specifier, copiedSpecifiers[i].valueSize, values[count] };
+        if (CTParagraphStyleGetValueForSpecifier(original, copiedSpecifiers[i].specifier,
+                                                 copiedSpecifiers[i].valueSize, values[count])) {
+            settings[count] = (CTParagraphStyleSetting){copiedSpecifiers[i].specifier,
+                                                        copiedSpecifiers[i].valueSize, values[count]};
             count++;
         }
     }
 
     CTWritingDirection direction = kCTWritingDirectionLeftToRight;
-    settings[count++] = (CTParagraphStyleSetting){ kCTParagraphStyleSpecifierBaseWritingDirection, sizeof(direction), &direction };
+    settings[count++] = (CTParagraphStyleSetting){kCTParagraphStyleSpecifierBaseWritingDirection,
+                                                  sizeof(direction), &direction};
 
     return CTParagraphStyleCreate(settings, count);
 }
 
 %hook TFNAttributedTextModel
 
-- (void)setAttributedString:(NSAttributedString *)attributedString {
+- (void)setAttributedString:(NSAttributedString*)attributedString {
     if (![BHTSettings boolForKey:@"disable_rtl"] || attributedString.length == 0) {
         return %orig;
     }
 
-    NSMutableAttributedString *text = [attributedString mutableCopy];
-    [attributedString enumerateAttribute:NSParagraphStyleAttributeName inRange:NSMakeRange(0, attributedString.length) options:0 usingBlock:^(id value, NSRange range, BOOL *stop) {
-        // Some models carry a raw CTParagraphStyleRef under the same key.
-        if (value != nil && ![value isKindOfClass:[NSParagraphStyle class]]) {
-            if (CFGetTypeID((__bridge CFTypeRef)value) == CTParagraphStyleGetTypeID()) {
-                CTParagraphStyleRef ltrStyle = CreateLTRParagraphStyle((__bridge CTParagraphStyleRef)value);
-                [text addAttribute:NSParagraphStyleAttributeName value:(__bridge_transfer id)ltrStyle range:range];
-            }
-            return;
-        }
+    NSMutableAttributedString* text = [attributedString mutableCopy];
+    [attributedString
+        enumerateAttribute:NSParagraphStyleAttributeName
+                   inRange:NSMakeRange(0, attributedString.length)
+                   options:0
+                usingBlock:^(id value, NSRange range, BOOL* stop) {
+                    // Some models carry a raw CTParagraphStyleRef under the same key.
+                    if (value != nil && ![value isKindOfClass:[NSParagraphStyle class]]) {
+                        if (CFGetTypeID((__bridge CFTypeRef)value) == CTParagraphStyleGetTypeID()) {
+                            CTParagraphStyleRef ltrStyle =
+                                CreateLTRParagraphStyle((__bridge CTParagraphStyleRef)value);
+                            [text addAttribute:NSParagraphStyleAttributeName
+                                         value:(__bridge_transfer id)ltrStyle
+                                         range:range];
+                        }
+                        return;
+                    }
 
-        NSMutableParagraphStyle *style = value ? [value mutableCopy] : [NSMutableParagraphStyle new];
-        style.baseWritingDirection = NSWritingDirectionLeftToRight;
-        [text addAttribute:NSParagraphStyleAttributeName value:style range:range];
-    }];
+                    NSMutableParagraphStyle* style =
+                        value ? [value mutableCopy] : [NSMutableParagraphStyle new];
+                    style.baseWritingDirection = NSWritingDirectionLeftToRight;
+                    [text addAttribute:NSParagraphStyleAttributeName value:style range:range];
+                }];
 
     %orig(text);
 }
@@ -150,25 +167,25 @@ static CTParagraphStyleRef CreateLTRParagraphStyle(CTParagraphStyleRef original)
 
 // Strips the ?s= baked into the share URL format strings; &t= is already disabled
 // at the source (rehire_share_update_url_enabled in FeatureSwitches.x).
-static NSString *CleanedShareURLString(NSString *urlString) {
+static NSString* CleanedShareURLString(NSString* urlString) {
     if (urlString == nil) {
         return urlString;
     }
 
-    NSURLComponents *components = [NSURLComponents componentsWithString:urlString];
+    NSURLComponents* components = [NSURLComponents componentsWithString:urlString];
     if (components == nil) {
         return urlString;
     }
 
-    NSMutableArray<NSURLQueryItem *> *safeParams = [NSMutableArray arrayWithCapacity:0];
-    for (NSURLQueryItem *item in components.queryItems) {
+    NSMutableArray<NSURLQueryItem*>* safeParams = [NSMutableArray arrayWithCapacity:0];
+    for (NSURLQueryItem* item in components.queryItems) {
         if (![item.name isEqualToString:@"s"] && ![item.name isEqualToString:@"t"]) {
             [safeParams addObject:item];
         }
     }
     components.queryItems = safeParams.count > 0 ? safeParams : nil;
 
-    NSString *selectedHost = [[NSUserDefaults standardUserDefaults] objectForKey:@"sharing_domain"];
+    NSString* selectedHost = [[NSUserDefaults standardUserDefaults] objectForKey:@"sharing_domain"];
     if (selectedHost.length > 0) {
         components.host = selectedHost;
     }
@@ -180,13 +197,15 @@ static NSString *CleanedShareURLString(NSString *urlString) {
 // selectors wrap the instance one and the Swift share kit calls it directly.
 %hook TFNTwitterStatus
 
-- (NSString *)twitterURLForShareWithSParam:(unsigned int)sParam {
-    NSString *url = %orig;
+- (NSString*)twitterURLForShareWithSParam:(unsigned int)sParam {
+    NSString* url = %orig;
     return CleanedShareURLString(url);
 }
 
-+ (NSString *)twitterURLForShareWithSParam:(unsigned int)sParam username:(NSString *)username statusID:(long long)statusID {
-    NSString *url = %orig;
++ (NSString*)twitterURLForShareWithSParam:(unsigned int)sParam
+                                 username:(NSString*)username
+                                 statusID:(long long)statusID {
+    NSString* url = %orig;
     return CleanedShareURLString(url);
 }
 
@@ -195,13 +214,13 @@ static NSString *CleanedShareURLString(NSString *urlString) {
 // Profile links
 %hook TFSTwitterUserReference
 
-- (NSString *)twitterURLForShare {
-    NSString *url = %orig;
+- (NSString*)twitterURLForShare {
+    NSString* url = %orig;
     return CleanedShareURLString(url);
 }
 
-- (NSString *)twitterURLForCopy {
-    NSString *url = %orig;
+- (NSString*)twitterURLForCopy {
+    NSString* url = %orig;
     return CleanedShareURLString(url);
 }
 
@@ -211,15 +230,22 @@ static NSString *CleanedShareURLString(NSString *urlString) {
 
 %hook NSNotificationCenter
 
-- (id)addObserverForName:(NSNotificationName)name object:(id)obj queue:(NSOperationQueue *)queue usingBlock:(void (^)(NSNotification *note))block {
+- (id)addObserverForName:(NSNotificationName)name
+                  object:(id)obj
+                   queue:(NSOperationQueue*)queue
+              usingBlock:(void (^)(NSNotification* note))block {
     if ([name isEqualToString:UIApplicationUserDidTakeScreenshotNotification]) {
-        return %orig(name, obj, queue, ^(NSNotification *note) {});
+        return %orig(name, obj, queue,
+                         ^(NSNotification* note){});
     }
 
     return %orig;
 }
 
-- (void)addObserver:(id)observer selector:(SEL)aSelector name:(NSNotificationName)aName object:(id)anObject {
+- (void)addObserver:(id)observer
+           selector:(SEL)aSelector
+               name:(NSNotificationName)aName
+             object:(id)anObject {
     if ([aName isEqualToString:UIApplicationUserDidTakeScreenshotNotification]) {
         return;
     }

@@ -6,14 +6,13 @@
 
 @implementation AppIconItem
 
-- (instancetype)initWithBundleIconName:(NSString *)iconName
-                        iconFileNames:(NSArray<NSString*>*)files
-                         isPrimaryIcon:(BOOL)isPrimary
-{
+- (instancetype)initWithBundleIconName:(NSString*)iconName
+                         iconFileNames:(NSArray<NSString*>*)files
+                         isPrimaryIcon:(BOOL)isPrimary {
     if (self = [super init]) {
-        _bundleIconName  = [iconName copy];
+        _bundleIconName = [iconName copy];
         _bundleIconFiles = [files copy];
-        _isPrimaryIcon   = isPrimary;
+        _isPrimaryIcon = isPrimary;
     }
     return self;
 }

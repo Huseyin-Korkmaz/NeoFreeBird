@@ -4,16 +4,18 @@
 //
 
 #import "CustomTabBarPreviewCell.h"
-#import "CustomTabBarNativeColors.h"
 #import <objc/runtime.h>
+#import "CustomTabBarNativeColors.h"
 
 @interface UIImage (TFNAdditions)
-+ (id)tfn_vectorImageNamed:(id)arg1 fitsSize:(struct CGSize)arg2 fillColor:(id)arg3;
++ (id)tfn_vectorImageNamed:(id)arg1
+                  fitsSize:(struct CGSize)arg2
+                 fillColor:(id)arg3;
 @end
 
 @interface CustomTabBarPreviewCell ()
-@property (nonatomic, strong) UIView *shadowBox;
-@property (nonatomic, strong) UIImageView *iconView;
+@property (nonatomic, strong) UIView* shadowBox;
+@property (nonatomic, strong) UIImageView* iconView;
 @end
 
 @implementation CustomTabBarPreviewCell
@@ -36,13 +38,17 @@
         [self.shadowBox addSubview:self.iconView];
 
         [NSLayoutConstraint activateConstraints:@[
-            [self.shadowBox.centerXAnchor constraintEqualToAnchor:self.contentView.centerXAnchor],
-            [self.shadowBox.centerYAnchor constraintEqualToAnchor:self.contentView.centerYAnchor],
+            [self.shadowBox.centerXAnchor
+                constraintEqualToAnchor:self.contentView.centerXAnchor],
+            [self.shadowBox.centerYAnchor
+                constraintEqualToAnchor:self.contentView.centerYAnchor],
             [self.shadowBox.widthAnchor constraintEqualToConstant:32],
             [self.shadowBox.heightAnchor constraintEqualToConstant:32],
 
-            [self.iconView.centerXAnchor constraintEqualToAnchor:self.shadowBox.centerXAnchor],
-            [self.iconView.centerYAnchor constraintEqualToAnchor:self.shadowBox.centerYAnchor],
+            [self.iconView.centerXAnchor
+                constraintEqualToAnchor:self.shadowBox.centerXAnchor],
+            [self.iconView.centerYAnchor
+                constraintEqualToAnchor:self.shadowBox.centerYAnchor],
             [self.iconView.widthAnchor constraintEqualToConstant:24],
             [self.iconView.heightAnchor constraintEqualToConstant:24]
         ]];
@@ -50,9 +56,12 @@
     return self;
 }
 
-- (void)configureWithImageName:(NSString *)imageName {
+- (void)configureWithImageName:(NSString*)imageName {
     if (imageName.length) {
-        self.iconView.image = [UIImage tfn_vectorImageNamed:imageName fitsSize:CGSizeMake(24, 24) fillColor:CustomTabBarIconColor()];
+        self.iconView.image =
+            [UIImage tfn_vectorImageNamed:imageName
+                                 fitsSize:CGSizeMake(24, 24)
+                                fillColor:CustomTabBarIconColor()];
     } else {
         self.iconView.image = nil;
     }
@@ -63,7 +72,7 @@
     self.iconView.image = nil;
 }
 
-+ (NSString *)reuseIdentifier {
++ (NSString*)reuseIdentifier {
     return @"CustomTabBarPreviewCell";
 }
 

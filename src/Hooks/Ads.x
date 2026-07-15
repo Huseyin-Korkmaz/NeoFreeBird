@@ -18,7 +18,7 @@ static BOOL StatusItemIsPromoted(id item) {
         return NO;
     }
 
-    TFNTwitterStatus *status = object_getIvar(item, statusIvar);
+    TFNTwitterStatus* status = object_getIvar(item, statusIvar);
     return [status respondsToSelector:@selector(isPromoted)] && status.isPromoted;
 }
 
@@ -27,44 +27,56 @@ static BOOL ScribeItemIsPromoted(id item) {
         return NO;
     }
 
-    NSDictionary *scribeItem = [item performSelector:@selector(scribeItem)];
-    return [scribeItem isKindOfClass:[NSDictionary class]] && scribeItem[@"promoted_id"] != nil;
+    NSDictionary* scribeItem = [item performSelector:@selector(scribeItem)];
+    return [scribeItem isKindOfClass:[NSDictionary class]] &&
+           scribeItem[@"promoted_id"] != nil;
 }
 
 static BOOL IsModuleHeader(id item) {
-    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder]) isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"];
+    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder])
+        isEqualToString:@"TwitterURT.URTModuleHeaderViewModel"];
 }
 
 static BOOL IsModuleFooter(id item) {
-    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder]) isEqualToString:@"TwitterURT.URTModuleFooterViewModel"];
+    return [NSStringFromClass([unwrapDataViewItem(item) classForCoder])
+        isEqualToString:@"TwitterURT.URTModuleFooterViewModel"];
 }
 
-static BOOL ShouldHideItem(id item, NSString *location) {
+static BOOL ShouldHideItem(id item, NSString* location) {
     item = unwrapDataViewItem(item);
-    NSString *className = NSStringFromClass([item classForCoder]);
+    NSString* className = NSStringFromClass([item classForCoder]);
 
     if ([BHTSettings boolForKey:@"hide_promoted"]) {
-        if ([item isKindOfClass:objc_getClass("T1URTTimelineStatusItemViewModel")] && StatusItemIsPromoted(item)) {
+        if ([item
+                isKindOfClass:objc_getClass("T1URTTimelineStatusItemViewModel")] &&
+            StatusItemIsPromoted(item)) {
             return YES;
         }
 
-        if ([className isEqualToString:@"TwitterURT.URTTimelineGoogleNativeAdViewModel"]) {
+        if ([className
+                isEqualToString:@"TwitterURT.URTTimelineGoogleNativeAdViewModel"]) {
             return YES;
         }
 
-        if (([className isEqualToString:@"TwitterURT.URTTimelineTrendViewModel"] || [className isEqualToString:@"TwitterURT.URTTimelineEventSummaryViewModel"]) && ScribeItemIsPromoted(item)) {
+        if (([className isEqualToString:@"TwitterURT.URTTimelineTrendViewModel"] ||
+             [className
+                 isEqualToString:@"TwitterURT.URTTimelineEventSummaryViewModel"]) &&
+            ScribeItemIsPromoted(item)) {
             return YES;
         }
     }
 
     if ([BHTSettings boolForKey:@"hide_premium_offer"]) {
-        if ([className isEqualToString:@"TwitterURT.URTTimelineMessageItemViewModel"]) {
+        if ([className
+                isEqualToString:@"TwitterURT.URTTimelineMessageItemViewModel"]) {
             return YES;
         }
     }
 
-    if ([BHTSettings boolForKey:@"hide_trend_videos"] && [location isEqualToString:@"OTHER"]) {
-        if ([className isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"]) {
+    if ([BHTSettings boolForKey:@"hide_trend_videos"] &&
+        [location isEqualToString:@"OTHER"]) {
+        if ([className
+                isEqualToString:@"T1TwitterSwift.URTTimelineCarouselViewModel"]) {
             return YES;
         }
     }
@@ -72,15 +84,22 @@ static BOOL ShouldHideItem(id item, NSString *location) {
     return NO;
 }
 
-static NSArray *FilteredSections(TFNItemsDataViewController *dataViewController, NSArray *sections) {
-    if (!([BHTSettings boolForKey:@"hide_promoted"] || [BHTSettings boolForKey:@"hide_premium_offer"] || [BHTSettings boolForKey:@"hide_trend_videos"])) {
+static NSArray* FilteredSections(TFNItemsDataViewController* dataViewController,
+                                 NSArray* sections) {
+    if (!([BHTSettings boolForKey:@"hide_promoted"] ||
+          [BHTSettings boolForKey:@"hide_premium_offer"] ||
+          [BHTSettings boolForKey:@"hide_trend_videos"])) {
         return sections;
     }
 
-    NSString *location = [dataViewController respondsToSelector:@selector(adDisplayLocation)] ? dataViewController.adDisplayLocation : nil;
+    NSString* location =
+        [dataViewController respondsToSelector:@selector(adDisplayLocation)]
+            ? dataViewController.adDisplayLocation
+            : nil;
 
     BOOL modified = NO;
-    NSMutableArray *filteredSections = [NSMutableArray arrayWithCapacity:sections.count];
+    NSMutableArray* filteredSections =
+        [NSMutableArray arrayWithCapacity:sections.count];
 
     for (id section in sections) {
         if (![section isKindOfClass:[NSArray class]]) {
@@ -88,9 +107,9 @@ static NSArray *FilteredSections(TFNItemsDataViewController *dataViewController,
             continue;
         }
 
-        NSArray *items = section;
+        NSArray* items = section;
         NSUInteger count = items.count;
-        NSMutableIndexSet *removed = [NSMutableIndexSet indexSet];
+        NSMutableIndexSet* removed = [NSMutableIndexSet indexSet];
 
         for (NSUInteger i = 0; i < count; i++) {
             if (ShouldHideItem(items[i], location)) {
@@ -113,7 +132,8 @@ static NSArray *FilteredSections(TFNItemsDataViewController *dataViewController,
             NSUInteger contentCount = 0;
             BOOL contentRemoved = YES;
             NSUInteger j = i + 1;
-            while (j < count && !IsModuleHeader(items[j]) && !IsModuleFooter(items[j])) {
+            while (j < count && !IsModuleHeader(items[j]) &&
+                   !IsModuleFooter(items[j])) {
                 contentCount++;
                 if (![removed containsIndex:j]) {
                     contentRemoved = NO;
@@ -129,7 +149,7 @@ static NSArray *FilteredSections(TFNItemsDataViewController *dataViewController,
             }
         }
 
-        NSMutableArray *keptItems = [items mutableCopy];
+        NSMutableArray* keptItems = [items mutableCopy];
         [keptItems removeObjectsAtIndexes:removed];
         modified = YES;
 
@@ -143,12 +163,17 @@ static NSArray *FilteredSections(TFNItemsDataViewController *dataViewController,
 
 %hook TFNItemsDataViewController
 
-- (void)setSections:(NSArray *)sections restoreScrollPosition:(BOOL)restoreScrollPosition {
+- (void)setSections:(NSArray*)sections
+    restoreScrollPosition:(BOOL)restoreScrollPosition {
     %orig(FilteredSections(self, sections), restoreScrollPosition);
 }
 
-- (void)updateSections:(NSArray *)sections reconfigureItemIdentifiers:(NSArray *)identifiers withRowAnimation:(long long)animation completion:(id)completion {
-    %orig(FilteredSections(self, sections), identifiers, animation, completion);
+- (void)updateSections:(NSArray*)sections
+    reconfigureItemIdentifiers:(NSArray*)identifiers
+              withRowAnimation:(long long)animation
+                    completion:(id)completion {
+    %orig(FilteredSections(self, sections), identifiers, animation,
+              completion);
 }
 
 %end
@@ -156,7 +181,9 @@ static NSArray *FilteredSections(TFNItemsDataViewController *dataViewController,
 %hook TFNTwitterStatus
 
 - (_Bool)isCardHidden {
-    return ([BHTSettings boolForKey:@"hide_promoted"] && [self isPromoted]) ? true : %orig;
+    return ([BHTSettings boolForKey:@"hide_promoted"] && [self isPromoted])
+               ? true
+               : %orig;
 }
 
 %end

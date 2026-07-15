@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) NSInteger colorID;
 
-- (void)setSwatchColor:(UIColor *)color;
+- (void)setSwatchColor:(UIColor*)color;
 - (void)setSwatchSelected:(BOOL)selected;
 
 @end

@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CustomTabBarPreviewCell : UICollectionViewCell
 
-- (void)configureWithImageName:(nullable NSString *)imageName;
+- (void)configureWithImageName:(nullable NSString*)imageName;
 
-+ (NSString *)reuseIdentifier;
++ (NSString*)reuseIdentifier;
 
 @end
 

@@ -7,22 +7,24 @@
 //
 
 #import "CustomTabBarCell.h"
-#import "CustomTabBarNativeColors.h"
-#import "Core/TwitterChirpFont.h"
 #import <QuartzCore/QuartzCore.h>
+#import "Core/TwitterChirpFont.h"
+#import "CustomTabBarNativeColors.h"
 
 @interface UIImage (TFNAdditions)
-+ (id)tfn_vectorImageNamed:(id)arg1 fitsSize:(struct CGSize)arg2 fillColor:(id)arg3;
++ (id)tfn_vectorImageNamed:(id)arg1
+                  fitsSize:(struct CGSize)arg2
+                 fillColor:(id)arg3;
 @end
 
 @interface CustomTabBarCell ()
-@property (nonatomic, strong) UIView *container;
-@property (nonatomic, strong) UIImageView *iconView;
-@property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, copy) NSString *imageName;
+@property (nonatomic, strong) UIView* container;
+@property (nonatomic, strong) UIImageView* iconView;
+@property (nonatomic, strong) UILabel* titleLabel;
+@property (nonatomic, copy) NSString* imageName;
 @property (nonatomic, assign) BOOL tabSelected;
 @property (nonatomic, assign) BOOL fixed;
-@property (nonatomic, strong) UIColor *accentColor;
+@property (nonatomic, strong) UIColor* accentColor;
 @end
 
 @implementation CustomTabBarCell
@@ -44,7 +46,8 @@
 
         self.titleLabel = [UILabel new];
         self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-        self.titleLabel.font = [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:13];
+        self.titleLabel.font =
+            [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:13];
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         self.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -52,29 +55,39 @@
         [self.contentView addSubview:self.titleLabel];
 
         [NSLayoutConstraint activateConstraints:@[
-            [self.container.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
-            [self.container.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
-            [self.container.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor],
-            [self.container.heightAnchor constraintEqualToAnchor:self.container.widthAnchor],
+            [self.container.topAnchor
+                constraintEqualToAnchor:self.contentView.topAnchor],
+            [self.container.leadingAnchor
+                constraintEqualToAnchor:self.contentView.leadingAnchor],
+            [self.container.trailingAnchor
+                constraintEqualToAnchor:self.contentView.trailingAnchor],
+            [self.container.heightAnchor
+                constraintEqualToAnchor:self.container.widthAnchor],
 
-            [self.iconView.centerXAnchor constraintEqualToAnchor:self.container.centerXAnchor],
-            [self.iconView.centerYAnchor constraintEqualToAnchor:self.container.centerYAnchor],
+            [self.iconView.centerXAnchor
+                constraintEqualToAnchor:self.container.centerXAnchor],
+            [self.iconView.centerYAnchor
+                constraintEqualToAnchor:self.container.centerYAnchor],
             [self.iconView.widthAnchor constraintEqualToConstant:28],
             [self.iconView.heightAnchor constraintEqualToConstant:28],
 
-            [self.titleLabel.topAnchor constraintEqualToAnchor:self.container.bottomAnchor constant:8],
-            [self.titleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
-            [self.titleLabel.trailingAnchor constraintEqualToAnchor:self.contentView.trailingAnchor]
+            [self.titleLabel.topAnchor
+                constraintEqualToAnchor:self.container.bottomAnchor
+                               constant:8],
+            [self.titleLabel.leadingAnchor
+                constraintEqualToAnchor:self.contentView.leadingAnchor],
+            [self.titleLabel.trailingAnchor
+                constraintEqualToAnchor:self.contentView.trailingAnchor]
         ]];
     }
     return self;
 }
 
-- (void)configureWithTitle:(NSString *)title
-                 imageName:(NSString *)imageName
+- (void)configureWithTitle:(NSString*)title
+                 imageName:(NSString*)imageName
                   selected:(BOOL)selected
                      fixed:(BOOL)fixed
-               accentColor:(UIColor *)accentColor {
+               accentColor:(UIColor*)accentColor {
     self.titleLabel.text = title;
     self.imageName = imageName;
     self.tabSelected = selected;
@@ -85,11 +98,12 @@
 
 - (void)applyAppearance {
     // Card background: the fixed (Home) tile uses the inactive container colour.
-    self.container.backgroundColor = self.fixed
-        ? CustomTabBarInactiveCardBackgroundColor()
-        : CustomTabBarCardBackgroundColor();
+    self.container.backgroundColor =
+        self.fixed ? CustomTabBarInactiveCardBackgroundColor()
+                   : CustomTabBarCardBackgroundColor();
 
-    self.container.layer.borderColor = (self.tabSelected ? self.accentColor : [UIColor clearColor]).CGColor;
+    self.container.layer.borderColor =
+        (self.tabSelected ? self.accentColor : [UIColor clearColor]).CGColor;
 
     // Soft card shadow, always on (matches the native cell).
     self.container.layer.shadowColor = CustomTabBarCardShadowColor().CGColor;
@@ -99,7 +113,10 @@
     self.container.layer.masksToBounds = NO;
 
     if (self.imageName.length) {
-        self.iconView.image = [UIImage tfn_vectorImageNamed:self.imageName fitsSize:CGSizeMake(28, 28) fillColor:CustomTabBarIconColor()];
+        self.iconView.image =
+            [UIImage tfn_vectorImageNamed:self.imageName
+                                 fitsSize:CGSizeMake(28, 28)
+                                fillColor:CustomTabBarIconColor()];
     } else {
         self.iconView.image = nil;
     }
@@ -115,7 +132,7 @@
     self.container.layer.shadowOpacity = 0;
 }
 
-+ (NSString *)reuseIdentifier {
++ (NSString*)reuseIdentifier {
     return @"CustomTabBarCell";
 }
 

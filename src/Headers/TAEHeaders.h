@@ -7,30 +7,32 @@
 
 #import <UIKit/UIKit.h>
 
-// The font group (TAEStandardFontGroup on older versions) is TFNUIDefaultFontGroup in 12.3.
+// The font group (TAEStandardFontGroup on older versions) is
+// TFNUIDefaultFontGroup in 12.3.
 @interface TFNUIDefaultFontGroup : NSObject
 + (instancetype)sharedFontGroup;
-- (UIFont *)headline2BoldFont;
+- (UIFont*)headline2BoldFont;
 // The five root builders every named font getter dispatches through.
-- (UIFont *)fontOfSize:(CGFloat)size;
-- (UIFont *)mediumFontOfSize:(CGFloat)size;
-- (UIFont *)boldFontOfSize:(CGFloat)size;
-- (UIFont *)heavyFontOfSize:(CGFloat)size;
-- (UIFont *)monospacedDigitFontOfSize:(CGFloat)size weight:(CGFloat)weight;
+- (UIFont*)fontOfSize:(CGFloat)size;
+- (UIFont*)mediumFontOfSize:(CGFloat)size;
+- (UIFont*)boldFontOfSize:(CGFloat)size;
+- (UIFont*)heavyFontOfSize:(CGFloat)size;
+- (UIFont*)monospacedDigitFontOfSize:(CGFloat)size weight:(CGFloat)weight;
 @end
 
 @protocol TAEColorPalette
 - (id)colorPalette;
-- (UIColor *)primaryColorForOption:(NSUInteger)colorOption;
+- (UIColor*)primaryColorForOption:(NSUInteger)colorOption;
 @end
 
 @interface TAETwitterColorPaletteSettingInfo : NSObject
-@property(readonly, nonatomic) id <TAEColorPalette> colorPalette;
-@property(readonly, nonatomic) _Bool isDark;
+@property (readonly, nonatomic) id<TAEColorPalette> colorPalette;
+@property (readonly, nonatomic) _Bool isDark;
 @end
 
 @interface TAEColorSettings : NSObject
-@property(retain, nonatomic) TAETwitterColorPaletteSettingInfo *currentColorPalette;
+@property (retain, nonatomic)
+    TAETwitterColorPaletteSettingInfo* currentColorPalette;
 - (void)setPrimaryColorOption:(NSInteger)colorOption;
 + (instancetype)sharedSettings;
 @end

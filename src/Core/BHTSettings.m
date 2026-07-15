@@ -6,11 +6,11 @@
 //
 
 #import "Core/BHTSettings.h"
-#import "Core/BHTManager.h"
 #import "Core/BHTBundle.h"
+#import "Core/BHTManager.h"
 
-static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
-    static NSDictionary<NSString *, NSDictionary *> *pages;
+static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
+    static NSDictionary<NSString*, NSDictionary*>* pages;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         pages = @{
@@ -18,132 +18,317 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
                 @"titleKey": @"MODERN_SETTINGS_LAYOUT_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_LAYOUT_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"padlock", @"default": @NO },
-                    @{ @"key": @"hide_promoted", @"default": @YES },
-                    @{ @"key": @"hide_premium_offer", @"default": @YES },
-                    @{ @"key": @"no_tab_bar_hiding", @"default": @YES },
-                    @{ @"key": @"disable_rtl", @"default": @NO },
-                    @{ @"key": @"show_scroll_indicator", @"default": @NO }
+                    @{@"key": @"padlock",
+                      @"default": @NO},
+                    @{@"key": @"hide_promoted",
+                      @"default": @YES},
+                    @{@"key": @"hide_premium_offer",
+                      @"default": @YES},
+                    @{@"key": @"no_tab_bar_hiding",
+                      @"default": @YES},
+                    @{@"key": @"disable_rtl",
+                      @"default": @NO},
+                    @{@"key": @"show_scroll_indicator",
+                      @"default": @NO}
                 ]
             },
             @"appearance": @{
                 @"titleKey": @"MODERN_SETTINGS_APPEARANCE_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_APPEARANCE_SUBTITLE",
                 @"settings": @[
-                    @{ @"titleKey": @"THEME_OPTION_TITLE", @"action": @"showThemeViewController:", @"type": @"button" },
-                    @{ @"titleKey": @"APP_ICON_TITLE", @"action": @"showAppIconViewController:", @"type": @"button" },
-                    @{ @"titleKey": @"CUSTOM_TAB_BAR_OPTION_TITLE", @"action": @"showCustomTabBarVC:", @"type": @"button" },
-                    @{ @"key": @"tab_bar_theming", @"default": @NO },
-                    @{ @"key": @"restore_tab_labels", @"default": @NO },
-                    @{ @"key": @"custom_fonts", @"default": @NO },
-                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"regular_font_button", @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE", @"action": @"showRegularFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_1", @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE" },
-                    @{ @"type": @"compactButton", @"parentKey": @"custom_fonts", @"key": @"bold_font_button", @"titleKey": @"BOLD_FONTS_PICKER_OPTION_TITLE", @"action": @"showBoldFontPicker:", @"prefKeyForSubtitle": @"bhtwitter_font_2", @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE" }
+                    @{
+                        @"titleKey": @"THEME_OPTION_TITLE",
+                        @"action": @"showThemeViewController:",
+                        @"type": @"button"
+                    },
+                    @{
+                        @"titleKey": @"APP_ICON_TITLE",
+                        @"action": @"showAppIconViewController:",
+                        @"type": @"button"
+                    },
+                    @{
+                        @"titleKey": @"CUSTOM_TAB_BAR_OPTION_TITLE",
+                        @"action": @"showCustomTabBarVC:",
+                        @"type": @"button"
+                    },
+                    @{@"key": @"tab_bar_theming",
+                      @"default": @NO},
+                    @{@"key": @"restore_tab_labels",
+                      @"default": @NO},
+                    @{@"key": @"custom_fonts",
+                      @"default": @NO},
+                    @{
+                        @"type": @"compactButton",
+                        @"parentKey": @"custom_fonts",
+                        @"key": @"regular_font_button",
+                        @"titleKey": @"REQULAR_FONTS_PICKER_OPTION_TITLE",
+                        @"action": @"showRegularFontPicker:",
+                        @"prefKeyForSubtitle": @"bhtwitter_font_1",
+                        @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE"
+                    },
+                    @{
+                        @"type": @"compactButton",
+                        @"parentKey": @"custom_fonts",
+                        @"key": @"bold_font_button",
+                        @"titleKey": @"BOLD_FONTS_PICKER_OPTION_TITLE",
+                        @"action": @"showBoldFontPicker:",
+                        @"prefKeyForSubtitle": @"bhtwitter_font_2",
+                        @"subtitleDefaultKey": @"FONT_SYSTEM_DEFAULT_SUBTITLE"
+                    }
                 ]
             },
             @"timelines": @{
                 @"titleKey": @"MODERN_SETTINGS_TIMELINES_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_TIMELINES_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"hide_who_to_follow", @"default": @YES },
-                    @{ @"key": @"hide_timeline_prompts", @"default": @YES },
-                    @{ @"key": @"hide_spaces", @"default": @NO },
-                    @{ @"key": @"hide_custom_timelines", @"default": @NO }
+                    @{@"key": @"hide_who_to_follow",
+                      @"default": @YES},
+                    @{@"key": @"hide_timeline_prompts",
+                      @"default": @YES},
+                    @{@"key": @"hide_spaces",
+                      @"default": @NO},
+                    @{@"key": @"hide_custom_timelines",
+                      @"default": @NO}
                 ]
             },
             @"grok": @{
                 @"titleKey": @"MODERN_SETTINGS_GROK_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_GROK_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"hide_grok_analyze", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"hide_grok_sidebar", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"hide_grok_create", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"disable_auto_translate", @"default": @NO, @"type": @"toggle" }
+                    @{
+                        @"key": @"hide_grok_analyze",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"hide_grok_sidebar",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"hide_grok_create",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"disable_auto_translate",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    }
                 ]
             },
             @"media_downloads": @{
                 @"titleKey": @"MODERN_SETTINGS_MEDIA_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_MEDIA_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"download_videos", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"direct_save", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"disable_video_captions", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"auto_highest_load", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"force_tweet_full_frame", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"restore_video_timestamp", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"disable_immersive_scroll", @"default": @NO, @"type": @"toggle" }
+                    @{
+                        @"key": @"download_videos",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{@"key": @"direct_save",
+                      @"default": @NO,
+                      @"type": @"toggle"},
+                    @{
+                        @"key": @"disable_video_captions",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"auto_highest_load",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"force_tweet_full_frame",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"restore_video_timestamp",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"disable_immersive_scroll",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    }
                 ]
             },
             @"profiles": @{
                 @"titleKey": @"MODERN_SETTINGS_PROFILES_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_PROFILES_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"follow_confirm", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"copy_profile_info", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"disable_articles", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"disable_highlights", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"hide_blue_verified", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"hide_follow_button", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"restore_follow_button", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"square_avatars", @"default": @NO, @"type": @"toggle" }
+                    @{@"key": @"follow_confirm",
+                      @"default": @NO,
+                      @"type": @"toggle"},
+                    @{
+                        @"key": @"copy_profile_info",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"disable_articles",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"disable_highlights",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"hide_blue_verified",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"hide_follow_button",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"restore_follow_button",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{@"key": @"square_avatars",
+                      @"default": @NO,
+                      @"type": @"toggle"}
                 ]
             },
             @"tweets": @{
                 @"titleKey": @"MODERN_SETTINGS_TWEETS_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_TWEETS_SUBTITLE",
                 @"settings": @[
-                    @{ @"type": @"compactButton", @"key": @"undo_tweet_timeout", @"default": @10, @"titleKey": @"UNDO_TWEET_TITLE", @"action": @"showUndoTimeoutPicker:" },
-                    @{ @"key": @"tweet_confirm", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"like_confirm", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"tweet_to_image", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"hide_view_count", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"hide_bookmark_button", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"hide_downvote_button", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"disable_sensitive_tweet_warnings", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"bypass_age_verification", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"reply_sorting", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"restore_reply_context", @"default": @YES, @"type": @"toggle" },
-                    @{ @"key": @"restore_tweet_labels", @"default": @NO, @"type": @"toggle" }
+                    @{
+                        @"type": @"compactButton",
+                        @"key": @"undo_tweet_timeout",
+                        @"default": @10,
+                        @"titleKey": @"UNDO_TWEET_TITLE",
+                        @"action": @"showUndoTimeoutPicker:"
+                    },
+                    @{@"key": @"tweet_confirm",
+                      @"default": @NO,
+                      @"type": @"toggle"},
+                    @{@"key": @"like_confirm",
+                      @"default": @NO,
+                      @"type": @"toggle"},
+                    @{@"key": @"tweet_to_image",
+                      @"default": @NO,
+                      @"type": @"toggle"},
+                    @{
+                        @"key": @"hide_view_count",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"hide_bookmark_button",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"hide_downvote_button",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"disable_sensitive_tweet_warnings",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"bypass_age_verification",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{@"key": @"reply_sorting",
+                      @"default": @NO,
+                      @"type": @"toggle"},
+                    @{
+                        @"key": @"restore_reply_context",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"restore_tweet_labels",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    }
                 ]
             },
             @"search": @{
                 @"titleKey": @"MODERN_SETTINGS_SEARCH_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_SEARCH_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"no_history", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"hide_trends", @"default": @NO, @"type": @"toggle" },
-                    @{ @"key": @"hide_trend_videos", @"default": @NO, @"type": @"toggle" }
+                    @{@"key": @"no_history",
+                      @"default": @NO,
+                      @"type": @"toggle"},
+                    @{@"key": @"hide_trends",
+                      @"default": @NO,
+                      @"type": @"toggle"},
+                    @{
+                        @"key": @"hide_trend_videos",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    }
                 ]
             },
             @"branding": @{
                 @"titleKey": @"MODERN_SETTINGS_BRANDING_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_BRANDING_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"restore_twitter_names", @"default": @([BHTManager isTwitterBranded]), @"type": @"toggle" },
-                    @{ @"key": @"refresh_pill_label", @"default": @([BHTManager isTwitterBranded]), @"type": @"toggle" },
-                    @{ @"key": @"color_twitter_icon_in_top_bar", @"default": @([BHTManager isTwitterBranded]), @"type": @"toggle" }
+                    @{
+                        @"key": @"restore_twitter_names",
+                        @"default": @([BHTManager isTwitterBranded]),
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"refresh_pill_label",
+                        @"default": @([BHTManager isTwitterBranded]),
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"color_twitter_icon_in_top_bar",
+                        @"default": @([BHTManager isTwitterBranded]),
+                        @"type": @"toggle"
+                    }
                 ]
             },
             @"experimental": @{
                 @"titleKey": @"MODERN_SETTINGS_EXPERIMENTAL_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_EXPERIMENTAL_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"reply_in_webview", @"default": @NO, @"type": @"toggle" }
+                    @{@"key": @"reply_in_webview",
+                      @"default": @NO,
+                      @"type": @"toggle"}
                 ]
             },
             @"web": @{
                 @"titleKey": @"MODERN_SETTINGS_WEB_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_WEB_SUBTITLE",
                 @"settings": @[
-                    @{ @"type": @"compactButton", @"key": @"sharing_domain", @"action": @"showSharingDomainPrompt:", @"prefKeyForSubtitle": @"sharing_domain", @"subtitleDefault": @"x.com" },
-                    @{ @"key": @"always_open_safari", @"default": @NO },
-                    @{ @"key": @"new_inapp_webview", @"default": @YES }
+                    @{
+                        @"type": @"compactButton",
+                        @"key": @"sharing_domain",
+                        @"action": @"showSharingDomainPrompt:",
+                        @"prefKeyForSubtitle": @"sharing_domain",
+                        @"subtitleDefault": @"x.com"
+                    },
+                    @{@"key": @"always_open_safari",
+                      @"default": @NO},
+                    @{@"key": @"new_inapp_webview",
+                      @"default": @YES}
                 ]
             },
             @"debug": @{
                 @"titleKey": @"MODERN_SETTINGS_DEBUG_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_DEBUG_SUBTITLE",
                 @"settings": @[
-                    @{ @"key": @"flex_twitter", @"default": @NO, @"type": @"toggle" }
+                    @{@"key": @"flex_twitter",
+                      @"default": @NO,
+                      @"type": @"toggle"}
                 ]
             }
         };
@@ -151,14 +336,15 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsPages(void) {
     return pages;
 }
 
-static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
-    static NSDictionary<NSString *, NSDictionary *> *index;
+static NSDictionary<NSString*, NSDictionary*>* BHTSettingsIndex(void) {
+    static NSDictionary<NSString*, NSDictionary*>* index;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSMutableDictionary<NSString *, NSDictionary *> *map = [NSMutableDictionary dictionary];
-        for (NSDictionary *page in BHTSettingsPages().allValues) {
-            for (NSDictionary *setting in page[@"settings"]) {
-                NSString *key = setting[@"key"];
+        NSMutableDictionary<NSString*, NSDictionary*>* map =
+            [NSMutableDictionary dictionary];
+        for (NSDictionary* page in BHTSettingsPages().allValues) {
+            for (NSDictionary* setting in page[@"settings"]) {
+                NSString* key = setting[@"key"];
                 if (key) {
                     map[key] = setting;
                 }
@@ -178,12 +364,12 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
 + (void)load {
     [self migrateUndoTweetToggle];
 
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults boolForKey:@"nfb_key_migration_v1_done"]) {
         return;
     }
 
-    NSDictionary<NSString *, NSString *> *renamedKeys = @{
+    NSDictionary<NSString*, NSString*>* renamedKeys = @{
         @"dis_rtl": @"disable_rtl",
         @"showScollIndicator": @"show_scroll_indicator",
         @"en_font": @"custom_fonts",
@@ -207,12 +393,13 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
 
     // These old names double as Twitter's own feature-switch keys, so copy the
     // value across but leave the original in place rather than risk removing it.
-    NSSet<NSString *> *sharedWithTwitter = [NSSet setWithArray:@[
+    NSSet<NSString*>* sharedWithTwitter = [NSSet setWithArray:@[
         @"reply_sorting_enabled",
         @"ios_in_app_article_webview_enabled",
     ]];
 
-    [renamedKeys enumerateKeysAndObjectsUsingBlock:^(NSString *oldKey, NSString *newKey, BOOL *stop) {
+    [renamedKeys enumerateKeysAndObjectsUsingBlock:^(
+                     NSString* oldKey, NSString* newKey, BOOL* stop) {
         id value = [defaults objectForKey:oldKey];
         if (value == nil) {
             return;
@@ -231,13 +418,14 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
 // The Undo Tweet on/off toggle was merged into the timeout picker, where a
 // timeout of 0 means off. Carry a prior "off" state across as a 0 timeout.
 + (void)migrateUndoTweetToggle {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults boolForKey:@"nfb_undo_timeout_migration_done"]) {
         return;
     }
 
     id oldToggle = [defaults objectForKey:@"undo_tweet"];
-    if (oldToggle != nil && ![oldToggle boolValue] && [defaults objectForKey:@"undo_tweet_timeout"] == nil) {
+    if (oldToggle != nil && ![oldToggle boolValue] &&
+        [defaults objectForKey:@"undo_tweet_timeout"] == nil) {
         [defaults setInteger:0 forKey:@"undo_tweet_timeout"];
     }
     [defaults removeObjectForKey:@"undo_tweet"];
@@ -246,23 +434,23 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
 
 #pragma mark - Accessors
 
-+ (NSArray<NSDictionary *> *)settingsForPage:(NSString *)pageKey {
++ (NSArray<NSDictionary*>*)settingsForPage:(NSString*)pageKey {
     return pageKey ? BHTSettingsPages()[pageKey][@"settings"] : nil;
 }
 
-+ (NSString *)titleKeyForPage:(NSString *)pageKey {
++ (NSString*)titleKeyForPage:(NSString*)pageKey {
     return pageKey ? BHTSettingsPages()[pageKey][@"titleKey"] : nil;
 }
 
-+ (NSString *)subtitleKeyForPage:(NSString *)pageKey {
++ (NSString*)subtitleKeyForPage:(NSString*)pageKey {
     return pageKey ? BHTSettingsPages()[pageKey][@"subtitleKey"] : nil;
 }
 
-+ (NSDictionary *)settingForKey:(NSString *)key {
++ (NSDictionary*)settingForKey:(NSString*)key {
     return key ? BHTSettingsIndex()[key] : nil;
 }
 
-+ (BOOL)boolForKey:(NSString *)key {
++ (BOOL)boolForKey:(NSString*)key {
     id value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     if (value != nil) {
         return [value boolValue];
@@ -270,7 +458,7 @@ static NSDictionary<NSString *, NSDictionary *> *BHTSettingsIndex(void) {
     return [[self settingForKey:key][@"default"] boolValue];
 }
 
-+ (NSInteger)integerForKey:(NSString *)key {
++ (NSInteger)integerForKey:(NSString*)key {
     id value = [[NSUserDefaults standardUserDefaults] objectForKey:key];
     if (value != nil) {
         return [value integerValue];

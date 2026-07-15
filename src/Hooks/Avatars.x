@@ -21,13 +21,15 @@
 // leaving avatars that are natively rounded squares alone.
 static char kCoercedAvatarStyle;
 
-static NSInteger CoercedStyle(UIView *view, NSInteger style) {
+static NSInteger CoercedStyle(UIView* view, NSInteger style) {
     if (style == 2) {
         if ([BHTSettings boolForKey:@"square_avatars"]) {
-            objc_setAssociatedObject(view, &kCoercedAvatarStyle, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            objc_setAssociatedObject(view, &kCoercedAvatarStyle, @YES,
+                                     OBJC_ASSOCIATION_RETAIN_NONATOMIC);
             return 3;
         }
-        objc_setAssociatedObject(view, &kCoercedAvatarStyle, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(view, &kCoercedAvatarStyle, nil,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
     return style;
 }
@@ -36,14 +38,16 @@ void applySquareAvatarsSetting(void) {
     BOOL enabled = [BHTSettings boolForKey:@"square_avatars"];
     Class avatarClass = objc_getClass("TFNAvatarImageView");
 
-    for (UIWindow *window in UIApplication.sharedApplication.windows) {
-        EnumerateSubviewsRecursively(window, ^(UIView *view) {
+    for (UIWindow* window in UIApplication.sharedApplication.windows) {
+        EnumerateSubviewsRecursively(window, ^(UIView* view) {
             if (![view isKindOfClass:avatarClass]) {
                 return;
             }
 
-            TFNAvatarImageView *avatar = (TFNAvatarImageView *)view;
-            if (enabled ? avatar.style == 2 : objc_getAssociatedObject(avatar, &kCoercedAvatarStyle) != nil) {
+            TFNAvatarImageView* avatar = (TFNAvatarImageView*)view;
+            if (enabled
+                    ? avatar.style == 2
+                    : objc_getAssociatedObject(avatar, &kCoercedAvatarStyle) != nil) {
                 // Re-sent as circular; the hook coerces it when the setting is on.
                 [avatar setStyle:2];
             }
@@ -61,14 +65,16 @@ void applySquareAvatarsSetting(void) {
 
 // TUIAvatarImageView picks its circular pre-clip image transformer from the
 // incoming style, so coerce before its own logic runs. Its style mapping class
-// method also feeds the Swift avatar views, whose setter is unreachable from ObjC.
+// method also feeds the Swift avatar views, whose setter is unreachable from
+// ObjC.
 %hook TUIAvatarImageView
 
 - (void)setStyle:(NSInteger)style {
     %orig(CoercedStyle(self, style));
 }
 
-+ (NSInteger)avatarImageViewStyleWithProfileImageShape:(NSInteger)shape identityType:(NSInteger)identityType {
++ (NSInteger)avatarImageViewStyleWithProfileImageShape:(NSInteger)shape
+                                          identityType:(NSInteger)identityType {
     return [BHTSettings boolForKey:@"square_avatars"] ? 3 : %orig;
 }
 
@@ -78,7 +84,9 @@ void applySquareAvatarsSetting(void) {
 // images that get pre-clipped are rounded as squares instead of circles.
 %hook UIImage
 
-- (UIImage *)tfn_roundImageWithTargetDimensions:(CGSize)targetDimensions targetContentMode:(UIViewContentMode)targetContentMode {
+- (UIImage*)tfn_roundImageWithTargetDimensions:(CGSize)targetDimensions
+                             targetContentMode:
+                                 (UIViewContentMode)targetContentMode {
     if (![BHTSettings boolForKey:@"square_avatars"]) {
         return %orig;
     }
@@ -87,8 +95,10 @@ void applySquareAvatarsSetting(void) {
         return self;
     }
 
-    CGRect imageRect = CGRectMake(0, 0, targetDimensions.width, targetDimensions.height);
-    CGFloat cornerRadius = MIN(targetDimensions.width, targetDimensions.height) / 8.0;
+    CGRect imageRect =
+        CGRectMake(0, 0, targetDimensions.width, targetDimensions.height);
+    CGFloat cornerRadius =
+        MIN(targetDimensions.width, targetDimensions.height) / 8.0;
 
     UIGraphicsBeginImageContextWithOptions(targetDimensions, NO, self.scale);
     if (!UIGraphicsGetCurrentContext()) {
@@ -96,10 +106,11 @@ void applySquareAvatarsSetting(void) {
         return self;
     }
 
-    [[UIBezierPath bezierPathWithRoundedRect:imageRect cornerRadius:cornerRadius] addClip];
+    [[UIBezierPath bezierPathWithRoundedRect:imageRect
+                                cornerRadius:cornerRadius] addClip];
     [self drawInRect:imageRect];
 
-    UIImage *roundedImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIImage* roundedImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
     return roundedImage ?: self;
