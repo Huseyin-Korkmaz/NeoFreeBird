@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\n비디오 품질 선택";
 "FETCHING_PROGRESS_TITLE" = "잠시 기다려주세요...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "FFmpeg로 다운로드";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "GIF로 다운로드";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "MP4로 다운로드";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "기기의 홈 화면에 사용할 커스텀 앱 아이콘을 선택합니다. 언제든지 변경할 수 있습니다.";

@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\nVideoqualität auswählen";
 "FETCHING_PROGRESS_TITLE" = "Einen Moment...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "Mit FFmpeg herunterladen";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "Als GIF herunterladen";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "Als MP4 herunterladen";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "Wähle ein benutzerdefiniertes App-Symbol für den Home-Bildschirm deines Geräts. Du kannst es jederzeit ändern.";

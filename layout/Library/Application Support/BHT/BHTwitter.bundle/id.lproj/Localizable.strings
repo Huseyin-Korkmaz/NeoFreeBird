@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\nPilih kualitas video";
 "FETCHING_PROGRESS_TITLE" = "Tunggu sebentar...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "Unduh dengan FFmpeg";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "Unduh sebagai GIF";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "Unduh sebagai MP4";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "Pilih ikon atau tema baru untuk Twitter.";

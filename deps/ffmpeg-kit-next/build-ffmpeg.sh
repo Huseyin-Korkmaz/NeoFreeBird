@@ -72,10 +72,11 @@ if [[ ! -f "$FFMPEG_PREFIX/lib/libavcodec.a" ]]; then
     tar -xzf "$BUILD/ffmpeg.tar.gz" -C "$BUILD"
 
     pushd "$FFMPEG_SRC" >/dev/null
-    # Trimmed to what the video download flow uses: probe and demux Twitter
+    # Trimmed to what the media download flows use: probe and demux Twitter
     # HLS/MP4 over HTTPS, decode H.264/HEVC/AAC, scale, encode with the
-    # VideoToolbox hardware H.264 encoder, mux to mp4. Component selection
-    # pulls transitive deps (e.g. hls demuxer brings mov/mpegts/aac).
+    # VideoToolbox hardware H.264 encoder or the palette-based GIF pipeline,
+    # mux to mp4/gif. Component selection pulls transitive deps (e.g. hls
+    # demuxer brings mov/mpegts/aac).
     ./configure \
         --prefix="$FFMPEG_PREFIX" \
         --enable-cross-compile --target-os=darwin --arch=aarch64 --cpu=armv8 \
@@ -92,9 +93,9 @@ if [[ ! -f "$FFMPEG_PREFIX/lib/libavcodec.a" ]]; then
         --enable-demuxer=hls,mpegts,mov,aac \
         --enable-decoder=h264,hevc,aac \
         --enable-parser=h264,hevc,aac \
-        --enable-encoder=h264_videotoolbox \
-        --enable-muxer=mp4 \
-        --enable-filter=scale,format,null,anull \
+        --enable-encoder=h264_videotoolbox,gif \
+        --enable-muxer=mp4,gif \
+        --enable-filter=scale,format,null,anull,split,palettegen,paletteuse \
         --enable-bsf=aac_adtstoasc,extract_extradata
     make -j"$JOBS"
     make install

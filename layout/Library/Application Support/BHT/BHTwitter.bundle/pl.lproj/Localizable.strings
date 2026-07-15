@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\nWybierz jakość wideo";
 "FETCHING_PROGRESS_TITLE" = "Chwileczkę...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "Pobierz za pomocą FFmpeg";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "Pobierz jako GIF";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "Pobierz jako MP4";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "Wybierz własną ikonę aplikacji na ekran główny. Możesz zmienić ją w dowolnym momencie.";

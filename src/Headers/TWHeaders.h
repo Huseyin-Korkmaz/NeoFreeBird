@@ -12,7 +12,6 @@
 #import <AVKit/AVKit.h>
 #import <Photos/Photos.h>
 #import <SafariServices/SafariServices.h>
-#import "Download/Download.h"
 #import "CustomTabBar/CustomTabBarUtility.h"
 #import <Preferences/PSListController.h>
 #import <Preferences/PSSpecifier.h>

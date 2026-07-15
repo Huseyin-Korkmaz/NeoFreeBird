@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\nVideo kalitesi seç";
 "FETCHING_PROGRESS_TITLE" = "Bir saniye...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "FFmpeg ile indir";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "GIF olarak indir";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "MP4 olarak indir";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "Twitter için yeni bir ikon veya tema seç.";

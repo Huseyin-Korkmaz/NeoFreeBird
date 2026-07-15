@@ -47,12 +47,6 @@
         return false;
     }
 }
-+ (NSString *)getDownloadingPersent:(float)per {
-    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
-    [numberFormatter setNumberStyle:NSNumberFormatterPercentStyle];
-    NSNumber *number = [NSNumber numberWithFloat:per];
-    return [numberFormatter stringFromNumber:number];
-}
 + (id)sharedFontGroup {
     // TAEStandardFontGroup was renamed to TFNUIDefaultFontGroup in 12.3.
     return [objc_getClass("TFNUIDefaultFontGroup") sharedFontGroup];
@@ -91,6 +85,11 @@
         [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];
     } error:nil];
 }
++ (void)saveGIF:(NSURL *)url {
+    [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
+        [PHAssetChangeRequest creationRequestForAssetFromImageAtFileURL:url];
+    } error:nil];
+}
 + (void)showSaveVC:(NSURL *)url {
     UIActivityViewController *acVC = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
     if (is_iPad()) {
@@ -105,46 +104,10 @@
     MediaInformation *mediaInformation = [mediaInformationSession getMediaInformation];
     return mediaInformation;
 }
-+ (TFNMenuSheetViewController *)newFFmpegDownloadSheet:(MediaInformation *)mediaInformation downloadingURL:(NSURL *)downloadingURL {
-    NSAttributedString *AttString = [[NSAttributedString alloc] initWithString:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_MENU_TITLE"] attributes:@{
-        NSFontAttributeName: [BHTManager menuTitleFont],
-        NSForegroundColorAttributeName: UIColor.labelColor
-    }];
-    TFNActiveTextItem *title = [[objc_getClass("TFNActiveTextItem") alloc] initWithTextModel:[[objc_getClass("TFNAttributedTextModel") alloc] initWithAttributedString:AttString] activeRanges:nil];
-
-    NSMutableArray *actions = [[NSMutableArray alloc] init];
-    [actions addObject:title];
-
-    for (StreamInformation *stream in [mediaInformation getStreams]) {
-        NSNumber *width = [stream getWidth];
-        NSNumber *height = [stream getHeight];
-        if (width != nil && height != nil) {
-            NSString *resolution = [NSString stringWithFormat:@"%@x%@", width, height];
-            TFNActionItem *downloadOption = [objc_getClass("TFNActionItem") actionItemWithTitle:resolution imageName:@"arrow_down_circle_stroke" action:^{
-                TFNHUD *hud = [[objc_getClass("TFNHUD") alloc] initWithText:[[BHTBundle sharedBundle] localizedTwitterStringForKey:@"DOWNLOAD_LIVE_ACTIVITY_DOWNLOADING"]];
-                [hud show];
-
-                NSURL *newFilePath = [[NSURL fileURLWithPath:NSTemporaryDirectory()] URLByAppendingPathComponent:[NSString stringWithFormat:@"%@.mp4", NSUUID.UUID.UUIDString]];
-                [FFmpegKit executeAsync:[NSString stringWithFormat:@"-i %@ -vf scale=%@:flags=lanczos -c:v h264_videotoolbox -b:v 2M -c:a copy %@", downloadingURL.absoluteString, resolution, newFilePath.path] withCompleteCallback:^(FFmpegSession *session) {
-                    ReturnCode *returnCode = [session getReturnCode];
-                    dispatch_async(dispatch_get_main_queue(), ^(void) {
-                        [hud hide];
-                        if ([ReturnCode isSuccess:returnCode]) {
-                            if (!([BHTSettings boolForKey:@"direct_save"])) {
-                                [BHTManager showSaveVC:newFilePath];
-                            } else {
-                                [BHTManager save:newFilePath];
-                            }
-                        }
-                    });
-                }];
-            }];
-            [actions addObject:downloadOption];
-        }
-    }
-
-    TFNMenuSheetViewController *alert = [[objc_getClass("TFNMenuSheetViewController") alloc] initWithActionItems:[NSArray arrayWithArray:actions]];
-    return alert;
++ (NSString *)getDownloadingPercent:(float)progress {
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterPercentStyle];
+    return [numberFormatter stringFromNumber:[NSNumber numberWithFloat:progress]];
 }
 
 + (BOOL)isTwitterBranded {

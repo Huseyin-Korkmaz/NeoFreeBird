@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\nVälj videokvalitet";
 "FETCHING_PROGRESS_TITLE" = "Ett ögonblick...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "Ladda ner med FFmpeg";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "Ladda ner som GIF";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "Ladda ner som MP4";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "Välj en anpassad appikon för din enhets hemskärm. Byt när som helst.";

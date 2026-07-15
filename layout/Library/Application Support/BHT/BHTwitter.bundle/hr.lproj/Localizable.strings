@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\nOdaberi kvalitetu videa";
 "FETCHING_PROGRESS_TITLE" = "Samo trenutak...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "Preuzmi pomoću FFmpeg";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "Preuzmi kao GIF";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "Preuzmi kao MP4";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "Odaberi novu ikonu ili temu za Twitter.";

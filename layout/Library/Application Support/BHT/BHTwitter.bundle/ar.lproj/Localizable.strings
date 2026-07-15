@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\nاختيار جودة الفيديو";
 "FETCHING_PROGRESS_TITLE" = "لحظة فقط...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "التحميل باستخدام FFmpeg";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "التحميل بصيغة GIF";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "التحميل بصيغة MP4";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "اختر أيقونة أو مظهرًا جديدًا لتويتر.";

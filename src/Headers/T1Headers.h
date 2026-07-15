@@ -8,7 +8,6 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 #import <SafariServices/SafariServices.h>
-#import "Download/Download.h"
 #import "TFNHeaders.h"
 #import "TFSHeaders.h"
 

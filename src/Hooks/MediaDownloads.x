@@ -192,7 +192,7 @@ static NSArray *DMVideoEntities(UIView *attachmentView) {
 
     NSArray *mediaEntities = [[status entities] media];
     BOOL hasVideo = NO;
-    // mediaType 2 = video, 3 = GIF
+    // mediaType 2 = GIF, 3 = video
     for (TFSTwitterEntityMedia *media in mediaEntities) {
         if ([media isKindOfClass:%c(TFSTwitterEntityMedia)] && (media.mediaType == 2 || media.mediaType == 3)) {
             hasVideo = YES;

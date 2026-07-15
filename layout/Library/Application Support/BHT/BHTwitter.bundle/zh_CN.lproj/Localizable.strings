@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\n选择视频画质";
 "FETCHING_PROGRESS_TITLE" = "稍等片刻...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "使用 FFmpeg 下载";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "下载为 GIF";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "下载为 MP4";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "选择新的 Twitter 图标或主题。";

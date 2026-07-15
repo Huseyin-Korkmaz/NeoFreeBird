@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\nОберіть якість відео";
 "FETCHING_PROGRESS_TITLE" = "Секундочку...";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "Завантажити через FFmpeg";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "Завантажити як GIF";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "Завантажити як MP4";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "Оберіть нову іконку чи тему для Twitter.";

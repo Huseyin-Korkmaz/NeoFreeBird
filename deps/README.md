@@ -24,9 +24,10 @@ ffmpeg-kit-next 8.1.0 (FFmpeg n8.1.2), arm64 iOS, static only. Not tracked
 in git: `build.sh` runs `build-ffmpeg.sh` automatically when the libraries
 are missing, compiling with Xcode on macOS or cross-compiling with the
 Theos toolchain on Linux (cached under /tmp afterwards). FFmpeg is trimmed
-to the components the video download flow uses (HLS/HTTPS demux,
-H.264/HEVC/AAC decode, scale, VideoToolbox H.264 encode, mp4 mux), with
-TLS provided by the system SecureTransport backend instead of OpenSSL.
+to the components the media download flows use (HLS/HTTPS demux,
+H.264/HEVC/AAC decode, scale, VideoToolbox H.264 encode, palette-based
+GIF encode, mp4/gif mux), with TLS provided by the system SecureTransport
+backend instead of OpenSSL.
 The FFmpeg tag must stay in lockstep with the submodule (its vendored
 fftools sources compile against FFmpeg internals).
 

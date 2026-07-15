@@ -8,7 +8,6 @@
 #import "Headers/TWHeaders.h"
 
 @interface BHTManager : NSObject
-+ (NSString *)getDownloadingPersent:(float)per;
 + (void)cleanCache;
 + (NSString *)getVideoQuality:(NSString *)url;
 + (id)sharedFontGroup;
@@ -17,8 +16,9 @@
 + (UIViewController *)BHTSettingsWithAccount:(TFNTwitterAccount *)twAccount;
 + (void)showSaveVC:(NSURL *)url;
 + (void)save:(NSURL *)url;
++ (void)saveGIF:(NSURL *)url;
 + (MediaInformation *)getM3U8Information:(NSURL *)mediaURL;
-+ (TFNMenuSheetViewController *)newFFmpegDownloadSheet:(MediaInformation *)mediaInformation downloadingURL:(NSURL *)downloadingURL;
++ (NSString *)getDownloadingPercent:(float)progress;
 
 + (BOOL)isTwitterBranded;
 

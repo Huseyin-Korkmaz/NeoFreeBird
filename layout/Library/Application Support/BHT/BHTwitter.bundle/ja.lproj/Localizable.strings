@@ -227,7 +227,8 @@
 /*Dwonload*/
 "DOWNLOAD_MENU_TITLE" = "\n動画の画質を選択";
 "FETCHING_PROGRESS_TITLE" = "少々お待ちください…";
-"FFMPEG_DOWNLOAD_OPTION_TITLE" = "FFmpegを使用してダウンロード";
+"DOWNLOAD_AS_GIF_OPTION_TITLE" = "GIFとしてダウンロード";
+"DOWNLOAD_AS_MP4_OPTION_TITLE" = "MP4としてダウンロード";
 
 /*App icon*/
 "APP_ICON_HEADER_TITLE" = "Twitterアプリのアイコンを選択できます。いつでも変更できます。";
