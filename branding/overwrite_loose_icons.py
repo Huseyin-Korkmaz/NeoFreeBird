@@ -51,7 +51,7 @@ def main():
         by_key[(m["renditionName"], int(m["width"]), int(m["height"]))] = \
             os.path.join(extract_dir, m["file"])
 
-    synced, skipped = [], []
+    skipped = []
     for f in os.listdir(app_dir):
         if f.startswith("._") or not f.lower().endswith((".png", ".jpg", ".jpeg")):
             continue
@@ -70,15 +70,11 @@ def main():
         src = by_key.get((name, dims[0], dims[1]))
         if src:
             shutil.copyfile(src, fp)
-            synced.append((f, "%dx%d" % dims))
         else:
             skipped.append((f, "%dx%d" % dims))
 
-    print("loose icons: %d synced to catalog" % len(synced))
-    for f, d in synced:
-        print("  synced: %s (%s)" % (f, d))
     for f, d in skipped:
-        print("  no-match: %s (%s) has no catalog rendition of that size" % (f, d))
+        sys.stderr.write("no-match: %s (%s) has no catalog rendition of that size\n" % (f, d))
     return 0
 
 

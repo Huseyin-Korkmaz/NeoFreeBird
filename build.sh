@@ -23,7 +23,7 @@ die() { err "$1"; exit 1; }
 
 usage() {
   cat <<EOF
-Usage: $(basename "$0") [--sideloaded | --rootless | --trollstore | --rootfull] [-t | --twitter-branding] [--resource-pack ZIP]
+Usage: $(basename "$0") [--sideloaded | --rootless | --trollstore | --rootfull]
 TL;DR: You need to select one flag to build NeoFreeBird.
 
 Flags (required):
@@ -33,9 +33,9 @@ Flags (required):
   --rootfull     Compile NeoFreeBird as a .deb file that requires a jailbreak.
 
 Options:
-  -t, --twitter-branding  Set's the app's display name to Twitter (IPA builds only)
-  --resource-pack ZIP     (macOS only) Apply a theme pack ZIP (IPA builds only)
-  -h, --help              Show this help
+  -h, --help     Show this help
+
+Branding (name/icons) is applied separately with rebrand.sh on a built IPA.
 EOF
 }
 
@@ -44,19 +44,9 @@ require_cmd() { command -v "$1" >/dev/null 2>&1 || die "'$1' is required but not
 require_cmd bash
 require_cmd make
 
-CYAN_BIN=""; if command -v cyan >/dev/null 2>&1; then CYAN_BIN="cyan"; fi
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-apply_ipa_branding() {
-  require_cmd python3
-  TWITTER_BRANDING="$TWITTER_BRANDING" RESOURCE_PACK="$RESOURCE_PACK" \
-    python3 "$SCRIPT_DIR/branding/ipa_branding.py" "$1"
-}
-
 MODE=""
-TWITTER_BRANDING=0
-RESOURCE_PACK=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -75,16 +65,6 @@ while [[ $# -gt 0 ]]; do
     --rootfull)
       [[ -n "$MODE" ]] && die "Multiple flags provided. Choose one."
       MODE="rootfull"; shift
-      ;;
-    -t|--twitter-branding)
-      TWITTER_BRANDING=1; shift
-      ;;
-    --resource-pack)
-      [[ $# -ge 2 ]] || die "--resource-pack requires a path argument."
-      RESOURCE_PACK="$2"; shift 2
-      ;;
-    --resource-pack=*)
-      RESOURCE_PACK="${1#*=}"; shift
       ;;
     -h|--help)
       usage; exit 0
@@ -105,21 +85,6 @@ done
 if [[ -z "$MODE" ]]; then
   usage
   exit 2
-fi
-
-if [[ "$MODE" != "sideloaded" && "$MODE" != "trollstore" ]]; then
-  if [[ "$TWITTER_BRANDING" -eq 1 ]]; then
-    say "Skipping --twitter-branding: branding only applies to IPA builds (--sideloaded/--trollstore)."
-    TWITTER_BRANDING=0
-  fi
-  if [[ -n "$RESOURCE_PACK" ]]; then
-    say "Skipping --resource-pack: branding only applies to IPA builds (--sideloaded/--trollstore)."
-    RESOURCE_PACK=""
-  fi
-fi
-
-if [[ -n "$RESOURCE_PACK" && ! -f "$RESOURCE_PACK" ]]; then
-  die "--resource-pack file not found: $RESOURCE_PACK"
 fi
 
 clean_tree() {
@@ -148,7 +113,6 @@ case "$MODE" in
         cyan -i packages/com.atebits.Tweetie2.ipa -o packages/NeoFreeBird-sideloaded --ignore-encrypted \
           -uwf .theos/obj/debug/zxPluginsInject.dylib .theos/obj/debug/libbhFLEX.dylib \
           .theos/obj/debug/BHTwitter.dylib layout/Library/Application\ Support/BHT/BHTwitter.bundle
-        apply_ipa_branding "$(ls -t packages/*.ipa 2>/dev/null | head -n1)"
       else
         say "Skipping cyan step because it is not installed."
       fi
@@ -176,7 +140,6 @@ case "$MODE" in
       if command -v cyan >/dev/null 2>&1; then
         cyan -i packages/com.atebits.Tweetie2.ipa -o packages/NeoFreeBird-trollstore.tipa --ignore-encrypted \
           -uwf .theos/obj/debug/BHTwitter.dylib .theos/obj/debug/libbhFLEX.dylib layout/Library/Application\ Support/BHT/BHTwitter.bundle
-        apply_ipa_branding "$(ls -t packages/*.tipa 2>/dev/null | head -n1)"
       else
         say "Skipping cyan step because it is not installed."
       fi

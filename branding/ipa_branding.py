@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """IPA branding modifications applied to a freshly built .ipa/.tipa.
 
-This is a standalone port of the former ipa-branding.sh. build.sh invokes it
-as a subprocess after an IPA/TIPA has been produced:
+This is a standalone port of the former ipa-branding.sh. rebrand.sh invokes it
+as a subprocess on an already built IPA/TIPA:
 
     RESOURCE_PACK=... TWITTER_BRANDING=1 python3 ipa_branding.py <ipa_path>
 
 It unpacks the IPA once, applies every enabled step — the theme pack in
 RESOURCE_PACK and, when TWITTER_BRANDING=1, the "Twitter" display name — then
 repackages once. When no branding is enabled it exits 0 without touching the
-IPA. A non-zero exit means a requested step failed; build.sh treats that as
+IPA. A non-zero exit means a requested step failed; rebrand.sh treats that as
 fatal.
 
 The sibling helpers (car_extract.m, the .py steps) live alongside this file in
@@ -25,17 +25,6 @@ import tempfile
 from pathlib import Path
 
 BRANDING_DIR = Path(__file__).resolve().parent
-
-# --- console output, matching build.sh's say()/err()/die() styling ----------
-
-_IS_TTY = sys.stdout.isatty()
-_BOLD_GREEN = "\033[1;32m" if _IS_TTY else ""
-_RESET = "\033[0m" if _IS_TTY else ""
-
-
-def say(message):
-    print(f"{_BOLD_GREEN}{message}{_RESET}")
-
 
 def err(message):
     print(f"Error: {message}", file=sys.stderr)
@@ -84,8 +73,6 @@ def _set_display_name_in_app(appdir):
     data["CFBundleDisplayName"] = "Twitter"
     with open(plist, "wb") as f:
         plistlib.dump(data, f, fmt=plistlib.FMT_BINARY)
-
-    say('Set CFBundleDisplayName to "Twitter".')
 
 
 # --- resource pack ----------------------------------------------------------
@@ -239,11 +226,8 @@ def _apply_resource_pack_to_app(appdir, workdir, zip_path):
                 else:
                     dest.unlink()
                 shutil.copyfile(rf, dest)
-                say(f"Replaced {rf.name} in the app root.")
             else:
                 err(f"Branding: '{rf.name}' is not present in the app root; skipped.")
-
-    say(f"Applied image pack to {appdir.name}.")
 
 
 def _xcrun_find(tool):

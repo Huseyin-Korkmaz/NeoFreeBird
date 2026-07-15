@@ -72,7 +72,7 @@ jobs:
           BUILD_DIR: ${{ github.workspace }}/ffmpeg-build
 
   build:
-    name: Build ${{ matrix.deploy_format }}${{ matrix.branded && ' (Twitter)' || matrix.ipa && ' (X)' || '' }}
+    name: Build ${{ matrix.deploy_format }}
     runs-on: macos-latest
     needs: ffmpeg
     permissions:
@@ -81,26 +81,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Non-IPA formats: branding does not apply, so a single build each.
           - deploy_format: rootfull
             ipa: false
-            branded: false
           - deploy_format: rootless
             ipa: false
-            branded: false
-          # IPA formats: built both with and without custom branding.
           - deploy_format: sideloaded
             ipa: true
-            branded: false
-          - deploy_format: sideloaded
-            ipa: true
-            branded: true
           - deploy_format: trollstore
             ipa: true
-            branded: false
-          - deploy_format: trollstore
-            ipa: true
-            branded: true
 
     steps:
       - name: Checkout Main
@@ -131,7 +119,7 @@ jobs:
 
       - name: iOS SDK Caching
         id: SDK
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         env:
           cache-name: iOS-${{ inputs.sdk_version }}-SDK
         with:
@@ -142,7 +130,6 @@ jobs:
       - name: Download iOS SDK
         if: steps.SDK.outputs.cache-hit != 'true'
         run: |
-          # Only download the specific SDK version
           git clone -n --depth=1 --filter=tree:0 https://github.com/theos/sdks/
           cd sdks
           git sparse-checkout set --no-cone iPhoneOS${{ inputs.sdk_version }}.sdk
@@ -151,34 +138,37 @@ jobs:
         env:
           THEOS: ${{ github.workspace }}/theos
 
-      - name: Get BHTwitter Version
+      - name: Get Tweak Info
+        id: tweak_info
         run: |
-          BHTWITTER_VERSION=$(awk '/Version:/ {print $2}' main/control)
-          echo "BHTWITTER_VERSION=${BHTWITTER_VERSION}" >> "$GITHUB_ENV"
-          echo "$BHTWITTER_VERSION"
+          TWEAK_NAME=$(sed -n 's/^Name: *//p' main/control)
+          TWEAK_VERSION=$(awk '/Version:/ {print $2}' main/control)
+          echo "name=${TWEAK_NAME}" >> "$GITHUB_OUTPUT"
+          echo "version=${TWEAK_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "$TWEAK_NAME $TWEAK_VERSION"
 
       - name: Prepare X iPA
         if: matrix.ipa
+        id: x_version
         run: |
           wget "$IPA_URL" --no-verbose -O main/packages/com.atebits.Tweetie2.ipa
           unzip -q main/packages/com.atebits.Tweetie2.ipa -d main/tmp
-          # Get the version number of the X app and store it
           X_VERSION=$(grep -A 1 '<key>CFBundleShortVersionString</key>' main/tmp/Payload/Twitter.app/Info.plist |
             grep '<string>' | awk -F'[><]' '{print $3}')
-          echo "X_VERSION=${X_VERSION}" >> "$GITHUB_ENV"
+          echo "version=${X_VERSION}" >> "$GITHUB_OUTPUT"
           echo "$X_VERSION"
         env:
           IPA_URL: ${{ inputs.decrypted_ipa_url }}
 
       - name: Prepare Image Pack
-        if: matrix.branded && inputs.resource_pack_url != ''
+        if: matrix.ipa && inputs.resource_pack_url != ''
         run: |
           wget "$IMAGE_URL" --no-verbose -O main/resource-pack.zip
         env:
           IMAGE_URL: ${{ inputs.resource_pack_url }}
 
       - name: ffmpeg Stack Caching
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ffmpeg-build
           key: ${{ needs.ffmpeg.outputs.cache-key }}
@@ -187,9 +177,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/main
           sed -i '' "s/^TARGET.*$/TARGET := iphone:clang:${{ inputs.sdk_version }}:${{ inputs.target_version }}/" Makefile
-          IMAGE_FLAG=""
-          if [ -f resource-pack.zip ]; then IMAGE_FLAG="--resource-pack resource-pack.zip"; fi
-          ./build.sh --${{ matrix.deploy_format }}${{ matrix.branded && ' --twitter-branding' || '' }} $IMAGE_FLAG
+          ./build.sh --${{ matrix.deploy_format }}
         env:
           THEOS: ${{ github.workspace }}/theos
           BUILD_DIR: ${{ github.workspace }}/ffmpeg-build
@@ -198,23 +186,31 @@ jobs:
         if: matrix.ipa
         run: |
           mv "main/packages/$(ls -t main/packages | head -n1)" \
-             "main/packages/NeoFreeBird-${{ matrix.deploy_format }}${BRAND_SUFFIX}_${{ env.BHTWITTER_VERSION }}_${{ env.X_VERSION }}.${IPA_EXT}"
+             "main/packages/${{ steps.tweak_info.outputs.name }}-${{ matrix.deploy_format }}-X_${{ steps.tweak_info.outputs.version }}_${{ steps.x_version.outputs.version }}.${IPA_EXT}"
         env:
           IPA_EXT: ${{ matrix.deploy_format == 'trollstore' && 'tipa' || 'ipa' }}
-          BRAND_SUFFIX: ${{ matrix.branded && '-Twitter' || '-X' }}
 
-      - name: Pass package name
-        id: package_name
+      - name: Rebrand IPA to Twitter variant
+        if: matrix.ipa
         run: |
-          echo "package=$(ls -t main/packages | head -n1)" >> "$GITHUB_OUTPUT"
+          cd ${{ github.workspace }}/main
+          IMAGE_FLAG=""
+          if [ -f resource-pack.zip ]; then IMAGE_FLAG="--resource-pack resource-pack.zip"; fi
+          ./rebrand.sh --twitter-branding $IMAGE_FLAG \
+            -o "packages/${{ steps.tweak_info.outputs.name }}-${{ matrix.deploy_format }}-Twitter_${{ steps.tweak_info.outputs.version }}_${{ steps.x_version.outputs.version }}.${IPA_EXT}" \
+            "packages/${{ steps.tweak_info.outputs.name }}-${{ matrix.deploy_format }}-X_${{ steps.tweak_info.outputs.version }}_${{ steps.x_version.outputs.version }}.${IPA_EXT}"
+        env:
+          IPA_EXT: ${{ matrix.deploy_format == 'trollstore' && 'tipa' || 'ipa' }}
 
       - name: Add to Draft Release
         if: ${{ inputs.create_release }}
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ env.BHTWITTER_VERSION }}
-          name: v${{ env.BHTWITTER_VERSION }} - BHTwitter
-          files: main/packages/${{ steps.package_name.outputs.package }}
+          tag_name: v${{ steps.tweak_info.outputs.version }}
+          name: v${{ steps.tweak_info.outputs.version }} - ${{ steps.tweak_info.outputs.name }}
+          files: |
+            main/packages/${{ steps.tweak_info.outputs.name }}-*
+            main/packages/*.deb
           draft: true

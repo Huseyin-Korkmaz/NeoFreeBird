@@ -15,9 +15,9 @@ Pipeline (see ipa-branding.sh: replace_app_images):
 For every bitmap rendition we pick a pixel source: the overlay file if one is
 named after this rendition (REPLACE), otherwise the extracted original
 (PRESERVE). Non-bitmap assets (colors/vectors/data), appearance variants (dark)
-and wide-gamut (P3) renditions are out of scope and reported as DROPPED. Overlay
-files that match no existing rendition are reported and ignored (we never add
-icons that did not already exist).
+and wide-gamut (P3) renditions are out of scope and skipped. Overlay files that
+match no existing rendition are warned about on stderr and ignored (we never
+add icons that did not already exist).
 
 We reconstruct a source .xcassets from those choices and compile it with actool.
 """
@@ -167,17 +167,17 @@ def main():
 
     # Group renditions into assets and choose a pixel source for each.
     assets = {}  # name -> {"icon": bool, "entries": [ {idiom,scale,size,src,replaced} ]}
-    dropped, missing = [], []
+    missing = []
     for e in rows:
         name = e.get("Name")
         rname = e.get("RenditionName")
         atype = e.get("AssetType")
         if atype not in BITMAP_TYPES:
-            dropped.append((name, rname, atype)); continue
+            continue
         if is_wide_gamut(e):
-            dropped.append((name, rname, "wide-gamut")); continue
+            continue
         if has_nondefault_appearance(e):
-            dropped.append((name, rname, "appearance-variant")); continue
+            continue
 
         idiom = (e.get("Idiom") or "universal").lower()
         scale = int(round(float(e.get("Scale", 1))))
@@ -229,7 +229,6 @@ def main():
             drop.add(n)
     for n in drop:
         del assets[n]
-    dropped_icons = sorted(n for n in drop if n in icon_asset_names)
 
     # New alternate icons: any pack image whose name has no counterpart in the
     # base catalog is added as a brand-new alternate icon, resized from its single
@@ -270,7 +269,6 @@ def main():
         ]
 
     all_asset_names = {e.get("Name") for e in rows if e.get("Name")}
-    added_icons = []
     if template_rends:
         for f, path in sorted(overlays.items()):
             if path in used_files:
@@ -285,7 +283,6 @@ def main():
                 assets["%s-settings" % stem] = {"icon": False,
                                                 "entries": make_entries(path, settings_rends)}
             used_files.add(path)
-            added_icons.append(stem)
 
     # Build a source .xcassets.
     xcassets = os.path.join(os.path.dirname(out_car) or ".", "_merge.xcassets")
@@ -357,23 +354,12 @@ def main():
     shutil.rmtree(xcassets, ignore_errors=True)
     shutil.rmtree(resize_dir, ignore_errors=True)
 
-    replaced = sum(1 for a in assets.values() for e in a["entries"] if e["replaced"])
-    preserved = sum(1 for a in assets.values() for e in a["entries"] if not e["replaced"])
     unused = sorted(p for p in set(overlays.values()) if p not in used_files)
-    print("merge: %d replaced, %d preserved, %d dropped, %d overlay files unused" % (
-        replaced, preserved, len(dropped), len(unused)))
-    if dropped_icons:
-        print("  dropped %d un-overridden stock icon set(s): %s" % (
-            len(dropped_icons), ", ".join(dropped_icons)))
-    if added_icons:
-        print("  added %d new alternate icon(s) from pack: %s" % (
-            len(added_icons), ", ".join(added_icons)))
-    for name, rname, why in dropped:
-        print("  dropped: %s (%s) [%s]" % (name, rname, why))
     for p in unused:
-        print("  overlay-unmatched: %s (no rendition or asset with that name)" % os.path.basename(p))
+        sys.stderr.write("overlay-unmatched: %s (no rendition or asset with that name)\n"
+                         % os.path.basename(p))
     for name, rname, idiom, scale, dims in missing:
-        print("  no-pixels: %s (%s) %s@%dx %s" % (name, rname, idiom, scale, dims))
+        sys.stderr.write("no-pixels: %s (%s) %s@%dx %s\n" % (name, rname, idiom, scale, dims))
     return 0
 
 

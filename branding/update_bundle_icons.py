@@ -141,8 +141,6 @@ def main() -> int:
     with open(plist_path, "wb") as fh:
         plistlib.dump(info, fh, fmt=plistlib.FMT_BINARY)
 
-    print("icons: primary=%s | phone files=%s | pad files=%s" % (
-        primary_name, buckets["phone"], buckets["pad"]))
     return 0
 
 
