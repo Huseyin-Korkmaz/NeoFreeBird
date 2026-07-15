@@ -206,3 +206,25 @@ static NSString *CleanedShareURLString(NSString *urlString) {
 }
 
 %end
+
+// MARK: - Disable screenshot detection
+
+%hook NSNotificationCenter
+
+- (id)addObserverForName:(NSNotificationName)name object:(id)obj queue:(NSOperationQueue *)queue usingBlock:(void (^)(NSNotification *note))block {
+    if ([name isEqualToString:UIApplicationUserDidTakeScreenshotNotification]) {
+        return %orig(name, obj, queue, ^(NSNotification *note) {});
+    }
+
+    return %orig;
+}
+
+- (void)addObserver:(id)observer selector:(SEL)aSelector name:(NSNotificationName)aName object:(id)anObject {
+    if ([aName isEqualToString:UIApplicationUserDidTakeScreenshotNotification]) {
+        return;
+    }
+
+    return %orig;
+}
+
+%end
