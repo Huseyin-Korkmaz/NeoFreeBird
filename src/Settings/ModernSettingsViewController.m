@@ -389,7 +389,7 @@
 
     UILabel* footerLabel = [[UILabel alloc] init];
     footerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    footerLabel.text = @NFB_VERSION_STRING;
+    footerLabel.text = @NFB_VERSION_STRING " (" NFB_COMMIT_STRING ")";
     footerLabel.numberOfLines = 0;
     footerLabel.textAlignment = NSTextAlignmentLeft;
 
