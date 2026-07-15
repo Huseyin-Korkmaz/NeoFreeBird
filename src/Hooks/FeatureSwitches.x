@@ -272,6 +272,23 @@ static NSNumber* FeatureSwitchOverrideValueForKey(NSString* key) {
         return [BHTSettings boolForKey:@"hide_downvote_button"] ? @NO : nil;
     }
 
+    if ([key isEqualToString:@"ssp_ads_spotlight"] ||
+        [key isEqualToString:@"ssp_ads_spotlight_client_only_integration"] ||
+        [key isEqualToString:
+                 @"ssp_ads_spotlight_client_only_integration_preload"] ||
+        [key isEqualToString:@"ssp_ads_home_enabled"] ||
+        [key isEqualToString:@"ssp_ads_home_client_only_integration"] ||
+        [key isEqualToString:@"ssp_ads_profile"] ||
+        [key isEqualToString:
+                 @"ssp_ads_profile_client_only_integration_enabled"] ||
+        [key isEqualToString:@"ssp_ads_immersive"] ||
+        [key isEqualToString:@"ssp_ads_immersive_client_only_integration"] ||
+        [key isEqualToString:@"ssp_ads_tweet_details"] ||
+        [key isEqualToString:
+                 @"ssp_ads_tweet_details_client_only_integration"]) {
+        return [BHTSettings boolForKey:@"hide_promoted"] ? @NO : nil;
+    }
+
     // Reactive blending: likes and follows make the timeline request fresh
     // who-to-follow suggestions and splice them in; this switch turns it off.
     if ([key isEqualToString:@"wtf_device_follow_nudge_turn_off_reactive_blending_enabled"]) {

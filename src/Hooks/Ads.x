@@ -22,6 +22,15 @@ static BOOL StatusItemIsPromoted(id item) {
     return [status respondsToSelector:@selector(isPromoted)] && status.isPromoted;
 }
 
+// Promoted trends and event summary heroes (the image ads at the top of
+// explore) carry their promotion in the Swift-side `promotedContent` stored
+// property, which isn't always reflected in the scribe item.
+static BOOL ItemHasPromotedContent(id item) {
+    Ivar promotedIvar =
+        class_getInstanceVariable([item class], "promotedContent");
+    return promotedIvar && object_getIvar(item, promotedIvar) != nil;
+}
+
 static BOOL ScribeItemIsPromoted(id item) {
     if (![item respondsToSelector:@selector(scribeItem)]) {
         return NO;
@@ -61,7 +70,7 @@ static BOOL ShouldHideItem(id item, NSString* location) {
         if (([className isEqualToString:@"TwitterURT.URTTimelineTrendViewModel"] ||
              [className
                  isEqualToString:@"TwitterURT.URTTimelineEventSummaryViewModel"]) &&
-            ScribeItemIsPromoted(item)) {
+            (ScribeItemIsPromoted(item) || ItemHasPromotedContent(item))) {
             return YES;
         }
     }
