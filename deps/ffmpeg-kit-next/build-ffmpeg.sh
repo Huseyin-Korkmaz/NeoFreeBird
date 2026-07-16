@@ -62,6 +62,26 @@ fetch() {
     [[ -f "$out" ]] || curl -fL --retry 3 -o "$out" "$url"
 }
 
+# --- OPENSSL ----------------------------------------------------------------
+OPENSSL_SRC="$BUILD/openssl"
+OPENSSL_PREFIX="$BUILD/openssl-install"
+
+if [[ ! -f "$OPENSSL_PREFIX/lib/libssl.a" ]]; then
+    git clone --depth 1 https://github.com/openssl/openssl.git "$OPENSSL_SRC"
+
+    pushd "$OPENSSL_SRC"
+
+    ./Configure ios64-xcrun \
+        no-shared \
+        no-tests \
+        --prefix="$OPENSSL_PREFIX"
+
+    make -j"$JOBS"
+    make install_sw
+
+    popd
+fi
+
 # --- FFmpeg ----------------------------------------------------------------
 
 FFMPEG_SRC="$BUILD/FFmpeg-$FFMPEG_TAG"
@@ -82,14 +102,19 @@ if [[ ! -f "$FFMPEG_PREFIX/lib/libavcodec.a" ]]; then
         --enable-cross-compile --target-os=darwin --arch=aarch64 --cpu=armv8 \
         --cc=ios-clang --cxx=ios-clang++ --as=ios-clang \
         --ar="$AR_BIN" --ranlib="$RANLIB_BIN" --nm="$NM_BIN" \
-        --extra-cflags="-Wno-unused-function -Wno-deprecated-declarations -fstrict-aliasing" \
+        --extra-cflags="-I$OPENSSL_PREFIX/include \
+        -Wno-unused-function \
+        -Wno-deprecated-declarations \
+        -fstrict-aliasing" \
+        --extra-ldflags="-L$OPENSSL_PREFIX/lib -Wl,-dead_strip" \
+        --extra-libs="-lssl -lcrypto" \
         --disable-shared --enable-static --enable-pthreads --enable-small \
         --disable-programs --disable-doc --disable-debug \
         --disable-zlib --disable-bzlib --disable-iconv \
         --disable-audiotoolbox --disable-avfoundation --disable-coreimage \
-        --enable-securetransport --enable-videotoolbox \
+        --enable-openssl --enable-videotoolbox \
         --disable-everything \
-        --enable-protocol=file,tcp,tls,http,https,crypto,data \
+        --enable-protocol=file,tcp,tls,http,https,crypto,data,udp \
         --enable-demuxer=hls,mpegts,mov,aac \
         --enable-decoder=h264,hevc,aac \
         --enable-parser=h264,hevc,aac \
@@ -137,7 +162,9 @@ rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR/lib/pkgconfig"
 cp "$KIT_SRC"/*.h "$OUT_DIR/"
 cp -r "$FFMPEG_PREFIX"/include/* "$OUT_DIR/"
-cp "$FFMPEG_PREFIX"/lib/*.a "$KIT_BUILD/libffmpegkit.a" "$OUT_DIR/lib/"
+cp "$FFMPEG_PREFIX"/lib/*.a "$OUT_DIR/lib/"
+cp "$OPENSSL_PREFIX"/lib/*.a "$OUT_DIR/lib/"
+cp "$KIT_BUILD/libffmpegkit.a" "$OUT_DIR/lib/"
 cp "$FFMPEG_PREFIX"/lib/pkgconfig/*.pc "$OUT_DIR/lib/pkgconfig/"
 
 echo "Done. Headers and libraries installed in $OUT_DIR."
