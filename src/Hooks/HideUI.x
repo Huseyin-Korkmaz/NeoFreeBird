@@ -125,6 +125,31 @@
 
 %end
 
+%hook UIView
+-(void)didMoveToWindow {
+    %orig;
+    if ([BHTSettings boolForKey:@"hide_trends"] 
+    && [self.accessibilityIdentifier isEqualToString:@"T1TwitterSwift.TrendsSidebarViewController"] 
+    && is_iPad()) {
+        self.hidden = YES;
+        self.userInteractionEnabled = NO;
+        for (UIView *subview in self.subviews) {
+            subview.hidden = YES;
+        }
+    }
+    if ([BHTSettings boolForKey:@"hide_who_to_follow"] 
+    && [self.accessibilityIdentifier isEqualToString:@"T1UserRecommendationsViewController"] 
+    && is_iPad()) {
+        self.hidden = YES;
+        self.userInteractionEnabled = NO;
+        for (UIView *subview in self.subviews) {
+            subview.hidden = YES;
+        }
+    }
+}
+
+%end
+
 // MARK: - No Subscribe button
 
 // Every Subscribe surface — the profile button provider (and its answers that
