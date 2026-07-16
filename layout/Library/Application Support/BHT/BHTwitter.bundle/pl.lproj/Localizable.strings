@@ -190,6 +190,8 @@
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Ukryj własne osie czasu";
 "HIDE_CUSTOM_TIMELINES_DETAIL" = "Usuwa przycisk Dodaj z kart osi czasu na ekranie głównym.";
 
+"RESTORE_REFRESH_SOUNDS_TITLE" = "Dźwięki przy odświeżaniu";
+
 "HIDE_TRENDS_TITLE" = "Ukryj popularne treści";
 "HIDE_TRENDS_DETAIL" = "Pokazuje tylko pasek wyszukiwania na karcie Eksploruj, ukrywając wszystkie trendy, wiadomości i karty stron.";
 

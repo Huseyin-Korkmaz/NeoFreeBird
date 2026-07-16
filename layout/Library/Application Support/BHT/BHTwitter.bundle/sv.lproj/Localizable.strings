@@ -190,6 +190,8 @@
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Dölj anpassade tidslinjer";
 "HIDE_CUSTOM_TIMELINES_DETAIL" = "Ta bort Lägg till-knappen från flikarna på hemtidslinjen.";
 
+"RESTORE_REFRESH_SOUNDS_TITLE" = "Ljud vid uppdatering";
+
 "HIDE_TRENDS_TITLE" = "Dölj trendande innehåll";
 "HIDE_TRENDS_DETAIL" = "Visa endast sökfältet på Utforska-fliken och dölj alla trender, nyheter och sidflikarna.";
 

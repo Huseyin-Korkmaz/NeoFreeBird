@@ -190,6 +190,8 @@
 "HIDE_CUSTOM_TIMELINES_TITLE" = "隐藏自定义时间线";
 "HIDE_CUSTOM_TIMELINES_DETAIL" = "移除首页时间线标签中的添加按钮。";
 
+"RESTORE_REFRESH_SOUNDS_TITLE" = "下拉刷新音效";
+
 "HIDE_TRENDS_TITLE" = "隐藏热门内容";
 "HIDE_TRENDS_DETAIL" = "在“探索”标签中仅显示搜索栏，隐藏所有趋势、新闻和页面标签。";
 

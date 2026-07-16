@@ -190,6 +190,8 @@
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Masquer les fils personnalisés";
 "HIDE_CUSTOM_TIMELINES_DETAIL" = "Supprime le bouton Ajouter des onglets du fil d'accueil.";
 
+"RESTORE_REFRESH_SOUNDS_TITLE" = "Sons lors de l'actualisation";
+
 "HIDE_TRENDS_TITLE" = "Masquer les tendances";
 "HIDE_TRENDS_DETAIL" = "Affiche uniquement la barre de recherche dans l'onglet Explorer, en masquant les tendances, l'actualité et les onglets de page.";
 

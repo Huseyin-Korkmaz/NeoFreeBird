@@ -190,6 +190,8 @@
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Özel zaman akışlarını gizle";
 "HIDE_CUSTOM_TIMELINES_DETAIL" = "Ana zaman akışı sekmelerinden Ekle düğmesini kaldırır.";
 
+"RESTORE_REFRESH_SOUNDS_TITLE" = "Yenileme sesleri";
+
 "HIDE_TRENDS_TITLE" = "Trend içeriği gizle";
 "HIDE_TRENDS_DETAIL" = "Keşfet sekmesinde yalnızca arama çubuğunu gösterir; tüm trendleri, haberleri ve sayfa sekmelerini gizler.";
 

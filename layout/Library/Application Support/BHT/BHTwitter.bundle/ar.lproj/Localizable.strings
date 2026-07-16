@@ -190,6 +190,8 @@
 "HIDE_CUSTOM_TIMELINES_TITLE" = "إخفاء الخطوط الزمنية المخصصة";
 "HIDE_CUSTOM_TIMELINES_DETAIL" = "إزالة زر الإضافة من تبويبات الخط الزمني الرئيسي.";
 
+"RESTORE_REFRESH_SOUNDS_TITLE" = "أصوات السحب للتحديث";
+
 "HIDE_TRENDS_TITLE" = "إخفاء المحتوى الرائج";
 "HIDE_TRENDS_DETAIL" = "عرض شريط البحث فقط في تبويب الاستكشاف، مع إخفاء جميع الترندات والأخبار وتبويبات الصفحة.";
 

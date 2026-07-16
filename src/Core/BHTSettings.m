@@ -88,7 +88,9 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                     @{@"key": @"hide_spaces",
                       @"default": @NO},
                     @{@"key": @"hide_custom_timelines",
-                      @"default": @NO}
+                      @"default": @NO},
+                    @{@"key": @"restore_refresh_sounds",
+                      @"default": @YES}
                 ]
             },
             @"grok": @{
