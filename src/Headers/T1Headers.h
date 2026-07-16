@@ -20,6 +20,9 @@
 @property (nonatomic, strong) TFNPillControl* pillControl;
 @end
 
+@interface TUIFollowControlCustomScreenshot : UIView
+@end
+
 @interface TTMAssetVideoFile : NSObject
 @property (nonatomic, copy, readonly) NSString* filePath;
 @property (nonatomic, assign, readonly) CGFloat duration;

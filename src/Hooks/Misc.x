@@ -254,3 +254,12 @@ static NSString* CleanedShareURLString(NSString* urlString) {
 }
 
 %end
+
+%hook TUIFollowControlCustomScreenshot
+- (void)didMoveToWindow {
+    %orig;
+    self.hidden = true;
+    self.alpha = 0.0;
+    self.userInteractionEnabled = false;
+}
+%end
