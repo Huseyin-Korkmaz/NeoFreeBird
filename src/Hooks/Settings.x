@@ -5,11 +5,6 @@
 
 #import "HookHelpers.h"
 
-static UIFont* _Nonnull remapFont(UIFont* origFont) {
-    UIFont* newFont = getDefaultFont(origFont);
-    return newFont != nil ? newFont : origFont;
-}
-
 // MARK: - NeoFreeBird settings entry
 
 static const void* SettingsEntryKey = &SettingsEntryKey;
@@ -252,28 +247,22 @@ static NSArray* sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController* setting
 }
 %end
 
-// Every named getter (bodyFont, title1Font, ...) dispatches to one of these five
-// methods, the only ones that actually build a UIFont; remapping here covers all.
-%hook TFNUIDefaultFontGroup
-- (UIFont*)fontOfSize:(CGFloat)size {
+%hook UIFont
++ (UIFont*)tfn_fontWithName:(NSString*)name size:(CGFloat)size {
     UIFont* origFont = %orig;
-    return remapFont(origFont);
-}
-- (UIFont*)mediumFontOfSize:(CGFloat)size {
-    UIFont* origFont = %orig;
-    return remapFont(origFont);
-}
-- (UIFont*)boldFontOfSize:(CGFloat)size {
-    UIFont* origFont = %orig;
-    return remapFont(origFont);
-}
-- (UIFont*)heavyFontOfSize:(CGFloat)size {
-    UIFont* origFont = %orig;
-    return remapFont(origFont);
-}
-- (UIFont*)monospacedDigitFontOfSize:(CGFloat)size weight:(CGFloat)weight {
-    UIFont* origFont = %orig;
-    return remapFont(origFont);
+
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"custom_fonts"]) {
+        return origFont;
+    }
+
+    BOOL isBold = [name containsString:@"Bold"] || [name containsString:@"Heavy"];
+    NSString* customName = [[NSUserDefaults standardUserDefaults]
+        objectForKey:isBold ? @"bhtwitter_font_2" : @"bhtwitter_font_1"];
+    if (!customName) {
+        return origFont;
+    }
+
+    return [UIFont fontWithName:customName size:size] ?: origFont;
 }
 %end
 
