@@ -25,6 +25,7 @@
 #import "LegacyLogin/LegacyLoginViewController.h"
 #import "Padlock/AuthViewController.h"
 #import "Settings/ModernSettingsViewController.h"
+#import "ThemeColor/BHTDimPalette.h"
 #import "ThemeColor/Palette.h"
 
 // Recursive view traversal (BHTHookHelpers.m)

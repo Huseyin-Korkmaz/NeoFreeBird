@@ -35,6 +35,236 @@ void applySelectedThemeColor(void) {
     }
 }
 
+// MARK: - Dim background recolor
+
+// The app only ever renders Light or Dark now -- there's no native third
+// option -- so Dim comes back by intercepting Dark's palette at its one
+// choke point and swapping in a proxy that recolors just the background
+// family, leaving Light untouched.
+%hook TAETwitterColorPaletteSettingInfo
+
+- (id<TAEColorPalette>)colorPalette {
+    id<TAEColorPalette> realPalette = %orig;
+    if (self.isDark && BHTDimThemeEnabled()) {
+        return (id<TAEColorPalette>)[BHTDimPaletteProxy proxyWithPalette:realPalette];
+    }
+    return realPalette;
+}
+
+%end
+
+// Headers, small containers, profile pages, and the boxes around some cells
+// don't go through TAEColorPalette at all -- they're drawn with UIKit's own
+// dynamic system background colors, which Apple defines as pure black (or
+// near enough) in Dark. Re-point those at the same three Dim shades so
+// nothing native-styled is left behind.
+%hook UIColor
+
++ (UIColor*)systemBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)secondarySystemBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimElevatedBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)tertiarySystemBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimHighlightBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)systemGroupedBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)secondarySystemGroupedBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimElevatedBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)tertiarySystemGroupedBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimHighlightBackgroundColor()
+                                                                       : original;
+    }];
+}
+
+%end
+
+// The six named colors above only cover code that calls those exact class
+// methods. Plenty of chrome (profile headers, small containers, boxes around
+// cells) instead gets its color from a UIDynamicSystemColor (system colors)
+// or UIDynamicCatalogColor (colors loaded from an asset catalog, including
+// Twitter's own named design-system colors, which we have no way to
+// enumerate) stored directly on a view's backgroundColor. Both are UIColor
+// subclasses that funnel through -resolvedColorWithTraitCollection: at draw
+// time -- hooking there catches every source at once, not just the ones we
+// know the name of.
+@interface UIDynamicSystemColor : UIColor
+@end
+@interface UIDynamicCatalogColor : UIColor
+@end
+// UIExtendedSRGBColorSpace is the concrete storage class behind essentially
+// every flat (non-dynamic) UIColor, not just background colors -- so unlike
+// the two hooks above, this one leans hard on BHTDimReplacementForResolvedColor's
+// filtering (opaque, achromatic, near-black only) to avoid ever touching flat
+// black text, icon tints, shadows, or borders that happen to share the class.
+@interface UIExtendedSRGBColorSpace : UIColor
+@end
+
+@interface UIDeviceRGBColor: UIColor
+@end
+
+%hook UIDynamicSystemColor
+
+- (UIColor*)resolvedColorWithTraitCollection:(UITraitCollection*)traitCollection {
+    UIColor* original = %orig;
+    if (BHTColorIsDimExempt(self)) {
+        return original;
+    }
+    if (!BHTDimThemeEnabled() || traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return original;
+    }
+    UIColor* replacement = BHTDimReplacementForResolvedColor(original);
+    return replacement ?: original;
+}
+
+%end
+
+%hook UIDeviceRGBColor
+- (UIColor*)resolvedColorWithTraitCollection:(UITraitCollection*)traitCollection {
+    UIColor* original = %orig;
+    if (BHTColorIsDimExempt(self)) {
+        return original;
+    }
+    if (!BHTDimThemeEnabled() || traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return original;
+    }
+    UIColor* replacement = BHTDimReplacementForResolvedColor(original);
+    return replacement ?: original;
+}
+
+%end
+
+%hook UIDynamicCatalogColor
+
+- (UIColor*)resolvedColorWithTraitCollection:(UITraitCollection*)traitCollection {
+    UIColor* original = %orig;
+    if (BHTColorIsDimExempt(self)) {
+        return original;
+    }
+    if (!BHTDimThemeEnabled() || traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return original;
+    }
+    UIColor* replacement = BHTDimReplacementForResolvedColor(original);
+    return replacement ?: original;
+}
+
+%end
+
+%hook UIExtendedSRGBColorSpace
+
+- (UIColor*)resolvedColorWithTraitCollection:(UITraitCollection*)traitCollection {
+    UIColor* original = %orig;
+    if (BHTColorIsDimExempt(self)) {
+        return original;
+    }
+    if (!BHTDimThemeEnabled() || traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return original;
+    }
+    UIColor* replacement = BHTDimReplacementForResolvedColor(original);
+    return replacement ?: original;
+}
+
+%end
+
+%hook TFNSolidColorView
+
+-(void) didMoveToWindow {
+    %orig;
+    if (BHTDimThemeEnabled()) {
+        self.hidden = TRUE;
+    }
+}
+
+%end
+
+// TFNButton blends into Dim's navy too well, so its background should stay
+// whatever Twitter itself set it to. Skipping our own explicit recolor in
+// the UIView hook below isn't enough on its own: that color is still an
+// instance of one of the four classes hooked above, which will substitute it
+// regardless of which view holds it. Marking the exact color instance here,
+// at the moment it's assigned, is what actually keeps the four hooks above
+// from touching it.
+%hook TFNButton
+
+- (void)setBackgroundColor:(UIColor*)color {
+    if (BHTColorIsCloseToWhite(color)) {
+        BHTMarkColorDimExempt(color);
+    }
+    %orig(color);
+}
+
+%end
+
+%hook UIView
+-(void) didMoveToWindow {
+    %orig;
+    if ([self isKindOfClass:objc_getClass("TFNButton")] || [self isKindOfClass:objc_getClass("UIImageView")]) {
+        return;
+    }
+    if ([self superview] && [self.superview isKindOfClass:objc_getClass("TFNSolidColorView")]) {
+        if (BHTDimThemeEnabled()) {
+            // This override is unconditional and bypasses the resolvedColor
+            // heuristic entirely, so white chrome needs its own explicit
+            // guard here -- forcing it to Dim navy would wreck readability.
+            if (BHTColorIsCloseToWhite(self.backgroundColor)) {
+                return;
+            }
+            self.backgroundColor = BHTDimBackgroundColor();
+        }
+    }
+}
+
+%end
+
 // MARK: - Custom tab bar order and visibility
 
 static NSString* scribePageForEntry(id<T1AppNavigationTabEntry> entry) {

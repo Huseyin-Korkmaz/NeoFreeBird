@@ -35,6 +35,9 @@
 @interface TFNNavigationController : UINavigationController
 @end
 
+@interface TFNNavigationBar : UINavigationBar
+@end
+
 @interface TFNActionItem : NSObject
 + (instancetype)cancelActionItemWithAction:(void (^)(void))arg1;
 + (instancetype)cancelActionItemWithTitle:(NSString*)arg1;
@@ -132,6 +135,10 @@
 @interface TFNTitleView : UIView
 + (instancetype)titleViewWithTitle:(NSString*)title
                           subtitle:(NSString*)subTitle;
+@end
+
+@interface TFNSolidColorView : UIView
+@property (nonatomic, strong) UIColor* backgroundColor;
 @end
 
 @interface UIImage (TFNAdditions)
