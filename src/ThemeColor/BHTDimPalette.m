@@ -6,10 +6,11 @@
 //
 
 #import "ThemeColor/BHTDimPalette.h"
+#import "Core/BHTSettings.h"
 #import <objc/runtime.h>
 
 BOOL BHTDimThemeEnabled(void) {
-    return YES;
+    return [BHTSettings boolForKey:@"enable_dim_theme"];
 }
 
 static UIColor* BHTColorWithRGB(uint32_t rgb) {
