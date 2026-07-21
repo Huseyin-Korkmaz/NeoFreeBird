@@ -4,7 +4,7 @@
 //
 
 #import "HookHelpers.h"
-#import "UIHeaders.h"
+#import "Headers/UIHeaders.h"
 
 // MARK: - Custom accent color
 
