@@ -46,15 +46,6 @@ UIColor* _Nullable BHTDimReplacementForResolvedColor(UIColor* resolved);
  */
 BOOL BHTColorIsCloseToWhite(UIColor* _Nullable color);
 
-/**
- * -resolvedColorWithTraitCollection: hooks have no notion of which view is
- * asking -- they only ever see the color instance. To exempt a specific
- * view's color from those hooks, mark the exact UIColor instance it's
- * assigned as exempt (e.g. from that view's -setBackgroundColor: override)
- * and have the resolution hooks check it before substituting.
- */
-void BHTMarkColorDimExempt(UIColor* _Nullable color);
-BOOL BHTColorIsDimExempt(UIColor* _Nullable color);
 
 /**
  * Wraps a live TAEColorPalette-conforming object, substituting Dim's navy

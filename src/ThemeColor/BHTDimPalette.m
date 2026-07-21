@@ -99,27 +99,6 @@ BOOL BHTColorIsCloseToWhite(UIColor* color) {
     return minComponent > 0.9;
 }
 
-// The resolvedColorWithTraitCollection: hooks only ever see a color instance,
-// never the view it's attached to, so a view-level exemption (e.g. skipping
-// TFNButton in a didMoveToWindow hook) can't stop those hooks from still
-// recoloring whatever the view's own backgroundColor already was. Marking
-// the exact color instance here, from the view's -setBackgroundColor:
-// override, gives both layers a shared signal to check.
-static const void* kBHTDimExemptColorKey = &kBHTDimExemptColorKey;
-
-void BHTMarkColorDimExempt(UIColor* color) {
-    if (!color) {
-        return;
-    }
-    objc_setAssociatedObject(color, kBHTDimExemptColorKey, @YES, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-BOOL BHTColorIsDimExempt(UIColor* color) {
-    if (!color) {
-        return NO;
-    }
-    return [objc_getAssociatedObject(color, kBHTDimExemptColorKey) boolValue];
-}
 
 @interface BHTDimPaletteProxy ()
 @property (nonatomic, strong) id realPalette;
@@ -182,72 +161,94 @@ BOOL BHTColorIsDimExempt(UIColor* color) {
 #pragma mark - Overridden background family
 
 - (UIColor*)backgroundColor {
-    return BHTDimBackgroundColor();
+    UIColor* real = [self.realPalette backgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimBackgroundColor();
 }
-- (UIColor*) backgroundPrimary {
-    return BHTDimBackgroundColor();
+- (UIColor*)backgroundPrimary {
+    UIColor* real = [self.realPalette backgroundPrimary];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimBackgroundColor();
 }
 - (UIColor*)darkBackgroundColor {
-    return BHTDimBackgroundColor();
+    UIColor* real = [self.realPalette darkBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimBackgroundColor();
 }
 - (UIColor*)cardHeaderBackgroundColor {
-    return BHTDimBackgroundColor();
+    UIColor* real = [self.realPalette cardHeaderBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimBackgroundColor();
 }
 - (UIColor*)modalSheetBackgroundColor {
-    return BHTDimBackgroundColor();
+    UIColor* real = [self.realPalette modalSheetBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimBackgroundColor();
 }
 - (UIColor*)messagingBackgroundColor {
-    return BHTDimBackgroundColor();
+    UIColor* real = [self.realPalette messagingBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimBackgroundColor();
 }
 
 - (UIColor*)secondaryBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette secondaryBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)faintBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette faintBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)itemDarkBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette itemDarkBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)elevatedBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette elevatedBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)toastsBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette toastsBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)tileBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette tileBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)cardDetailsBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette cardDetailsBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)premiumTiersCardBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette premiumTiersCardBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)tweetConversationAdBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette tweetConversationAdBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)chatTopicBackgroundColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette chatTopicBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 - (UIColor*)dmBubbleIncomingColor {
-    return BHTDimElevatedBackgroundColor();
+    UIColor* real = [self.realPalette dmBubbleIncomingColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
 
 - (UIColor*)highlightBackgroundColor {
-    return BHTDimHighlightBackgroundColor();
+    UIColor* real = [self.realPalette highlightBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimHighlightBackgroundColor();
 }
 - (UIColor*)unreadBackgroundColor {
-    return BHTDimHighlightBackgroundColor();
+    UIColor* real = [self.realPalette unreadBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimHighlightBackgroundColor();
 }
 - (UIColor*)highlightedStatusBackgroundColor {
-    return BHTDimHighlightBackgroundColor();
+    UIColor* real = [self.realPalette highlightedStatusBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimHighlightBackgroundColor();
 }
 - (UIColor*)statusCellOverlayColor {
-    return BHTDimHighlightBackgroundColor();
+    UIColor* real = [self.realPalette statusCellOverlayColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimHighlightBackgroundColor();
 }
 - (UIColor*)dmInboxCellSelectionBackgroundColor {
-    return BHTDimHighlightBackgroundColor();
+    UIColor* real = [self.realPalette dmInboxCellSelectionBackgroundColor];
+    return BHTColorIsCloseToWhite(real) ? real : BHTDimHighlightBackgroundColor();
 }
 
 @end
