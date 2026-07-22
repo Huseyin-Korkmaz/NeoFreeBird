@@ -40,24 +40,6 @@ static UIImage* imageFromView(UIView* view) {
     return img;
 }
 
-static UIFont* _Nullable getDefaultFont(UIFont* font) {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"custom_fonts"]) {
-        // https://stackoverflow.com/a/20515367/16619237
-        UIFontDescriptorSymbolicTraits fontDescriptorSymbolicTraits =
-            font.fontDescriptor.symbolicTraits;
-        BOOL isBold =
-            (fontDescriptorSymbolicTraits & UIFontDescriptorTraitBold) != 0;
-
-        if ([[NSUserDefaults standardUserDefaults]
-                objectForKey:isBold ? @"bhtwitter_font_2" : @"bhtwitter_font_1"]) {
-            NSString* fontName = [[NSUserDefaults standardUserDefaults]
-                objectForKey:isBold ? @"bhtwitter_font_2" : @"bhtwitter_font_1"];
-            return [UIFont fontWithName:fontName size:font.pointSize];
-        }
-        return nil;
-    }
-    return nil;
-}
 static BOOL isDeviceLanguageRTL() {
     return [NSParagraphStyle _defaultWritingDirection] ==
            NSWritingDirectionRightToLeft;
