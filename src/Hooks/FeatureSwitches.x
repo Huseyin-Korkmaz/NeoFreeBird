@@ -723,12 +723,12 @@ BOOL panelIsGenuinelyAvailable(long long panelID) {
                                       @selector(birdwatchHomePageIsEnabled)) &&
                    genuineTabGateFlag(switches, @selector(birdwatchHistoryIsEnabled));
         }
-        case 16: // Premium hub
+        case 15: // Premium hub
             return genuineSwitchBool(@"subscriptions_premium_hub_enabled");
-        case 17: // Jobs
+        case 16: // Jobs
             return genuineSwitchBool(@"recruiting_global_jobs_hub_enabled") ||
                    genuineSwitchBool(@"recruiting_jetfuel_jobs_hub_enabled");
-        case 18: { // Money
+        case 17: { // Money
             id host =
                 ((id (*)(id, SEL))objc_msgSend)(objc_getClass("T1HostViewController"),
                                                 @selector(sharedHostViewController));
@@ -776,7 +776,7 @@ static __thread BOOL DashPanelIDQuery = NO;
         }
     };
 
-    for (NSNumber* panelID in @[@13, @16, @17, @18]) {
+    for (NSNumber* panelID in @[@13, @15, @16, @17]) {
         if (!panelIsGenuinelyAvailable(panelID.longLongValue)) {
             claim(panelID);
         }
@@ -787,7 +787,7 @@ static __thread BOOL DashPanelIDQuery = NO;
     }
 
     if (!AccountIsGenuinelyPremium()) {
-        claim(@16);
+        claim(@15);
     }
 
     return spoofed;
