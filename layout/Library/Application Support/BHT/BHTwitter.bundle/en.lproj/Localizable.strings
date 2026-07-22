@@ -263,6 +263,13 @@
 "RESTORE_TWITTER_NAMES_TITLE" = "Restore Twitter terminology";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Replaces 'X' with 'Twitter', 'Post' with 'Tweet', 'Repost' with 'Retweet' and so on throughout the app's interface.";
 
+/*Dim Theme*/
+"ENABLE_DIM_THEME_TITLE" = "Enable dim theme";
+"ENABLE_DIM_THEME_DETAIL" = "Restores the removed dim theme for Twitter. Requires dark mode to be enabled and a restart.";
+"DIM_THEME_RESTART_ALERT_TITLE" = "Restart required";
+"DIM_THEME_RESTART_ALERT_MESSAGE" = "The dim theme requires a restart to take effect.";
+"DIM_THEME_RESTART_ALERT_RESTART_BUTTON" = "Restart";
+
 /*Deprecated*/
 "MODERN_SETTINGS_PLACEHOLDER_TEXT" = "Nothing to see here - yet";
 "MODERN_SETTINGS_PLACEHOLDER_DETAIL_TEXT" = "This section is coming soon. Stay tuned for more NeoFreeBird features!";

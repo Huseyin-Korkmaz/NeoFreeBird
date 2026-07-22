@@ -4,6 +4,7 @@
 //
 
 #import "HookHelpers.h"
+#import "Headers/UIHeaders.h"
 
 // MARK: - Custom accent color
 
@@ -34,6 +35,161 @@ void applySelectedThemeColor(void) {
             setPrimaryColorOption:selectedColor.integerValue];
     }
 }
+
+// MARK: - Dim background recolor
+
+// The app only ever renders Light or Dark now -- there's no native third
+// option -- so Dim comes back by intercepting Dark's palette at its one
+// choke point and swapping in a proxy that recolors just the background
+// family, leaving Light untouched.
+%hook TAETwitterColorPaletteSettingInfo
+
+- (id<TAEColorPalette>)colorPalette {
+    id<TAEColorPalette> realPalette = %orig;
+    if (self.isDark && BHTDimThemeEnabled()) {
+        return (id<TAEColorPalette>)[BHTDimPaletteProxy proxyWithPalette:realPalette];
+    }
+    return realPalette;
+}
+
+%end
+
+// Headers, small containers, profile pages, and the boxes around some cells
+// don't go through TAEColorPalette at all -- they're drawn with UIKit's own
+// dynamic system background colors, which Apple defines as pure black (or
+// near enough) in Dark. Re-point those at the same three Dim shades so
+// nothing native-styled is left behind.
+%hook UIColor
+
++ (UIColor*)systemBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)secondarySystemBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimElevatedBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)tertiarySystemBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimHighlightBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)systemGroupedBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)secondarySystemGroupedBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimElevatedBackgroundColor()
+                                                                       : original;
+    }];
+}
+
++ (UIColor*)tertiarySystemGroupedBackgroundColor {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled()) {
+        return original;
+    }
+    return [UIColor colorWithDynamicProvider:^UIColor*(UITraitCollection* traits) {
+        return traits.userInterfaceStyle == UIUserInterfaceStyleDark ? BHTDimHighlightBackgroundColor()
+                                                                       : original;
+    }];
+}
+
+%end
+
+%hook UIDynamicSystemColor
+
+- (UIColor*)resolvedColorWithTraitCollection:(UITraitCollection*)traitCollection {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled() || traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return original;
+    }
+    UIColor* replacement = BHTDimReplacementForResolvedColor(original);
+    return replacement ?: original;
+}
+
+%end
+
+%hook UIDeviceRGBColor
+- (UIColor*)resolvedColorWithTraitCollection:(UITraitCollection*)traitCollection {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled() || traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return original;
+    }
+    UIColor* replacement = BHTDimReplacementForResolvedColor(original);
+    return replacement ?: original;
+}
+
+%end
+
+%hook UIDynamicCatalogColor
+
+- (UIColor*)resolvedColorWithTraitCollection:(UITraitCollection*)traitCollection {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled() || traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return original;
+    }
+    UIColor* replacement = BHTDimReplacementForResolvedColor(original);
+    return replacement ?: original;
+}
+
+%end
+
+%hook UIExtendedSRGBColorSpace
+
+- (UIColor*)resolvedColorWithTraitCollection:(UITraitCollection*)traitCollection {
+    UIColor* original = %orig;
+    if (!BHTDimThemeEnabled() || traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return original;
+    }
+    UIColor* replacement = BHTDimReplacementForResolvedColor(original);
+    return replacement ?: original;
+}
+
+%end
+
+%hook TFNSolidColorView
+
+-(void) didMoveToWindow {
+    %orig;
+    if (BHTDimThemeEnabled()) {
+        self.hidden = TRUE;
+    }
+}
+
+%end
 
 // MARK: - Custom tab bar order and visibility
 

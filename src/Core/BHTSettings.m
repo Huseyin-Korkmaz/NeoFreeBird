@@ -55,6 +55,8 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                       @"default": @NO},
                     @{@"key": @"restore_tab_labels",
                       @"default": @NO},
+                    @{@"key": @"enable_dim_theme",
+                      @"default": @NO},
                     @{@"key": @"custom_fonts",
                       @"default": @NO},
                     @{
