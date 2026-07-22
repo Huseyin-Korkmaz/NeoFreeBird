@@ -71,10 +71,13 @@ if [[ ! -f "$OPENSSL_PREFIX/lib/libssl.a" ]]; then
 
     pushd "$OPENSSL_SRC"
 
+    export IPHONEOS_DEPLOYMENT_TARGET=14.0
+
     ./Configure ios64-xcrun \
         no-shared \
         no-tests \
-        --prefix="$OPENSSL_PREFIX"
+        --prefix="$OPENSSL_PREFIX" \
+        -mios-version-min=14.0
 
     make -j"$JOBS"
     make install_sw
