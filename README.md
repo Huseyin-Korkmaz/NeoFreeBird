@@ -1,17 +1,44 @@
 <div align="center">
     <img src="icon_rounded.png" alt="NeoFreeBird-BHTwitter" width="130" height="130">
 
-  # NeoFreeBird-BHTwitter (tweak)
+  # NeoFreeBird-BHTwitter
   <i>The ultimate way to tweak your Twitter/X experience.</i>
+
+  <div>
+    <a href="https://intradeus.github.io/http-protocol-redirector?r=altstore://source?url=https://raw.githubusercontent.com/orionblur/NeoFreeBird/refs/heads/v6/AltSource.json"><img src="images/badges/add_to_altstore.png" alt="Add to AltStore" height="40"></a>
+    &nbsp;
+    <a href="https://intradeus.github.io/http-protocol-redirector?r=sidestore://source?url=https://raw.githubusercontent.com/orionblur/NeoFreeBird/refs/heads/v6/AltSource.json"><img src="images/badges/add_to_sidestore.png" alt="Add to SideStore" height="40"></a>
+    &nbsp;
+    <a href="https://intradeus.github.io/http-protocol-redirector?r=feather://source/https://raw.githubusercontent.com/orionblur/NeoFreeBird/refs/heads/v6/AltSource.json"><img src="images/badges/add_to_feather.png" alt="Add to Feather" height="40"></a>
+    &nbsp;
+    <a href="https://github.com/orionblur/NeoFreeBird/releases"><img src="images/badges/download_from_github.png" alt="Download from GitHub" height="40"></a>
+    &nbsp;
+  </div>
 </div>
 <br>
 
-> [!WARNING]
-> <b>Please do not create issues regarding sign in or Tweeting.</b><br>Twitter/X have added Attestation to prevent the use of third-paty or modified clients. We cannot do anything against this. Please do not create new issues regarding this.
+| | | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|:-------------------------:|
+|<img width="1604" alt="Screenshot 1" src="images/main/1.png">|<img width="1604" alt="Screenshot 2" src="images/main/2.png">|<img width="1604" alt="Screenshot 3" src="images/main/3.png">|<img width="1604" alt="Screenshot 4" src="images/main/4.png">|
+
+# Preview
 
 | | | |
 |:-------------------------:|:-------------------------:|:-------------------------:|
-|<img width="1604" alt="Screenshot 1" src="1.png">|<img width="1604" alt="Screenshot 2" src="2.png">|<img width="1604" alt="Screenshot 3" src="3.png">|
+|<img width="1604" alt="Screenshot 1" src="images/timeline/timeline1.png">|<img width="1604" alt="Screenshot 2" src="images/timeline/timeline2.png">|<img width="1604" alt="Screenshot 3" src="images/timeline/timeline3.png">|
+|<img width="1604" alt="Screenshot 4" src="images/timeline/timeline4.png">|<img width="1604" alt="Screenshot 5" src="images/timeline/timeline5.png">|<img width="1604" alt="Screenshot 6" src="images/timeline/timeline6.png">|
+
+# Features
+| | | |
+|:-------------------------:|:-------------------------:|:-------------------------:|
+|<img width="1604" alt="Screenshot 1" src="images/settings/settings1.png">|<img width="1604" alt="Screenshot 2" src="images/settings/settings2.png">|<img width="1604" alt="Screenshot 3" src="images/settings/settings3.png">|
+|<img width="1604" alt="Screenshot 4" src="images/settings/settings4.png">|<img width="1604" alt="Screenshot 5" src="images/settings/settings5.png">|<img width="1604" alt="Screenshot 6" src="images/settings/settings6.png">|
+|<img width="1604" alt="Screenshot 4" src="images/settings/settings7.png">|<img width="1604" alt="Screenshot 5" src="images/settings/settings8.png">|<img width="1604" alt="Screenshot 6" src="images/settings/settings9.png">|
+|<img width="1604" alt="Screenshot 4" src="images/settings/settings10.png">|<img width="1604" alt="Screenshot 5" src="images/settings/settings11.png">|<img width="1604" alt="Screenshot 6" src="images/settings/settings12.png">|
+|<img width="1604" alt="Screenshot 4" src="images/settings/settings13.png">|<img width="1604" alt="Screenshot 5" src="images/settings/settings14.png">|<img width="1604" alt="Screenshot 6" src="images/settings/settings15.png">|
+
+# Downloading
+Go to the [Releases](https://github.com/orionblur/NeoFreeBird/releases) page to download the latest version of NeoFreeBird-BHTwitter. You can also build it yourself by following the instructions below.
 
 # Compiling NeoFreeBird-BHTwitter
 
@@ -25,8 +52,8 @@
 3. Clone the NeoFreeBird-BHTwitter repository:
 
 ```bash
-git clone --recursive https://github.com/NeoFreeBird/tweak
-cd tweak
+git clone --recursive https://github.com/orionblur/NeoFreeBird
+cd NeoFreeBird
 ```
 
 4. Make the build script executable:
@@ -54,9 +81,8 @@ Available options:
 
 1. Fork this repository.
 2. Open the "Actions" tab and enable workflows.
-3. Choose "Build and Release NeoFreeBird-BHTwitter."
+3. Choose "Release".
 4. Click "Run workflow" and provide:
-   - Deployment format: `rootful`, `rootless`, `sideloaded`, or `trollstore`.
    - A decrypted IPA URL for sideloaded/TrollStore builds.
    - Any value for rootful/rootless builds.
 5. Check the "Releases" tab once the build completes.
@@ -126,11 +152,3 @@ By default the IPA is rebranded in place. Pass `-o`/`--output` to write a rebran
 ```bash
 ./rebrand.sh -t --resource-pack theme.zip -o packages/Twitter-rebranded.ipa packages/NeoFreeBird-sideloaded.ipa
 ```
-
-> [!NOTE]
-> <b>These builds are considered beta</b><br>This repo is meant for NeoFreeBird, which builds this for specific versions of Twitter. You can of course build this for your own app without using the main NeoFreeBird app, but please note your build will not be supported by the NeoFreeBird team if you do.
-
-
-> [!NOTE]
-> <b>This repo is forked from BHTwitter.</b><br>It will merge patches upstream to BHTwitter when it's considered mostly done.
-

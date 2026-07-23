@@ -27,6 +27,7 @@
 @property (nonatomic, strong) NSArray* coolKidsCells;
 @property (nonatomic, strong) NSArray* specialThanksCells;
 @property (nonatomic, strong) NSArray* officialPageCells;
+@property (nonatomic, strong) NSArray* contributorCells;
 @end
 
 @implementation ModernSettingsViewController
@@ -79,6 +80,9 @@
             headerViewWithTitle:[[BHTBundle sharedBundle]
                                     localizedStringForKey:@"SPECIAL_THANKS_SECTION_HEADER_TITLE"]];
     } else if (section == 4) {
+        return [self headerViewWithTitle:[[BHTBundle sharedBundle]
+                                             localizedStringForKey:@"CONTRIBUTOR_PAGE_SECTION_HEADER_TITLE"]];
+    } else if (section == 5) {
         return [self headerViewWithTitle:
                          [[BHTBundle sharedBundle]
                              localizedStringForKey:@"FOLLOW_OFFICIAL_PAGE_SECTION_HEADER_TITLE"]];
@@ -121,7 +125,8 @@
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
-    if (section == 0 || section == 1 || section == 2 || section == 3 || section == 4) {
+    if (section == 0 || section == 1 || section == 2 || section == 3 || section == 4 ||
+        section == 5) {
         return UITableViewAutomaticDimension;
     }
     return 0;
@@ -314,6 +319,26 @@
             @"userID": @"1616194182187732992"
         }
     ];
+    self.contributorCells = @[
+        @{
+            @"title": @"thea 🪽",
+            @"username": @"theacrat",
+            @"avatarURL": @"https://unavatar.io/x/theacrat",
+            @"userID": @"1830499505718075392"
+        },
+        @{
+            @"title": @"matt sephton",
+            @"username": @"gingerbeardman",
+            @"avatarURL": @"https://unavatar.io/x/gingerbeardman",
+            @"userID": @"40743"
+        },
+        @{
+            @"title": @"OrionBlur",
+            @"username": @"orionblur",
+            @"avatarURL": @"https://unavatar.io/x/orionblur",
+            @"userID": @"2023606533255540736"
+        }
+    ];
 
     self.officialPageCells = @[@{
         @"title": @"NeoFreeBird",
@@ -421,7 +446,7 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView*)tableView {
-    return 5;
+    return 6;
 }
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
@@ -434,6 +459,8 @@
     } else if (section == 3) {
         return self.specialThanksCells.count;
     } else if (section == 4) {
+        return self.contributorCells.count;
+    } else if (section == 5) {
         return self.officialPageCells.count;
     }
     return 0;
@@ -462,6 +489,10 @@
                                    atIndexPath:indexPath
                                      fromArray:self.specialThanksCells];
     } else if (indexPath.section == 4) {
+        return [self developerCellForTableView:tableView
+                                   atIndexPath:indexPath
+                                     fromArray:self.contributorCells];
+    } else if (indexPath.section == 5) {
         return [self developerCellForTableView:tableView
                                    atIndexPath:indexPath
                                      fromArray:self.officialPageCells];
@@ -600,6 +631,9 @@
         NSDictionary* developer = self.specialThanksCells[indexPath.row];
         [self openTwitterProfileWithUserID:developer[@"userID"]];
     } else if (indexPath.section == 4) {
+        NSDictionary* developer = self.contributorCells[indexPath.row];
+        [self openTwitterProfileWithUserID:developer[@"userID"]];
+    } else if (indexPath.section == 5) {
         NSDictionary* developer = self.officialPageCells[indexPath.row];
         [self openTwitterProfileWithUserID:developer[@"userID"]];
     }

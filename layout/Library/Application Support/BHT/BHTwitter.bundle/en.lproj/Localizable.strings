@@ -277,6 +277,8 @@
 
 "SOURCE_UNAVAILABLE" = "Source Unavailable";
 
+"CONTRIBUTOR_PAGE_SECTION_HEADER_TITLE" = "Contributors";
+
 /*App lock*/
 "PADLOCK_LOCKED_LABEL" = "Locked";
 
