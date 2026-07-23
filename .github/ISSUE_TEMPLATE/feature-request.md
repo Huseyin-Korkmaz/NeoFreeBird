@@ -1,7 +1,7 @@
 ---
 name: Feature Request
 about: Suggest an idea for NeoFreeBird
-title: "[Feature Request]"
+title: "[FEATURE REQUEST]"
 labels: enhancement
 assignees: ''
 
