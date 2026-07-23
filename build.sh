@@ -17,6 +17,30 @@ if [[ "$is_tty" -eq 1 ]]; then
   fi
 fi
 
+inject_appex() {
+    local ipa
+    ipa="$(realpath "$1")"
+
+    local appex="$SCRIPT_DIR/deps/OpenTwitterSafariExtension/OpenTwitterSafariExtension.appex"
+
+    local tmp
+    tmp=$(mktemp -d)
+
+    unzip -q "$ipa" -d "$tmp"
+
+    mkdir -p "$tmp/Payload/Twitter.app/PlugIns"
+    cp -R "$appex" "$tmp/Payload/Twitter.app/PlugIns/"
+
+    rm -f "$ipa"
+
+    (
+        cd "$tmp"
+        zip -qry "$ipa" Payload
+    )
+
+    rm -rf "$tmp"
+}
+
 say() { if [[ -n "${bold}${green}${reset}" ]]; then printf "%b%s%b\n" "${bold}${green}" "$1" "${reset}"; else printf "%s\n" "$1"; fi; }
 err() { printf "Error: %s\n" "$1" >&2; }
 die() { err "$1"; exit 1; }
@@ -113,6 +137,7 @@ case "$MODE" in
         cyan -i packages/com.atebits.Tweetie2.ipa -o packages/NeoFreeBird-sideloaded --ignore-encrypted \
           -uwf .theos/obj/debug/zxPluginsInject.dylib .theos/obj/debug/libbhFLEX.dylib \
           .theos/obj/debug/BHTwitter.dylib layout/Library/Application\ Support/BHT/BHTwitter.bundle
+        inject_appex packages/NeoFreeBird-sideloaded.ipa
       else
         say "Skipping cyan step because it is not installed."
       fi
@@ -140,6 +165,7 @@ case "$MODE" in
       if command -v cyan >/dev/null 2>&1; then
         cyan -i packages/com.atebits.Tweetie2.ipa -o packages/NeoFreeBird-trollstore.tipa --ignore-encrypted \
           -uwf .theos/obj/debug/BHTwitter.dylib .theos/obj/debug/libbhFLEX.dylib layout/Library/Application\ Support/BHT/BHTwitter.bundle
+        inject_appex packages/NeoFreeBird-trollstore.tipa
       else
         say "Skipping cyan step because it is not installed."
       fi
