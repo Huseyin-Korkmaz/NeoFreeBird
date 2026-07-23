@@ -22,6 +22,39 @@ extern UIColor* CurrentAccentColor(void);
 static NSString* const kLastSelectedIconKey = @"bh_last_selected_app_icon";
 static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
 
+@interface UIColor (NativeTokens_AppIconVC)
++ (id)tfnuiColors;
+@end
+
+@interface NSObject (NativeTokens_AppIconVC)
+- (UIColor*)textDetailsColor;
+@end
+
+static UIColor* AppIconDetailTextColor(void) {
+    id colors = [UIColor respondsToSelector:@selector(tfnuiColors)]
+                    ? [UIColor tfnuiColors]
+                    : nil;
+    if (colors && [colors respondsToSelector:@selector(textDetailsColor)]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        UIColor* details = [colors performSelector:@selector(textDetailsColor)];
+#pragma clang diagnostic pop
+        if ([details isKindOfClass:[UIColor class]]) {
+            return details;
+        }
+    }
+    return [UIColor secondaryLabelColor];
+}
+
+static UIFont* AppIconDetailFont(void) {
+    return [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:15];
+}
+
+static NSString* AppIconDetailText(void) {
+    return [[BHTBundle sharedBundle]
+        localizedTwitterStringForKey:@"SUBSCRIPTION_APP_ICON_SETTINGS_DETAIL"];
+}
+
 @interface AppIconViewController () <UICollectionViewDelegate,
                                      UICollectionViewDataSource,
                                      UICollectionViewDelegateFlowLayout>
@@ -47,8 +80,6 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
     self.appIconCollectionView =
         [[UICollectionView alloc] initWithFrame:CGRectZero
                            collectionViewLayout:flow];
-    self.appIconCollectionView.contentInsetAdjustmentBehavior =
-        UIScrollViewContentInsetAdjustmentAlways;
     [self.appIconCollectionView registerClass:[AppIconCell class]
                    forCellWithReuseIdentifier:[AppIconCell reuseIdentifier]];
     [self.appIconCollectionView registerClass:[UICollectionReusableView class]
@@ -65,7 +96,7 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
 
     [NSLayoutConstraint activateConstraints:@[
         [self.appIconCollectionView.topAnchor
-            constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+            constraintEqualToAnchor:self.view.topAnchor],
         [self.appIconCollectionView.leadingAnchor
             constraintEqualToAnchor:self.view.leadingAnchor],
         [self.appIconCollectionView.trailingAnchor
@@ -77,10 +108,19 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
     [self loadAppIcons];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
+    self.view.backgroundColor = [Palette currentBackgroundColor];
+    self.appIconCollectionView.backgroundColor = [Palette currentBackgroundColor];
+    [self.appIconCollectionView reloadData];
+}
+
 #pragma mark - Icon data
 
 // Icons come from Info.plist so the picker matches whatever the build ships;
-// the primary icon is listed first so it can be restored.
+// the primary icon is listed first so it can be restored. Like the native
+// picker, icons whose preview art is missing are dropped.
 - (void)loadAppIcons {
     NSDictionary* iconsDict =
         [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleIcons"];
@@ -89,10 +129,13 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
 
     NSDictionary* primary = iconsDict[@"CFBundlePrimaryIcon"];
     if ([primary isKindOfClass:[NSDictionary class]]) {
-        [items addObject:[[AppIconItem alloc]
-                             initWithBundleIconName:primary[@"CFBundleIconName"]
-                                      iconFileNames:primary[@"CFBundleIconFiles"]
-                                      isPrimaryIcon:YES]];
+        AppIconItem* item = [[AppIconItem alloc]
+            initWithBundleIconName:primary[@"CFBundleIconName"]
+                     iconFileNames:primary[@"CFBundleIconFiles"]
+                     isPrimaryIcon:YES];
+        if ([self thumbnailForItem:item]) {
+            [items addObject:item];
+        }
     }
 
     NSDictionary* alternates = iconsDict[@"CFBundleAlternateIcons"];
@@ -102,10 +145,13 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
         for (NSString* key in sortedKeys) {
             NSDictionary* alt = alternates[key];
             NSString* name = alt[@"CFBundleIconName"] ?: key;
-            [items addObject:[[AppIconItem alloc]
-                                 initWithBundleIconName:name
-                                          iconFileNames:alt[@"CFBundleIconFiles"]
-                                          isPrimaryIcon:NO]];
+            AppIconItem* item = [[AppIconItem alloc]
+                initWithBundleIconName:name
+                         iconFileNames:alt[@"CFBundleIconFiles"]
+                         isPrimaryIcon:NO];
+            if ([self thumbnailForItem:item]) {
+                [items addObject:item];
+            }
         }
     }
 
@@ -195,6 +241,9 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
         return;
 
     AppIconItem* item = self.icons[ip.row];
+    if ([self isItemActive:item])
+        return;
+
     NSString* toSet = item.isPrimaryIcon ? nil : item.bundleIconName;
 
     [[NSUserDefaults standardUserDefaults]
@@ -220,12 +269,11 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
 
     UILabel* detail = [UILabel new];
     detail.translatesAutoresizingMaskIntoConstraints = NO;
-    detail.font = [TwitterChirpFont(TwitterFontStyleRegular) fontWithSize:13];
-    detail.textColor = [UIColor secondaryLabelColor];
+    detail.font = AppIconDetailFont();
+    detail.textColor = AppIconDetailTextColor();
     detail.numberOfLines = 0;
     detail.textAlignment = NSTextAlignmentLeft;
-    detail.text =
-        [[BHTBundle sharedBundle] localizedStringForKey:@"APP_ICON_HEADER_TITLE"];
+    detail.text = AppIconDetailText();
     [header addSubview:detail];
 
     [NSLayoutConstraint activateConstraints:@[
@@ -234,9 +282,9 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
         [detail.trailingAnchor constraintEqualToAnchor:header.trailingAnchor
                                               constant:-16],
         [detail.topAnchor constraintEqualToAnchor:header.topAnchor
-                                         constant:8],
+                                         constant:16],
         [detail.bottomAnchor constraintEqualToAnchor:header.bottomAnchor
-                                            constant:-8]
+                                            constant:-16]
     ]];
 
     return header;
@@ -245,7 +293,13 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
 - (CGSize)collectionView:(UICollectionView*)cv
                              layout:(UICollectionViewLayout*)layout
     referenceSizeForHeaderInSection:(NSInteger)section {
-    return CGSizeMake(cv.bounds.size.width, 60);
+    CGFloat width = CGRectGetWidth(cv.bounds);
+    CGRect textRect = [AppIconDetailText()
+        boundingRectWithSize:CGSizeMake(width - 32, CGFLOAT_MAX)
+                     options:NSStringDrawingUsesLineFragmentOrigin
+                  attributes:@{NSFontAttributeName: AppIconDetailFont()}
+                     context:nil];
+    return CGSizeMake(width, ceil(CGRectGetHeight(textRect)) + 36);
 }
 
 #pragma mark - Flow layout sizing
@@ -253,13 +307,12 @@ static NSString* const kPrimaryIconSentinel = @"PrimaryIcon";
 - (CGSize)collectionView:(UICollectionView*)cv
                     layout:(UICollectionViewLayout*)layout
     sizeForItemAtIndexPath:(NSIndexPath*)indexPath {
-    // Native layout: 3 columns, icon width capped at 96pt, height = width + 38
-    // (icon square + 14pt gap + 24pt indicator).
     UICollectionViewFlowLayout* flow = (UICollectionViewFlowLayout*)layout;
     CGFloat available = CGRectGetWidth(cv.bounds) - flow.sectionInset.left -
                         flow.sectionInset.right -
                         flow.minimumInteritemSpacing * 2;
-    CGFloat width = MIN(floor(available / 3.0), 96.0);
+    CGFloat scale = UIScreen.mainScreen.scale ?: 1;
+    CGFloat width = MIN(floor(available / 3.0 * scale) / scale, 96.0);
     return CGSizeMake(width, width + 38.0);
 }
 

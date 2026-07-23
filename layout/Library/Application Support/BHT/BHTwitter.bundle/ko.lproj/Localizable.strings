@@ -233,7 +233,6 @@
 "DOWNLOAD_AS_MP4_OPTION_TITLE" = "MP4로 다운로드";
 
 /*App icon*/
-"APP_ICON_HEADER_TITLE" = "기기의 홈 화면에 사용할 커스텀 앱 아이콘을 선택합니다. 언제든지 변경할 수 있습니다.";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "자기소개 복사";
