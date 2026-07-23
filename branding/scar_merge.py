@@ -197,14 +197,28 @@ def main():
         used.add(path)
 
     if new_icons:
-        # clone-asset rewrote the manifest; reload, then install each new
-        # icon's art into every rendition of its clones.
+        # clone-asset rewrote the manifest; reload, then shrink each clone to
+        # its master's native resolution before installing the art. The
+        # template stores 1024x1024 single-size renditions, but upscaled art
+        # compresses terribly (a ~300px master balloons to ~2 MB per
+        # rendition) and adds nothing: iOS scales icons from whatever sizes
+        # the catalog offers (the primary icon ships nothing above 180px).
         manifest, facets, by_ident = load_catalog(catalog)
         for stem, path in new_icons:
+            native = min(Image.open(path).size)
+            for r in by_ident.get(facets[stem], []):
+                c = r["content"]
+                if c["type"] == "image" and r["width"] > native:
+                    r["width"] = r["height"] = native
+                elif c["type"] == "multisize":
+                    for e in c["sizes"]:
+                        e["width"] = min(e["width"], native)
+                        e["height"] = min(e["height"], native)
             for name in (stem, "%s-settings" % stem):
                 for r in by_ident.get(facets[name], []):
                     install(catalog, r, path)
             print("new icon: %s" % stem)
+        json.dump(manifest, open(os.path.join(catalog, "manifest.json"), "w"), indent=2)
 
     # 3. Drop stock alternates that got no replacement art, plus their
     #    -settings thumbnails, so the base app's icons don't linger in the
