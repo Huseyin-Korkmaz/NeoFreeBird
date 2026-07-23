@@ -195,10 +195,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/main
           IMAGE_FLAG=""
-          if [ -f resource-pack.zip ]; then
-            IMAGE_FLAG="--resource-pack resource-pack.zip"
-            python3 -m pip install --quiet Pillow
-          fi
+          if [ -f resource-pack.zip ]; then IMAGE_FLAG="--resource-pack resource-pack.zip"; fi
           ./rebrand.sh --twitter-branding $IMAGE_FLAG \
             -o "packages/${{ steps.tweak_info.outputs.name }}-${{ matrix.deploy_format }}-Twitter_${{ steps.tweak_info.outputs.version }}_${{ steps.x_version.outputs.version }}.${IPA_EXT}" \
             "packages/${{ steps.tweak_info.outputs.name }}-${{ matrix.deploy_format }}-X_${{ steps.tweak_info.outputs.version }}_${{ steps.x_version.outputs.version }}.${IPA_EXT}"

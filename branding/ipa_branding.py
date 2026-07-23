@@ -139,19 +139,14 @@ def _apply_resource_pack_to_app(appdir, workdir, zip_path):
 
     # --- icons/: merge into Assets.car ---
     if have_icons:
-        try:
-            import PIL  # noqa: F401
-        except ImportError:
-            raise BrandingError(
-                "Branding: the Pillow package is required for icons/ (pip install Pillow)"
-            )
         if not car.is_file():
             raise BrandingError("Branding: app has no Assets.car to merge into")
         scar = _ensure_scar(workdir)
+        python = _python_with_pillow()
 
         new_car = workdir / "new.car"
         if not _run([
-            sys.executable, str(BRANDING_DIR / "scar_merge.py"),
+            str(python), str(BRANDING_DIR / "scar_merge.py"),
             str(car), str(icons_dir), str(new_car),
             "--workdir", str(workdir), "--scar", str(scar),
         ]):
@@ -195,6 +190,32 @@ def _apply_resource_pack_to_app(appdir, workdir, zip_path):
                 shutil.copyfile(rf, dest)
             else:
                 err(f"Branding: '{rf.name}' is not present in the app root; skipped.")
+
+
+def _python_with_pillow():
+    """Interpreter for the Pillow-dependent steps: a cached venv, bootstrapped
+    with Pillow on first use (plain `pip install` is refused on
+    externally-managed Pythons, e.g. Homebrew and Debian)."""
+    devnull = {"stdout": subprocess.DEVNULL, "stderr": subprocess.DEVNULL}
+    cache = Path(os.environ.get("XDG_CACHE_HOME") or Path.home() / ".cache") / "neofreebird"
+    venv = cache / "venv"
+    venv_python = venv / "bin" / "python3"
+    if venv_python.is_file() and _run([str(venv_python), "-c", "import PIL"], **devnull):
+        return venv_python
+
+    print("Branding: setting up a Python venv with Pillow (one-time)...")
+    cache.mkdir(parents=True, exist_ok=True)
+    if not _run([sys.executable, "-m", "venv", "--clear", str(venv)]):
+        raise BrandingError(
+            "Branding: could not create a venv for Pillow; install the venv "
+            "module (e.g. python3-venv) or install Pillow for %s yourself" % sys.executable
+        )
+    if not _run([str(venv_python), "-m", "pip", "install", "--quiet", "Pillow"]):
+        raise BrandingError(
+            "Branding: could not install Pillow into %s; install Pillow for "
+            "%s yourself" % (venv, sys.executable)
+        )
+    return venv_python
 
 
 def _scar_triple():

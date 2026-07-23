@@ -40,10 +40,6 @@ jobs:
           path: main
           ref: ${{ github.event.inputs.commit_id || github.ref }}
 
-      - name: Install Pillow
-        if: inputs.resource_pack_url != ''
-        run: python3 -m pip install --quiet Pillow
-
       - name: Download IPA
         id: ipa
         run: |
