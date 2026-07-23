@@ -2,7 +2,7 @@
 name: Translation Error
 about: Report a translation error in NeoFreeBird
 title: "[TRANSLATION]"
-labels: ''
+labels: 'translation'
 assignees: ''
 
 ---
