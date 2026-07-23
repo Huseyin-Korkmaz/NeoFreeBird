@@ -28,7 +28,7 @@ TL;DR: You need to select at least one branding option and a built .ipa/.tipa.
 
 Branding (at least one required):
   -t, --twitter-branding  Set's the app's display name to Twitter
-  --resource-pack ZIP     (macOS only) Apply a theme pack ZIP
+  --resource-pack ZIP     Apply a theme pack ZIP (requires Pillow: pip install Pillow)
 
 Options:
   -o, --output PATH       Write a rebranded copy to PATH instead of rebranding in place

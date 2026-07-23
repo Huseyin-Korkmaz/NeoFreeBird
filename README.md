@@ -108,7 +108,7 @@ Result: `com.bandarhl.bhtwitter_4.2_iphoneos-arm.deb` inside `packages`.
 
 `rebrand.sh` applies name and icon branding to an IPA. This can be done before or after patching with the tweak.
 
-Resource packs can only be applied on macOS. If you don't have a macOS machine, there is a GitHub Actions workflow to run it.
+Resource packs work on both macOS and Linux via [scar](https://github.com/theacrat/scar), which is downloaded automatically if it isn't in `PATH` (or set `NFB_SCAR` to a binary). They also need the Pillow package (`pip install Pillow`). There is a GitHub Actions workflow if you'd rather not run it locally.
 
 
 ```bash
@@ -118,7 +118,7 @@ Resource packs can only be applied on macOS. If you don't have a macOS machine, 
 At least one branding option is required:
 ```
 -t, --twitter-branding: sets the app's display name to Twitter.
---resource-pack ZIP: (macOS only) applies a theme pack ZIP.
+--resource-pack ZIP: applies a theme pack ZIP.
 ```
 
 By default the IPA is rebranded in place. Pass `-o`/`--output` to write a rebranded copy instead:

@@ -12,8 +12,8 @@ repackages once. When no branding is enabled it exits 0 without touching the
 IPA. A non-zero exit means a requested step failed; rebrand.sh treats that as
 fatal.
 
-The sibling helpers (car_extract.m, the .py steps) live alongside this file in
-branding/, so they are resolved relative to this file rather than the caller.
+The sibling helper scripts live alongside this file in branding/, so they are
+resolved relative to this file rather than the caller.
 """
 
 import os
@@ -21,10 +21,17 @@ import plistlib
 import shutil
 import subprocess
 import sys
+import tarfile
 import tempfile
+import urllib.request
 from pathlib import Path
 
 BRANDING_DIR = Path(__file__).resolve().parent
+
+# Pinned scar release used for Assets.car work when no binary is available
+# locally (https://github.com/theacrat/scar).
+SCAR_VERSION = "v0.1.0"
+SCAR_URL = "https://github.com/theacrat/scar/releases/download/{v}/scar-{v}-{triple}.tar.gz"
 
 def err(message):
     print(f"Error: {message}", file=sys.stderr)
@@ -82,7 +89,7 @@ def _apply_resource_pack_to_app(appdir, workdir, zip_path):
 
     The pack is a .zip with two optional subfolders plus optional root files:
       icons/  loose images merged into the app's Assets.car (see
-              build_merged_car.py). A flat zip (images at the root, no icons/
+              scar_merge.py). A flat zip (images at the root, no icons/
               folder) is still treated as icons.
       svgs/   vector glyphs copied over matching TwitterAppearance files (see
               override_appearance_svgs.py).
@@ -132,81 +139,41 @@ def _apply_resource_pack_to_app(appdir, workdir, zip_path):
 
     # --- icons/: merge into Assets.car ---
     if have_icons:
-        if not _have("assetutil"):
-            raise BrandingError("Branding: 'assetutil' is required for icons/")
-        clang_bin = shutil.which("clang") or _xcrun_find("clang")
-        actool_bin = shutil.which("actool") or _xcrun_find("actool")
-        if not clang_bin:
-            raise BrandingError("Branding: 'clang' (Xcode) is required for icons/")
-        if not actool_bin:
-            raise BrandingError("Branding: 'actool' (Xcode) is required for icons/")
+        try:
+            import PIL  # noqa: F401
+        except ImportError:
+            raise BrandingError(
+                "Branding: the Pillow package is required for icons/ (pip install Pillow)"
+            )
         if not car.is_file():
             raise BrandingError("Branding: app has no Assets.car to merge into")
-
-        clang_log = workdir / "clang.log"
-        car_extract = workdir / "car_extract"
-        with open(clang_log, "w") as log:
-            built = _run(
-                [
-                    clang_bin, "-fobjc-arc", "-O2",
-                    "-framework", "Foundation",
-                    "-framework", "CoreGraphics",
-                    "-framework", "ImageIO",
-                    "-F", "/System/Library/PrivateFrameworks", "-framework", "CoreUI",
-                    str(BRANDING_DIR / "car_extract.m"), "-o", str(car_extract),
-                ],
-                stderr=log,
-            )
-        if not built:
-            err("Branding: failed to build car_extract:")
-            sys.stderr.write(clang_log.read_text())
-            raise BrandingError("Branding: failed to build car_extract")
-
-        # Aspect-preserving pad helper for master resizes (build_merged_car reads
-        # it via NFB_PAD_TOOL); non-fatal if it fails to build (falls back to sips).
-        pad_image = workdir / "pad_image"
-        with open(clang_log, "a") as log:
-            padded = _run(
-                [
-                    clang_bin, "-fobjc-arc", "-O2",
-                    "-framework", "Foundation",
-                    "-framework", "CoreGraphics",
-                    "-framework", "ImageIO",
-                    str(BRANDING_DIR / "pad_image.m"), "-o", str(pad_image),
-                ],
-                stderr=log,
-            )
-        if padded:
-            os.environ["NFB_PAD_TOOL"] = str(pad_image)
-
-        extract = workdir / "extract"
-        if not _run([str(car_extract), str(car), str(extract)]):
-            raise BrandingError(f"Branding: failed to extract {car}")
+        scar = _ensure_scar(workdir)
 
         new_car = workdir / "new.car"
         if not _run([
-            sys.executable, str(BRANDING_DIR / "build_merged_car.py"),
-            str(car), str(extract), str(icons_dir), str(new_car),
+            sys.executable, str(BRANDING_DIR / "scar_merge.py"),
+            str(car), str(icons_dir), str(new_car),
+            "--workdir", str(workdir), "--scar", str(scar),
         ]):
             raise BrandingError("Branding: failed to rebuild Assets.car")
         shutil.copyfile(new_car, car)
 
+        # The merged catalog directory holds the final decoded art.
+        catalog = workdir / "catalog"
+
         if plist.is_file():
             if not _run([
                 sys.executable, str(BRANDING_DIR / "update_bundle_icons.py"),
-                str(plist), str(car),
+                str(plist), str(catalog),
             ]):
                 raise BrandingError("Branding: failed to update CFBundleIcons")
 
         # Sync the loose fallback icons in the app root (used by SpringBoard) to
         # the rebuilt catalog, else the home-screen icon stays stale.
-        new_extract = workdir / "newextract"
-        if _run([str(car_extract), str(car), str(new_extract)],
-                stderr=subprocess.DEVNULL):
-            _run([
-                sys.executable, str(BRANDING_DIR / "overwrite_loose_icons.py"),
-                str(appdir), str(new_extract),
-            ])
+        _run([
+            sys.executable, str(BRANDING_DIR / "overwrite_loose_icons.py"),
+            str(appdir), str(catalog),
+        ])
 
     # --- svgs/: override TwitterAppearance vector glyphs ---
     if have_svgs:
@@ -230,14 +197,46 @@ def _apply_resource_pack_to_app(appdir, workdir, zip_path):
                 err(f"Branding: '{rf.name}' is not present in the app root; skipped.")
 
 
-def _xcrun_find(tool):
-    try:
-        out = subprocess.run(
-            ["xcrun", "-f", tool], capture_output=True, text=True
+def _scar_triple():
+    machine = os.uname().machine.lower()
+    if sys.platform == "darwin" and machine == "arm64":
+        return "aarch64-apple-darwin"
+    if sys.platform.startswith("linux") and machine in ("x86_64", "amd64"):
+        return "x86_64-unknown-linux-musl"
+    if sys.platform.startswith("linux") and machine in ("aarch64", "arm64"):
+        return "aarch64-unknown-linux-musl"
+    return None
+
+
+def _ensure_scar(workdir):
+    """Locate the scar binary: $NFB_SCAR, then PATH, then download the pinned
+    release build for this platform."""
+    env = os.environ.get("NFB_SCAR")
+    if env:
+        if Path(env).is_file():
+            return Path(env)
+        raise BrandingError(f"Branding: NFB_SCAR points to a missing file: {env}")
+    found = shutil.which("scar")
+    if found:
+        return Path(found)
+
+    triple = _scar_triple()
+    if not triple:
+        raise BrandingError(
+            "Branding: no scar release build for this platform; install scar "
+            "(https://github.com/theacrat/scar) and put it in PATH or NFB_SCAR"
         )
-    except FileNotFoundError:
-        return None
-    return out.stdout.strip() if out.returncode == 0 else None
+    url = SCAR_URL.format(v=SCAR_VERSION, triple=triple)
+    tgz = workdir / "scar.tar.gz"
+    try:
+        urllib.request.urlretrieve(url, tgz)
+        with tarfile.open(tgz) as tf:
+            tf.extract("scar", workdir)
+    except (OSError, tarfile.TarError) as exc:
+        raise BrandingError(f"Branding: failed to download scar from {url}: {exc}")
+    scar = workdir / "scar"
+    scar.chmod(0o755)
+    return scar
 
 
 # --- entry point ------------------------------------------------------------

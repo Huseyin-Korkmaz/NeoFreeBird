@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Sync loose fallback icon PNGs in the app root to the merged catalog.
 
-Usage: overwrite_loose_icons.py <app_dir> <extract_dir>
+Usage: overwrite_loose_icons.py <app_dir> <catalog_dir>
 
 Twitter.app ships loose primary-icon files at its root (e.g.
 ProductionAppIcon60x60@2x.png, ProductionAppIcon76x76@2x~ipad.png) that
 SpringBoard uses for the home-screen icon. Replacing icons only inside
 Assets.car leaves these stale, so the home screen keeps the old art. Here we
-overwrite each loose root icon with the matching rendition from the freshly
-rebuilt catalog (car_extract output in <extract_dir>), matched by the icon
+overwrite each loose root icon with the matching rendition from the merged
+catalog directory scar_merge.py leaves in its --workdir, matched by the icon
 asset name (filename prefix) and pixel dimensions.
 """
 
@@ -37,19 +37,32 @@ def png_dims(path):
 
 def main():
     if len(sys.argv) != 3:
-        sys.stderr.write("usage: overwrite_loose_icons.py <app_dir> <extract_dir>\n")
+        sys.stderr.write("usage: overwrite_loose_icons.py <app_dir> <catalog_dir>\n")
         return 2
-    app_dir, extract_dir = sys.argv[1], sys.argv[2]
+    app_dir, catalog = sys.argv[1], sys.argv[2]
 
-    with open(os.path.join(extract_dir, "manifest.json")) as fh:
+    with open(os.path.join(catalog, "manifest.json")) as fh:
         manifest = json.load(fh)
-    # (asset name, w, h) -> extracted png; and the set of asset names.
+    facets = {f["attributes"].get("identifier"): f["name"] for f in manifest["facets"]}
+
+    # (asset name, w, h) -> decoded png; and the set of asset names. Atlas
+    # crops (links) count via their preview, which holds the final art.
     by_key = {}
-    names = set()
-    for m in manifest:
-        names.add(m["renditionName"])
-        by_key[(m["renditionName"], int(m["width"]), int(m["height"]))] = \
-            os.path.join(extract_dir, m["file"])
+    names = set(n for n in facets.values())
+    for r in manifest["renditions"]:
+        name = facets.get(r["key"].get("identifier"))
+        if not name:
+            continue
+        c = r["content"]
+        if c["type"] == "image":
+            png, w, h = c["file"], r["width"], r["height"]
+        elif c["type"] == "raw-payload" and c.get("preview"):
+            png, w, h = c["preview"], r["width"], r["height"]
+        elif c["type"] == "link" and c.get("preview"):
+            png, (w, h) = c["preview"], c["rect"][2:4]
+        else:
+            continue
+        by_key[(name, w, h)] = os.path.join(catalog, png)
 
     skipped = []
     for f in os.listdir(app_dir):
