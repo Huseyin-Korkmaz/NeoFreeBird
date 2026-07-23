@@ -34,7 +34,7 @@ on:
         type: boolean
       resource_pack_url:
         description: "Override app icons (.ZIP) (IPA builds only)"
-        default: "https://files.catbox.moe/xji3tg.zip"
+        default: "https://files.catbox.moe/p63f20.zip"
         required: false
         type: string
       commit_id:
@@ -144,12 +144,14 @@ jobs:
       - name: Compute ffmpeg Cache Key
         id: ffmpeg-key
         run: |
-          echo "key=ffmpeg-stack-sdk$(xcrun --sdk iphoneos --show-sdk-version)-${{ hashFiles('main/deps/ffmpeg-kit-next/build-ffmpeg.sh') }}" >> "$GITHUB_OUTPUT"
+          echo "key=ffmpeg-stack-sdk$(xcrun --sdk iphoneos --show-sdk-version)-$(git -C main rev-parse --short HEAD:deps/ffmpeg-kit-next/upstream)-${{ hashFiles('main/deps/ffmpeg-kit-next/build-ffmpeg.sh') }}" >> "$GITHUB_OUTPUT"
 
       - name: ffmpeg Stack Caching
         uses: actions/cache@v6
         with:
-          path: ffmpeg-build
+          path: |
+            ffmpeg-build
+            main/deps/ffmpeg-kit-next/build
           key: ${{ steps.ffmpeg-key.outputs.key }}
 
       - name: Build Package

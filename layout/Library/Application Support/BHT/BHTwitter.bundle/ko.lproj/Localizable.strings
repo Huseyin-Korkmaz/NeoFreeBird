@@ -190,6 +190,8 @@
 "HIDE_CUSTOM_TIMELINES_TITLE" = "커스텀 타임라인 제거";
 "HIDE_CUSTOM_TIMELINES_DETAIL" = "홈 타임라인 탭에서 추가 버튼을 제거합니다.";
 
+"RESTORE_REFRESH_SOUNDS_TITLE" = "당겨서 새로고침 소리";
+
 "HIDE_TRENDS_TITLE" = "트렌딩 콘텐츠 제거";
 "HIDE_TRENDS_DETAIL" = "탐색하기 탭에서 검색 바만 표시하고, 모든 트렌드, 뉴스와 페이지 탭을 제거합니다.";
 
@@ -231,7 +233,6 @@
 "DOWNLOAD_AS_MP4_OPTION_TITLE" = "MP4로 다운로드";
 
 /*App icon*/
-"APP_ICON_HEADER_TITLE" = "기기의 홈 화면에 사용할 커스텀 앱 아이콘을 선택합니다. 언제든지 변경할 수 있습니다.";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "자기소개 복사";

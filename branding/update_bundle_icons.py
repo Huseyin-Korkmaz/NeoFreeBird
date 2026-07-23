@@ -1,62 +1,52 @@
 #!/usr/bin/env python3
 """Rewrite an app's CFBundleIcons to match a compiled asset catalog.
 
-Usage: update_bundle_icons.py <Info.plist> <Assets.car>
+Usage: update_bundle_icons.py <Info.plist> <catalog_dir>
 
-Enumerates the app-icon renditions inside <Assets.car> (via `assetutil`),
-groups them by idiom, and rewrites CFBundleIcons / CFBundleIcons~ipad in the
-given Info.plist so they reference the icons actually present in the catalog.
-
-Kept as a sibling of ipa-branding.sh; invoked from replace_app_images().
+Enumerates the app-icon assets in a scar-decompiled catalog directory (the
+merged directory scar_merge.py leaves in its --workdir), groups the primary
+icon's renditions by idiom, and rewrites CFBundleIcons / CFBundleIcons~ipad in
+the given Info.plist so they reference the icons actually present.
 """
 
-import collections
 import json
+import os
 import plistlib
-import subprocess
+import re
 import sys
 
-
-def point_size(entry):
-    """Icon size in points, e.g. 120px @2x -> "60x60"."""
-    scale = float(entry.get("Scale", 1)) or 1.0
-    w = float(entry.get("PixelWidth", 0)) / scale
-    h = float(entry.get("PixelHeight", 0)) / scale
-    return "%gx%g" % (w, h)
+IDIOM_PHONE, IDIOM_PAD, IDIOM_MARKETING = 1, 2, 6
 
 
 def main() -> int:
     if len(sys.argv) != 3:
-        sys.stderr.write("usage: update_bundle_icons.py <Info.plist> <Assets.car>\n")
+        sys.stderr.write("usage: update_bundle_icons.py <Info.plist> <catalog_dir>\n")
         return 2
-    plist_path, car_path = sys.argv[1], sys.argv[2]
+    plist_path, catalog = sys.argv[1], sys.argv[2]
 
     try:
-        raw = subprocess.run(
-            ["assetutil", "--info", car_path],
-            capture_output=True, text=True, check=True,
-        ).stdout
-        entries = json.loads(raw)
-    except subprocess.CalledProcessError as exc:
-        sys.stderr.write("assetutil failed: %s\n" % (exc.stderr or exc))
-        return 1
+        with open(os.path.join(catalog, "manifest.json")) as fh:
+            manifest = json.load(fh)
     except (ValueError, OSError) as exc:
-        sys.stderr.write("could not read asset catalog: %s\n" % exc)
+        sys.stderr.write("could not read catalog manifest: %s\n" % exc)
         return 1
+
+    facets = {f["name"]: f["attributes"].get("identifier") for f in manifest["facets"]}
+    by_ident = {}
+    for r in manifest["renditions"]:
+        by_ident.setdefault(r["key"].get("identifier"), []).append(r)
+
+    # App-icon assets are the facets that own multisize (MSIS) stubs; a catalog
+    # may hold several sets (the primary plus alternate icons). We only rewrite
+    # the PRIMARY set's file list and reconcile the alternates by name.
+    icon_names = sorted(n for n, i in facets.items()
+                        if any(r["content"]["type"] == "multisize" for r in by_ident.get(i, [])))
+    if not icon_names:
+        sys.stderr.write("no app-icon assets found in %s\n" % catalog)
+        return 3
 
     with open(plist_path, "rb") as fh:
         info = plistlib.load(fh)
-
-    # App-icon renditions are typed "Icon Image"; a catalog may hold several sets
-    # (the primary plus alternate icons). We only rewrite the PRIMARY set and
-    # leave CFBundleAlternateIcons untouched, so pick the primary's name.
-    icon_rows = [e for e in entries if isinstance(e, dict)
-                 and e.get("AssetType") == "Icon Image"
-                 and (e.get("Idiom") or "").lower() != "marketing"]
-    icon_names = [e.get("Name") for e in icon_rows if e.get("Name")]
-    if not icon_names:
-        sys.stderr.write("no app-icon renditions found in %s\n" % car_path)
-        return 3
 
     def existing_primary_name(key):
         d = info.get(key)
@@ -71,7 +61,7 @@ def main() -> int:
         # with the most renditions (the real home-screen icon).
         prod = [n for n in icon_names if "production" in n.lower()]
         primary_name = prod[0] if prod else \
-            collections.Counter(icon_names).most_common(1)[0][0]
+            max(icon_names, key=lambda n: len(by_ident.get(facets[n], [])))
 
     # idiom bucket -> [base, ...] (unique, ordered) for the primary set only.
     buckets = {"phone": [], "pad": []}
@@ -80,19 +70,50 @@ def main() -> int:
         if base not in buckets[key]:
             buckets[key].append(base)
 
-    for entry in icon_rows:
-        if entry.get("Name") != primary_name:
+    for r in by_ident.get(facets[primary_name], []):
+        c = r["content"]
+        if c["type"] == "link":
+            w, h = c["rect"][2:4]
+        elif c["type"] in ("image", "raw-payload"):
+            w, h = r["width"], r["height"]
+        else:
+            continue
+        scale = r["key"].get("scale") or 1
+        idiom = r["key"].get("idiom", 0)
+        if idiom == IDIOM_MARKETING:
             continue
         # CFBundleIconFiles base name, e.g. "AppIcon" + "60x60" -> "AppIcon60x60".
-        base = "%s%s" % (primary_name, point_size(entry))
-        idiom = (entry.get("Idiom") or "").lower()
-        if idiom == "phone":
+        base = "%s%gx%g" % (primary_name, w / scale, h / scale)
+        if idiom == IDIOM_PHONE:
             add("phone", base)
-        elif idiom in ("pad", "ipad"):
+        elif idiom == IDIOM_PAD:
             add("pad", base)
-        elif idiom in ("universal", ""):
+        else:
             add("phone", base)
             add("pad", base)
+
+    # Prefer the size list the app already shipped, renamed to the primary
+    # (the catalog-derived list can include phantom sizes from oddly-keyed
+    # renditions, e.g. 180px renditions tagged @2x). Sizes the catalog no
+    # longer offers are dropped; a plist with no usable list keeps the
+    # derived one.
+    def preserved_sizes(key):
+        d = info.get(key)
+        prim = d.get("CFBundlePrimaryIcon") if isinstance(d, dict) else None
+        files = prim.get("CFBundleIconFiles") if isinstance(prim, dict) else None
+        if not isinstance(files, list):
+            return None
+        return [m.group(1) for f in files if isinstance(f, str)
+                for m in [re.search(r"(\d+(?:\.\d+)?x\d+(?:\.\d+)?)$", f)] if m]
+
+    # Sizes are checked against both idioms' renditions: the stock plist lists
+    # 60x60 for iPad (iPhone-app compat) even though only phone renditions
+    # carry that size.
+    derived_sizes = {b[len(primary_name):] for bucket in buckets.values() for b in bucket}
+    for key, bucket in (("CFBundleIcons", "phone"), ("CFBundleIcons~ipad", "pad")):
+        kept = [primary_name + s for s in preserved_sizes(key) or [] if s in derived_sizes]
+        if kept:
+            buckets[bucket] = kept
 
     def make_primary(files):
         return {"CFBundleIconFiles": files, "CFBundleIconName": primary_name} if files else None
@@ -128,7 +149,7 @@ def main() -> int:
         info[key] = icons
 
     if phone_primary is None and pad_primary is None:
-        sys.stderr.write("no app-icon renditions found in %s\n" % car_path)
+        sys.stderr.write("no app-icon renditions found in %s\n" % catalog)
         return 3
 
     if phone_primary is not None:

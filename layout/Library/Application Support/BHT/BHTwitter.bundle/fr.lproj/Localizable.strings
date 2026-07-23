@@ -190,6 +190,8 @@
 "HIDE_CUSTOM_TIMELINES_TITLE" = "Masquer les fils personnalisés";
 "HIDE_CUSTOM_TIMELINES_DETAIL" = "Supprime le bouton Ajouter des onglets du fil d'accueil.";
 
+"RESTORE_REFRESH_SOUNDS_TITLE" = "Sons lors de l'actualisation";
+
 "HIDE_TRENDS_TITLE" = "Masquer les tendances";
 "HIDE_TRENDS_DETAIL" = "Affiche uniquement la barre de recherche dans l'onglet Explorer, en masquant les tendances, l'actualité et les onglets de page.";
 
@@ -231,7 +233,6 @@
 "DOWNLOAD_AS_MP4_OPTION_TITLE" = "Télécharger en MP4";
 
 /*App icon*/
-"APP_ICON_HEADER_TITLE" = "Choisis une nouvelle icône ou thème pour Twitter.";
 
 /*Copy profile info*/
 "COPY_PROFILE_INFO_MENU_OPTION_1" = "Copier la bio";

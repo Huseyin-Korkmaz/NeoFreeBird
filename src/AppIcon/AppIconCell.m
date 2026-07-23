@@ -23,6 +23,8 @@ static const CGFloat kAppIconCornerDivisor = 4.491;
 
 @interface NSObject (NativeTokens)
 - (UIColor*)dividerColor;
++ (id)sharedColorManager;
+- (BOOL)isHighContrastForObject:(id)object withDefault:(BOOL)defaultValue;
 @end
 
 // The native icon border / unselected indicator use tfnuiColors.dividerColor.
@@ -42,11 +44,32 @@ static UIColor* AppIconDividerColor(void) {
     return [UIColor separatorColor];
 }
 
+// The native active indicator swaps to the outlined-check glyph when the
+// system is in high-contrast mode.
+static BOOL AppIconHighContrast(void) {
+    id manager = [NSClassFromString(@"TFNDynamicColorManager")
+                     respondsToSelector:@selector(sharedColorManager)]
+                     ? [NSClassFromString(@"TFNDynamicColorManager")
+                           sharedColorManager]
+                     : nil;
+    if ([manager respondsToSelector:@selector(isHighContrastForObject:
+                                              withDefault:)]) {
+        return [manager isHighContrastForObject:nil withDefault:NO];
+    }
+    return NO;
+}
+
 // The 24pt selection indicator: a filled check-circle when active, an outline
 // circle otherwise. Uses the app's own vector art, falling back to SF Symbols.
 static UIImage* AppIconIndicator(BOOL active, UIColor* accentColor) {
     UIColor* fill = active ? accentColor : AppIconDividerColor();
-    NSString* vectorName = active ? @"checkmark_circle_fill_white" : @"circle";
+    NSString* vectorName;
+    if (active) {
+        vectorName = AppIconHighContrast() ? @"checkmark_circle_fill"
+                                           : @"checkmark_circle_fill_white";
+    } else {
+        vectorName = @"circle";
+    }
     UIImage* image = [UIImage tfn_vectorImageNamed:vectorName
                                           fitsSize:CGSizeMake(24, 24)
                                          fillColor:fill];
@@ -110,8 +133,11 @@ static UIImage* AppIconIndicator(BOOL active, UIColor* accentColor) {
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+
+    // The native cell derives the radius from the cell's own bounds; the icon
+    // view's bounds are still zero on the first layout pass.
     self.iconView.layer.cornerRadius =
-        round(CGRectGetWidth(self.iconView.bounds) / kAppIconCornerDivisor);
+        trunc(CGRectGetWidth(self.bounds) / kAppIconCornerDivisor);
 }
 
 - (void)configureWithImage:(UIImage*)image
