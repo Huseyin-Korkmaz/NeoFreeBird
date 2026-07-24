@@ -417,6 +417,7 @@
     footerLabel.text = @NFB_VERSION_STRING " (" NFB_COMMIT_STRING ")";
     footerLabel.numberOfLines = 0;
     footerLabel.textAlignment = NSTextAlignmentLeft;
+    footerLabel.userInteractionEnabled = YES;
 
     footerLabel.font = TwitterChirpFont(TwitterFontStyleRegular);
 
@@ -440,7 +441,31 @@
                                                  constant:-8]
     ]];
 
+    UITapGestureRecognizer* tapGesture =
+        [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                action:@selector(footerLabelTapped:)];
+    [footerLabel addGestureRecognizer:tapGesture];
+    UILongPressGestureRecognizer* longPressGesture =
+        [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                      action:@selector(footerLabelLongPressed:)];
+    [footerLabel addGestureRecognizer:longPressGesture];
+
     self.tableView.tableFooterView = footerView;
+}
+
+- (void)footerLabelTapped:(UIGestureRecognizer *)sender {
+    NSURL *url = [NSURL URLWithString:@"https://github.com/orionblur/NeoFreeBird"];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
+}
+- (void)footerLabelLongPressed:(UILongPressGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateBegan) {
+        NSURL *url = [NSURL URLWithString:@"https://www.youtube.com/watch?v=SI6JR94quJI"];
+        if ([[UIApplication sharedApplication] canOpenURL:url]) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        }
+    }
 }
 
 #pragma mark - UITableViewDataSource
