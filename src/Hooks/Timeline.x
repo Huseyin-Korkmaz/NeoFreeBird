@@ -4,6 +4,7 @@
 //
 
 #import "HookHelpers.h"
+#import <string.h>
 
 // MARK: - Hide custom timelines
 
@@ -183,10 +184,109 @@ static NSString* ItemScribeComponent(id viewModel) {
     return [component isKindOfClass:[NSString class]] ? component : nil;
 }
 
+
+static BOOL ItemRespondsAndInvokesBOOL(id viewModel, SEL selector) {
+    if (![viewModel respondsToSelector:selector]) {
+        return NO;
+    }
+
+    return ((BOOL (*)(id, SEL))objc_msgSend)(viewModel, selector);
+}
+
+// Set when a reply is only on the feed because a followed account replied to
+// someone else's tweet 
+static BOOL ItemIsReplyWithSocialContext(id viewModel) {
+    return ItemRespondsAndInvokesBOOL(viewModel, @selector(isReplyAndShouldShowSocialContext));
+}
+
+
+static BOOL ItemIsConversationThreadReply(id viewModel) {
+    return [ItemEntryID(viewModel) containsString:@"conversationthread"];
+}
+
+// The tweet's author and who it's directly replying to, for recognizing an
+// exchange between the thread's own author and a verified user. Real user
+// IDs are never 0, so that doubles as "unknown/unsupported".
+static long long ItemRepresentedFromUserID(id viewModel) {
+    SEL selector = @selector(representedFromUserID);
+    if (![viewModel respondsToSelector:selector]) {
+        return 0;
+    }
+
+    return ((long long (*)(id, SEL))objc_msgSend)(viewModel, selector);
+}
+
+static long long ItemInReplyToUserID(id viewModel) {
+    SEL selector = @selector(inReplyToUserID);
+    if (![viewModel respondsToSelector:selector]) {
+        return 0;
+    }
+
+    return ((long long (*)(id, SEL))objc_msgSend)(viewModel, selector);
+}
+
+// Twitter's *ByCurrentAccountState fields are a tri-state (0 unknown, 1 yes,
+// 2 no); if follows still get hidden, flip this to the value logged for a
+// known-followed account.
+static const NSInteger kFollowedByCurrentAccountStateFollowing = 1;
+
+static BOOL BHShouldHideVerifiedItem(id viewModel, BOOL inConversation,
+                                     long long conversationRootUserID,
+                                     NSSet<NSNumber*>* authorRepliedToUserIDs) {
+    SEL verifiedSelector = @selector(isFromUserVerified);
+    if (![viewModel respondsToSelector:verifiedSelector]) {
+        return NO;
+    }
+
+    BOOL verified = ((BOOL (*)(id, SEL))objc_msgSend)(viewModel, verifiedSelector);
+    if (!verified) {
+        return NO;
+    }
+
+    if (inConversation) {
+        if (!ItemIsConversationThreadReply(viewModel)) {
+            return NO;
+        }
+
+        if (conversationRootUserID != 0) {
+            long long repliedUserID = ItemRepresentedFromUserID(viewModel);
+
+            BOOL isAuthorsOwnReply = repliedUserID == conversationRootUserID;
+            BOOL authorRepliedToThisUser =
+                [authorRepliedToUserIDs containsObject:@(repliedUserID)];
+            if (isAuthorsOwnReply || authorRepliedToThisUser) {
+                return NO;
+            }
+        }
+    }
+
+    if (!inConversation && ItemIsReplyWithSocialContext(viewModel)) {
+        return NO;
+    }
+
+    SEL followStateSelector = @selector(representedFromUserFollowedByCurrentAccountState);
+    if ([viewModel respondsToSelector:followStateSelector]) {
+        NSInteger followState =
+            ((NSInteger (*)(id, SEL))objc_msgSend)(viewModel, followStateSelector);
+        if (followState == kFollowedByCurrentAccountStateFollowing) {
+            return NO;
+        }
+    }
+
+    return YES;
+}
+
 static BOOL ShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePrompts,
-                                   BOOL inConversation, BOOL inProfile) {
+                                   BOOL hideVerified, BOOL inConversation, BOOL inProfile,
+                                   long long conversationRootUserID,
+                                   NSSet<NSNumber*>* authorRepliedToUserIDs) {
     id viewModel = unwrapDataViewItem(item);
     NSString* className = NSStringFromClass([viewModel classForCoder]);
+
+    if (hideVerified && BHShouldHideVerifiedItem(viewModel, inConversation, conversationRootUserID,
+                                                 authorRepliedToUserIDs)) {
+        return YES;
+    }
 
     if (hidePrompts && [className isEqualToString:@"TwitterURT.URTTimelinePromptViewModel"]) {
         return YES;
@@ -219,6 +319,109 @@ static BOOL ShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePromp
     return NO;
 }
 
+// More efficient way to filter timeline items than calling ShouldHideTimelineItem() repeatedly, which
+// slows down the app a LOT
+static BOOL MemoizedShouldHideTimelineItem(id item, BOOL hideWhoToFollow, BOOL hidePrompts,
+                                           BOOL hideVerified, BOOL inConversation,
+                                           BOOL inProfile, long long conversationRootUserID,
+                                           NSSet<NSNumber*>* authorRepliedToUserIDs) {
+    static NSCache<NSString*, NSNumber*>* cache;
+    static NSUInteger cachedFlags = NSUIntegerMax;
+    static long long cachedRootUserID = 0;
+    static NSSet<NSNumber*>* cachedAuthorRepliedToUserIDs;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        cache = [NSCache new];
+        cache.countLimit = 4000;
+    });
+
+    
+    NSUInteger flags = (hideWhoToFollow << 0) | (hidePrompts << 1) | (hideVerified << 2) |
+                       (inConversation << 3) | (inProfile << 4);
+    BOOL repliedSetChanged = authorRepliedToUserIDs != cachedAuthorRepliedToUserIDs &&
+                             ![authorRepliedToUserIDs isEqualToSet:cachedAuthorRepliedToUserIDs];
+    if (flags != cachedFlags || conversationRootUserID != cachedRootUserID || repliedSetChanged) {
+        [cache removeAllObjects];
+        cachedFlags = flags;
+        cachedRootUserID = conversationRootUserID;
+        cachedAuthorRepliedToUserIDs = authorRepliedToUserIDs;
+    }
+
+    NSString* entryID = ItemEntryID(unwrapDataViewItem(item));
+    if (!entryID) {
+        return ShouldHideTimelineItem(item, hideWhoToFollow, hidePrompts, hideVerified,
+                                      inConversation, inProfile, conversationRootUserID,
+                                      authorRepliedToUserIDs);
+    }
+
+    NSNumber* cached = [cache objectForKey:entryID];
+    if (cached) {
+        return cached.boolValue;
+    }
+
+    BOOL hide = ShouldHideTimelineItem(item, hideWhoToFollow, hidePrompts, hideVerified,
+                                       inConversation, inProfile, conversationRootUserID,
+                                       authorRepliedToUserIDs);
+    [cache setObject:@(hide) forKey:entryID];
+    return hide;
+}
+
+
+static long long ConversationRootUserID(NSArray* sections) {
+    for (id section in sections) {
+        if (![section isKindOfClass:[NSArray class]]) {
+            continue;
+        }
+
+        for (id item in (NSArray*)section) {
+            id viewModel = unwrapDataViewItem(item);
+            if (ItemIsConversationThreadReply(viewModel)) {
+                continue;
+            }
+
+            long long userID = ItemRepresentedFromUserID(viewModel);
+            if (userID != 0) {
+                return userID;
+            }
+        }
+    }
+
+    return 0;
+}
+
+
+static NSSet<NSNumber*>* ConversationAuthorRepliedToUserIDs(NSArray* sections,
+                                                            long long rootUserID) {
+    NSMutableSet<NSNumber*>* repliedToUserIDs = [NSMutableSet set];
+    if (rootUserID == 0) {
+        return repliedToUserIDs;
+    }
+
+    for (id section in sections) {
+        if (![section isKindOfClass:[NSArray class]]) {
+            continue;
+        }
+
+        for (id item in (NSArray*)section) {
+            id viewModel = unwrapDataViewItem(item);
+            if (!ItemIsConversationThreadReply(viewModel)) {
+                continue;
+            }
+
+            if (ItemRepresentedFromUserID(viewModel) != rootUserID) {
+                continue;
+            }
+
+            long long repliedToUserID = ItemInReplyToUserID(viewModel);
+            if (repliedToUserID != 0) {
+                [repliedToUserIDs addObject:@(repliedToUserID)];
+            }
+        }
+    }
+
+    return repliedToUserIDs;
+}
+
 static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewController,
                                          NSArray* sections) {
     BOOL hideWhoToFollow = [BHTSettings boolForKey:@"hide_who_to_follow"];
@@ -227,9 +430,18 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
         IsInHierarchyOfClass(dataViewController, @"T1ConversationContainerViewController");
     BOOL inProfile = IsInHierarchyOfClass(dataViewController, @"T1ProfileViewController");
 
-    if (!hideWhoToFollow && !hidePrompts && !inConversation) {
+    BOOL hideVerified = [BHTSettings boolForKey:@"hide_verified_tweets"] && !inProfile;
+
+    if (!hideWhoToFollow && !hidePrompts && !hideVerified && !inConversation) {
         return sections;
     }
+
+    long long conversationRootUserID =
+        (hideVerified && inConversation) ? ConversationRootUserID(sections) : 0;
+    NSSet<NSNumber*>* authorRepliedToUserIDs =
+        (hideVerified && inConversation)
+            ? ConversationAuthorRepliedToUserIDs(sections, conversationRootUserID)
+            : nil;
 
     // Modules can share a section with unrelated items, so filtering is per item;
     // a purely filtered section (like the Discover More one) empties and is dropped.
@@ -246,8 +458,9 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
         NSMutableIndexSet* removed = [NSMutableIndexSet indexSet];
 
         for (NSUInteger i = 0; i < items.count; i++) {
-            if (ShouldHideTimelineItem(items[i], hideWhoToFollow, hidePrompts, inConversation,
-                                       inProfile)) {
+            if (MemoizedShouldHideTimelineItem(items[i], hideWhoToFollow, hidePrompts, hideVerified,
+                                               inConversation, inProfile, conversationRootUserID,
+                                               authorRepliedToUserIDs)) {
                 [removed addIndex:i];
             }
         }

@@ -91,6 +91,8 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                       @"default": @NO},
                     @{@"key": @"hide_custom_timelines",
                       @"default": @NO},
+                    @{@"key": @"hide_verified_tweets",
+                      @"default": @NO},
                     @{@"key": @"restore_refresh_sounds",
                       @"default": @YES}
                 ]
