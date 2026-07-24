@@ -511,3 +511,16 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
 }
 
 %end
+
+%hook TFNFloatingActionButton
+- (void)didMoveToWindow {
+    %orig;
+
+    if ([BHTSettings boolForKey:@"hide_tweet_button"]) {
+        self.userInteractionEnabled = NO;
+        self.hidden = YES;
+        self.alpha = 0.0;
+    }
+}
+
+%end

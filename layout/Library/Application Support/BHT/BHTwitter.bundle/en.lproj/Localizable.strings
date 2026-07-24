@@ -274,6 +274,9 @@
 "HIDE_VERIFIED_TWEETS_TITLE" = "Hide verified Tweets";
 "HIDE_VERIFIED_TWEETS_DETAIL" = "Hides Tweets from verified accounts in your timeline and replies, unless the author has replied to them in the same thread or you follow the account.";
 
+"HIDE_TWEET_BUTTON_TITLE" = "Hide Tweet button";
+"HIDE_TWEET_BUTTON_DETAIL" = "Removes the Tweet button from the navigation bar.";
+
 /*Deprecated*/
 "MODERN_SETTINGS_PLACEHOLDER_TEXT" = "Nothing to see here - yet";
 "MODERN_SETTINGS_PLACEHOLDER_DETAIL_TEXT" = "This section is coming soon. Stay tuned for more NeoFreeBird features!";

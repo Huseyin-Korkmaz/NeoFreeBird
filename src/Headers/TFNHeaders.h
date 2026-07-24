@@ -116,6 +116,9 @@
 - (id)init;
 @end
 
+@interface TFNFloatingActionButton : UIView
+@end
+
 @interface TFNTwitter : NSObject
 + (instancetype)sharedTwitter;
 @property (readonly, nonatomic) NSArray* accounts;
