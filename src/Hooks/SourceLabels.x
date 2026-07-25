@@ -55,6 +55,12 @@ static NSString* encodedQueryParameter(id object) {
 
 @interface T1ConversationFooterTextView (SourceLabels)
 @property (nonatomic, readonly) T1ConversationFooterItem* footerItem;
+@property (nonatomic, readonly) TFNAttributedTextView* textView;
+- (void)BHT_forceRecolorSource;
+@end
+
+@interface TFNAttributedTextView (SourceLabels)
+- (TFNAttributedTextModel*)textModel;
 @end
 
 // TweetSourceHelper itself is declared in Headers/BHTHelpers.h; declare only the
@@ -342,6 +348,44 @@ static NSString* encodedQueryParameter(id object) {
     }
 
     %orig;
+
+    if ([BHTSettings boolForKey:@"restore_tweet_labels"]) {
+        __weak __typeof(self) weakSelf = self;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf BHT_forceRecolorSource];
+        });
+    }
+}
+
+%new
+- (void)BHT_forceRecolorSource {
+    @try {
+        NSString* tweetID = objc_getAssociatedObject(self, &kFooterTweetIDKey);
+        NSString* source = tweetID.length > 0 ? tweetSources[tweetID] : nil;
+        if (source.length == 0 || [source isEqualToString:[TweetSourceHelper unavailableString]]) {
+            return;
+        }
+
+        TFNAttributedTextView* textView = self.textView;
+        NSAttributedString* current = textView.textModel.attributedString;
+        if (current.length == 0) {
+            return;
+        }
+
+        NSRange range = [current.string rangeOfString:source options:NSBackwardsSearch];
+        if (range.location == NSNotFound) {
+            return;
+        }
+
+        NSMutableAttributedString* recolored = [current mutableCopy];
+        [recolored addAttribute:NSForegroundColorAttributeName
+                           value:CurrentAccentColor()
+                           range:range];
+        TFNAttributedTextModel* newModel =
+            [[%c(TFNAttributedTextModel) alloc] initWithAttributedString:recolored];
+        [textView setTextModel:newModel];
+    } @catch (NSException* e) {
+    }
 }
 
 %new
@@ -351,6 +395,8 @@ static NSString* encodedQueryParameter(id object) {
     if (tweetID.length > 0 && [tweetID isEqualToString:mine]) {
         // Posted from the main queue, so we are already on the main thread here.
         [self updateFooterTextView];
+        [self setNeedsDisplay];
+        [self setNeedsLayout];
     }
 }
 
