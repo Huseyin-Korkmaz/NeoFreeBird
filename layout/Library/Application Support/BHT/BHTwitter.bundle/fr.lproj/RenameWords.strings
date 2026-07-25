@@ -14,13 +14,14 @@ Strictly per-language: a language without its own copy of this file gets no gene
 renaming at all.
 */
 
-"republication" = "retweet";
-"republications" = "retweets";
-"republié" = "retweeté";
+"repost" = "retweet";
+"reposts" = "retweets";
+"reposté" = "retweeté";
 "republication en cours" = "retweet en cours";
-"publication" = "Tweet";
-"publications" = "Tweets";
-"publié" = "Tweeté";
+"post" = "Tweet";
+"posts" = "Tweets";
+"posté" = "Tweeté";
+"poster" = "Tweeter";
 "publication en cours" = "Tweet en cours";
 "Premium" = "Blue";
 "X" = "Twitter";
