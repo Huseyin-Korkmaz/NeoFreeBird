@@ -320,6 +320,15 @@ static UIColor* tabItemColor(BOOL selected) {
     return %orig;
 }
 
+- (void)didMoveToWindow {
+    %orig;
+
+    if (self.window && [BHTSettings boolForKey:@"restore_tab_labels"] &&
+        [self respondsToSelector:@selector(_t1_layoutForTabBar)]) {
+        [self performSelector:@selector(_t1_layoutForTabBar)];
+    }
+}
+
 %new
 - (void)applyCurrentThemeToIcon {
     [self _t1_updateImageViewAnimated:NO];
