@@ -32,6 +32,9 @@
 "MODERN_SETTINGS_TWEETS_TITLE" = "Tweets and replies";
 "MODERN_SETTINGS_TWEETS_SUBTITLE" = "Change the look of Tweets and remove features you may not use.";
 
+"MODERN_SETTINGS_CHAT_TITLE" = "Chat";
+"MODERN_SETTINGS_CHAT_SUBTITLE" = "Add features to the XChat interface.";
+
 "MODERN_SETTINGS_SEARCH_TITLE" = "Search and discover";
 "MODERN_SETTINGS_SEARCH_SUBTITLE" = "Change what you see in the Search tab.";
 

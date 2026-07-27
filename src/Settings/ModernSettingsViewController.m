@@ -216,6 +216,13 @@
             @"action": @"showProfilesSettings"
         },
         @{
+            @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_CHAT_TITLE"],
+            @"subtitle":
+                [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_CHAT_SUBTITLE"],
+            @"icon": @"messages_stroke",
+            @"action": @"showChatSettings"
+        },
+        @{
             @"title": [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_SEARCH_TITLE"],
             @"subtitle":
                 [[BHTBundle sharedBundle] localizedStringForKey:@"MODERN_SETTINGS_SEARCH_SUBTITLE"],
@@ -752,6 +759,12 @@
 }
 
 - (void)showPresetsSettings {
+    ModernSettingsPlaceholderViewController* vc = [[ModernSettingsPlaceholderViewController alloc]
+        initWithAccount:self.account
+               titleKey:@"MODERN_SETTINGS_PRESETS_TITLE"];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+- (void)showChatSettings {
     ModernSettingsPlaceholderViewController* vc = [[ModernSettingsPlaceholderViewController alloc]
         initWithAccount:self.account
                titleKey:@"MODERN_SETTINGS_PRESETS_TITLE"];
