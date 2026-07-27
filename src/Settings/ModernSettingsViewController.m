@@ -12,6 +12,7 @@
 #import "Settings/ModernSettingsPageViewController.h"
 #import "Settings/ModernSettingsPlaceholderViewController.h"
 #import "Settings/Pages/AppearanceSettingsViewController.h"
+#import "Settings/Pages/ChatSettingsViewController.h"
 #import "Settings/Pages/DebugSettingsViewController.h"
 #import "Settings/Pages/ProfilesSettingsViewController.h"
 #import "Settings/Pages/TimelinesSettingsViewController.h"
@@ -765,9 +766,8 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 - (void)showChatSettings {
-    ModernSettingsPlaceholderViewController* vc = [[ModernSettingsPlaceholderViewController alloc]
-        initWithAccount:self.account
-               titleKey:@"MODERN_SETTINGS_PRESETS_TITLE"];
+    ChatSettingsViewController* vc =
+        [[ChatSettingsViewController alloc] initWithAccount:self.account];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

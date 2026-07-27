@@ -206,6 +206,17 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                       @"type": @"toggle"}
                 ]
             },
+            @"chat": @{
+                @"titleKey": @"MODERN_SETTINGS_CHAT_TITLE",
+                @"subtitleKey": @"MODERN_SETTINGS_CHAT_SUBTITLE",
+                @"settings": @[
+                    @{
+                        @"key": @"hide_typing_indicator",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    }
+                ]
+            },
             @"tweets": @{
                 @"titleKey": @"MODERN_SETTINGS_TWEETS_TITLE",
                 @"subtitleKey": @"MODERN_SETTINGS_TWEETS_SUBTITLE",

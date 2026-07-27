@@ -124,6 +124,10 @@
 "RESTORE_TWEET_LABELS_TITLE" = "Show Tweet source labels";
 "RESTORE_TWEET_LABELS_DETAIL" = "Shows what client Tweets were made from.";
 
+/*Chat*/
+"HIDE_TYPING_INDICATOR_TITLE" = "Hide typing indicator";
+"HIDE_TYPING_INDICATOR_DETAIL" = "Stop sending the \"typing...\" indicator to other people in chats.";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Confirm follows";
 "FOLLOW_CONFIRM_DETAIL" = "Ask before following someone.";
