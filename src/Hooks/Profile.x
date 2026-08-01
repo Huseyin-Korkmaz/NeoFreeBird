@@ -164,3 +164,34 @@ static char kCopyProviderKey;
 }
 
 %end
+
+// MARK: - Show unrounded tweet/post count
+
+%hook T1ProfileDisplayNormalMainContentProvider
+
+- (id)_tweetsSubtitle {
+    id original = %orig;
+
+    NSNumber* count = self.viewModel.tweetCount;
+    if (![count isKindOfClass:[NSNumber class]] || ![original isKindOfClass:[NSString class]]) {
+        return original;
+    }
+
+    NSString* abbreviated = [count tfs_twitterAbbreviated];
+    NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    NSString* fullCount = [formatter stringFromNumber:count];
+
+    if (!abbreviated.length || !fullCount.length || [abbreviated isEqualToString:fullCount]) {
+        return original;
+    }
+
+    NSRange range = [(NSString*)original rangeOfString:abbreviated];
+    if (range.location == NSNotFound) {
+        return original;
+    }
+
+    return [(NSString*)original stringByReplacingCharactersInRange:range withString:fullCount];
+}
+
+%end

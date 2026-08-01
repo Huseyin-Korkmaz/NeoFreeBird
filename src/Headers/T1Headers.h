@@ -107,10 +107,17 @@
 @property (readonly, copy, nonatomic) NSString* username;
 @property (readonly, copy, nonatomic) NSString* bio;
 @property (readonly, copy, nonatomic) NSString* url;
+@property (readonly, nonatomic) NSNumber* tweetCount;
 @end
 
 @interface T1ProfileHeaderViewController : UIViewController
 @property (retain, nonatomic) T1ProfileUserViewModel* viewModel;
+@end
+
+// Hooked for unrounded tweet/post count
+@interface T1ProfileDisplayNormalMainContentProvider : NSObject
+@property (retain, nonatomic) T1ProfileUserViewModel* viewModel;
+- (id)_tweetsSubtitle;
 @end
 
 #pragma mark - Status views
