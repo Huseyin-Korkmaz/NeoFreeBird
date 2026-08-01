@@ -45,6 +45,7 @@ static char kCopyProviderKey;
         copyAction(@"COPY_PROFILE_INFO_MENU_OPTION_1", @"news_stroke", viewModel.bio),
         copyAction(@"COPY_PROFILE_INFO_MENU_OPTION_5", @"location_stroke", viewModel.location),
         copyAction(@"COPY_PROFILE_INFO_MENU_OPTION_4", @"link", viewModel.url),
+        copyAction(@"COPY_PROFILE_INFO_MENU_OPTION_6", @"link", "https://x.com/%@", viewModel.username),
     ];
 }
 
