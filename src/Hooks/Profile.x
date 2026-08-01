@@ -138,6 +138,9 @@ static char kCopyProviderKey;
                              count:(NSNumber*)count
                        highlighted:(BOOL)highlighted {
     id original = %orig;
+    if (![BHTSettings boolForKey:@"show_unrounded_counts"]) {
+        return original;
+    }
 
     if (![count isKindOfClass:[NSNumber class]] ||
         ![original isKindOfClass:[NSAttributedString class]]) {
@@ -171,6 +174,10 @@ static char kCopyProviderKey;
 
 - (id)_tweetsSubtitle {
     id original = %orig;
+    
+    if (![BHTSettings boolForKey:@"show_unrounded_counts"]) {
+        return original;
+    }
 
     NSNumber* count = self.viewModel.tweetCount;
     if (![count isKindOfClass:[NSNumber class]] || ![original isKindOfClass:[NSString class]]) {

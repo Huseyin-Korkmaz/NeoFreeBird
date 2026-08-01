@@ -147,6 +147,9 @@
 "RESTORE_FOLLOW_BUTTON_TITLE" = "No Subscribe button";
 "RESTORE_FOLLOW_BUTTON_DETAIL" = "Hides the Subscribe button on Tweets and in profiles.";
 
+"SHOW_UNROUNDED_COUNTS_TITLE" = "Show unrounded counts";
+"SHOW_UNROUNDED_COUNTS_DETAIL" = "Shows the exact number of followers, following, and tweets instead of rounding them to the nearest thousand or million.";
+
 /*Search*/
 "NO_HISTORY_TITLE" = "No search history";
 "NO_HISTORY_DETAIL" = "Twitter will no longer keep track of your searches.";
