@@ -224,6 +224,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"key": @"hide_typing_indicator",
                         @"default": @NO,
                         @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"download_voice_messages",
+                        @"default": @NO,
+                        @"type": @"toggle"
                     }
                 ]
             },

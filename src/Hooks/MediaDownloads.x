@@ -5,6 +5,80 @@
 
 #import "HookHelpers.h"
 
+// MARK: - DM voice message download
+//
+// Diagnostics established that AttachmentAssetAudioView is NOT nested inside
+// DMConversation.MessageAttachmentView at all (verified: walking up to 20
+// superview levels from the audio view never finds one) -- image/video/gif
+// attachments and voice notes use different containers in the DM UI, so the
+// download entry point has to live directly on the audio view itself, not
+// piggybacked on MessageAttachmentView's existing UIContextMenuInteraction
+// (see the DM video download section below, which is unrelated/untouched).
+//
+// The note's remote URL isn't exposed anywhere in the Swift view/model layer
+// either (unlike image/video, there's no -inlineMediaInfos equivalent), so
+// it's captured indirectly: DM voice notes are pre-decrypted straight to a
+// local file (Documents/dm/dm-files-<conversation>/decrypted-media-v2/...),
+// and that file gets opened via a plain AVURLAsset right as playback starts
+// (confirmed on-device). A single "last seen" URL is cached whenever any such
+// path is opened -- not tied to a specific view instance, since the DM list
+// recycles cells aggressively and per-instance associated-object caching
+// proved unreliable across reuse.
+static NSURL* nfbLastCapturedVoiceURL = nil;
+
+%hook AVURLAsset
+- (id)initWithURL:(NSURL*)url options:(NSDictionary*)options {
+    if ([url.path containsString:@"/decrypted-media-v2/"]) {
+        nfbLastCapturedVoiceURL = url;
+    }
+    return %orig;
+}
+%end
+
+// DM voice notes are pre-decrypted straight to disk (Documents/dm/.../
+// decrypted-media-v2/.../*.m4a), so the captured URL is normally a local
+// file URL already -- just copy it out and hand it to the share sheet. The
+// network branch is kept as a fallback in case that ever changes.
+static void DownloadVoiceMessage(NSURL* sourceURL) {
+    NSString* extension = sourceURL.pathExtension.length ? sourceURL.pathExtension : @"m4a";
+    NSURL* destination = [[NSURL fileURLWithPath:NSTemporaryDirectory()]
+        URLByAppendingPathComponent:[NSString
+                                         stringWithFormat:@"%@.%@", NSUUID.UUID.UUIDString, extension]];
+
+    if (sourceURL.isFileURL) {
+        NSError* copyError = nil;
+        [[NSFileManager defaultManager] copyItemAtURL:sourceURL toURL:destination error:&copyError];
+        if (copyError) {
+            NSLog(@"[NFB] DownloadVoiceMessage copy failed: %@", copyError);
+            return;
+        }
+        [BHTManager showSaveVC:destination];
+        return;
+    }
+
+    TFNHUD* hud = [[objc_getClass("TFNHUD") alloc]
+        initWithText:[[BHTBundle sharedBundle]
+                          localizedTwitterStringForKey:@"DOWNLOAD_LIVE_ACTIVITY_DOWNLOADING"]];
+    [hud show];
+    NSURLSessionDownloadTask* task = [[NSURLSession sharedSession]
+        downloadTaskWithURL:sourceURL
+          completionHandler:^(NSURL* location, NSURLResponse* response, NSError* error) {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  [hud hide];
+                  if (!location || error) {
+                      return;
+                  }
+                  NSError* moveError = nil;
+                  [[NSFileManager defaultManager] moveItemAtURL:location toURL:destination error:&moveError];
+                  if (moveError) {
+                      return;
+                  }
+                  [BHTManager showSaveVC:destination];
+              });
+          }];
+    [task resume];
+}
+
 // MARK: - DM video download
 
 // The DM UI is Swift now: media messages live in DMConversation.MessageAttachmentView,
@@ -71,6 +145,108 @@ static NSArray* DMVideoEntities(UIView* attachmentView) {
                      }];
 }
 %end
+
+// MARK: - DM voice message download (context menu)
+//
+// Lives directly on the audio view -- see the note at the top of this file
+// for why this can't share MessageAttachmentView's interaction. Same
+// UIContextMenuInteraction pattern as the video/gif download above: its
+// fixed ~0.5s trigger duration wins the race against the stock DM context
+// menu (React/Reply/Copy/etc) essentially every time a long-press lands on
+// the audio view specifically, replacing it with just Download rather than
+// merging the two. That's an accepted tradeoff, matching how the video/gif
+// download above already behaves for images/videos -- confirmed on-device
+// that a longer-duration separate UILongPressGestureRecognizer (see the
+// commented-out block below) doesn't help: the native menu's own preview
+// animation takes over the touch before the longer threshold is ever
+// reached, so it never fires at all.
+%hook _TtC13DMAttachments24AttachmentAssetAudioView
+%property (nonatomic, strong) UIContextMenuInteraction* voiceDownloadInteraction;
+- (void)layoutSubviews {
+    %orig;
+
+    if ([BHTSettings boolForKey:@"download_voice_messages"] && self.voiceDownloadInteraction == nil) {
+        self.voiceDownloadInteraction = [[UIContextMenuInteraction alloc] initWithDelegate:self];
+        [self addInteraction:self.voiceDownloadInteraction];
+    }
+}
+%new
+- (UIContextMenuConfiguration*)contextMenuInteraction:(UIContextMenuInteraction*)interaction
+                       configurationForMenuAtLocation:(CGPoint)location {
+    NSURL* voiceURL = nfbLastCapturedVoiceURL;
+    if (!voiceURL) {
+        return nil;
+    }
+
+    return [UIContextMenuConfiguration
+        configurationWithIdentifier:nil
+                    previewProvider:nil
+                     actionProvider:^UIMenu* _Nullable(
+                         NSArray<UIMenuElement*>* _Nonnull suggestedActions) {
+                         UIAction* saveAction = [UIAction
+                             actionWithTitle:
+                                 [[BHTBundle sharedBundle]
+                                     localizedTwitterStringForKey:@"DOWNLOAD_ACTIVITY_VIEW_LABEL"]
+                                       image:[UIImage systemImageNamed:@"square.and.arrow.down"]
+                                  identifier:nil
+                                     handler:^(__kindof UIAction* _Nonnull action) {
+                                         DownloadVoiceMessage(voiceURL);
+                                     }];
+                         return [UIMenu menuWithTitle:@"" children:@[saveAction]];
+                     }];
+}
+%end
+
+// Longer-hold alternative tried on 2026-08-02: didn't work (confirmed
+// on-device) -- the native context menu's own preview animation takes over
+// the touch at its fixed ~0.5s duration before this recognizer's longer
+// threshold is ever reached, so it never fires. Kept here in case a
+// different technique (e.g. hooking whatever class actually owns the stock
+// context menu's UIContextMenuInteractionDelegate, to inject a Download
+// UIAction into its real UIMenu instead of presenting a competing one) gets
+// picked back up later. Requires:
+//   - T1Headers.h: `@property (nonatomic, strong) UILongPressGestureRecognizer*
+//     voiceDownloadLongPress;` on _TtC13DMAttachments24AttachmentAssetAudioView
+//     instead of the UIContextMenuInteraction property above.
+//
+// %hook _TtC13DMAttachments24AttachmentAssetAudioView
+// %property (nonatomic, strong) UILongPressGestureRecognizer* voiceDownloadLongPress;
+// - (void)layoutSubviews {
+//     %orig;
+//
+//     if ([BHTSettings boolForKey:@"download_voice_messages"] && self.voiceDownloadLongPress == nil) {
+//         UILongPressGestureRecognizer* longPress = [[UILongPressGestureRecognizer alloc]
+//             initWithTarget:self
+//                     action:@selector(nfb_handleVoiceDownloadLongPress:)];
+//         longPress.minimumPressDuration = 1.2;
+//         longPress.cancelsTouchesInView = NO;
+//         longPress.delaysTouchesBegan = NO;
+//         [self addGestureRecognizer:longPress];
+//         self.voiceDownloadLongPress = longPress;
+//     }
+// }
+// %new
+// - (void)nfb_handleVoiceDownloadLongPress:(UILongPressGestureRecognizer*)recognizer {
+//     if (recognizer.state != UIGestureRecognizerStateBegan) {
+//         return;
+//     }
+//     NSURL* voiceURL = nfbLastCapturedVoiceURL;
+//     if (!voiceURL) {
+//         return;
+//     }
+//
+//     TFNActionItem* downloadItem = [objc_getClass("TFNActionItem")
+//         actionItemWithTitle:[[BHTBundle sharedBundle]
+//                                  localizedTwitterStringForKey:@"DOWNLOAD_ACTIVITY_VIEW_LABEL"]
+//                   imageName:@"arrow_down_circle_stroke"
+//                      action:^{
+//                          DownloadVoiceMessage(voiceURL);
+//                      }];
+//     TFNMenuSheetViewController* sheet = [[objc_getClass("TFNMenuSheetViewController") alloc]
+//         initWithActionItems:@[downloadItem]];
+//     [sheet tfnPresentedCustomPresentFromViewController:topMostController() animated:YES completion:nil];
+// }
+// %end
 
 // MARK: - Upload custom voice
 
