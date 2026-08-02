@@ -6,24 +6,6 @@
 #import "HookHelpers.h"
 
 // MARK: - DM voice message download
-//
-// Diagnostics established that AttachmentAssetAudioView is NOT nested inside
-// DMConversation.MessageAttachmentView at all (verified: walking up to 20
-// superview levels from the audio view never finds one) -- image/video/gif
-// attachments and voice notes use different containers in the DM UI, so the
-// download entry point has to live directly on the audio view itself, not
-// piggybacked on MessageAttachmentView's existing UIContextMenuInteraction
-// (see the DM video download section below, which is unrelated/untouched).
-//
-// The note's remote URL isn't exposed anywhere in the Swift view/model layer
-// either (unlike image/video, there's no -inlineMediaInfos equivalent), so
-// it's captured indirectly: DM voice notes are pre-decrypted straight to a
-// local file (Documents/dm/dm-files-<conversation>/decrypted-media-v2/...),
-// and that file gets opened via a plain AVURLAsset right as playback starts
-// (confirmed on-device). A single "last seen" URL is cached whenever any such
-// path is opened -- not tied to a specific view instance, since the DM list
-// recycles cells aggressively and per-instance associated-object caching
-// proved unreliable across reuse.
 static NSURL* nfbLastCapturedVoiceURL = nil;
 
 %hook AVURLAsset
@@ -196,57 +178,6 @@ static NSArray* DMVideoEntities(UIView* attachmentView) {
                      }];
 }
 %end
-
-// Longer-hold alternative tried on 2026-08-02: didn't work (confirmed
-// on-device) -- the native context menu's own preview animation takes over
-// the touch at its fixed ~0.5s duration before this recognizer's longer
-// threshold is ever reached, so it never fires. Kept here in case a
-// different technique (e.g. hooking whatever class actually owns the stock
-// context menu's UIContextMenuInteractionDelegate, to inject a Download
-// UIAction into its real UIMenu instead of presenting a competing one) gets
-// picked back up later. Requires:
-//   - T1Headers.h: `@property (nonatomic, strong) UILongPressGestureRecognizer*
-//     voiceDownloadLongPress;` on _TtC13DMAttachments24AttachmentAssetAudioView
-//     instead of the UIContextMenuInteraction property above.
-//
-// %hook _TtC13DMAttachments24AttachmentAssetAudioView
-// %property (nonatomic, strong) UILongPressGestureRecognizer* voiceDownloadLongPress;
-// - (void)layoutSubviews {
-//     %orig;
-//
-//     if ([BHTSettings boolForKey:@"download_voice_messages"] && self.voiceDownloadLongPress == nil) {
-//         UILongPressGestureRecognizer* longPress = [[UILongPressGestureRecognizer alloc]
-//             initWithTarget:self
-//                     action:@selector(nfb_handleVoiceDownloadLongPress:)];
-//         longPress.minimumPressDuration = 1.2;
-//         longPress.cancelsTouchesInView = NO;
-//         longPress.delaysTouchesBegan = NO;
-//         [self addGestureRecognizer:longPress];
-//         self.voiceDownloadLongPress = longPress;
-//     }
-// }
-// %new
-// - (void)nfb_handleVoiceDownloadLongPress:(UILongPressGestureRecognizer*)recognizer {
-//     if (recognizer.state != UIGestureRecognizerStateBegan) {
-//         return;
-//     }
-//     NSURL* voiceURL = nfbLastCapturedVoiceURL;
-//     if (!voiceURL) {
-//         return;
-//     }
-//
-//     TFNActionItem* downloadItem = [objc_getClass("TFNActionItem")
-//         actionItemWithTitle:[[BHTBundle sharedBundle]
-//                                  localizedTwitterStringForKey:@"DOWNLOAD_ACTIVITY_VIEW_LABEL"]
-//                   imageName:@"arrow_down_circle_stroke"
-//                      action:^{
-//                          DownloadVoiceMessage(voiceURL);
-//                      }];
-//     TFNMenuSheetViewController* sheet = [[objc_getClass("TFNMenuSheetViewController") alloc]
-//         initWithActionItems:@[downloadItem]];
-//     [sheet tfnPresentedCustomPresentFromViewController:topMostController() animated:YES completion:nil];
-// }
-// %end
 
 // MARK: - Upload custom voice
 
