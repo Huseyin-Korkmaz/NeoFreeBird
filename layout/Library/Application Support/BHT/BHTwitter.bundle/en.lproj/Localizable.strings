@@ -182,6 +182,9 @@
 "DOWNLOAD_VIDEOS_TITLE" = "Download media";
 "DOWNLOAD_VIDEOS_DETAIL" = "Save videos or GIFs right from the Tweet overflow menu.";
 
+"UPLOAD_FULL_HD_VIDEOS_TITLE" = "Upload full HD videos";
+"UPLOAD_FULL_HD_VIDEOS_DETAIL" = "Unlock the ability to upload videos in 1080p.";
+
 "DIRECT_SAVE_TITLE" = "Save to Photos";
 "DIRECT_SAVE_DETAIL" = "Videos you save will go straight to your Photos app.";
 

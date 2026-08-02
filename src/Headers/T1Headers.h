@@ -250,6 +250,9 @@
 - (void)updateFooterTextView;
 @end
 
+@interface T1VideoQualityUploadSettings: NSObject
+- (_Bool)shouldAllowFullHdVideoUpload:(long long)upload;
+@end
 // Hooked for unrounded follower/following counts
 @interface T1ProfileFriendsFollowingViewModel : NSObject
 - (id)_t1_followCountTextWithLabel:(id)arg1

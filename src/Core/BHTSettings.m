@@ -268,6 +268,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"type": @"toggle"
                     },
                     @{
+                        @"key": @"upload_full_hd_videos",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
                         @"key": @"bypass_age_verification",
                         @"default": @YES,
                         @"type": @"toggle"
