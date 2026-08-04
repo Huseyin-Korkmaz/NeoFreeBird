@@ -245,7 +245,7 @@
 "CUSTOM_FONTS_MENU_TITLE" = "\nChoose a font";
 "CUSTOM_FONTS_TUT_ALERT_MESSAGE" = "No custom fonts yet. Install some with the iFont app from the App Store.";
 
-/*Dwonload*/
+/*Download*/
 "DOWNLOAD_MENU_TITLE" = "\nChoose video quality";
 "FETCHING_PROGRESS_TITLE" = "Just a second...";
 "DOWNLOAD_AS_GIF_OPTION_TITLE" = "Download as GIF";
@@ -283,6 +283,9 @@
 
 "RESTORE_TWITTER_NAMES_TITLE" = "Restore Twitter terminology";
 "RESTORE_TWITTER_NAMES_DETAIL" = "Replaces 'X' with 'Twitter', 'Post' with 'Tweet', 'Repost' with 'Retweet' and so on throughout the app's interface.";
+
+"BLUE_LAUNCH_SCREEN_TITLE" = "Restore blue launch screen";
+"BLUE_LAUNCH_SCREEN_DETAIL" = "Restores the original blue launch screen.";
 
 /*Dim Theme*/
 "ENABLE_DIM_THEME_TITLE" = "Enable dim theme";

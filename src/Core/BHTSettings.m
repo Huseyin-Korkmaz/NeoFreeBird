@@ -332,6 +332,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"key": @"color_twitter_icon_in_top_bar",
                         @"default": @([BHTManager isTwitterBranded]),
                         @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"blue_launch_screen",
+                        @"default": @([BHTManager isTwitterBranded]),
+                        @"type": @"toggle"
                     }
                 ]
             },
