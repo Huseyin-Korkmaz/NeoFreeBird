@@ -272,3 +272,9 @@
                              count:(id)arg3
                        highlighted:(_Bool)arg4;
 @end
+
+
+@interface T1AnimatedLaunchScreenView : UIView
+- (void)layoutSubviews;
+- (void)traitCollectionDidChange:(id)change;
+@end
