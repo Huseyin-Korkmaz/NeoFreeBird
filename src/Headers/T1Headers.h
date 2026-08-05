@@ -278,3 +278,18 @@
 - (void)layoutSubviews;
 - (void)traitCollectionDidChange:(id)change;
 @end
+
+@interface T1PollingResultsView: UIView
+@property (nonatomic) double percentage;
+@property (retain, nonatomic) NSString *percentageString;
+@property (nonatomic) _Bool hasVoted;
+@end
+
+@interface T1PollingCardView: UIView
+- (id)initWithFrame:(CGRect)frame;
+@property (retain, nonatomic) NSArray *choiceButtons;
+@property (retain, nonatomic) NSArray *resultViews;
+@property (retain, nonatomic) TFNTappableHighlightView *pollChoiceContainer;
+@property (retain, nonatomic) TFNTappableHighlightView *pollResultContainer;
+@property (retain, nonatomic) TFNTappableHighlightView *pollStatusContainer;
+@end

@@ -524,3 +524,65 @@ static NSArray* FilteredTimelineSections(TFNItemsDataViewController* dataViewCon
 }
 
 %end
+
+static const char *BHTPollPercentageAddedKey = "BHTPollPercentageAddedKey";
+%hook T1PollingCardView
+
+- (void)didMoveToWindow {
+    %orig;
+
+    if (![BHTSettings boolForKey:@"show_poll_results"]) {
+        return;
+    }
+
+    NSArray *results = self.resultViews;
+    NSArray *choices = self.choiceButtons;
+
+    if (results.count == 0 || choices.count == 0) {
+        return;
+    }
+
+    NSMutableArray<NSString *> *percentages = [NSMutableArray array];
+    for (id resultView in results) {
+        if ([resultView respondsToSelector:@selector(percentageString)]) {
+            NSString *percentage = [resultView valueForKey:@"percentageString"];
+            if (percentage.length > 0) {
+                [percentages addObject:percentage];
+            }
+        }
+    }
+
+    if (percentages.count == 0) {
+        return;
+    }
+
+    for (NSUInteger i = 0; i < choices.count && i < percentages.count; i++) {
+        id button = choices[i];
+        if (![button isKindOfClass:NSClassFromString(@"TFNButton")]) {
+            continue;
+        }
+
+        NSNumber *alreadyEdited = objc_getAssociatedObject(button, BHTPollPercentageAddedKey);
+        if (alreadyEdited.boolValue) {
+            continue;
+        }
+
+        NSString *currentTitle = [button valueForKey:@"_mapsui_title"];
+        if (!currentTitle) {
+            continue;
+        }
+
+        NSString *newTitle = [NSString stringWithFormat:@"%@ (%@)",
+                              currentTitle,
+                              percentages[i]];
+
+        [button setValue:newTitle forKey:@"_mapsui_title"];
+
+        objc_setAssociatedObject(button,
+                                 BHTPollPercentageAddedKey,
+                                 @YES,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+}
+
+%end

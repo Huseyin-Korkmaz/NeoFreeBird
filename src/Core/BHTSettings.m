@@ -273,6 +273,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"type": @"toggle"
                     },
                     @{
+                        @"key": @"show_poll_results",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
                         @"key": @"upload_full_hd_videos",
                         @"default": @NO,
                         @"type": @"toggle"

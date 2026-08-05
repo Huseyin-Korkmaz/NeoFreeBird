@@ -86,6 +86,9 @@
 "TWEET_CONFIRM_TITLE" = "Confirm Tweets";
 "TWEET_CONFIRM_DETAIL" = "Ask before you post a Tweet.";
 
+"SHOW_POLL_RESULTS_TITLE" = "Show poll results before voting";
+"SHOW_POLL_RESULTS_DETAIL" = "Appends the poll results to option names before you vote, so you can see how others have voted.";
+
 "HIDE_BLUE_VERIFIED_TITLE" = "Hide Blue verified checkmarks";
 "HIDE_BLUE_VERIFIED_DETAIL" = "Hide paid verified checkmark on Tweets. This does not include brand/government accounts.";
 
