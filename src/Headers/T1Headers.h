@@ -293,3 +293,12 @@
 @property (retain, nonatomic) TFNTappableHighlightView *pollResultContainer;
 @property (retain, nonatomic) TFNTappableHighlightView *pollStatusContainer;
 @end
+
+@interface TFCCardData : NSObject
+@property (readonly, copy, nonatomic) NSString *name;
+- (NSString *)stringForKey:(NSString *)key;
+- (NSString *)stringForKey:(NSString *)key defaultValue:(NSString *)value;
+- (NSNumber *)numberForKey:(NSString *)key;
+- (NSNumber *)numberFromStringForKey:(NSString *)key;
+- (BOOL)boolForKey:(NSString *)key;
+@end
