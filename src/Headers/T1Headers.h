@@ -302,3 +302,22 @@
 - (NSNumber *)numberFromStringForKey:(NSString *)key;
 - (BOOL)boolForKey:(NSString *)key;
 @end
+
+@interface TAVPlaybackState : NSObject
+// AVPlayer semantics: 0 = paused, 1 = waiting to play, 2 = playing
+@property (nonatomic, readonly) long long timeControlStatus;
+@end
+
+@interface TAVPlayer : NSObject
+@property (nonatomic, readonly) TAVPlaybackState* playbackState;
+- (void)play;
+- (void)pause;
+- (void)playOrReplay;
+@end
+
+@interface _TtC14T1TwitterSwift22ImmersiveVideoPageView : UIView
+@end
+
+@interface _TtC14T1TwitterSwift17ImmersiveCardView : UIView
+- (void)setPausedByUser:(BOOL)paused;
+@end

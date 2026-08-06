@@ -166,6 +166,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"key": @"disable_video_docking",
                         @"default": @NO,
                         @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"tap_to_pause",
+                        @"default": @NO,
+                        @"type": @"toggle"
                     }
                 ]
             },
