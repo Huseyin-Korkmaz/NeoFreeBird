@@ -255,4 +255,3 @@ BOOL BHTColorIsCloseToWhite(UIColor* color) {
 @end
 
 
-
