@@ -38,7 +38,7 @@ UIColor* BHTDimHighlightBackgroundColor(void) {
 
 // The legacy Dim search field used its own neutral shade rather than any of
 // the three general-purpose background colors above.
-static UIColor* BHTDimPillBackgroundColor(void) {
+UIColor* BHTDimSearchPillColor(void) {
     return BHTColorWithRGB(0x29333F);
 }
 
@@ -249,11 +249,6 @@ BOOL BHTColorIsCloseToWhite(UIColor* color) {
     UIColor* real = [self.realPalette dmBubbleIncomingColor];
     return BHTColorIsCloseToWhite(real) ? real : BHTDimElevatedBackgroundColor();
 }
-- (UIColor*)pillDefaultBackgroundColor {
-    UIColor* real = [self.realPalette pillDefaultBackgroundColor];
-    return BHTColorIsCloseToWhite(real) ? real : BHTDimPillBackgroundColor();
-}
-
 // Twitter's current Dark palette makes the selected capsule/tab indicator
 // white. Classic Dim used the account's selected accent color instead.
 - (UIColor*)tabBarItemColor {

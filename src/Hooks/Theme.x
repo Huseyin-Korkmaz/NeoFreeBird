@@ -191,6 +191,89 @@ void applySelectedThemeColor(void) {
 
 %end
 
+// X 12.9's Explore search pill is a background image owned by UISearchBar's
+// private _UITextFieldImageBackgroundView. It never asks TAEColorPalette for
+// pillDefaultBackgroundColor, so recolor it through UISearchBar's public image
+// API and preserve the native pill geometry with stretchable round caps.
+static UIImage* BHTDimSearchPillImage(void) {
+    static UIImage* image;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        const CGFloat diameter = 44.0;
+        UIGraphicsImageRenderer* renderer =
+            [[UIGraphicsImageRenderer alloc] initWithSize:CGSizeMake(diameter, diameter)];
+        UIImage* base = [renderer imageWithActions:^(UIGraphicsImageRendererContext* context) {
+            [BHTDimSearchPillColor() setFill];
+            [[UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, diameter, diameter)
+                                        cornerRadius:diameter / 2.0] fill];
+        }];
+        image = [base resizableImageWithCapInsets:UIEdgeInsetsMake(diameter / 2.0,
+                                                                   diameter / 2.0,
+                                                                   diameter / 2.0,
+                                                                   diameter / 2.0)
+                                         resizingMode:UIImageResizingModeStretch];
+    });
+    return image;
+}
+
+static void BHTApplyDimSearchPill(UISearchBar* searchBar) {
+    if (!BHTDimThemeEnabled() ||
+        searchBar.traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return;
+    }
+    [searchBar setSearchFieldBackgroundImage:BHTDimSearchPillImage()
+                                    forState:UIControlStateNormal];
+}
+
+%hook TFNSearchBar
+
+- (void)layoutSubviews {
+    %orig;
+    BHTApplyDimSearchPill((UISearchBar*)self);
+}
+
+- (void)didMoveToWindow {
+    %orig;
+    BHTApplyDimSearchPill((UISearchBar*)self);
+}
+
+%end
+
+static BOOL BHTIsExploreSearchBackgroundView(UIView* view) {
+    Class searchBarClass = objc_getClass("TFNSearchBar");
+    for (UIView* ancestor = view.superview; ancestor; ancestor = ancestor.superview) {
+        if (searchBarClass && [ancestor isKindOfClass:searchBarClass]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+// TFNSearchBar reapplies its stock image after -layoutSubviews, so the public
+// setter above alone does not survive X's final configuration pass. Intercept
+// the concrete UIKit image owner, but only when it belongs to TFNSearchBar.
+%hook _UITextFieldImageBackgroundView
+
+- (void)setImage:(UIImage*)image {
+    if (BHTDimThemeEnabled() && BHTIsExploreSearchBackgroundView((UIView*)self) &&
+        ((UIView*)self).traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+        %orig(BHTDimSearchPillImage());
+    } else {
+        %orig(image);
+    }
+}
+
+- (void)didMoveToWindow {
+    %orig;
+    if (((UIView*)self).window && BHTDimThemeEnabled() &&
+        BHTIsExploreSearchBackgroundView((UIView*)self) &&
+        ((UIView*)self).traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+        ((UIImageView*)self).image = BHTDimSearchPillImage();
+    }
+}
+
+%end
+
 // MARK: - Custom tab bar order and visibility
 
 static NSString* scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
