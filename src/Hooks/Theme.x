@@ -332,6 +332,19 @@ static BOOL BHTIsExploreSearchBackgroundView(UIView* view) {
 
 %end
 
+%hook _TtC10TFNUISwift25SegmentedHighlightBarView
+
+- (void)setBackgroundColor:(UIColor*)color {
+    // A nil assignment is the bar hiding its caret -- leave that alone.
+    if (color && [BHTSettings boolForKey:@"tab_bar_theming"]) {
+        %orig(CurrentAccentColor());
+        return;
+    }
+    %orig(color);
+}
+
+%end
+
 // MARK: - Custom tab bar order and visibility
 
 static NSString* scribePageForEntry(id<T1AppNavigationTabEntry> entry) {
