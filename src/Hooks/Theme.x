@@ -5,6 +5,7 @@
 
 #import "HookHelpers.h"
 #import "Headers/UIHeaders.h"
+#import <math.h>
 
 // MARK: - Custom accent color
 
@@ -176,6 +177,63 @@ void applySelectedThemeColor(void) {
     }
     UIColor* replacement = BHTDimReplacementForResolvedColor(original);
     return replacement ?: original;
+}
+
+%end
+
+// X 12.9 sometimes assigns backgroundPrimary (or a literal black color) to a
+// view after the palette has already been resolved. Reused timeline rows and
+// conversation/detail surfaces take this path while scrolling, so the palette
+// proxy and private UIColor resolution hooks above never get another chance to
+// recolor them. Normalize only UIView background assignments, and repeat the
+// normalization when a view enters a window so colors assigned before traits
+// were available are covered as well.
+static UIColor* BHTDimNormalizedViewBackground(UIView* view, UIColor* color) {
+    if (!view || !color || !BHTDimThemeEnabled() ||
+        view.traitCollection.userInterfaceStyle != UIUserInterfaceStyleDark) {
+        return color;
+    }
+
+    UIColor* resolved = [color resolvedColorWithTraitCollection:view.traitCollection];
+    UIColor* replacement = BHTDimReplacementForResolvedColor(resolved);
+    if (replacement) {
+        return replacement;
+    }
+
+    // The UIColor hooks may already have resolved a catalog background to a
+    // Dim shade. Pin that resolved value on the view so later reuse cannot
+    // fall back to the catalog's original pure-black dark variant.
+    CGFloat red = 0, green = 0, blue = 0, alpha = 0;
+    if ([resolved getRed:&red green:&green blue:&blue alpha:&alpha] && alpha >= 0.99) {
+        BOOL isDimShade =
+            (fabs(red - 21.0 / 255.0) < 0.002 && fabs(green - 32.0 / 255.0) < 0.002 &&
+             fabs(blue - 43.0 / 255.0) < 0.002) ||
+            (fabs(red - 25.0 / 255.0) < 0.002 && fabs(green - 39.0 / 255.0) < 0.002 &&
+             fabs(blue - 52.0 / 255.0) < 0.002) ||
+            (fabs(red - 28.0 / 255.0) < 0.002 && fabs(green - 40.0 / 255.0) < 0.002 &&
+             fabs(blue - 54.0 / 255.0) < 0.002);
+        if (isDimShade) {
+            return resolved;
+        }
+    }
+
+    return color;
+}
+
+%hook UIView
+
+- (void)setBackgroundColor:(UIColor*)color {
+    %orig(BHTDimNormalizedViewBackground(self, color));
+}
+
+- (void)didMoveToWindow {
+    %orig;
+    if (self.window && self.backgroundColor) {
+        UIColor* normalized = BHTDimNormalizedViewBackground(self, self.backgroundColor);
+        if (normalized != self.backgroundColor) {
+            self.backgroundColor = normalized;
+        }
+    }
 }
 
 %end
