@@ -320,3 +320,11 @@
 @interface _TtC14T1TwitterSwift17ImmersiveCardView : UIView
 - (void)setPausedByUser:(BOOL)paused;
 @end
+
+@interface _TtC4DMUI23ContainerViewController: UIViewController
+- (void)loadView;
+@end
+
+@interface _TtC14DMConversation29SecureContainerViewController: _TtC4DMUI23ContainerViewController
+- (void)loadView;
+@end

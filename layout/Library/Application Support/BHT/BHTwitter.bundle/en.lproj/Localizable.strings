@@ -134,6 +134,9 @@
 "DOWNLOAD_VOICE_MESSAGES_TITLE" = "Download voice messages";
 "DOWNLOAD_VOICE_MESSAGES_DETAIL" = "Save voice messages to your device after playing them (long-press on an audio message to download it).";
 
+"BLOCK_SCREENSHOT_DETECTION_TITLE" = "Block screenshot detection";
+"BLOCK_SCREENSHOT_DETECTION_DETAIL" = "Allows you to screenshot \"secure\" chats without being blocked.";
+
 /*Profiles*/
 "FOLLOW_CONFIRM_TITLE" = "Confirm follows";
 "FOLLOW_CONFIRM_DETAIL" = "Ask before following someone.";
