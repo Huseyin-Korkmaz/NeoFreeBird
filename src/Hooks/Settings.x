@@ -4,6 +4,7 @@
 //
 
 #import "HookHelpers.h"
+#import "Headers/XHeaders.h"
 
 // MARK: - NeoFreeBird settings entry
 
@@ -264,6 +265,34 @@ static NSArray* sectionsWithNeoFreeBirdEntry(TFNItemsDataViewController* setting
 
     return [UIFont fontWithName:customName size:size] ?: origFont;
 }
+%end
+
+%hook XDSButtonContentElement
++ (id)labelWithText:(id)text font:(id)font color:(id)color {
+
+    id orig = %orig;
+    if (![[NSUserDefaults standardUserDefaults] boolForKey:@"custom_fonts"]) {
+        return orig;
+    }
+
+    BOOL isBold = [font containsString:@"Bold"] ||
+                  [font containsString:@"Heavy"];
+
+    NSString *customName = [[NSUserDefaults standardUserDefaults]
+        objectForKey:isBold ? @"bhtwitter_font_2" : @"bhtwitter_font_1"];
+    if (!customName) {
+        return orig;
+    }
+    UIFont *customFont = [UIFont fontWithName:customName
+                                         size:[(UIFont *)orig pointSize]];
+    if (!customFont) {
+        return orig;
+    }
+
+    return %orig(text, customFont, color);
+
+}
+
 %end
 
 // Cephei blocks HBPreferences access from app processes unless this opt-in
