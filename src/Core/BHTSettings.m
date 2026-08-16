@@ -288,6 +288,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"type": @"toggle"
                     },
                     @{
+                        @"key": @"show_account_location",
+                        @"default": @YES,
+                        @"type": @"toggle"
+                    },
+                    @{
                         @"key": @"upload_full_hd_videos",
                         @"default": @NO,
                         @"type": @"toggle"
