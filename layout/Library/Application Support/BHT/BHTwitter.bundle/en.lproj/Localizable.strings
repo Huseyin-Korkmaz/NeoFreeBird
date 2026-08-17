@@ -98,6 +98,9 @@
 "HIDE_VIEW_COUNT_TITLE" = "Hide views";
 "HIDE_VIEW_COUNT_DETAIL" = "Don't show views under Tweets.";
 
+"DISABLE_MEDIA_CAROUSEL_TITLE" = "Disable media carousel";
+"DISABLE_MEDIA_CAROUSEL_DETAIL" = "Reverts the new look for mulitple media attachments.";
+
 "HIDE_BOOKMARK_BUTTON_TITLE" = "Hide bookmarks";
 "HIDE_BOOKMARK_BUTTON_DETAIL" = "Remove the bookmark button from Tweets.";
 "HIDE_DOWNVOTE_BUTTON_TITLE" = "Hide downvotes";
