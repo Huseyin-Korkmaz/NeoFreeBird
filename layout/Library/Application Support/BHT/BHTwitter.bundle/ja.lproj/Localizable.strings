@@ -181,6 +181,26 @@
 
 "CUSTOM_TAB_BAR_OPTION_TITLE" = "ナビゲーションバーを編集";
 
+"MODERN_SETTINGS_CHAT_TITLE" = "チャットの設定";
+"MODERN_SETTINGS_CHAT_SUBTITLE" = "Xチャットのインターフェースに機能を追加する。";
+
+/*Chat*/
+"HIDE_TYPING_INDICATOR_TITLE" = "「入力中」の表示を非表示";
+"HIDE_TYPING_INDICATOR_DETAIL" = "チャット相手に「入力中」のステータスを送信しないようにします。";
+
+"DOWNLOAD_VOICE_MESSAGES_TITLE" = "ボイスメッセージのダウンロード";
+"DOWNLOAD_VOICE_MESSAGES_DETAIL" = "再生したボイスメッセージを端末に保存します（音声を長押ししてダウンロード）。";
+
+"BLOCK_SCREENSHOT_DETECTION_TITLE" = "スクリーンショット検知のブロック";
+"BLOCK_SCREENSHOT_DETECTION_DETAIL" = "ブロックされることなくシークレットチャットのスクリーンショットを撮影できます。";
+
+/*Dim Theme*/
+"ENABLE_DIM_THEME_TITLE" = "ダークブルーテーマを有効化";
+"ENABLE_DIM_THEME_DETAIL" = "削除されたTwitterのダークブルー（Dim）テーマを復元します。ダークモードの有効化とアプリの再起動が必要です。";
+"DIM_THEME_RESTART_ALERT_TITLE" = "再起動が必要です";
+"DIM_THEME_RESTART_ALERT_MESSAGE" = "ダークブルーテーマを適用するにはアプリの再起動が必要です。";
+"DIM_THEME_RESTART_ALERT_RESTART_BUTTON" = "再起動";
+
 /*Layout*/
 "HIDE_SPACES_TITLE" = "スペースバーを非表示";
 
