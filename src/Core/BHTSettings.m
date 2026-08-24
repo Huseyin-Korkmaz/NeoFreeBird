@@ -382,8 +382,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                     },
                     @{@"key": @"always_open_safari",
                       @"default": @NO},
+                    // X's new article webview does not work under
+                    // LiveContainer, so default it off there rather than
+                    // forcing the switch on for every guest install.
                     @{@"key": @"new_inapp_webview",
-                      @"default": @YES}
+                      @"default": @(![BHTManager isLiveContainer])}
                 ]
             },
             @"debug": @{
