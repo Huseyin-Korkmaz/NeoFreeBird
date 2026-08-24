@@ -219,11 +219,31 @@ static void togglePlayback(TAVPlayer* player) {
     }
 }
 
+static const void* kBHTTwoFingerTapKey = &kBHTTwoFingerTapKey;
+
 %hook _TtC14T1TwitterSwift17ImmersiveCardView
 
-- (void)handleSingleTap:(UITapGestureRecognizer*)tap {
+- (void)didMoveToWindow {
+    %orig;
+
+    if (!self.window || objc_getAssociatedObject(self, kBHTTwoFingerTapKey)) {
+        return;
+    }
+
+    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]
+        initWithTarget:self
+                action:@selector(bht_handleTwoFingerTap:)];
+    tap.numberOfTouchesRequired = 2;
+    tap.numberOfTapsRequired = 1;
+    [self addGestureRecognizer:tap];
+
+    objc_setAssociatedObject(self, kBHTTwoFingerTapKey, tap,
+                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+%new
+- (void)bht_handleTwoFingerTap:(UITapGestureRecognizer*)tap {
     if (![BHTSettings boolForKey:@"tap_to_pause"]) {
-        %orig; 
         return;
     }
 
@@ -237,13 +257,13 @@ static void togglePlayback(TAVPlayer* player) {
 
     TAVPlayer* player = pageView ? immersivePagePlayer(pageView) : nil;
     if (!player) {
-        %orig;
         return;
     }
 
     BOOL wasPlaying = player.playbackState.timeControlStatus != 0;
     togglePlayback(player);
-    [self setPausedByUser:wasPlaying];  
+
+    [self setPausedByUser:wasPlaying];
 }
 
 %end

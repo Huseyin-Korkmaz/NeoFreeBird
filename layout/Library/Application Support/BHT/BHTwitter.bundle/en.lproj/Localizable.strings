@@ -184,7 +184,7 @@
 "RESTORE_VIDEO_TIMESTAMP_DETAIL" = "Shows timestamp on immersive player.";
 
 "TAP_TO_PAUSE_TITLE" = "Tap to pause videos";
-"TAP_TO_PAUSE_DETAIL" = "Tap on a video to pause it, instead of having to use the pause button.";
+"TAP_TO_PAUSE_DETAIL" = "Tap with 2 fingers on a video to pause it, instead of having to use the pause button.";
 
 "DISABLE_IMMERSIVE_SCROLL_TITLE" = "No video feed scrolling";
 
