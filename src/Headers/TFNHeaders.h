@@ -13,6 +13,8 @@
 @property (nonatomic, strong) NSString* username;
 @property (nonatomic, strong) NSString* displayUsername;
 @property (nonatomic, strong) NSString* fullName;
+@property (nonatomic, readonly) NSInteger userID;
+@property (nonatomic, strong) NSDate* createdDate;
 @property (nonatomic, strong) id scribe;
 @end
 
@@ -134,6 +136,10 @@
 - (void)tfn_dismissAnimated:(id)sender;
 - (void)tfn_presentFromViewController:(UIViewController*)viewController
                              animated:(BOOL)animated;
+@end
+
+@interface TFNTwitterUserDataSource : NSObject
+@property (nonatomic, strong) TFNTwitterAccount* user;
 @end
 
 @interface TFNBarButtonItemButton : UIButton

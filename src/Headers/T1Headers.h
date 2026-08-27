@@ -116,6 +116,7 @@
 @property (readonly, copy, nonatomic) NSString* username;
 @property (readonly, copy, nonatomic) NSString* bio;
 @property (readonly, copy, nonatomic) NSString* url;
+@property (readonly, copy, nonatomic) TFNTwitterUserDataSource* userDataSource;
 @property (readonly, nonatomic) NSNumber* tweetCount;
 @end
 
