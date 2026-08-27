@@ -153,6 +153,9 @@
 "COPY_PROFILE_INFO_TITLE" = "Copy profile details";
 "COPY_PROFILE_INFO_DETAIL" = "Copy usernames, bios, and more with one tap.";
 
+"FAST_BLOCK_TITLE" = "Fast block/mute";
+"FAST_BLOCK_DETAIL" = "Block or mute accounts without the confirmation dialog.";
+
 "DISABLE_ARTICLES_TITLE" = "No Articles tab";
 "DISABLE_ARTICLES_DETAIL" = "Hide the Articles tab in profiles.";
 

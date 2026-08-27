@@ -23,7 +23,19 @@
 @interface TUIFollowControlCustomScreenshot : UIView
 @end
 
+// Follow/block control on profiles and user rows. Each destructive action is
+// split in two: -_blockUser:event: puts up the confirmation and -_doBlockUser:
+// event: is what its confirm button ends up calling.
+@interface TUIFollowControl : UIView
+@property (nonatomic) BOOL confirmBlock;
+- (void)_doBlockUser:(id)user event:(id)event;
+- (void)_doUnblockUser:(id)user event:(id)event;
+- (void)_doBlockMessageUser:(id)user event:(id)event;
+- (void)_doUnblockMessageUser:(id)user event:(id)event;
+@end
+
 @interface TUIFollowButtonV2: UIControl
+@property (nonatomic) BOOL confirmBlock;
 - (void)buttonTapped;
 @end
 
