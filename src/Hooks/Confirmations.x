@@ -43,6 +43,20 @@ static void ShowConfirmation(void (^confirmed)(void)) {
 // MARK: - Follow confirm
 
 
+%hook TUIFollowControl
+
+- (void)_followUser:(id)sender event:(id)event {
+    if (![BHTSettings boolForKey:@"follow_confirm"]) {
+        return %orig;
+    }
+
+    ShowConfirmation(^{
+        %orig;
+    });
+}
+
+%end
+
 %hook TUIFollowButtonV2
 
 - (void)buttonTapped {
