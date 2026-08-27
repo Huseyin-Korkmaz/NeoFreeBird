@@ -363,3 +363,12 @@
 "LEGACY_LOGIN_RATE_LIMITED_TITLE" = "Muhtemelen istek limiti aşıldı (243)";
 "LEGACY_LOGIN_RATE_LIMITED_MESSAGE" = "Çok fazla deneme yapıldı. Bir süre bekleyin veya ağı/VPN'i değiştirip tekrar deneyin.\n\nDetaylar:\n%@";
 "LEGACY_LOGIN_UNKNOWN_ERROR" = "Bilinmeyen hata";
+
+/* Subscription Keys */
+"SUBSCRIPTION_APP_ICON_SETTINGS_TITLE" = "Uygulama simgesi";
+"SUBSCRIPTION_APP_ICON_SETTINGS_DETAIL" = "Twitter için özel bir uygulama simgesi seçin.";
+
+"SUBSCRIPTION_TAB_CUSTOMIZATION_RESTORE_BUTTON_TITLE" = "Varsayılana sıfırla";
+
+"SUBSCRIPTION_UNDO_SEND_DURATION_TITLE" = "Geri alma süresi";
+"SUBSCRIPTION_UNDO_SEND_DURATION_DETAIL" = "Tweet atıldıktan sonra geri alma butonunun ne kadar süre kalacağını seçin.";
