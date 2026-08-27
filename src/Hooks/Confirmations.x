@@ -45,6 +45,19 @@ static void ShowConfirmation(void (^confirmed)(void)) {
 
 %end
 
+%hook T1PersistentComposeViewController
+- (void)_t1_sendReply {
+    if (![BHTSettings boolForKey:@"tweet_confirm"]) {
+        return %orig;
+    }
+
+    ShowConfirmation(^{
+        %orig;
+    });
+}
+
+%end
+
 // MARK: - Follow confirm
 
 

@@ -133,6 +133,7 @@
 - (id)_tweetsSubtitle;
 @end
 
+
 #pragma mark - Status views
 
 @protocol T1StatusInlineActionButtonDelegate <NSObject>
@@ -150,6 +151,7 @@
 
 @interface T1PersistentComposeViewController : UIViewController
 @property (readonly, nonatomic) id statusViewModel;
+-(void)_t1_sendReply;
 @end
 
 @protocol TTACoreStatusViewEventHandler <NSObject>
