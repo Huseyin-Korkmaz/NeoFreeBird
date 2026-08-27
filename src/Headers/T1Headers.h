@@ -23,6 +23,10 @@
 @interface TUIFollowControlCustomScreenshot : UIView
 @end
 
+@interface TUIFollowButtonV2: UIControl
+- (void)buttonTapped;
+@end
+
 @interface TTMAssetVideoFile : NSObject
 @property (nonatomic, copy, readonly) NSString* filePath;
 @property (nonatomic, assign, readonly) CGFloat duration;

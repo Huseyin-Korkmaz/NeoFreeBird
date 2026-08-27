@@ -10,6 +10,9 @@
 
 "CONFIRM_ALERT_MESSAGE" = "Sure you meant to do that?";
 
+"YES_ACTION_LABEL" = "Yes";
+"NO_ACTION_LABEL" = "No";
+
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "General";
 "MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Lock the app, keep the navigation bar visible, and more.";
