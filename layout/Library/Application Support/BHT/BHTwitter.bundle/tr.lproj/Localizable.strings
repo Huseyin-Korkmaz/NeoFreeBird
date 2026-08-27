@@ -366,9 +366,19 @@
 
 /* Subscription Keys */
 "SUBSCRIPTION_APP_ICON_SETTINGS_TITLE" = "Uygulama simgesi";
-"SUBSCRIPTION_APP_ICON_SETTINGS_DETAIL" = "Twitter için özel bir uygulama simgesi seçin.";
+"SUBSCRIPTION_APP_ICON_SETTINGS_DETAIL" = "Cihazınızın ana ekranı için özel bir uygulama simgesi seçin. İstediğiniz zaman değiştirin.";
 
 "SUBSCRIPTION_TAB_CUSTOMIZATION_RESTORE_BUTTON_TITLE" = "Varsayılana sıfırla";
+"Restore to default" = "Varsayılana sıfırla";
 
 "SUBSCRIPTION_UNDO_SEND_DURATION_TITLE" = "Geri alma süresi";
 "SUBSCRIPTION_UNDO_SEND_DURATION_DETAIL" = "Tweet atıldıktan sonra geri alma butonunun ne kadar süre kalacağını seçin.";
+
+/* Common UI Elements & Time Selectors */
+"Off" = "Kapalı";
+"Cancel" = "Vazgeç";
+"5 seconds" = "5 saniye";
+"10 seconds" = "10 saniye";
+"20 seconds" = "20 saniye";
+"30 seconds" = "30 saniye";
+"60 seconds" = "60 saniye";
