@@ -31,14 +31,12 @@
     return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 }
 
-// A timeout of 0 reads as "Off"; any positive value shows its seconds.
+// A timeout of 0 reads as "Kapalı"; any positive value shows its seconds in Turkish.
 - (NSString*)labelForTimeout:(NSInteger)seconds {
     if (seconds <= 0) {
-        return [[BHTBundle sharedBundle] localizedStringForKey:@"GENERIC_OFF_LABEL"];
+        return @"Kapalı";
     }
-    NSString* format = [[BHTBundle sharedBundle]
-        localizedStringForKey:@"SUBSCRIPTION_UNDO_SEND_DURATION_LABEL"];
-    return [NSString stringWithFormat:format, (long)seconds];
+    return [NSString stringWithFormat:@"%ld saniye", (long)seconds];
 }
 
 - (NSString*)undoTimeoutSubtitle {
