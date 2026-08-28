@@ -121,8 +121,11 @@
 "DISABLE_AUTO_TRANSLATE_TITLE" = "自動翻訳を無効にする";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "ポストやプロフィールを自動的に翻訳しないようにします。";
 
-"SQUARE_AVATARS_TITLE" = "プロフィール画像を正方形にする";
-"SQUARE_AVATARS_DETAIL" = "旧Twitterのように、すべてのプロフィール画像を正方形で表示します。";
+"DISABLE_MEDIA_CAROUSEL_TITLE" = "ポスト内のメディアをグリッド表示"
+"DISABLE_MEDIA_CAROUSEL_DETAIL" = "ポスト内のメディアをカルーセルではなく、グリッド一覧で表示します。"
+
+"SQUARE_AVATARS_TITLE" = "正方形のプロフィール写真";
+"SQUARE_AVATARS_DETAIL" = "昔のTwitterのように、ブランドアカウントのような正方形のプロフィール写真を全員に適用します。";
 
 "REPLY_SORTING_TITLE" = "リプライの並べ替えを無効にする";
 "REPLY_SORTING_DETAIL" = "ポストのリプライにある並べ替え機能を無効にします。";
@@ -149,6 +152,9 @@
 
 "COPY_PROFILE_INFO_TITLE" = "プロフィール情報をコピー";
 "COPY_PROFILE_INFO_DETAIL" = "ユーザー名やプロフィール情報などをワンタップでコピーできるようにします。";
+
+"FAST_BLOCK_TITLE" = "1タップブロック・ミュート";
+"FAST_BLOCK_DETAIL" = "確認ダイアログを表示させず、1タップでアカウントをブロックまたはミュートします。";
 
 "DISABLE_ARTICLES_TITLE" = "記事タブを非表示";
 "DISABLE_ARTICLES_DETAIL" = "プロフィールから「記事」タブを非表示にします。";

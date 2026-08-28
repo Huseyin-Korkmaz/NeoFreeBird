@@ -10,6 +10,9 @@
 
 "CONFIRM_ALERT_MESSAGE" = "Sure you meant to do that?";
 
+"YES_ACTION_LABEL" = "Yes";
+"NO_ACTION_LABEL" = "No";
+
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "General";
 "MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Lock the app, keep the navigation bar visible, and more.";
@@ -150,6 +153,9 @@
 "COPY_PROFILE_INFO_TITLE" = "Copy profile details";
 "COPY_PROFILE_INFO_DETAIL" = "Copy usernames, bios, and more with one tap.";
 
+"FAST_BLOCK_TITLE" = "Fast block/mute";
+"FAST_BLOCK_DETAIL" = "Block or mute accounts without the confirmation dialog.";
+
 "DISABLE_ARTICLES_TITLE" = "No Articles tab";
 "DISABLE_ARTICLES_DETAIL" = "Hide the Articles tab in profiles.";
 
@@ -275,6 +281,8 @@
 "COPY_PROFILE_INFO_MENU_OPTION_4" = "Copy website";
 "COPY_PROFILE_INFO_MENU_OPTION_5" = "Copy location";
 "COPY_PROFILE_INFO_MENU_OPTION_6" = "Copy profile URL";
+"COPY_PROFILE_INFO_MENU_OPTION_7" = "Copy user ID";
+"COPY_PROFILE_INFO_MENU_OPTION_8" = "Copy date joined";
 
 /*Theme*/
 "THEME_SETTINGS_NAVIGATION_TITLE" = "Theme";

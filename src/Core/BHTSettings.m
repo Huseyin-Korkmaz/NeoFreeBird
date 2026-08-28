@@ -187,6 +187,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"type": @"toggle"
                     },
                     @{
+                        @"key": @"fast_block",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
                         @"key": @"disable_articles",
                         @"default": @YES,
                         @"type": @"toggle"
