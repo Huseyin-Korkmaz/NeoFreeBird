@@ -78,6 +78,7 @@
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Linkleri Safari veya varsayılan tarayıcıda aç.";
 
 "SHARING_DOMAIN_TITLE" = "Paylaşım alan adı";
+"SHARING_DOMAIN_DETAIL" = "Paylaşılan Tweet bağlantılarında kullanılan alan adını özelleştirin.";
 
 /*Tweets*/
 "TWEET_TO_IMAGE_TITLE" = "Tweet’i görsel olarak kaydet";
