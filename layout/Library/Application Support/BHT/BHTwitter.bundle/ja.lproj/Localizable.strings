@@ -124,8 +124,8 @@
 "DISABLE_MEDIA_CAROUSEL_TITLE" = "ポスト内のメディアをグリッド表示"
 "DISABLE_MEDIA_CAROUSEL_DETAIL" = "ポスト内のメディアをカルーセルではなく、グリッド一覧で表示します。"
 
-"SQUARE_AVATARS_TITLE" = "正方形のプロフィール写真";
-"SQUARE_AVATARS_DETAIL" = "昔のTwitterのように、ブランドアカウントのような正方形のプロフィール写真を全員に適用します。";
+"SQUARE_AVATARS_TITLE" = "正方形のプロフィール画像";
+"SQUARE_AVATARS_DETAIL" = "旧Twitterのように、ブランドアカウントのような正方形のプロフィール画像を全員に適用します。";
 
 "REPLY_SORTING_TITLE" = "リプライの並べ替えを無効にする";
 "REPLY_SORTING_DETAIL" = "ポストのリプライにある並べ替え機能を無効にします。";
