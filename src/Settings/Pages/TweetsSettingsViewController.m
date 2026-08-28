@@ -31,7 +31,8 @@
     return [super tableView:tableView cellForRowAtIndexPath:indexPath];
 }
 
-// A timeout of 0 reads as "Off"; any positive value shows its - (NSString*)labelForTimeout:(NSInteger)seconds {
+// A timeout of 0 reads as "Off"; any positive value shows its seconds.
+- (NSString*)labelForTimeout:(NSInteger)seconds {
     if (seconds <= 0) {
         return [[BHTBundle sharedBundle] localizedStringForKey:@"GENERIC_OFF_LABEL"];
     }
@@ -62,12 +63,11 @@
                                                 }]];
     }
 
-        [alert addAction:[UIAlertAction
+    [alert addAction:[UIAlertAction
                          actionWithTitle:[[BHTBundle sharedBundle]
                                              localizedStringForKey:@"CANCEL_ACTION_LABEL"]
                                    style:UIAlertActionStyleCancel
                                  handler:nil]];
-
 
     [self presentViewController:alert animated:YES completion:nil];
 }
