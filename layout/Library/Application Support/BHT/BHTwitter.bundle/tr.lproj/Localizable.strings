@@ -12,6 +12,10 @@
 
 "YES_ACTION_LABEL" = "Evet";
 "NO_ACTION_LABEL" = "Hayır";
+"CANCEL_ACTION_LABEL" = "Vazgeç";
+"CONTINUE_ACTION_LABEL" = "Devam et";
+"DONE" = "Bitti";
+"SAVE" = "Kaydet";
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Genel";
@@ -169,6 +173,9 @@
 "SHOW_UNROUNDED_COUNTS_TITLE" = "Tam sayıları göster";
 "SHOW_UNROUNDED_COUNTS_DETAIL" = "Takipçi, takip ve tweet sayılarını yuvarlamak yerine tam sayı olarak gösterir.";
 
+"FAST_BLOCK_TITLE" = "Hızlı engelleme";
+"FAST_BLOCK_DETAIL" = "Profillerde hızlıca engelleme seçeneği sunar.";
+
 /*Search*/
 "NO_HISTORY_TITLE" = "Arama geçmişi yok";
 "NO_HISTORY_DETAIL" = "Twitter artık aramalarını kaydetmeyecek.";
@@ -285,6 +292,7 @@
 "THEME_SETTINGS_NAVIGATION_DETAIL" = "Yalnızca sizin göreceğiniz bir tema rengi seçin.";
 
 /*Tab bar*/
+"TAB_CUSTOMIZATION_TITLE" = "Sekmeleri düzenle";
 "CUSTOM_TAB_BAR_SETTINGS_NAVIGATION_TITLE" = "Sekmeleri düzenle";
 "CUSTOM_TAB_BAR_GRID_DETAIL" = "Eklemek veya kaldırmak için bir öğeye dokunun. Yeniden sıralamak için aşağıdaki çubuğu sürükleyin.";
 "CUSTOM_TAB_BAR_RESET_MESSAGE" = "Geçerli gezinme çubuğunu varsayılanlara döndürmek istediğinizden emin misiniz?";
