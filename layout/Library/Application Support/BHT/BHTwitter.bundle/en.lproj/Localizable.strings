@@ -68,6 +68,9 @@
 "HIDE_TIMELINE_PROMPTS_TITLE" = "No timeline prompts";
 "HIDE_TIMELINE_PROMPTS_DETAIL" = "Remove banners like 'Add contacts'.";
 
+"HIDE_BLOCKED_RETWEETS_TITLE" = "Hide blocked retweets";
+"HIDE_BLOCKED_RETWEETS_DETAIL" = "Hide retweets of accounts who've blocked you.";
+
 "PADLOCK_TITLE" = "Lock Twitter";
 "PADLOCK_DETAIL" = "Require Face ID or a passcode to open Twitter.";
 

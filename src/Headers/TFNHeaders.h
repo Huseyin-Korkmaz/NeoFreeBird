@@ -18,6 +18,12 @@
 @property (nonatomic, strong) id scribe;
 @end
 
+@interface TFNTwitterUser : NSObject
+@property (readonly, nonatomic) long long userID;
+@property (readonly, copy, nonatomic) NSString* username;
+@property (readonly, nonatomic) TFSTwitterRelationship* relationship;
+@end
+
 @interface TFNTableView : UITableView
 @end
 

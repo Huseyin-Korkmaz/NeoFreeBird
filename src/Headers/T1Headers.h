@@ -154,6 +154,11 @@
 -(void)_t1_sendReply;
 @end
 
+@interface T1URTTimelineStatusItemViewModel : NSObject
+@property (nonatomic, readonly) BOOL isRetweet;
+@property (nonatomic, readonly) TFNTwitterUser* representedFromUser;
+@end
+
 @protocol TTACoreStatusViewEventHandler <NSObject>
 @end
 
