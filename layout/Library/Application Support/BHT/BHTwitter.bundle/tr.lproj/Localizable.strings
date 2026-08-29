@@ -16,6 +16,7 @@
 "CONTINUE_ACTION_LABEL" = "Devam et";
 "DONE" = "Bitti";
 "SAVE" = "Kaydet";
+"SAVE_ACTION_LABEL" = "Kaydet";
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Genel";
@@ -323,6 +324,9 @@
 
 "HIDE_VERIFIED_TWEETS_TITLE" = "Onaylı Tweetleri gizle";
 "HIDE_VERIFIED_TWEETS_DETAIL" = "Zaman akışınızda ve yanıtlarınızda onaylı hesapların Tweetlerini gizler (Yazar aynı ileti dizisinde yanıt vermediyse veya hesabı takip etmiyorsanız).";
+
+"HIDE_BLOCKED_RETWEETS_TITLE" = "Engellenen Retweetleri gizle";
+"HIDE_BLOCKED_RETWEETS_DETAIL" = "Engellediğiniz kişilerin başkaları tarafından yapılan Retweetlerini zaman akışınızda gizler.";
 
 "HIDE_TWEET_BUTTON_TITLE" = "Tweet at butonunu gizle";
 "HIDE_TWEET_BUTTON_DETAIL" = "Gezinme çubuğundan Tweet at butonunu kaldırır.";
