@@ -154,6 +154,16 @@
 -(void)_t1_sendReply;
 @end
 
+@interface T1ImmersiveFullScreenViewController : UIViewController
+@property (retain, nonatomic) UIPanGestureRecognizer *dismissGesture;
+@end
+
+@interface T1ImmersiveViewController : UIViewController
+@end
+
+@interface T1ImmersiveViewControllerV2 : UIViewController
+@end
+
 @interface T1URTTimelineStatusItemViewModel : NSObject
 @property (nonatomic, readonly) BOOL isRetweet;
 @property (nonatomic, readonly) TFNTwitterUser* representedFromUser;

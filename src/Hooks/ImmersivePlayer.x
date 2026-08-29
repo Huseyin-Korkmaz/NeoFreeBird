@@ -177,28 +177,79 @@ static BOOL isImmersiveCardPan(id viewController,
     return panIvar && object_getIvar(viewController, panIvar) == gesture;
 }
 
+static BOOL isUpwardPan(UIGestureRecognizer *gesture) {
+    if (![gesture isKindOfClass:[UIPanGestureRecognizer class]]) return NO;
+    UIPanGestureRecognizer *pan = (UIPanGestureRecognizer *)gesture;
+    CGPoint v = [pan velocityInView:gesture.view];
+    return v.y < 0.0;
+}
+
 %hook T1ImmersiveViewController
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer*)gesture {
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture {
     if ([BHTSettings boolForKey:@"disable_immersive_scroll"] &&
         isImmersiveCardPan(self, gesture)) {
+        if (isUpwardPan(gesture)) {
+            return NO;
+        }
+        return YES;
+    }
+
+    return %orig;
+}
+
+- (BOOL)allowsUpwardSwipeToDismiss {
+    if ([BHTSettings boolForKey:@"disable_immersive_scroll"]) {
         return NO;
     }
 
     return %orig;
 }
 
+- (void)handlePan:(UIPanGestureRecognizer *)pan {
+    if ([BHTSettings boolForKey:@"disable_immersive_scroll"]) {
+        CGPoint v = [pan velocityInView:self.view];
+        if (v.y < 0.0) {
+            return;
+        }
+    }
+
+    %orig(pan);
+}
+
 %end
 
 %hook T1ImmersiveViewControllerV2
 
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer*)gesture {
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gesture {
     if ([BHTSettings boolForKey:@"disable_immersive_scroll"] &&
         isImmersiveCardPan(self, gesture)) {
+        if (isUpwardPan(gesture)) {
+            return NO;
+        }
+        return YES;
+    }
+
+    return %orig;
+}
+
+- (BOOL)allowsUpwardSwipeToDismiss {
+    if ([BHTSettings boolForKey:@"disable_immersive_scroll"]) {
         return NO;
     }
 
     return %orig;
+}
+
+- (void)handlePan:(UIPanGestureRecognizer *)pan {
+    if ([BHTSettings boolForKey:@"disable_immersive_scroll"]) {
+        CGPoint v = [pan velocityInView:self.view];
+        if (v.y < 0.0) {
+            return;
+        }
+    }
+
+    %orig(pan);
 }
 
 %end
