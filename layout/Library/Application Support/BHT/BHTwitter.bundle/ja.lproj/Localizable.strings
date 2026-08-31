@@ -1,6 +1,6 @@
 /*
- Language: ja
- NeoFreeBird
+  Language: ja
+  NeoFreeBird
 */
 
 "NFB_SETTINGS_TITLE" = "NeoFreeBird";
@@ -9,6 +9,9 @@
 /*Alerts and popups*/
 
 "CONFIRM_ALERT_MESSAGE" = "続行しますか？";
+
+"YES_ACTION_LABEL" = "はい";
+"NO_ACTION_LABEL" = "いいえ";
 
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "一般";
@@ -65,6 +68,9 @@
 "HIDE_TIMELINE_PROMPTS_TITLE" = "タイムラインの案内を非表示";
 "HIDE_TIMELINE_PROMPTS_DETAIL" = "「連絡先を追加」などの案内バナーを非表示にします。";
 
+"HIDE_BLOCKED_RETWEETS_TITLE" = "ブロックしたユーザーのリツイートを非表示";
+"HIDE_BLOCKED_RETWEETS_DETAIL" = "あなたをブロックしているアカウントのリツイートを非表示にします。";
+
 "PADLOCK_TITLE" = "Xをロック";
 "PADLOCK_DETAIL" = "Xを開く際にFace IDまたはパスコードによる認証を必要とします。";
 
@@ -98,8 +104,8 @@
 "HIDE_VIEW_COUNT_TITLE" = "表示回数を非表示";
 "HIDE_VIEW_COUNT_DETAIL" = "ポストの下に表示される表示回数を非表示にします。";
 
-"DISABLE_MEDIA_CAROUSEL_TITLE" = "メディアカルーセルを無効にする";
-"DISABLE_MEDIA_CAROUSEL_DETAIL" = "複数のメディアを添付した際の新しい表示形式を無効にし、従来の表示に戻します。";
+"DISABLE_MEDIA_CAROUSEL_TITLE" = "ポスト内のメディアをグリッド表示";
+"DISABLE_MEDIA_CAROUSEL_DETAIL" = "ポスト内のメディアをカルーセルではなく、グリッド一覧で表示します。";
 
 "HIDE_BOOKMARK_BUTTON_TITLE" = "ブックマークボタンを非表示";
 "HIDE_BOOKMARK_BUTTON_DETAIL" = "ポストに表示されるブックマークボタンを非表示にします。";
@@ -120,9 +126,6 @@
 
 "DISABLE_AUTO_TRANSLATE_TITLE" = "自動翻訳を無効にする";
 "DISABLE_AUTO_TRANSLATE_DETAIL" = "ポストやプロフィールを自動的に翻訳しないようにします。";
-
-"DISABLE_MEDIA_CAROUSEL_TITLE" = "ポスト内のメディアをグリッド表示"
-"DISABLE_MEDIA_CAROUSEL_DETAIL" = "ポスト内のメディアをカルーセルではなく、グリッド一覧で表示します。"
 
 "SQUARE_AVATARS_TITLE" = "正方形のプロフィール画像";
 "SQUARE_AVATARS_DETAIL" = "旧Twitterのように、ブランドアカウントのような正方形のプロフィール画像を全員に適用します。";
@@ -281,6 +284,8 @@
 "COPY_PROFILE_INFO_MENU_OPTION_4" = "ウェブサイトをコピー";
 "COPY_PROFILE_INFO_MENU_OPTION_5" = "位置情報をコピー";
 "COPY_PROFILE_INFO_MENU_OPTION_6" = "プロフィールURLをコピー";
+"COPY_PROFILE_INFO_MENU_OPTION_7" = "ユーザーIDをコピー";
+"COPY_PROFILE_INFO_MENU_OPTION_8" = "登録日をコピー";
 
 /*Theme*/
 "THEME_SETTINGS_NAVIGATION_TITLE" = "テーマ";
