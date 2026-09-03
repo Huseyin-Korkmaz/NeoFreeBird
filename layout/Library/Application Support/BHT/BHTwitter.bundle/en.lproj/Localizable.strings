@@ -150,7 +150,7 @@
 "HIDE_TYPING_INDICATOR_DETAIL" = "Stop sending the \"typing...\" indicator to other people in chats.";
 
 "DOWNLOAD_VOICE_MESSAGES_TITLE" = "Download voice messages";
-"DOWNLOAD_VOICE_MESSAGES_DETAIL" = "Save voice messages to your device after playing them (long-press on an audio message to download it).";
+"DOWNLOAD_VOICE_MESSAGES_DETAIL" = "Save voice messages to your device after playing them (long-press on an audio message with 2 fingers to download it).";
 
 "BLOCK_SCREENSHOT_DETECTION_TITLE" = "Block screenshot detection";
 "BLOCK_SCREENSHOT_DETECTION_DETAIL" = "Allows you to screenshot \"secure\" chats without being blocked.";
@@ -377,6 +377,8 @@
 "LEGACY_LOGIN_RATE_LIMITED_TITLE" = "Likely rate limited (243)";
 "LEGACY_LOGIN_RATE_LIMITED_MESSAGE" = "Too many attempts. Wait a while or switch network/VPN, then try again.\n\nDetails:\n%@";
 "LEGACY_LOGIN_UNKNOWN_ERROR" = "Unknown error";
+
+"DOWNLOAD_ACTIVITY_VIEW_LABEL" = "Download media";
 
 /* Subscription Keys */
 "SUBSCRIPTION_APP_ICON_SETTINGS_TITLE" = "Change app icon";
