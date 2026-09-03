@@ -16,10 +16,7 @@
 #import "HookHelpers.h"
 #import <string.h>
 
-// Forward declarations & Class interfaces to fix compilation error
-@interface TFNBarButtonItemButton : UIView
-@end
-
+// Forward declaration for the Swift controller causing the compiler error
 @interface _TtC14DMConversation29SecureContainerViewController : UIViewController
 @end
 
@@ -140,7 +137,6 @@ static void nfb_applyChatScreenTint(UIView* view) {
         return;
     }
     
-    // Logos uzerinden super class çağrısını güvenli yapmak için
     %orig;
 }
 
