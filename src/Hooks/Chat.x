@@ -16,6 +16,13 @@
 #import "HookHelpers.h"
 #import <string.h>
 
+// Forward declarations & Class interfaces to fix compilation error
+@interface TFNBarButtonItemButton : UIView
+@end
+
+@interface _TtC14DMConversation29SecureContainerViewController : UIViewController
+@end
+
 // MARK: - Matching
 
 static BOOL isChatWebSocketURL(NSURL* url) {
@@ -132,15 +139,9 @@ static void nfb_applyChatScreenTint(UIView* view) {
         %orig;
         return;
     }
-    struct objc_super superInfo = {
-        .receiver = self,
-        .super_class = class_getSuperclass([self class])
-    };
-
-    ((void (*)(struct objc_super *, SEL))objc_msgSendSuper)(
-        &superInfo,
-        @selector(loadView)
-    );
+    
+    // Logos uzerinden super class çağrısını güvenli yapmak için
+    %orig;
 }
 
 %end
