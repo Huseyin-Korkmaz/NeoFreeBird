@@ -26,6 +26,15 @@
         {
           "version": "12.21",
           "buildVersion": "26",
+          "date": "2026-09-04T02:07:56Z",
+          "downloadURL": "https://github.com/orionblur/NeoFreeBird/releases/download/v6.6.1/orionblur-NFB-BHTwitter-sideloaded-X_6.6.1_12.21.ipa",
+          "size": 251173328,
+          "minOSVersion": "15.0",
+          "localizedDescription": "Version 6.6.1\n\nFixes\n- Fixed voice message downloading (now requires 2 fingers with a long press)\n- Fixed a crash that would happen when encountering any confirmation prompt"
+        },
+        {
+          "version": "12.21",
+          "buildVersion": "1",
           "date": "2026-09-03T00:48:51Z",
           "downloadURL": "https://github.com/orionblur/NeoFreeBird/releases/download/v6.6.0/orionblur-NFB-BHTwitter-sideloaded-X_6.6.0_12.21.ipa",
           "size": 251172512,
