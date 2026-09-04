@@ -5,6 +5,7 @@
 
 #import "HookHelpers.h"
 #import "Headers/UIHeaders.h"
+#import "Headers/TFNHeaders.h"
 #import <math.h>
 
 // MARK: - Custom accent color
@@ -332,10 +333,33 @@ static BOOL BHTIsExploreSearchBackgroundView(UIView* view) {
 
 %end
 
-%hook _TtC10TFNUISwift25SegmentedHighlightBarView
+
+%hook _TtC10TFNUISwift26LegacySegmentedTabBarStyle
+
+- (void)setHighlightBarColor:(UIColor*)color {
+    if (color && [BHTSettings boolForKey:@"tab_bar_theming"]) {
+        %orig(CurrentAccentColor());
+        return;
+    }
+    %orig(color);
+}
+
+%end
+
+%hook _TtC10TFNUISwift25LegacySegmentedTabBarView
+
+- (void)setStyle:(_TtC10TFNUISwift26LegacySegmentedTabBarStyle*)style {
+    if (style && [BHTSettings boolForKey:@"tab_bar_theming"]) {
+        style.highlightBarColor = CurrentAccentColor();
+    }
+    %orig(style);
+}
+
+%end
+
+%hook _TtC10TFNUISwift31LegacySegmentedHighlightBarView
 
 - (void)setBackgroundColor:(UIColor*)color {
-    // A nil assignment is the bar hiding its caret -- leave that alone.
     if (color && [BHTSettings boolForKey:@"tab_bar_theming"]) {
         %orig(CurrentAccentColor());
         return;

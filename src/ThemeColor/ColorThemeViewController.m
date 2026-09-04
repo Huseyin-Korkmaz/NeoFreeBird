@@ -14,6 +14,7 @@
 #import "Core/BHTBundle.h"
 #import "Core/BHTSettings.h"
 #import "Core/TwitterChirpFont.h"
+#import "Headers/TFNHeaders.h"
 #import "Headers/TWHeaders.h"
 #import "ThemeColor/Palette.h"
 
@@ -134,13 +135,25 @@ static UIColor* NativeAccentColor(NSUInteger option) {
 
 static void reapplySegmentedCaretAccent(UIView* view) {
     static Class caretClass;
+    static Class tabBarClass;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        caretClass = NSClassFromString(@"_TtC10TFNUISwift25SegmentedHighlightBarView");
+        caretClass = NSClassFromString(@"_TtC10TFNUISwift31LegacySegmentedHighlightBarView");
+        tabBarClass = NSClassFromString(@"_TtC10TFNUISwift25LegacySegmentedTabBarView");
     });
 
     if (caretClass && [view isKindOfClass:caretClass]) {
         view.backgroundColor = CurrentAccentColor();
+    }
+
+    if (tabBarClass && [view isKindOfClass:tabBarClass]) {
+        _TtC10TFNUISwift25LegacySegmentedTabBarView* tabBar =
+            (_TtC10TFNUISwift25LegacySegmentedTabBarView*)view;
+        _TtC10TFNUISwift26LegacySegmentedTabBarStyle* style = tabBar.style;
+        if (style) {
+            style.highlightBarColor = CurrentAccentColor();
+            tabBar.style = style;
+        }
     }
     for (UIView* subview in view.subviews) {
         reapplySegmentedCaretAccent(subview);
