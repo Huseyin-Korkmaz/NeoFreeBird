@@ -435,9 +435,12 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
 // MARK: - Force Inject Download Option into Native Video Menu (Bypass Restrictions)
 
 %hook T1StatusActionController
-- (NSArray *)actionItemsForStatus:(id)status options:(NSUInteger)options {
-    NSMutableArray *items = [%orig mutableCopy];
-    if (!items) items = [NSMutableArray array];
+- (id)actionItemsForStatus:(id)status options:(NSUInteger)options {
+    id origResult = %orig(status, options);
+    NSMutableArray *items = [origResult mutableCopy];
+    if (!items) {
+        items = [NSMutableArray array];
+    }
 
     if (![BHTSettings boolForKey:@"download_videos"]) {
         return items;
