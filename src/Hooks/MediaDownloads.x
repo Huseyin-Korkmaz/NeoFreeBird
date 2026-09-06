@@ -380,7 +380,7 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
 }
 %end
 
-// MARK: - Tweet video download
+// MARK: - Tweet video download (Share Sheet)
 
 %hook UIViewController
 - (NSArray*)_t1_actionItemsForStatus:(__unsafe_unretained id)status
@@ -429,5 +429,47 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
     NSUInteger insertIndex = newItems.count > 0 ? newItems.count - 1 : 0;
     [newItems insertObject:downloadItem atIndex:insertIndex];
     return newItems;
+}
+%end
+
+// MARK: - Force Enable Download on Long Press Context Menu (Bypass Restrictions)
+
+%hook UIView
+- (void)addInteraction:(id<UIInteraction>)interaction {
+    %orig;
+
+    if ([interaction isKindOfClass:[UIContextMenuInteraction class]]) {
+        UIContextMenuInteraction *menuInteraction = (UIContextMenuInteraction *)interaction;
+        UIView *view = menuInteraction.view;
+        
+        if (view && [view respondsToSelector:@selector(mediaEntity)]) {
+            id mediaEntity = [view performSelector:@selector(mediaEntity)];
+            if (mediaEntity) {
+                objc_setAssociatedObject(menuInteraction, "nfb_media_entity", mediaEntity, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            }
+        }
+    }
+}
+%end
+
+%hook UIContextMenuInteraction
+- (UIContextMenuConfiguration *)_delegate_configurationForMenuAtLocation:(CGPoint)location {
+    UIContextMenuConfiguration *config = %orig;
+    
+    id mediaEntity = objc_getAssociatedObject(self, "nfb_media_entity");
+    if (mediaEntity) {
+        // Twitter bu video için indirme seçeneğini engellediyse/kaldırdıysa zorla enjekte ediyoruz
+        if (!config) {
+            config = [UIContextMenuConfiguration configurationWithIdentifier:nil previewProvider:nil actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
+                UIAction *downloadAction = [UIAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_VIDEOS_TITLE"] image:[UIImage systemImageNamed:@"square.and.arrow.down"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+                    DownloadInlineButton *downloader = [%c(DownloadInlineButton) new];
+                    [downloader presentDownloadOptionsForMediaEntities:@[mediaEntity]];
+                }];
+                return [UIMenu menuWithTitle:@"" children:@[downloadAction]];
+            }];
+        }
+    }
+    
+    return config;
 }
 %end
