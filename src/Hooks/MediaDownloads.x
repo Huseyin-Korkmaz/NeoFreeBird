@@ -380,7 +380,7 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
 }
 %end
 
-// MARK: - Tweet video download (Share Sheet)
+// MARK: - Tweet video download (Share Sheet & Context Menu)
 
 %hook UIViewController
 - (NSArray*)_t1_actionItemsForStatus:(__unsafe_unretained id)status
@@ -432,44 +432,55 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
 }
 %end
 
-// MARK: - Force Enable Download on Long Press Context Menu (Bypass Restrictions)
+// MARK: - Force Inject Download Option into Native Video Menu (Bypass Restrictions)
 
-%hook UIView
-- (void)addInteraction:(id<UIInteraction>)interaction {
-    %orig;
+%hook T1StatusActionController
+- (NSArray *)actionItemsForStatus:(id)status options:(NSUInteger)options {
+    NSMutableArray *items = [%orig mutableCopy];
+    if (!items) items = [NSMutableArray array];
 
-    if ([interaction isKindOfClass:[UIContextMenuInteraction class]]) {
-        UIContextMenuInteraction *menuInteraction = (UIContextMenuInteraction *)interaction;
-        UIView *view = menuInteraction.view;
-        
-        if (view && [view respondsToSelector:@selector(mediaEntity)]) {
-            id mediaEntity = [view performSelector:@selector(mediaEntity)];
-            if (mediaEntity) {
-                objc_setAssociatedObject(menuInteraction, "nfb_media_entity", mediaEntity, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    if (![BHTSettings boolForKey:@"download_videos"]) {
+        return items;
+    }
+
+    // Check whether a download action item already exists in the list
+    BOOL hasDownload = NO;
+    for (id item in items) {
+        if ([item respondsToSelector:@selector(title)] && 
+            ([[item title] containsString:@"İndir"] || [[item title] containsString:@"Download"])) {
+            hasDownload = YES;
+            break;
+        }
+    }
+
+    // Force inject the custom download item if Twitter restricted or removed it natively
+    if (!hasDownload) {
+        TFSTwitterEntityMedia *media = nil;
+        if ([status respondsToSelector:@selector(entities)]) {
+            NSArray *mediaEntities = [[status entities] media];
+            for (TFSTwitterEntityMedia *m in mediaEntities) {
+                if (m.videoInfo && m.videoInfo.variants.count > 0) {
+                    media = m;
+                    break;
+                }
             }
         }
-    }
-}
-%end
 
-%hook UIContextMenuInteraction
-- (UIContextMenuConfiguration *)_delegate_configurationForMenuAtLocation:(CGPoint)location {
-    UIContextMenuConfiguration *config = %orig;
-    
-    id mediaEntity = objc_getAssociatedObject(self, "nfb_media_entity");
-    if (mediaEntity) {
-        // Twitter bu video için indirme seçeneğini engellediyse/kaldırdıysa zorla enjekte ediyoruz
-        if (!config) {
-            config = [UIContextMenuConfiguration configurationWithIdentifier:nil previewProvider:nil actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
-                UIAction *downloadAction = [UIAction actionWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_VIDEOS_TITLE"] image:[UIImage systemImageNamed:@"square.and.arrow.down"] identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
-                    DownloadInlineButton *downloader = [%c(DownloadInlineButton) new];
-                    [downloader presentDownloadOptionsForMediaEntities:@[mediaEntity]];
-                }];
-                return [UIMenu menuWithTitle:@"" children:@[downloadAction]];
-            }];
+        if (media) {
+            TFNActionItem *downloadItem = [%c(TFNActionItem)
+                actionItemWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_VIDEOS_TITLE"]
+                          imageName:@"arrow_down_circle_stroke"
+                             action:^{
+                                 DownloadInlineButton *downloader = [%c(DownloadInlineButton) new];
+                                 [downloader presentDownloadOptionsForMediaEntities:@[media]];
+                             }];
+            
+            // Insert download action right before the last item (typically 'Share via...')
+            NSUInteger index = items.count > 0 ? items.count - 1 : 0;
+            [items insertObject:downloadItem atIndex:index];
         }
     }
-    
-    return config;
+
+    return items;
 }
 %end
