@@ -6,6 +6,11 @@
 #import "HookHelpers.h"
 #import <objc/runtime.h>
 
+@interface T1MediaContextMenu : NSObject
+- (id)mediaEntity;
+- (id)media;
+@end
+
 static NSURL* nfbLastCapturedVoiceURL = nil;
 
 static BOOL IsVoiceMediaURL(NSURL* url) {
@@ -498,9 +503,9 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
     if (!hasDownload) {
         TFSTwitterEntityMedia *media = nil;
         if ([self respondsToSelector:@selector(mediaEntity)]) {
-            media = [self performSelector:@selector(mediaEntity)];
+            media = [self mediaEntity];
         } else if ([self respondsToSelector:@selector(media)]) {
-            media = [self performSelector:@selector(media)];
+            media = [self media];
         }
 
         if (media) {
