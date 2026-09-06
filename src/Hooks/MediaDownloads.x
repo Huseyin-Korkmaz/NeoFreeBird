@@ -169,10 +169,6 @@ static NSArray* DMVideoEntities(UIView* attachmentView) {
 
 
 // MARK: - Chat voice bubble
-//
-// The audio view sits inside MessageAttachmentView but carries its own gesture
-// rather than sharing the video download menu above, so that a long press on a
-// voice note wins over the stock chat context menu.
 
 static const void* kVoiceDownloadLongPressKey = &kVoiceDownloadLongPressKey;
 
@@ -207,10 +203,6 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
     SetVoiceDownloadLongPressRecognizer(self, longPress);
 }
 
-// The view overrides -gestureRecognizerShouldBegin: for its own waveform pan
-// gesture, and UIKit routes that override through for *every* recognizer
-// attached to the view -- ours included. Without this passthrough the long
-// press installs cleanly and then never begins.
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer*)gestureRecognizer {
     if (gestureRecognizer == VoiceDownloadLongPressRecognizer(self)) {
         return YES;
@@ -249,8 +241,6 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
 
 // MARK: - Upload custom voice
 
-// Overwrites the recording at the attachment's existing file path, so the
-// composer picks up the replacement without any model changes.
 %hook T1MediaAttachmentsViewCell
 %property (nonatomic, strong) UIButton* uploadButton;
 - (void)updateCellElements {
@@ -432,7 +422,7 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
 }
 %end
 
-// MARK: - Force Inject Download Option into Native Video Menu (Bypass Restrictions)
+// MARK: - Force Inject Download Option into Status Action Controller
 
 %hook T1StatusActionController
 - (id)actionItemsForStatus:(id)status options:(NSUInteger)options {
@@ -446,7 +436,6 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
         return items;
     }
 
-    // Check whether a download action item already exists in the list
     BOOL hasDownload = NO;
     for (id item in items) {
         if ([item respondsToSelector:@selector(title)] && 
@@ -456,7 +445,6 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
         }
     }
 
-    // Force inject the custom download item if Twitter restricted or removed it natively
     if (!hasDownload) {
         TFSTwitterEntityMedia *media = nil;
         if ([status respondsToSelector:@selector(entities)]) {
@@ -478,7 +466,52 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
                                  [downloader presentDownloadOptionsForMediaEntities:@[media]];
                              }];
             
-            // Insert download action right before the last item (typically 'Share via...')
+            NSUInteger index = items.count > 0 ? items.count - 1 : 0;
+            [items insertObject:downloadItem atIndex:index];
+        }
+    }
+
+    return items;
+}
+%end
+
+// MARK: - Direct Video Long-Press Context Menu Hook (T1MediaContextMenu)
+
+%hook T1MediaContextMenu
+- (NSArray *)actionItems {
+    NSArray *origItems = %orig;
+    NSMutableArray *items = origItems ? [origItems mutableCopy] : [NSMutableArray array];
+
+    if (![BHTSettings boolForKey:@"download_videos"]) {
+        return items;
+    }
+
+    BOOL hasDownload = NO;
+    for (id item in items) {
+        if ([item respondsToSelector:@selector(title)] && 
+            ([[item title] containsString:@"İndir"] || [[item title] containsString:@"Download"])) {
+            hasDownload = YES;
+            break;
+        }
+    }
+
+    if (!hasDownload) {
+        TFSTwitterEntityMedia *media = nil;
+        if ([self respondsToSelector:@selector(mediaEntity)]) {
+            media = [self performSelector:@selector(mediaEntity)];
+        } else if ([self respondsToSelector:@selector(media)]) {
+            media = [self performSelector:@selector(media)];
+        }
+
+        if (media) {
+            TFNActionItem *downloadItem = [%c(TFNActionItem)
+                actionItemWithTitle:[[BHTBundle sharedBundle] localizedStringForKey:@"DOWNLOAD_VIDEOS_TITLE"]
+                          imageName:@"arrow_down_circle_stroke"
+                             action:^{
+                                 DownloadInlineButton *downloader = [%c(DownloadInlineButton) new];
+                                 [downloader presentDownloadOptionsForMediaEntities:@[media]];
+                             }];
+
             NSUInteger index = items.count > 0 ? items.count - 1 : 0;
             [items insertObject:downloadItem atIndex:index];
         }
