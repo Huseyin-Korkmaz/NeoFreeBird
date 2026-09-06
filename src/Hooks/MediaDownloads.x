@@ -382,8 +382,6 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
 
 // MARK: - Tweet video download
 
-// _t1_actionItemsForStatus:... is a category method on UIViewController, so the
-// hook has to land on the base class to cover every share/action sheet.
 %hook UIViewController
 - (NSArray*)_t1_actionItemsForStatus:(__unsafe_unretained id)status
                              account:(__unsafe_unretained id)account
@@ -402,10 +400,9 @@ static void SetVoiceDownloadLongPressRecognizer(UIView* view,
 
     NSArray* mediaEntities = [[status entities] media];
     BOOL hasVideo = NO;
-    // mediaType 2 = GIF, 3 = video
     for (TFSTwitterEntityMedia* media in mediaEntities) {
         if ([media isKindOfClass:%c(TFSTwitterEntityMedia)] &&
-            (media.mediaType == 2 || media.mediaType == 3)) {
+            media.videoInfo && media.videoInfo.variants.count > 0) {
             hasVideo = YES;
             break;
         }
