@@ -7,7 +7,6 @@
 
 // MARK: - Immersive Player Timestamp
 
-// Field indexes in ImmersiveCardState's declaration order.
 enum {
     CardStateFieldIsPanningBetweenCards = 19,
     CardStateFieldIsChromeFadedOutWhilePanning = 20,
@@ -28,8 +27,6 @@ static const uint8_t* immersiveCardStateMetadata(void) {
     return metadata;
 }
 
-// Reads a Bool field through the struct's field offset vector, the same way the
-// app's own compiled accesses do, so byte offsets never have to be hardcoded.
 static BOOL cardStateBoolField(const uint8_t* state,
                                uint32_t fieldIndex,
                                BOOL* outValue) {
@@ -51,10 +48,6 @@ static BOOL cardStateBoolField(const uint8_t* state,
     return YES;
 }
 
-// displayMode is a Swift enum stored as an 8-byte case index followed by a
-// discriminator tag (0 = the repliesPanning payload case, 1 = an empty case).
-// Empty cases: regular = 0, repliesOpen = 1, repliesCompletelyOpen = 2,
-// controlsHidden = 3, scrubbing = 4, statusExpanded = 5.
 static BOOL progressLabelAlphaFromState(id pluginView, CGFloat* outAlpha) {
     Ivar stateIvar = class_getInstanceVariable([pluginView class], "state");
     if (!stateIvar) {
@@ -87,12 +80,8 @@ static BOOL progressLabelAlphaFromState(id pluginView, CGFloat* outAlpha) {
     return YES;
 }
 
-
 static const void* kBHTRestoredTimestampKey = &kBHTRestoredTimestampKey;
 
-// VideoControlsView.ProgressLabelMode, a payload-free Swift enum stored in a
-// single byte. The timestamp button's tap handler just flips this and rebuilds
-// its configuration, so writing it has the same effect as tapping the label.
 enum {
     ProgressLabelModeRemaining = 0,
     ProgressLabelModeTotal = 1,
@@ -119,8 +108,6 @@ enum {
     objc_setAssociatedObject(self, kBHTRestoredTimestampKey, @YES,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
-    // Set once instead of on every layout so tapping the label still toggles
-    // back to the remaining-time countdown.
     uint8_t* mode = (uint8_t*)(__bridge void*)self + ivar_getOffset(modeIvar);
     *mode = ProgressLabelModeTotal;
 }
@@ -170,8 +157,6 @@ enum {
 
 // MARK: - Disable Immersive Feed Scrolling
 
-// The card pan drives vertical paging between videos; blocking it lets the
-// swipe-down dismiss gesture take over.
 static BOOL isImmersiveCardPan(id viewController,
                                UIGestureRecognizer* gesture) {
     Ivar panIvar =
@@ -256,42 +241,57 @@ static BOOL isUpwardPan(UIGestureRecognizer *gesture) {
 
 %end
 
-// MARK: - Tap to Play/Pause
+// MARK: - Tap to Play/Pause & Long Press to Download
 
 static TAVPlayer* immersivePagePlayer(UIView* pageView) {
     Ivar playerIvar = class_getInstanceVariable([pageView class], "player");
     return playerIvar ? object_getIvar(pageView, playerIvar) : nil;
 }
 
-// timeControlStatus follows AVPlayer: 0 paused, 1 waiting to play, 2 playing.
 static void togglePlayback(TAVPlayer* player) {
     if (player.playbackState.timeControlStatus != 0) {
         [player pause];
     } else {
-        [player playOrReplay];  // replays instead of no-oping at end of video
+        [player playOrReplay];
     }
 }
 
 static const void* kBHTTwoFingerTapKey = &kBHTTwoFingerTapKey;
+static const void* kBHTLongPressDownloadKey = &kBHTLongPressDownloadKey;
 
 %hook _TtC14T1TwitterSwift17ImmersiveCardView
 
 - (void)didMoveToWindow {
     %orig;
 
-    if (!self.window || objc_getAssociatedObject(self, kBHTTwoFingerTapKey)) {
+    if (!self.window) {
         return;
     }
 
-    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]
-        initWithTarget:self
-                action:@selector(bht_handleTwoFingerTap:)];
-    tap.numberOfTouchesRequired = 2;
-    tap.numberOfTapsRequired = 1;
-    [self addGestureRecognizer:tap];
+    // Çift Parmakla Durdurma
+    if (!objc_getAssociatedObject(self, kBHTTwoFingerTapKey)) {
+        UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc]
+            initWithTarget:self
+                    action:@selector(bht_handleTwoFingerTap:)];
+        tap.numberOfTouchesRequired = 2;
+        tap.numberOfTapsRequired = 1;
+        [self addGestureRecognizer:tap];
 
-    objc_setAssociatedObject(self, kBHTTwoFingerTapKey, tap,
-                             OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, kBHTTwoFingerTapKey, tap,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+
+    // Basılı Tutarak İndirme (Long Press)
+    if (!objc_getAssociatedObject(self, kBHTLongPressDownloadKey)) {
+        UILongPressGestureRecognizer* longPress = [[UILongPressGestureRecognizer alloc]
+            initWithTarget:self
+                    action:@selector(bht_handleLongPressDownload:)];
+        longPress.minimumPressDuration = 0.5;
+        [self addGestureRecognizer:longPress];
+
+        objc_setAssociatedObject(self, kBHTLongPressDownloadKey, longPress,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
 }
 
 %new
@@ -317,6 +317,39 @@ static const void* kBHTTwoFingerTapKey = &kBHTTwoFingerTapKey;
     togglePlayback(player);
 
     [self setPausedByUser:wasPlaying];
+}
+
+%new
+- (void)bht_handleLongPressDownload:(UILongPressGestureRecognizer*)gesture {
+    if (gesture.state != UIGestureRecognizerStateBegan || ![BHTSettings boolForKey:@"download_videos"]) {
+        return;
+    }
+
+    __block id mediaEntity = nil;
+    
+    // Kart içindeki media nesnesini bul
+    Ivar viewModelIvar = class_getInstanceVariable([self class], "viewModel");
+    if (viewModelIvar) {
+        id viewModel = object_getIvar(self, viewModelIvar);
+        if ([viewModel respondsToSelector:@selector(mediaEntity)]) {
+            mediaEntity = [viewModel performSelector:@selector(mediaEntity)];
+        } else if ([viewModel respondsToSelector:@selector(status)]) {
+            id status = [viewModel performSelector:@selector(status)];
+            if ([status respondsToSelector:@selector(entities)]) {
+                NSArray* mediaList = [[status entities] media];
+                if (mediaList.count > 0) {
+                    mediaEntity = mediaList.firstObject;
+                }
+            }
+        }
+    }
+
+    if (!mediaEntity) {
+        return;
+    }
+
+    DownloadInlineButton* downloader = [%c(DownloadInlineButton) new];
+    [downloader presentDownloadOptionsForMediaEntities:@[mediaEntity]];
 }
 
 %end
