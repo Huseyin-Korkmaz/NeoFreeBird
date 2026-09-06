@@ -167,10 +167,11 @@ static UIViewController* TopMostController(void) {
                              action:^{
                                  ffmpegDownload(
                                      [NSString
-                                         stringWithFormat:@"-i %@ -an -vf "
-                                                          @"split[a][b];[a]palettegen["
-                                                          @"p];[b][p]paletteuse",
-                                                          url.absoluteString],
+                                         stringWithFormat:
+                                             @"-i %@ -an -vf "
+                                             @"split[a][b];[a]palettegen["
+                                             @"p];[b][p]paletteuse",
+                                             url.absoluteString],
                                      @"gif", durationMs);
                              }];
         };
@@ -185,7 +186,7 @@ static UIViewController* TopMostController(void) {
                                      [NSString
                                          stringWithFormat:
                                              @"-i %@ -vf scale=%@:flags=lanczos -c:v "
-                                             @"h264_videotoolbox -b:v 2M -c:a copy",
+                                             @"h264_videotoolbox -b:v 2M -c:a aac -b:a 128k",
                                              url.absoluteString, resolution],
                                      @"mp4", durationMs);
                              }];
@@ -265,15 +266,17 @@ static UIViewController* TopMostController(void) {
             });
         };
 
-        // Filter to video/GIF so grouping keys off the real video count, not the
-        // raw media count.
+        // Filter out items that do not contain video variants.
         NSMutableArray<TFSTwitterEntityMedia*>* videoEntities =
             [NSMutableArray new];
         for (TFSTwitterEntityMedia* media in mediaEntities) {
-            if ((media.mediaType == 2 || media.mediaType == 3) &&
-                media.videoInfo.variants.count > 0) {
+            if (media.videoInfo && media.videoInfo.variants.count > 0) {
                 [videoEntities addObject:media];
             }
+        }
+        
+        if (videoEntities.count == 0) {
+            return;
         }
 
         void (^presentSheet)(NSArray*) = ^(NSArray* items) {
