@@ -67,7 +67,7 @@ static UIViewController* TopMostController(void) {
         // VideoToolbox. The output path is appended to args; progress comes
         // from the processed time measured against the probed duration.
         NSString* downloadingText = [[BHTBundle sharedBundle]
-            localizedTwitterStringForKey:@"DOWNLOAD_LIVE_ACTIVITY_DOWNLOADING"];
+            localizedStringForKey:@"DOWNLOAD_LIVE_ACTIVITY_DOWNLOADING"];
         void (^ffmpegDownload)(NSString*, NSString*, double) = ^(
             NSString* args, NSString* ext, double durationMs) {
             showHUD(downloadingText);

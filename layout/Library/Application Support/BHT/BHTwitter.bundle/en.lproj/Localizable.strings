@@ -363,6 +363,10 @@
 "LEGACY_LOGIN_VERIFYING_STATUS" = "Verifying…";
 "LEGACY_LOGIN_SIGNING_IN_STATUS" = "Signing in…";
 "LEGACY_LOGIN_UNAVAILABLE_TITLE" = "Unavailable";
+"PHONE_OR_EMAIL_OR_USERNAME_LABEL" = "Phone, email, or username";
+"PASSWORD_LABEL" = "Password";
+"LOG_IN_ACTION_LABEL" = "Log in";
+"LOG_IN_TITLE" = "Log in";
 "LEGACY_LOGIN_CLASSES_MISSING_MESSAGE" = "Login classes missing.";
 "LEGACY_LOGIN_BUILD_COMMAND_FAILED_MESSAGE" = "Could not build command.";
 "LEGACY_LOGIN_CRASH_AVOIDED_TITLE" = "Crash avoided";
