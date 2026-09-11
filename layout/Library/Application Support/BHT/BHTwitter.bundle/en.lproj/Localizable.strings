@@ -95,6 +95,9 @@
 "LIKE_CONFIRM_TITLE" = "Confirm likes";
 "LIKE_CONFIRM_DETAIL" = "Ask before liking a Tweet.";
 
+"USE_TENOR_GIFS_TITLE" = "Use Tenor GIFs";
+"USE_TENOR_GIFS_DETAIL" = "Use Tenor GIFs instead of Twitter's GIFs (GIPHY). Tenor has more options.";
+
 "TWEET_CONFIRM_TITLE" = "Confirm Tweets";
 "TWEET_CONFIRM_DETAIL" = "Ask before you post a Tweet.";
 
