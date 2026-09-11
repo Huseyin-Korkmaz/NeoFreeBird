@@ -28,6 +28,8 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                       @"default": @YES},
                     @{@"key": @"disable_rtl",
                       @"default": @NO},
+                    @{@"key": @"no_focus_lost",
+                      @"default": @NO},
                     @{@"key": @"show_scroll_indicator",
                       @"default": @NO}
                 ]
@@ -281,6 +283,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                     },
                     @{
                         @"key": @"hide_downvote_button",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
+                    @{
+                        @"key": @"use_tenor_gifs",
                         @"default": @NO,
                         @"type": @"toggle"
                     },

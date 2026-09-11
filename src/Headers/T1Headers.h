@@ -348,3 +348,7 @@
 
 @interface T1AppSplitSideBarViewController : UIViewController
 @end
+
+@interface T1Window: UIWindow
+@property (nonatomic) UIWindowScene* windowScene;
+@end

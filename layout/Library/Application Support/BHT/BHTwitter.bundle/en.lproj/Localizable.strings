@@ -71,6 +71,9 @@
 "HIDE_WHO_TO_FOLLOW_TITLE" = "No 'Who to follow'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Remove follow suggestions.";
 
+"NO_FOCUS_LOST_TITLE" = "No focus lost";
+"NO_FOCUS_LOST_DETAIL" = "Blocks Twitter from detecting when you've switched to another app, so you won't lose your place in a thread.";
+
 "HIDE_TIMELINE_PROMPTS_TITLE" = "No timeline prompts";
 "HIDE_TIMELINE_PROMPTS_DETAIL" = "Remove banners like 'Add contacts'.";
 
