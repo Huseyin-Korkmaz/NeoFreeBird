@@ -71,6 +71,9 @@
 "HIDE_WHO_TO_FOLLOW_TITLE" = "No 'Who to follow'";
 "HIDE_WHO_TO_FOLLOW_DETAIL" = "Remove follow suggestions.";
 
+"NO_FOCUS_LOST_TITLE" = "No focus lost";
+"NO_FOCUS_LOST_DETAIL" = "Blocks Twitter from detecting when you've switched to another app, so you won't lose your place in a thread.";
+
 "HIDE_TIMELINE_PROMPTS_TITLE" = "No timeline prompts";
 "HIDE_TIMELINE_PROMPTS_DETAIL" = "Remove banners like 'Add contacts'.";
 
@@ -94,6 +97,9 @@
 
 "LIKE_CONFIRM_TITLE" = "Confirm likes";
 "LIKE_CONFIRM_DETAIL" = "Ask before liking a Tweet.";
+
+"USE_TENOR_GIFS_TITLE" = "Use Tenor GIFs";
+"USE_TENOR_GIFS_DETAIL" = "Use Tenor GIFs instead of Twitter's GIFs (GIPHY). Tenor has more options.";
 
 "TWEET_CONFIRM_TITLE" = "Confirm Tweets";
 "TWEET_CONFIRM_DETAIL" = "Ask before you post a Tweet.";
@@ -214,6 +220,9 @@
 
 "DOWNLOAD_VIDEOS_TITLE" = "Download media";
 "DOWNLOAD_VIDEOS_DETAIL" = "Save videos or GIFs right from the Tweet overflow menu.";
+
+"DOWNLOAD_HIGHEST_QUALITY_TITLE" = "Always download highest quality";
+"DOWNLOAD_HIGHEST_QUALITY_DETAIL" = "Skip the quality picker and save the best MP4 straight away.";
 
 "UPLOAD_FULL_HD_VIDEOS_TITLE" = "Upload full HD videos";
 "UPLOAD_FULL_HD_VIDEOS_DETAIL" = "Unlock the ability to upload videos in 1080p.";
@@ -363,6 +372,10 @@
 "LEGACY_LOGIN_VERIFYING_STATUS" = "Verifying…";
 "LEGACY_LOGIN_SIGNING_IN_STATUS" = "Signing in…";
 "LEGACY_LOGIN_UNAVAILABLE_TITLE" = "Unavailable";
+"PHONE_OR_EMAIL_OR_USERNAME_LABEL" = "Phone, email, or username";
+"PASSWORD_LABEL" = "Password";
+"LOG_IN_ACTION_LABEL" = "Log in";
+"LOG_IN_TITLE" = "Log in";
 "LEGACY_LOGIN_CLASSES_MISSING_MESSAGE" = "Login classes missing.";
 "LEGACY_LOGIN_BUILD_COMMAND_FAILED_MESSAGE" = "Could not build command.";
 "LEGACY_LOGIN_CRASH_AVOIDED_TITLE" = "Crash avoided";
