@@ -215,6 +215,28 @@ static UIViewController* TopMostController(void) {
                     m3u8URL = url;
             }
 
+            if ([BHTSettings boolForKey:@"download_highest_quality"] &&
+                media.mediaType == 3 && mp4URLs.count > 0) {
+                NSURL* bestURL = mp4URLs.firstObject;
+                NSInteger bestPixels = -1;
+                for (NSURL* url in mp4URLs) {
+                    NSArray<NSString*>* dims =
+                        [[BHTManager getVideoQuality:url.absoluteString]
+                            componentsSeparatedByString:@"x"];
+                    NSInteger pixels = dims.count == 2
+                                           ? dims[0].integerValue * dims[1].integerValue
+                                           : 0;
+                    if (pixels > bestPixels) {
+                        bestPixels = pixels;
+                        bestURL = url;
+                    }
+                }
+                ffmpegDownload(
+                    [NSString stringWithFormat:@"-i %@ -c copy", bestURL.absoluteString],
+                    @"mp4", 0);
+                return;
+            }
+
             NSMutableArray* items = [NSMutableArray new];
             NSMutableSet<NSString*>* offered = [NSMutableSet new];
             void (^appendMP4Items)(double) = ^(double durationMs) {

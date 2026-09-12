@@ -138,6 +138,12 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"default": @YES,
                         @"type": @"toggle"
                     },
+                    @{
+                        @"key": @"download_highest_quality",
+                        @"parentKey": @"download_videos",
+                        @"default": @NO,
+                        @"type": @"toggle"
+                    },
                     @{@"key": @"direct_save",
                       @"default": @NO,
                       @"type": @"toggle"},

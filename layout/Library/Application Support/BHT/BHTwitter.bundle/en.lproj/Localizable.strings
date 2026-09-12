@@ -221,6 +221,9 @@
 "DOWNLOAD_VIDEOS_TITLE" = "Download media";
 "DOWNLOAD_VIDEOS_DETAIL" = "Save videos or GIFs right from the Tweet overflow menu.";
 
+"DOWNLOAD_HIGHEST_QUALITY_TITLE" = "Always download highest quality";
+"DOWNLOAD_HIGHEST_QUALITY_DETAIL" = "Skip the quality picker and save the best MP4 straight away.";
+
 "UPLOAD_FULL_HD_VIDEOS_TITLE" = "Upload full HD videos";
 "UPLOAD_FULL_HD_VIDEOS_DETAIL" = "Unlock the ability to upload videos in 1080p.";
 
