@@ -276,27 +276,11 @@ static NSString* CleanedShareURLString(NSString* urlString) {
 %end
 
 
-%hook T1Window
-- (void)setWindowScene:(UIWindowScene*)windowScene {
-    %orig;
-    if (windowScene != nil) {
-        Class sceneClass = [windowScene class];
-        SEL resignSelector = @selector(sceneWillResignActive:);
-        SEL becomeSelector = @selector(sceneDidBecomeActive:);
-
-        Method originalResignMethod = class_getInstanceMethod(sceneClass, resignSelector);
-        Method originalBecomeMethod = class_getInstanceMethod(sceneClass, becomeSelector);
-
-        IMP newResignIMP = imp_implementationWithBlock(^(id _self, UIScene* scene) {
-            // Do nothing
-        });
-        IMP newBecomeIMP = imp_implementationWithBlock(^(id _self, UIScene* scene) {
-            // Do nothing
-        });
-
-        method_setImplementation(originalResignMethod, newResignIMP);
-        method_setImplementation(originalBecomeMethod, newBecomeIMP);
+%hook T1ViewControllerScribeEventObserver
+- (void)viewControllerApplicationDidBecomeActive:(id)active {
+    if ([BHTSettings boolForKey:@"no_focus_lost"]) {
+        return;
     }
+    %orig(active);
 }
-
 %end

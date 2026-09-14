@@ -17,6 +17,7 @@
 "DONE" = "Done";
 "SAVE" = "Save";
 "SAVE_ACTION_LABEL" = "Save";
+"OK_ACTION_LABEL" = "OK";
 
 
 /*Settings*/
@@ -403,6 +404,26 @@
 
 "SUBSCRIPTION_UNDO_SEND_DURATION_TITLE" = "Undo Duration";
 "SUBSCRIPTION_UNDO_SEND_DURATION_DETAIL" = "Choose how long the undo button will remain after sending a tweet.";
+
+/* Presets — settings import and export */
+"SETTINGS_EXPORT_TITLE" = "Export settings";
+"SETTINGS_IMPORT_TITLE" = "Import settings";
+
+"SETTINGS_EXPORT_FAILED_TITLE" = "Export failed";
+"SETTINGS_EXPORT_WRITE_FAILED" = "The settings file couldn't be created.";
+
+"SETTINGS_IMPORT_CONFIRM_TITLE" = "Import settings?";
+"SETTINGS_IMPORT_CONFIRM_MESSAGE" = "Your current NeoFreeBird settings will be replaced by the ones in the file you choose.";
+"SETTINGS_IMPORT_CONFIRM_BUTTON" = "Choose file";
+"SETTINGS_IMPORT_FAILED_TITLE" = "Import failed";
+"SETTINGS_IMPORT_SUCCESS_TITLE" = "Settings imported";
+"SETTINGS_IMPORT_SUCCESS_MESSAGE" = "%ld settings were applied. Restart the app for all of them to take effect.";
+"SETTINGS_IMPORT_RESTART_BUTTON" = "Restart";
+"SETTINGS_IMPORT_LATER_BUTTON" = "Later";
+
+"SETTINGS_TRANSFER_UNREADABLE_FILE" = "That file couldn't be read.";
+"SETTINGS_TRANSFER_MALFORMED_FILE" = "That file isn't a NeoFreeBird settings export.";
+"SETTINGS_TRANSFER_NO_SETTINGS" = "That file didn't contain any settings this version recognises.";
 
 /* Common UI Elements & Time Selectors */
 "Off" = "Off";

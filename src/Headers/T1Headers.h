@@ -349,6 +349,6 @@
 @interface T1AppSplitSideBarViewController : UIViewController
 @end
 
-@interface T1Window: UIWindow
-@property (nonatomic) UIWindowScene* windowScene;
+@interface T1ViewControllerScribeEventObserver: NSObject
+- (void)viewControllerApplicationDidBecomeActive:(id)active;
 @end
