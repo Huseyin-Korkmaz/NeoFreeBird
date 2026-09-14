@@ -203,6 +203,12 @@
 "DISABLE_VIDEO_DOCKING_TITLE" = "Video penceresini sabitlemeyi kapat";
 "DISABLE_VIDEO_DOCKING_DETAIL" = "Videoları kaydırırken Resim içinde Resim (PiP) butonunun çıkmasını engeller.";
 
+"DISABLE_AUTO_PLAY_GIF_TITLE" = "GIF'leri otomatik oynatma";
+"DISABLE_AUTO_PLAY_GIF_DETAIL" = "Zaman akışındaki GIF'lerin otomatik başlamasını engeller.";
+
+"DOWNLOAD_GIF_AS_VIDEO_TITLE" = "GIF'leri video olarak indir";
+"DOWNLOAD_GIF_AS_VIDEO_DETAIL" = "GIF indirmelerinde varsayılan formatı MP4 video olarak değiştirir.";
+
 /*Twitter Blue*/
 "HIDE_PROMOTED_TITLE" = "Reklam yok";
 "HIDE_PROMOTED_DETAIL" = "Tüm reklamları kaldır.";
@@ -211,6 +217,9 @@
 
 "DOWNLOAD_VIDEOS_TITLE" = "Medya indir";
 "DOWNLOAD_VIDEOS_DETAIL" = "Tweet’ten video veya GIF indir.";
+
+"DOWNLOAD_MEDIA_BUTTON_TITLE" = "Medya indirme düğmesi";
+"DOWNLOAD_MEDIA_BUTTON_DETAIL" = "Tweet'lerin altına doğrudan indirme düğmesi ekler.";
 
 "UPLOAD_FULL_HD_VIDEOS_TITLE" = "Full HD video yükle";
 "UPLOAD_FULL_HD_VIDEOS_DETAIL" = "1080p çözünürlükte video yükleme özelliğini açar.";
@@ -277,6 +286,8 @@
 "FETCHING_PROGRESS_TITLE" = "Bir saniye...";
 "DOWNLOAD_AS_GIF_OPTION_TITLE" = "GIF olarak indir";
 "DOWNLOAD_AS_MP4_OPTION_TITLE" = "MP4 olarak indir";
+"DOWNLOAD_IMAGE_OPTION_TITLE" = "Görseli kaydet";
+"DOWNLOAD_ALL_MEDIA_OPTION_TITLE" = "Tüm medyayı indir";
 
 /*App icon*/
 
