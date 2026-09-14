@@ -18,6 +18,32 @@
 "SAVE" = "Kaydet";
 "SAVE_ACTION_LABEL" = "Kaydet";
 
+/* Export & Import Presets */
+"SETTINGS_EXPORT_TITLE" = "Ayarları dışa aktar";
+"SETTINGS_EXPORT_DETAIL" = "Mevcut yapılandırmanızı bir dosyaya kaydedin.";
+"SETTINGS_IMPORT_TITLE" = "Ayarları içe aktar";
+"SETTINGS_IMPORT_DETAIL" = "Daha önce dışa aktarılmış bir ayar dosyasını yükleyin.";
+"SETTINGS_EXPORT_FAILED_TITLE" = "Dışa aktarma başarısız";
+"SETTINGS_IMPORT_CONFIRM_TITLE" = "Ayarları içe aktar";
+"SETTINGS_IMPORT_CONFIRM_MESSAGE" = "Tüm mevcut ayarlarınız içe aktarılan dosyadaki değerlerle değiştirilecek. Devam etmek istiyor musunuz?";
+"SETTINGS_IMPORT_CONFIRM_BUTTON" = "İçe Aktar";
+"SETTINGS_IMPORT_FAILED_TITLE" = "İçe aktarma başarısız";
+"SETTINGS_IMPORT_SUCCESS_TITLE" = "Başarılı";
+"SETTINGS_IMPORT_SUCCESS_MESSAGE" = "%ld ayar başarıyla yüklendi. Değişikliklerin tamamen etkili olması için uygulamayı yeniden başlatmanız önerilir.";
+"SETTINGS_IMPORT_LATER_BUTTON" = "Daha Sonra";
+"SETTINGS_IMPORT_RESTART_BUTTON" = "Yeniden Başlat";
+"OK_ACTION_LABEL" = "Tamam";
+
+/* Downloads & Media Settings */
+"USE_TENOR_GIFS_TITLE" = "Tenor GIF'lerini kullan";
+"USE_TENOR_GIFS_DETAIL" = "Varsayılan GIF arama sağlayıcısı olarak Tenor'u kullanır.";
+"DOWNLOAD_HIGHEST_QUALITY_TITLE" = "En yüksek kalitede indir";
+"DOWNLOAD_HIGHEST_QUALITY_DETAIL" = "Medyaları her zaman mevcut olan en yüksek çözünürlükte indirir.";
+
+/* Chat & Focus */
+"NO_FOCUS_LOST_TITLE" = "Odak kaybını önle";
+"NO_FOCUS_LOST_DETAIL" = "Sohbet ekranında gezinirken klavyenin ve odağın kaybolmasını engeller.";
+
 /*Settings*/
 "MODERN_SETTINGS_LAYOUT_TITLE" = "Genel";
 "MODERN_SETTINGS_LAYOUT_SUBTITLE" = "Uygulamayı kilitleyin, gezinme çubuğunu görünür tutun ve daha fazlası.";
