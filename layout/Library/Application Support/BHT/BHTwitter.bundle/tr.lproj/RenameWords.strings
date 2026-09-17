@@ -15,12 +15,12 @@ renaming at all.
 */
 
 "repost" = "retweet";
-"reposts" = "retweets";
-"reposted" = "retweeted";
-"reposting" = "retweeting";
+"reposts" = "retweetler";
+"reposted" = "retweetlendi";
+"reposting" = "retweetleniyor";
 "post" = "Tweet";
-"posts" = "Tweets";
-"posted" = "Tweeted";
-"posting" = "Tweeting";
-"premium" = "blue";
+"posts" = "Tweetler";
+"posted" = "Tweetlendi";
+"posting" = "Tweetleniyor";
+"premium" = "Blue";
 "X" = "Twitter";
