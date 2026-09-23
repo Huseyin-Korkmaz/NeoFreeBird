@@ -1,0 +1,81 @@
+# Translating NeoFreeBird
+
+Thank you for helping with translating NeoFreeBird! 
+
+## Supported Languages
+
+NeoFreeBird currently supports these (non-English) languages (although more can be added with a PR)
+- Arabic
+- German
+- Spanish
+- French
+- Croatian
+- Indonesian
+- Japanese
+- Korean
+- Polish
+- Russian
+- Swedish
+- Turkish
+- Ukrainian
+- Chinese Simplified
+- Chinese Traditional
+
+## Requirements
+- Fluent knowledge in any of these languages and English
+- Some sort of text editor
+- Git on your computer
+- A GitHub account
+- (Optional but very helpful) [Python 3](https://www.python.org) installed, this will run the check_localization.py file and help you find missing text
+
+## Translating Text
+1. Fork this NeoFreeBird repo and clone your fork to your computer.
+2. **Get a list of all missing text in your language.** You can do this manually (if you've already seen untranslated text in the app), or use the check_localization.py file. To use that file, clone the repo somewhere on your computer, enter a terminal into the root folder of NeoFreeBird, and (with Python installed), run `./check_localization.py`. It will give you more details on how to use the program to find missing text. For example, here is me running `./check_localization.py tr`
+```
+   tr — 248/278 translated (89.2%)
+  missing (30):
+    OK_ACTION_LABEL
+    NO_FOCUS_LOST_TITLE
+    NO_FOCUS_LOST_DETAIL
+    USE_TENOR_GIFS_TITLE
+    USE_TENOR_GIFS_DETAIL
+    DOWNLOAD_HIGHEST_QUALITY_TITLE
+    DOWNLOAD_HIGHEST_QUALITY_DETAIL
+    COPY_PROFILE_INFO_MENU_OPTION_7
+    COPY_PROFILE_INFO_MENU_OPTION_8
+    PHONE_OR_EMAIL_OR_USERNAME_LABEL
+    PASSWORD_LABEL
+    LOG_IN_ACTION_LABEL
+    LOG_IN_TITLE
+    DOWNLOAD_ACTIVITY_VIEW_LABEL
+    DOWNLOAD_LIVE_ACTIVITY_DOWNLOADING
+    SETTINGS_EXPORT_TITLE
+    SETTINGS_IMPORT_TITLE
+    SETTINGS_EXPORT_FAILED_TITLE
+    SETTINGS_EXPORT_WRITE_FAILED
+    SETTINGS_IMPORT_CONFIRM_TITLE
+    SETTINGS_IMPORT_CONFIRM_MESSAGE
+    SETTINGS_IMPORT_CONFIRM_BUTTON
+    SETTINGS_IMPORT_FAILED_TITLE
+    SETTINGS_IMPORT_SUCCESS_TITLE
+    SETTINGS_IMPORT_SUCCESS_MESSAGE
+    SETTINGS_IMPORT_RESTART_BUTTON
+    SETTINGS_IMPORT_LATER_BUTTON
+    SETTINGS_TRANSFER_UNREADABLE_FILE
+    SETTINGS_TRANSFER_MALFORMED_FILE
+    SETTINGS_TRANSFER_NO_SETTINGS
+  not in en (stale?) (2):
+    SHARING_DOMAIN_DETAIL
+    TAB_CUSTOMIZATION_TITLE
+```
+
+3. **Fill out the translations.** Make sure to keep the general flow and meaning of the phrase similar to that of English. If you're unsure on what a feature does or what it's trying to say, feel free to ping me on Twitter (@orionblur) or make an issue! Each line should only have 1 translation, and a translation key and value should be covered in quotes. There should also be a semicolon at the end of the line. Here's what that looks like in practice:
+```
+"NEW_OPTION_TITLE" = "Some text here";
+"NEW_OPTION_DETAIL" = "More text here";
+```
+4. **Commit and push your changes to your fork.** Make sure that everything looks good before making a PR.
+5. **Make a PR to this repo **(go to the [Pull Requests](https://github.com/orionblur/NeoFreeBird/pulls) tab, click on "New Pull Request", and have the base repository be orionblur's, with the head repo being yours.
+6. I will go through the PR and merge it as soon as I can get to it. It'll be very helpful if you can compile the app (either locally or through Github Actions) and show that your new translations are taking shape (although this is purely optional!).
+
+That's it! If you have any questions on translations, please feel free to ping me or make an issue, and I'll do my best to help.
