@@ -17,23 +17,28 @@ renaming at all.
 "yeniden gönderilere göre sırala" = "retweetleri sırala";
 "yeniden gönderileri kapat" = "retweetleri kapat";
 "yeniden gönderileri aç" = "retweetleri aç";
-"yeniden gönder" = "retweetle";
-"yeniden gönderi" = "retweet";
-"yeniden gönderiyi" = "retweet'i";
-"yeniden gönderiler" = "retweetler";
-"yeniden gönderildi" = "retweetlendi";
 "yeniden gönderiliyor" = "retweetleniyor";
-"gönderi etkinliği" = "tweet etkinliği";
+"yeniden gönderildi" = "retweetlendi";
+"yeniden gönderiler" = "retweetler";
+"yeniden gönderiyi" = "retweet'i";
+"yeniden gönderi" = "retweet";
+"yeniden gönder" = "retweetle";
+
+"bu gönderi ilgimi çekmiyor" = "Bu tweet ilgimi çekmiyor";
+"bu gönderi" = "bu tweet";
 "gönderi etkileşimlerini" = "tweet etkileşimlerini";
+"gönderi etkinliği" = "tweet etkinliği";
 "gönderi sayısı" = "Tweetler";
-"gönderi" = "tweetle";
-"gönderiyi" = "tweet'i";
-"gönderiler" = "tweetler";
-"gönderildi" = "tweetlendi";
 "gönderiliyor" = "tweetleniyor";
+"gönderildi" = "tweetlendi";
+"gönderiler" = "tweetler";
+"gönderiyi" = "tweet'i";
+"gönderi" = "tweetle";
+
 "alıntı sayısına göre sırala" = "alıntı tweetleri sırala";
-"alıntı" = "tweeti alıntıla";
 "alıntıları" = "alıntılanan tweetleri";
 "alıntılar" = "alıntı tweetler";
+"alıntı" = "tweeti alıntıla";
+
 "premium" = "Blue";
 "X" = "Twitter";
