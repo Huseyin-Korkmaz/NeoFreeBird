@@ -164,7 +164,7 @@
 "HIDE_PROMOTED_TITLE" = "Sans pubs";
 "HIDE_PROMOTED_DETAIL" = "Supprime toutes les pubs.";
 
-"UNDO_TWEET_TITLE" = "Annuler Tweet";
+"UNDO_TWEET_TITLE" = "Annuler le Tweet";
 
 "DOWNLOAD_VIDEOS_TITLE" = "Télécharger les médias";
 "DOWNLOAD_VIDEOS_DETAIL" = "Sauvegarde vidéos et GIFs directement.";
@@ -271,7 +271,7 @@
 "SOURCE_UNAVAILABLE" = "Source indisponible";
 
 /*App lock*/
-"PADLOCK_LOCKED_LABEL" = "Vérouiller";
+"PADLOCK_LOCKED_LABEL" = "Vérouillé";
 
 /*Source labels*/
 "UNKNOWN_SOURCE" = "Source inconnue";
