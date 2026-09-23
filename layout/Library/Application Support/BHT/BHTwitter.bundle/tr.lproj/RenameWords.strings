@@ -3,7 +3,7 @@ Generic terminology replacements for the "Restore Twitter names" feature, applie
 to every localized string and to server-composed text (notification rows etc.).
 
 Lowercase keys match whole words case-insensitively and the replacement copies the
-matched word's ksks ("Reposts" -> "Retweets", "REPOST" -> "RETWEET").
+matched word's capitalisation ("Reposts" -> "Retweets", "REPOST" -> "RETWEET").
 A replacement carrying its own capital keeps it even for lowercase matches
 ("posted" -> "Tweeted"). Keys that contain an uppercase letter match exactly and are
 replaced verbatim ("X" -> "Twitter").
