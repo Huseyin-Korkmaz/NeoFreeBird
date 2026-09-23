@@ -69,7 +69,7 @@ NeoFreeBird currently supports these (non-English) languages (although more can 
     TAB_CUSTOMIZATION_TITLE
 ```
 
-3. **Fill out the translations.** Make sure to keep the general flow and meaning of the phrase similar to that of English. If you're unsure on what a feature does or what it's trying to say, feel free to ping me on Twitter (@orionblur) or make an issue! Each line should only have 1 translation, and a translation key and value should be covered in quotes. There should also be a semicolon at the end of the line. Here's what that looks like in practice:
+3. **Fill out the translations.** The file for your language will be found in `layout/Library/Application Support/BHT/BHTwitter.bundle/xx.lproj/Localizable.strings` (where xx is the 2 letter code for your language). Make sure to keep the general flow and meaning of the phrase similar to that of English. If you're unsure on what a feature does or what it's trying to say, feel free to ping me on Twitter (@orionblur) or make an issue! Each line should only have 1 translation, and a translation key and value should be covered in quotes. There should also be a semicolon at the end of the line. Here's what that looks like in practice:
 ```
 "NEW_OPTION_TITLE" = "Some text here";
 "NEW_OPTION_DETAIL" = "More text here";
