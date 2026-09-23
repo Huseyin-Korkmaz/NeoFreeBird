@@ -79,3 +79,23 @@ NeoFreeBird currently supports these (non-English) languages (although more can 
 6. I will go through the PR and merge it as soon as I can get to it. It'll be very helpful if you can compile the app (either locally or through Github Actions) and show that your new translations are taking shape (although this is purely optional!).
 
 That's it! If you have any questions on translations, please feel free to ping me or make an issue, and I'll do my best to help.
+
+## Renaming Terminology
+This is slightly different, since instead of modifying an existing file (if it doesn't exist already), you'll need to make a new file called RenameWords.strings. NeoFreeBird is programmed to read this file to replace text within the app. For example, here's how it looks like in English:
+
+```
+/*NEW WORDS |  OLD WORDS */
+"repost" = "retweet";
+"reposts" = "retweets";
+"reposted" = "retweeted";
+"reposting" = "retweeting";
+"post" = "Tweet";
+"posts" = "Tweets";
+"posted" = "Tweeted";
+"posting" = "Tweeting";
+"premium" = "blue";
+"X" = "Twitter";
+```
+
+The left side contains the new terminology the X app uses, while the right side uses terminology the old Twitter app used. Since the words differ between languages, make sure to double check before adding to this file. Once you're done, you can go through the same flow as committing and making a PR as with the normal strings.
+
