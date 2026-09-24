@@ -10,7 +10,7 @@ on:
         type: string
       target_version:
         description: "Target iOS Version"
-        default: "14.0"
+        default: "15.0"
         required: true
         type: string
       decrypted_ipa_url:
@@ -20,7 +20,7 @@ on:
         type: string
       resource_pack_url:
         description: "Custom app icon pack (.ZIP) used for the branded IPA builds"
-        default: "https://files.catbox.moe/p63f20.zip"
+        default: "https://files.catbox.moe/vvtixe.zip"
         required: false
         type: string
       commit_id:
