@@ -5,8 +5,8 @@ to every localized string and to server-composed text (notification rows etc.).
 Lowercase keys match whole words case-insensitively and the replacement copies the
 matched word's capitalisation ("Reposts" -> "Retweets", "REPOST" -> "RETWEET").
 A replacement carrying its own capital keeps it even for lowercase matches
-("posted" -> "Tweeted"). Keys that contain an uppercase letter match exactly and are
-replaced verbatim ("X" -> "Twitter").
+("posted" -> "Tweeted"). Keys that contain an uppercase letter match exactly and
+are replaced verbatim ("X" -> "Twitter").
 List each word in only one of the two forms, and never use a replacement value that
 matches another key — replacements must be stable if the text is processed twice.
 
@@ -14,11 +14,11 @@ Strictly per-language: a language without its own copy of this file gets no gene
 renaming at all.
 */
 
-*/ Marka Terminolojisi */
+/* Marka Terminolojisi */
 "premium" = "Blue";
 "X" = "Twitter";
 
-*/ Tweet Ve Profil Terminolojisi */
+/* Tweet Ve Profil Terminolojisi */
 "gönderi" = "Tweet";
 "gönderin gönderildi" = "Tweetin gönderildi";
 "gönderi etkileşimlerini" = "Tweet Etkileşimlerini";
@@ -31,7 +31,7 @@ renaming at all.
 "gönderiler" = "Tweetler";
 "gönderiyi" = "Tweet'i";
 
-*/ Retweet Terminolojisi */
+/* Retweet Terminolojisi */
 "yeniden gönderilere göre sırala" = "Retweetleri Sırala";
 "yeniden gönderileri kapat" = "Retweetleri Kapat";
 "yeniden gönderileri aç" = "Retweetleri Aç";
@@ -43,9 +43,8 @@ renaming at all.
 "yeniden gönderi" = "Retweet";
 "yeniden gönder" = "Retweetle";
 
-*/ Alıntı Terminolojisi */
+/* Alıntı Terminolojisi */
 "alıntı" = "Tweeti Alıntıla";
 "alıntılar" = "Alıntı Tweetler";
 "alıntı sayısına göre sırala" = "Alıntı Tweetleri Sırala";
-
 
