@@ -14,6 +14,24 @@ Strictly per-language: a language without its own copy of this file gets no gene
 renaming at all.
 */
 
+*/ Marka Terminolojisi */
+"premium" = "Blue";
+"X" = "Twitter";
+
+*/ Tweet Ve Profil Terminolojisi */
+"gönderi" = "Tweet";
+"gönderin gönderildi" = "Tweetin gönderildi";
+"gönderi etkileşimlerini" = "Tweet Etkileşimlerini";
+"gönderi etkinliği" = "Tweet Etkinliği";
+"gönderi sayısı" = "Tweetler";
+"gönderi oluştur" = "Tweet at";
+"yeni gönderi" = "Yeni Tweet";
+"gönderi ayrıntıları" = "Tweet Detayları";
+"gönderileri" = "Tweetleri";
+"gönderiler" = "Tweetler";
+"gönderiyi" = "Tweet'i";
+
+*/ Retweet Terminolojisi */
 "yeniden gönderilere göre sırala" = "Retweetleri Sırala";
 "yeniden gönderileri kapat" = "Retweetleri Kapat";
 "yeniden gönderileri aç" = "Retweetleri Aç";
@@ -25,24 +43,9 @@ renaming at all.
 "yeniden gönderi" = "Retweet";
 "yeniden gönder" = "Retweetle";
 
-"gönderin gönderildi" = "Tweetin gönderildi";
-"gönderin paylaşıldı" = "Tweetin gönderildi";
-"gönderi etkileşimlerini" = "Tweet Etkileşimlerini";
-"gönderi etkinliği" = "Tweet Etkinliği";
-"gönderi sayısı" = "Tweetler";
-"gönderi oluştur" = "Tweet at";
-"yeni gönderi" = "Yeni Tweet";
-"gönderi ayrıntıları" = "Tweet Detayları";
-"gönderileri" = "Tweetleri";
-"gönderiler" = "Tweetler";
-"gönderiyi" = "Tweet'i";
-"gönderi" = "Tweet";
-
-"mesaj gönder" = "Mesaj gönder";
-
-"alıntı sayısına göre sırala" = "Alıntı Tweetleri Sırala";
-"alıntılar" = "Alıntı Tweetler";
+*/ Alıntı Terminolojisi */
 "alıntı" = "Tweeti Alıntıla";
+"alıntılar" = "Alıntı Tweetler";
+"alıntı sayısına göre sırala" = "Alıntı Tweetleri Sırala";
 
-"premium" = "Blue";
-"X" = "Twitter";
+
