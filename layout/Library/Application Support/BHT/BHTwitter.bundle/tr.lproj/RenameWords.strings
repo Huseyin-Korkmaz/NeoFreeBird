@@ -27,6 +27,8 @@ renaming at all.
 "gönderileri" = "Tweetleri";
 "gönderiler" = "Tweetler";
 "gönderiyi" = "Tweet'i";
+"gönderini" = "Tweetini";
+"gönderilerin" = "Tweetlerin";
 
 /* Retweet Terminolojisi */
 "yeniden gönderilere göre sırala" = "Retweetleri Sırala";
