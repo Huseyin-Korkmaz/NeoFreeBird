@@ -21,7 +21,6 @@ renaming at all.
 /* Tweet Ve Profil Terminolojisi */
 "gönderi" = "Tweet";
 "Gönderin" = "Tweetin";
-"gönderin gönderildi" = "Tweetin Gönderildi";
 "gönderi etkileşimlerini" = "Tweet Etkileşimlerini";
 "gönderi etkinliği" = "Tweet Etkinliği";
 "gönderi sayısı" = "Tweetler";
@@ -30,7 +29,6 @@ renaming at all.
 "gönderiyi" = "Tweet'i";
 "gönderini" = "Tweetini";
 "gönderilerin" = "Tweetlerin";
-"gönderildi" = "TEST";
 
 /* Retweet Terminolojisi */
 "yeniden gönderilere göre sırala" = "Retweetleri Sırala";
