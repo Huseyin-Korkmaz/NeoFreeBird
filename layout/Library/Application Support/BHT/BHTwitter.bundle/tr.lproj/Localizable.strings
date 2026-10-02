@@ -104,6 +104,12 @@
 "LIKE_CONFIRM_TITLE" = "Beğenileri onayla";
 "LIKE_CONFIRM_DETAIL" = "Bir Tweet’i beğenmeden önce onay ister.";
 
+"SHOW_QUOTE_NUMBERS_TITLE" = "Alıntı sayılarını göster";
+"SHOW_QUOTE_NUMBERS_DETAIL" = "Bir Tweetin aldığı alıntı ve Retweet sayısını gösterir.";
+
+"SHOW_UNROUNDED_QUOTE_NUMBERS_TITLE" = "Yuvarlanmamış alıntı sayılarını göster";
+"SHOW_UNROUNDED_QUOTE_NUMBERS_DETAIL" = "Bir Tweetin aldığı alıntı ve Retweetlerin tam sayısını gösterir. Düzen taşması sorunlarına neden olabilir.";
+
 "USE_TENOR_GIFS_TITLE" = "Tenor GIF’lerini kullan";
 "USE_TENOR_GIFS_DETAIL" = "Twitter’ın GIF’leri (GIPHY) yerine Tenor GIF’lerini kullanır. Tenor daha fazla seçenek sunar.";
 
@@ -250,6 +256,9 @@
 "DOWNLOAD_HIGHEST_QUALITY_TITLE" = "Her zaman en yüksek kaliteyi indir";
 "DOWNLOAD_HIGHEST_QUALITY_DETAIL" = "Kalite seçiciyi atlar ve doğrudan en iyi MP4’ü kaydeder.";
 
+"DOWNLOAD_ALL_VIDEOS_TITLE" = "Tüm videoları indir";
+"DOWNLOAD_ALL_VIDEOS_DETAIL" = "Bir Tweetteki tüm videoları indirme seçeneği ekler.";
+
 "UPLOAD_FULL_HD_VIDEOS_TITLE" = "Full HD video yükle";
 "UPLOAD_FULL_HD_VIDEOS_DETAIL" = "1080p çözünürlükte video yükleme özelliğinin kilidini açar.";
 
@@ -329,6 +338,7 @@
 "FETCHING_PROGRESS_TITLE" = "Sadece bir saniye...";
 "DOWNLOAD_AS_GIF_OPTION_TITLE" = "GIF olarak indir";
 "DOWNLOAD_AS_MP4_OPTION_TITLE" = "MP4 olarak indir";
+"DOWNLOAD_ALL_VIDEOS_OPTION_TITLE" = "Tüm videoları indir";
 
 
 /* App icon */
@@ -484,6 +494,11 @@
 
 "SETTINGS_EXPORT_TITLE" = "Ayarları dışa aktar";
 "SETTINGS_IMPORT_TITLE" = "Ayarları içe aktar";
+
+"CUSTOM_SEND_SOUND_TITLE" = "Gönderme sesini içe aktar";
+"CUSTOM_SEND_SOUND_DEFAULT" = "Özel ses seçilmedi";
+"CUSTOM_SEND_SOUND_FAILED_TITLE" = "Gönderme sesi içe aktarılamadı";
+"CUSTOM_SEND_SOUND_TOO_LONG" = "Seçtiğiniz ses çok uzun. 7 saniye veya daha kısa olmalıdır.";
 
 "SETTINGS_EXPORT_FAILED_TITLE" = "Dışa aktarma başarısız";
 "SETTINGS_EXPORT_WRITE_FAILED" = "Ayar dosyası oluşturulamadı.";
