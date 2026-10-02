@@ -21,6 +21,7 @@ renaming at all.
 /* Tweet Ve Profil Terminolojisi */
 "gönderi" = "Tweet";
 "Gönderin" = "Tweetin";
+"gönderin gönderildi" = "Tweetin Gönderildi";
 "gönderi etkileşimlerini" = "Tweet Etkileşimlerini";
 "gönderi etkinliği" = "Tweet Etkinliği";
 "gönderi sayısı" = "Tweetler";
