@@ -15,7 +15,7 @@ on:
       decrypted_ipa_url:
         description: "Direct URL of an X IPA"
         default: ""
-        required: true
+        required: false
         type: string
       deploy_format:
         description: "Deployment format"
@@ -122,7 +122,7 @@ jobs:
           echo "$TWEAK_NAME $TWEAK_VERSION"
 
       - name: Prepare X IPA
-        if: inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore'
+        if: (inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore') && inputs.decrypted_ipa_url != ''
         id: x_version
         run: |
           wget "$IPA_URL" --no-verbose -O main/packages/com.atebits.Tweetie2.ipa
@@ -135,7 +135,7 @@ jobs:
           IPA_URL: ${{ inputs.decrypted_ipa_url }}
 
       - name: Prepare Image Pack
-        if: inputs.resource_pack_url != '' && (inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore')
+        if: inputs.resource_pack_url != '' && (inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore') && inputs.decrypted_ipa_url != ''
         run: |
           wget "$IMAGE_URL" --no-verbose -O main/resource-pack.zip
         env:
@@ -164,7 +164,7 @@ jobs:
           BUILD_DIR: ${{ github.workspace }}/ffmpeg-build
 
       - name: Rebrand IPA
-        if: (inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore') && (inputs.twitter_branding || inputs.resource_pack_url != '')
+        if: (inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore') && (inputs.twitter_branding || inputs.resource_pack_url != '') && inputs.decrypted_ipa_url != ''
         run: |
           cd ${{ github.workspace }}/main
           IMAGE_FLAG=""
@@ -173,7 +173,7 @@ jobs:
             "packages/$(ls -t packages | head -n1)"
 
       - name: Rename IPA to include IPA version
-        if: inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore'
+        if: (inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore') && inputs.decrypted_ipa_url != ''
         run: |
           mv "main/packages/$(ls -t main/packages | head -n1)" \
              "main/packages/${{ steps.tweak_info.outputs.name }}-${BRANDING}-${{ inputs.deploy_format }}_${{ steps.tweak_info.outputs.version }}_${{ steps.x_version.outputs.version }}.${IPA_EXT}"
