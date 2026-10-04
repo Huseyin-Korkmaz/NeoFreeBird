@@ -358,11 +358,6 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                         @"default": @YES,
                         @"type": @"toggle"
                     },
-                    @{
-                        @"key": @"restore_tweet_labels",
-                        @"default": @NO,
-                        @"type": @"toggle"
-                    }
                 ]
             },
             @"search": @{
