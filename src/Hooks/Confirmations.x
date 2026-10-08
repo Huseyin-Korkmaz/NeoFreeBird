@@ -195,6 +195,14 @@ static BOOL FastBlockEnabled(void) {
 
 %end
 
+%hook TFNTwitterAccount
+
+- (BOOL)isXDSAlertBlockUserEnabled {
+    return FastBlockEnabled() ? NO : %orig;
+}
+
+%end
+
 %hook UIAlertController
 
 // Both block alerts get their cancel action from the constructor and add
