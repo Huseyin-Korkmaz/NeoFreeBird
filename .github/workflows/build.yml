@@ -13,9 +13,9 @@ on:
         default: "15.0"
         required: true
       decrypted_ipa_url:
-        description: "Direct URL of an X IPA"
+        description: "(Optional) Direct URL of an X IPA"
         default: ""
-        required: true
+        required: false
         type: string
       deploy_format:
         description: "Deployment format"
@@ -41,7 +41,6 @@ on:
         description: "(Optional) Commit ID to build at"
         default: ""
         required: false
-        type: string
       upload_artifact:
         description: "Upload IPA as artifact (Public)"
         default: true
@@ -122,7 +121,7 @@ jobs:
           echo "$TWEAK_NAME $TWEAK_VERSION"
 
       - name: Prepare X IPA
-        if: inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore'
+        if: (inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore') && inputs.decrypted_ipa_url != ''
         id: x_version
         run: |
           wget "$IPA_URL" --no-verbose -O main/packages/com.atebits.Tweetie2.ipa
@@ -164,7 +163,7 @@ jobs:
           BUILD_DIR: ${{ github.workspace }}/ffmpeg-build
 
       - name: Rebrand IPA
-        if: (inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore') && (inputs.twitter_branding || inputs.resource_pack_url != '')
+        if: (inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore') && inputs.decrypted_ipa_url != '' && (inputs.twitter_branding || inputs.resource_pack_url != '')
         run: |
           cd ${{ github.workspace }}/main
           IMAGE_FLAG=""
@@ -175,8 +174,12 @@ jobs:
       - name: Rename IPA to include IPA version
         if: inputs.deploy_format == 'sideloaded' || inputs.deploy_format == 'trollstore'
         run: |
+          X_VER="${{ steps.x_version.outputs.version }}"
+          if [ -z "$X_VER" ]; then
+            X_VER="base"
+          fi
           mv "main/packages/$(ls -t main/packages | head -n1)" \
-             "main/packages/${{ steps.tweak_info.outputs.name }}-${BRANDING}-${{ inputs.deploy_format }}_${{ steps.tweak_info.outputs.version }}_${{ steps.x_version.outputs.version }}.${IPA_EXT}"
+             "main/packages/${{ steps.tweak_info.outputs.name }}-${BRANDING}-${{ inputs.deploy_format }}_${{ steps.tweak_info.outputs.version }}_${X_VER}.${IPA_EXT}"
         env:
           IPA_EXT: ${{ inputs.deploy_format == 'trollstore' && 'tipa' || 'ipa' }}
           BRANDING: ${{ inputs.twitter_branding && 'Twitter' || 'X' }}
