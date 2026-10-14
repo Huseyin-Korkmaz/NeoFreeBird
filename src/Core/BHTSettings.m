@@ -102,6 +102,10 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                       @"default": @NO},
                     @{@"key": @"hide_tweet_button",
                       @"default": @NO},
+                    @{@"key": @"hide_retweets",
+                      @"default": @NO},
+                    @{@"key": @"hide_quote_tweets",
+                      @"default": @NO},
                     @{@"key": @"hide_verified_tweets",
                       @"default": @NO},
                     @{@"key": @"restore_refresh_sounds",
@@ -354,6 +358,13 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                       @"default": @NO,
                       @"type": @"toggle"},
                     @{
+                        @"type": @"compactButton",
+                        @"key": @"default_reply_sort",
+                        @"default": @0,
+                        @"titleKey": @"DEFAULT_REPLY_SORTING_TITLE",
+                        @"action": @"showReplySortPicker:"
+                    },
+                    @{
                         @"key": @"restore_reply_context",
                         @"default": @YES,
                         @"type": @"toggle"
@@ -445,7 +456,11 @@ static NSDictionary<NSString*, NSDictionary*>* BHTSettingsPages(void) {
                     // LiveContainer, so default it off there rather than
                     // forcing the switch on for every guest install.
                     @{@"key": @"new_inapp_webview",
-                      @"default": @(![BHTManager isLiveContainer])}
+                      @"default": @(![BHTManager isLiveContainer])},
+                    @{@"key": @"block_link_tracking",
+                      @"default": @YES},
+                    @{@"key": @"strip_tracking_params",
+                      @"default": @YES}
                 ]
             },
             @"debug": @{
