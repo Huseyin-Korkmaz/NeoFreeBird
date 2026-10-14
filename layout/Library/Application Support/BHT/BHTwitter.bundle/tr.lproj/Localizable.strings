@@ -92,6 +92,12 @@
 "ALWAYS_OPEN_SAFARI_TITLE" = "Harici tarayıcı kullan";
 "ALWAYS_OPEN_SAFARI_DETAIL" = "Bağlantıları Safari’de veya varsayılan tarayıcınızda açar.";
 
+"BLOCK_LINK_TRACKING_TITLE" = "Bağlantı takibini engelle";
+"BLOCK_LINK_TRACKING_DETAIL" = "Bağlantıları arka planda t.co istekleri veya reklam tık kimlikleri olmadan, doğrudan t.co üzerinden değil doğrudan açar. Twitter'ın güvensiz bağlantı uyarıları görünmez.";
+
+"STRIP_TRACKING_PARAMS_TITLE" = "Takip parametrelerini kaldır";
+"STRIP_TRACKING_PARAMS_DETAIL" = "Açtığınız bağlantılardan utm_ ve diğer takip etiketlerini ayıklar.";
+
 "SHARING_DOMAIN_TITLE" = "Paylaşım alan adı";
 "SHARING_DOMAIN_DETAIL" = "Paylaşılan bağlantılarda kullanılacak alan adını ayarlamanızı sağlar.";
 
@@ -156,6 +162,9 @@
 
 "SQUARE_AVATARS_TITLE" = "Kare profil resimleri";
 "SQUARE_AVATARS_DETAIL" = "Herkese, marka hesaplarında olduğu gibi kare profil resimleri verir.";
+
+"DEFAULT_REPLY_SORTING_TITLE" = "Varsayılan yanıt sıralaması";
+"DEFAULT_REPLY_SORTING_DETAIL" = "Tüm Tweetler için varsayılan yanıt sıralamasını seçin.";
 
 "REPLY_SORTING_TITLE" = "Yanıt sıralamasını devre dışı bırak";
 "REPLY_SORTING_DETAIL" = "Tweet sohbetlerindeki yanıt sıralama özelliğini devre dışı bırakır.";
@@ -398,6 +407,12 @@
 "DIM_THEME_RESTART_ALERT_TITLE" = "Yeniden başlatma gerekli";
 "DIM_THEME_RESTART_ALERT_MESSAGE" = "Alacakaranlık temasının etkili olması için yeniden başlatma gerekir.";
 "DIM_THEME_RESTART_ALERT_RESTART_BUTTON" = "Yeniden başlat";
+
+"HIDE_QUOTE_TWEETS_TITLE" = "Alıntı Tweetleri gizle";
+"HIDE_QUOTE_TWEETS_DETAIL" = "Zaman akışınızdaki alıntı Tweetleri gizler.";
+
+"HIDE_RETWEETS_TITLE" = "Retweetleri gizle";
+"HIDE_RETWEETS_DETAIL" = "Zaman akışınızdaki retweetleri gizler.";
 
 "HIDE_VERIFIED_TWEETS_TITLE" = "Onaylı Tweetleri gizle";
 "HIDE_VERIFIED_TWEETS_DETAIL" = "Yazar aynı dizide yanıt vermediği veya hesabı takip etmediğiniz sürece zaman akışınızda ve yanıtlarınızda onaylı hesapların Tweetlerini gizler.";
