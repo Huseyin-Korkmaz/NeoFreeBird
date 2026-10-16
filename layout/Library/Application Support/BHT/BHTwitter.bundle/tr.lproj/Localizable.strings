@@ -116,6 +116,9 @@
 "SHOW_UNROUNDED_QUOTE_NUMBERS_TITLE" = "Yuvarlanmamış alıntı sayılarını göster";
 "SHOW_UNROUNDED_QUOTE_NUMBERS_DETAIL" = "Bir Tweet'in aldığı alıntı ve retweetlerin tam sayısını gösterir. Taşma sorunlarına neden olabilir.";
 
+"POST_INTERACTIONS_COUNTS_TITLE" = "Alıntılar: %@  Retweet: %@";
+"POST_INTERACTIONS_UNROUNDED_COUNTS_TITLE" = "Alıntılar: %lld  Retweet: %lld";
+
 "USE_TENOR_GIFS_TITLE" = "Tenor GIF’lerini kullan";
 "USE_TENOR_GIFS_DETAIL" = "Twitter’ın GIF’leri (GIPHY) yerine Tenor GIF’lerini kullanır. Tenor daha fazla seçenek sunar.";
 
